@@ -1,0 +1,71 @@
+body{
+    background-color: grey;
+}
+#contrainer2{
+    height: auto;
+    padding: 10px 10px 10px 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: white;
+}
+table{
+    float:center;
+width: 100%;
+} 
+.head{
+width: 2%;
+}
+.head2{
+width: 1%;
+}
+.data{
+width: 15%;
+}
+textarea
+{
+width: 100%;
+height: 150px;
+resize: none;
+}
+.tablesplite{
+width: 10px;
+}
+.tablesplite2{
+width: 10px;
+}
+.td95{
+width: 90% !important;
+}
+.Width70{
+width: 70%;
+}
+input[type=text]{
+    border-radius: 10px;
+padding: 10px;
+}
+input[type=date]{
+    border-radius: 10px;
+    padding: 10px;
+}
+input[type=time]{
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.grid-container {
+display: grid;
+grid-template-columns: auto auto auto;
+padding: 10px;
+}
+.grid-item {
+padding: 5px;
+}
+.tdd{
+        width: 50%;
+    }
+    #oneperwidth{
+        width:100%;
+    }
+    #oneperheight{
+        height:100%;
+    }
