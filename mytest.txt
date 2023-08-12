@@ -1,2 +1,1 @@
-test edit my test4
-now
+mytest
