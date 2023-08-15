@@ -53,7 +53,13 @@
         $discharge_status = $row['discharge_status'];
         $discharge_type = $row['discharge_type'];
         $hospital_refer = $row['hospital_refer'];
-
+        $additional_code= $row['additional_code'];
+        $morphology_code= $row['morphology_code'];
+        $cause_of_death_a= $row['cause_of_death_a'];
+        $cause_of_death_b= $row['cause_of_death_b'];
+        $cause_of_death_c= $row['cause_of_death_c'];
+        $onset_and_death= $row['onset_and_death'];
+        
         $version = $row['version'];
 ?>
 <script>
@@ -71,6 +77,14 @@
         $("textarea#other_diagnosis").val(<?=json_encode($other_diagnosis)?>);
         $("textarea#external_cause").val(<?=json_encode($external_cause)?>);
         $("textarea#operating_room").val(<?=json_encode($operating_room)?>);
+        $("textarea#additional_code").val(<?=json_encode($additional_code)?>);
+        $("textarea#morphology_code").val(<?=json_encode($morphology_code)?>);
+
+
+        $("input[name=cause_of_death_a]").val(<?=json_encode($cause_of_death_a)?>);
+        $("input[name=cause_of_death_b]").val(<?=json_encode($cause_of_death_b)?>);
+        $("input[name=cause_of_death_c").val(<?=json_encode($cause_of_death_c)?>);
+        $("input[name=onset_and_death").val(<?=json_encode($onset_and_death)?>);
 
         var tracheostomy = <?=json_encode($tracheostomy)?>;
         if(tracheostomy == "Y"){

@@ -58,6 +58,12 @@
     $discharge_status = empty($_REQUEST['discharge_status']) ? null : $_REQUEST['discharge_status'];
     $discharge_type = empty($_REQUEST['discharge_type']) ? null : $_REQUEST['discharge_type'];
     $hospital_refer = empty($_REQUEST['hospital_refer']) ? null : $_REQUEST['hospital_refer'];
+    $additional_code = empty($_REQUEST['additional_code']) ? null : $_REQUEST['additional_code'];
+    $morphology_code = empty($_REQUEST['morphology_code']) ? null : $_REQUEST['morphology_code'];
+    $cause_of_death_a = empty($_REQUEST['cause_of_death_a']) ? null : $_REQUEST['cause_of_death_a'];
+    $cause_of_death_b= empty($_REQUEST['cause_of_death_b']) ? null : $_REQUEST['cause_of_death_b'];
+    $cause_of_death_c = empty($_REQUEST['cause_of_death_c']) ? null : $_REQUEST['cause_of_death_c'];
+    $onset_and_death = empty($_REQUEST['onset_and_death']) ? null : $_REQUEST['onset_and_death'];
 
 
     //$update_datetime = ใช้ NOW()
@@ -78,7 +84,8 @@
                                     mri=:mri,hemodialysis=:hemodialysis,
                                     non_or_other=:non_or_other,non_or_other_text=:non_or_other_text,
                                     discharge_status=:discharge_status,discharge_type=:discharge_type,
-                                    hospital_refer=:hospital_refer,
+                                    hospital_refer=:hospital_refer,additional_code=:additional_code,morphology_code=:morphology_code,
+                                    cause_of_death_a=:cause_of_death_a,cause_of_death_b=:cause_of_death_b,cause_of_death_c=:cause_of_death_c,onset_and_death=:onset_and_death,
                                     update_user=:update_user, update_datetime=NOW()
                                     WHERE summary_id = :summary_id AND an = :an
                                     ");
@@ -95,7 +102,8 @@
                                     'mri'=>$mri, 'hemodialysis'=>$hemodialysis,
                                     'non_or_other'=>$non_or_other, 'non_or_other_text'=>$non_or_other_text,
                                     'discharge_status'=>$discharge_status, 'discharge_type'=>$discharge_type,
-                                    'hospital_refer'=>$hospital_refer,
+                                    'hospital_refer'=>$hospital_refer,'additional_code'=>$additional_code,'morphology_code'=>$morphology_code,
+                                    'cause_of_death_a'=>$cause_of_death_a,'cause_of_death_b'=>$cause_of_death_b,'cause_of_death_c'=>$cause_of_death_c,'onset_and_death'=>$onset_and_death,
                                     'update_user'=>$update_user,
                                     'summary_id'=>$summary_id, 'an'=>$an,
 

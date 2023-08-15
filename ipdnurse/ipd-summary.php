@@ -153,7 +153,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea class="form-control CheckPer_1" name="other_diagnosis" id="other_diagnosis" rows="2"></textarea>
+                        <textarea class="form-control CheckPer_1" name="additional_code" id="additional_code" rows="2"></textarea>
                     </div>
                 </div>
               
@@ -162,7 +162,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea class="form-control CheckPer_2" name="external_cause" id="external_cause" rows="2"></textarea>
+                        <textarea class="form-control CheckPer_2" name="morphology_code" id="morphology_code" rows="2"></textarea>
                     </div>
                 </div>
                             
@@ -381,7 +381,7 @@
                 <div class="row">
                         <label>(a)</label>
                 <div class="col-md-8">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="non_or_other_text" id="non_or_other_text">
+                       <input type="text" class="form-control form-control-sm CheckPer_2" name="cause_of_death_a" id="cause_of_death_a">
                     </div>
                     </div>
 
@@ -390,21 +390,21 @@
                     <div class="row">
                         <label>(b)</label>
                 <div class="col-md-8">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="non_or_other_text" id="non_or_other_text">
+                       <input type="text" class="form-control form-control-sm CheckPer_2" name="cause_of_death_b" id="cause_of_death_b">
                     </div>
                     </div>
 <br>
                     <div class="row">
                         <label>(c)</label>
                 <div class="col-md-8">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="non_or_other_text" id="non_or_other_text">
+                       <input type="text" class="form-control form-control-sm CheckPer_2" name="cause_of_death_c" id="cause_of_death_c">
                     </div>
                     </div>
                     <br>
                     <label class="col-sm-12">Interval between onset and death</label>
                     <div class="row">
                 <div class="col-md-10">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="non_or_other_text" id="non_or_other_text">
+                       <input type="text" class="form-control form-control-sm CheckPer_2" name="onset_and_death" id="onset_and_death">
                </div>
     </div>
     </div>
