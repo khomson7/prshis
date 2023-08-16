@@ -23,6 +23,8 @@
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
 
+    
+    
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
        
@@ -30,6 +32,24 @@
         $vn = KphisQueryUtils::getVnByAn($an);
         $an_parameters = ['an' => $an];
         $hn_parameters = ['hn' => $hn];
+
+
+
+       
+
+        if(isset($_POST['button1'])) {
+           
+            
+            $sql = "SELECT  ".DbConstant::KPHIS_DBNAME.".DrAdmissionNote($an)";
+            $stmt = $conn->query($sql);
+            $stmt ->execute();
+            
+            echo $stmt->rowCount();
+
+        }
+
+        
+
         
         //-------------------------Doctor admission note
         $sql = "SELECT *
@@ -175,6 +195,10 @@
         $stmt_period = $conn->prepare($sql_period);
         $stmt_period->execute(['an'=>$an]);
         $row_period  = $stmt_period->fetch();
+
+
+       
+
 ?>
 <script src="../include/fabric.js"></script>
 <style type="text/css">
@@ -197,6 +221,20 @@
         display: block;
     }
 </style>
+
+<form id ="button1" method="post">
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-md-1">
+        <input type="submit" name="button1"
+                value="นำเข้าบันทึกรับใหม่"/>
+
+</div>
+</div>
+    </form>
+    
+    <br>
+
 <form id="admit_firsth" action=""  method="post"  enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">

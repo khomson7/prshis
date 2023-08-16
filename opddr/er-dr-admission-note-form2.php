@@ -243,13 +243,12 @@ while ($row_item = $stmt_item->fetch()){
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
-               <button type="button" class="btn btn-danger btn-block" onclick="self.close()"><i class="fa fa-window-close"></i> ปิด</button> 
+            <button type="button" class="btn btn-danger btn-block" onclick="self.close()"><i class="fa fa-window-close"></i> ปิด</button> 
             </div>
             <div class="col-md-11">
-                <h4>แบบบันทึกประวัติและตรวจร่างกายผู้ป่วยอุบัติเหตุแรกรับ <?=htmlspecialchars(DbConstant::HOSPITAL_NAME)?></h4>
+                <h4>แบบบันทึกประวัติและตรวจร่างกายผู้ป่วยแรกรับ(ER Form) <?=htmlspecialchars(DbConstant::HOSPITAL_NAME)?></h4>
             </div>
         </div><p></p>
-
         <div class="card-group pb-3 ">
             <div class="card" >
 
@@ -504,35 +503,6 @@ while ($row_item = $stmt_item->fetch()){
                 </div>
             </div>
         </div>
-
-        <div class="card-group pb-3 ">
-            <div class="card" >
-            <div class="card-body" style=" overflow-y: auto;">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label class="col-sm-12"><B>PRIMARY SURVEY</B></label>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-</div>
-
-<div class="card" >
-                <div class="card-body" style=" overflow-y: auto;">
-                    <div class="row">
-                        <div class="col-md-12">
-                        <div class="form-group row">
-                                <label class="col-sm-12"><B>SECONDARY SURVEY</B></label>
-                            </div>
-
-                        </div>
-                            </div>
-                            </div>
-                            </div>
-</div>
-
-
 
         <div class="patient-info-container alert alert-secondary" role="alert" style="z-index: 600;">
             <div class="d-flex">
