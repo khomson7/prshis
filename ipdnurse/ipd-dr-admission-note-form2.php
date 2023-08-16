@@ -222,7 +222,7 @@ $row_period  = $stmt_period->fetch();
         <p></p>
 
         <div class="card-group pb-3 ">
-            <div class="card" >
+            <div class="card">
                 <div class="card-body" style=" overflow-y: auto;">
                     <div class="row">
                         <div class="col-md-12">
@@ -231,15 +231,16 @@ $row_period  = $stmt_period->fetch();
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
-                                <label >วันที่</label>
+                                <label>วันที่</label>
                                 <div class="col-sm-4">
-                                    <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?=(isset($row['receiver_medication_date']) ? htmlspecialchars($row['receiver_medication_date']) : '')?>">
+                                    <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row['receiver_medication_date']) ? htmlspecialchars($row['receiver_medication_date']) : '') ?>">
                                 </div>
                                 <label>เวลา</label>
                                 <div class="col-sm-4">
-                                    <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?=(isset($row['receiver_medication_time']) ? htmlspecialchars($row['receiver_medication_time']) : '')?>">
+                                    <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row['receiver_medication_time']) ? htmlspecialchars($row['receiver_medication_time']) : '') ?>">
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> มาถึงหอผู้ปวยโดย</B></label>
                             </div>
@@ -247,187 +248,224 @@ $row_period  = $stmt_period->fetch();
                                 <!-- <input type="hidden" id="arrive_hidden" name="arrive_hidden" value=""> -->
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php   if ($row['arrive_by'] == 'เดินมา'
-                                                                ||  $row['arrive_by'] == NULL)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="w1" name="arrive_by" value="เดินมา" onchange="custom_check('off_arrive');">
+                                    <input type="radio" <?php if (
+                                                            $row['arrive_by'] == 'เดินมา'
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="w1" name="arrive_by" value="เดินมา" onchange="custom_check('off_arrive');">
                                     <label class="custom-control-label" for="w1">เดินมา</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['arrive_by'] == 'รถนั่ง')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="w2" name="arrive_by" value="รถนั่ง" onchange="custom_check('off_arrive');">
+                                    <input type="radio" <?php if ($row['arrive_by'] == 'รถนั่ง') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="w2" name="arrive_by" value="รถนั่ง" onchange="custom_check('off_arrive');">
                                     <label class="custom-control-label" for="w2">รถนั่ง</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['arrive_by'] == 'รถนอน')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="w3" name="arrive_by" value="รถนอน" onchange="custom_check('off_arrive');">
+                                    <input type="radio" <?php if ($row['arrive_by'] == 'รถนอน') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="w3" name="arrive_by" value="รถนอน" onchange="custom_check('off_arrive');">
                                     <label class="custom-control-label" for="w3">รถนอน</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-3">
-                                    <input type="radio" <?php if ($row['arrive_by'] == 'รถ Transfer')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="w4" name="arrive_by" value="รถ Transfer" onchange="custom_check('off_arrive');">
+                                    <input type="radio" <?php if ($row['arrive_by'] == 'รถ Transfer') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="w4" name="arrive_by" value="รถ Transfer" onchange="custom_check('off_arrive');">
                                     <label class="custom-control-label" for="w4">รถ Transfer</label>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['arrive_by'] !='เดินมา'
-                                                                &&$row['arrive_by'] !='รถนั่ง'
-                                                                &&$row['arrive_by'] !='รถนอน'
-                                                                &&$row['arrive_by'] !='รถ Transfer'
-                                                                &&$row['arrive_by'] != NULL) {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="w5" onchange="custom_check('on_arrive');">
+                                    <input type="radio" <?php if (
+                                                            $row['arrive_by'] != 'เดินมา'
+                                                            && $row['arrive_by'] != 'รถนั่ง'
+                                                            && $row['arrive_by'] != 'รถนอน'
+                                                            && $row['arrive_by'] != 'รถ Transfer'
+                                                            && $row['arrive_by'] != NULL
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="w5" onchange="custom_check('on_arrive');">
                                     <label class="custom-control-label" for="w5">อื่น ๆ</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="w6" name="arrive_by"
-                                        value="<?php if ($row['arrive_by'] !='เดินมา'
-                                                        &&$row['arrive_by'] !='รถนั่ง'
-                                                        &&$row['arrive_by'] !='รถนอน'
-                                                        &&$row['arrive_by'] !='รถ Transfer') {echo htmlspecialchars($row['arrive_by']);}?>"
-                                        <?php if (!($row['arrive_by'] !='เดินมา'
-                                                        &&$row['arrive_by'] !='รถนั่ง'
-                                                        &&$row['arrive_by'] !='รถนอน'
-                                                        &&$row['arrive_by'] !='รถ Transfer'
-                                                        &&$row['arrive_by'] != NULL)) {echo 'disabled';}?>
-                                    >
+                                    <input type="text" class="form-control form-control-sm" id="w6" name="arrive_by" value="<?php if (
+                                                                                                                                $row['arrive_by'] != 'เดินมา'
+                                                                                                                                && $row['arrive_by'] != 'รถนั่ง'
+                                                                                                                                && $row['arrive_by'] != 'รถนอน'
+                                                                                                                                && $row['arrive_by'] != 'รถ Transfer'
+                                                                                                                            ) {
+                                                                                                                                echo htmlspecialchars($row['arrive_by']);
+                                                                                                                            } ?>" <?php if (!($row['arrive_by'] != 'เดินมา'
+                                                                                                                                                && $row['arrive_by'] != 'รถนั่ง'
+                                                                                                                                                && $row['arrive_by'] != 'รถนอน'
+                                                                                                                                                && $row['arrive_by'] != 'รถ Transfer'
+                                                                                                                                                && $row['arrive_by'] != NULL)) {
+                                                                                                                                                echo 'disabled';
+                                                                                                                                            } ?>>
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> อาการสำคัญ</B></label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="" name="chief_complaints" rows="6" ><?=(isset($row_opdscreen['cc']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['chief_complaints']))?></textarea>
+                                    <textarea class="form-control" id="" name="chief_complaints" rows="6"><?= (isset($row_opdscreen['cc']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['chief_complaints'])) ?></textarea>
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-5"><B> ผู้ให้ข้อมูล</B></label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['informant_patient'] == 'ผู้ป่วย')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="e1" value="ผู้ป่วย" name="informant_patient"   >
+                                    <input type="checkbox" <?php if ($row['informant_patient'] == 'ผู้ป่วย') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="e1" value="ผู้ป่วย" name="informant_patient">
                                     <label class="custom-control-label" for="e1">ผู้ป่วย</label>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['informant_relatives'] != null)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="e2"    onchange="custom_check('on_informant1');">
+                                    <input type="checkbox" <?php if ($row['informant_relatives'] != null) {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="e2" onchange="custom_check('on_informant1');">
                                     <label class="custom-control-label" for="e2">ญาติ</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="e_informant1" name="informant_relatives"
-                                            value="<?=(isset($row['informant_relatives']) ? htmlspecialchars($row['informant_relatives']) : '')?>"
-                                            <?php if ($row['informant_relatives'] == null)  {echo 'disabled';} ?>>
+                                    <input type="text" class="form-control form-control-sm" id="e_informant1" name="informant_relatives" value="<?= (isset($row['informant_relatives']) ? htmlspecialchars($row['informant_relatives']) : '') ?>" <?php if ($row['informant_relatives'] == null) {
+                                                                                                                                                                                                                                                    echo 'disabled';
+                                                                                                                                                                                                                                                } ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['informant_deliverer'] == 'ผู้นำส่ง')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="e3" value="ผู้นำส่ง" name="informant_deliverer"   >
+                                    <input type="checkbox" <?php if ($row['informant_deliverer'] == 'ผู้นำส่ง') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="e3" value="ผู้นำส่ง" name="informant_deliverer">
                                     <label class="custom-control-label" for="e3">ผู้นำส่ง</label>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['informant_etc'] != null)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="e4"    onchange="custom_check('on_informant2');">
+                                    <input type="checkbox" <?php if ($row['informant_etc'] != null) {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="e4" onchange="custom_check('on_informant2');">
                                     <label class="custom-control-label" for="e4">อื่นๆ</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="e_informant2" name="informant_etc"
-                                            value="<?=(isset($row['informant_etc']) ? htmlspecialchars($row['informant_etc']) : '')?>"
-                                            <?php if ($row['informant_etc'] == null)  {echo 'disabled';} ?>>
+                                    <input type="text" class="form-control form-control-sm" id="e_informant2" name="informant_etc" value="<?= (isset($row['informant_etc']) ? htmlspecialchars($row['informant_etc']) : '') ?>" <?php if ($row['informant_etc'] == null) {
+                                                                                                                                                                                                                                    echo 'disabled';
+                                                                                                                                                                                                                                } ?>>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card" >
+            <div class="card">
                 <div class="card-body" style=" overflow-y: auto;">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group row">
-                            <label class="col-sm-12"><B>เข้ารับการรักษาโดย</B></label>
+                                <label class="col-sm-12"><B>เข้ารับการรักษาโดย</B></label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['take_medication_by'] == 'มาเอง'
-                                                                ||$row['take_medication_by'] == NULL)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง"    onchange="custom_check('off_entered');">
+                                    <input type="radio" <?php if (
+                                                            $row['take_medication_by'] == 'มาเอง'
+                                                            || $row['take_medication_by'] == NULL
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง" onchange="custom_check('off_entered');">
                                     <label class="custom-control-label" for="entered_by1">มาเอง</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['take_medication_by'] == 'แพทย์นัด')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="entered_by2" name="take_medication_by" value="แพทย์นัด"    onchange="custom_check('off_entered');">
+                                    <input type="radio" <?php if ($row['take_medication_by'] == 'แพทย์นัด') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="entered_by2" name="take_medication_by" value="แพทย์นัด" onchange="custom_check('off_entered');">
                                     <label class="custom-control-label" for="entered_by2">แพทย์นัด</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['take_medication_by'] != 'มาเอง'
-                                                                &&$row['take_medication_by'] != 'แพทย์นัด'
-                                                                &&$row['take_medication_by'] != NULL)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="entered_by3"    onchange="custom_check('on_entered');">
+                                    <input type="radio" <?php if (
+                                                            $row['take_medication_by'] != 'มาเอง'
+                                                            && $row['take_medication_by'] != 'แพทย์นัด'
+                                                            && $row['take_medication_by'] != NULL
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="entered_by3" onchange="custom_check('on_entered');">
                                     <label class="custom-control-label" for="entered_by3">ส่งตัวจาก</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by"
-                                            value="<?php if ($row['take_medication_by'] != 'มาเอง'
-                                                            &&$row['take_medication_by'] != 'แพทย์นัด') {echo htmlspecialchars($row['take_medication_by']);}?>"
-                                            <?php if (!($row['take_medication_by'] != 'มาเอง'
-                                                    &&$row['take_medication_by'] != 'แพทย์นัด'
-                                                    &&$row['take_medication_by'] != NULL)) {echo 'disabled';} ?>>
+                                    <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by" value="<?php if (
+                                                                                                                                                    $row['take_medication_by'] != 'มาเอง'
+                                                                                                                                                    && $row['take_medication_by'] != 'แพทย์นัด'
+                                                                                                                                                ) {
+                                                                                                                                                    echo htmlspecialchars($row['take_medication_by']);
+                                                                                                                                                } ?>" <?php if (!($row['take_medication_by'] != 'มาเอง'
+                                                                                                                                                                    && $row['take_medication_by'] != 'แพทย์นัด'
+                                                                                                                                                                    && $row['take_medication_by'] != NULL)) {
+                                                                                                                                                                    echo 'disabled';
+                                                                                                                                                                } ?>>
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> นำส่งผู้ป่วยโดย</B></label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['taken_by_relative'] == 'Y')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="r1" value="Y" name="taken_by_relative"    onchange="custom_check('off_taken');">
+                                    <input type="checkbox" <?php if ($row['taken_by_relative'] == 'Y') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="r1" value="Y" name="taken_by_relative" onchange="custom_check('off_taken');">
                                     <label class="custom-control-label" for="r1">ญาติ</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['taken_by_nurse'] == 'Y')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="r2" value="Y" name="taken_by_nurse"    onchange="custom_check('off_taken');">
+                                    <input type="checkbox" <?php if ($row['taken_by_nurse'] == 'Y') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="r2" value="Y" name="taken_by_nurse" onchange="custom_check('off_taken');">
                                     <label class="custom-control-label" for="r2">พยาบาล</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-3">
-                                    <input type="checkbox" <?php if ($row['taken_by_crib'] == 'Y')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="r3" value="Y" name="taken_by_crib"    onchange="custom_check('off_taken');">
+                                    <input type="checkbox" <?php if ($row['taken_by_crib'] == 'Y') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="r3" value="Y" name="taken_by_crib" onchange="custom_check('off_taken');">
                                     <label class="custom-control-label" for="r3">พนักงานเปล</label>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['taken_by_etc'] == 'Y')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" value="Y" name="taken_by_etc" id="r4" onchange="custom_check('on_taken');">
+                                    <input type="checkbox" <?php if ($row['taken_by_etc'] == 'Y') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" value="Y" name="taken_by_etc" id="r4" onchange="custom_check('on_taken');">
                                     <label class="custom-control-label" for="r4">อื่น ๆ</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="r5" name="taken_by"
-                                            value="<?php if ($row['taken_by_etc'] == 'Y') {echo htmlspecialchars($row['taken_by']);}?>"
-                                            <?php if (!($row['taken_by_etc'] == 'Y')) {echo 'disabled';} ?>>
+                                    <input type="text" class="form-control form-control-sm" id="r5" name="taken_by" value="<?php if ($row['taken_by_etc'] == 'Y') {
+                                                                                                                                echo htmlspecialchars($row['taken_by']);
+                                                                                                                            } ?>" <?php if (!($row['taken_by_etc'] == 'Y')) {
+                                                                                                                                                                                                                    echo 'disabled';
+                                                                                                                                                                                                                } ?>>
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12"><B>ประวัติการเจ็บป่วยปัจจุบัน</B></label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="" name="medical_history" rows="6"><?=(isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history']))?></textarea>
+                                    <textarea class="form-control" id="" name="medical_history" rows="6"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history'])) ?></textarea>
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12"><B>สัญญาณชีพแรกรับ</B></label>
                             </div>
@@ -435,8 +473,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-2">BP</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="bp" disabled value="<?=(isset($row_vs['sbp']) ? htmlspecialchars($row_vs['sbp']).'/' : '')?><?=(isset($row_vs['dbp']) ? htmlspecialchars($row_vs['dbp']) : '')?>"
-                                                aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="bp" disabled value="<?= (isset($row_vs['sbp']) ? htmlspecialchars($row_vs['sbp']) . '/' : '') ?><?= (isset($row_vs['dbp']) ? htmlspecialchars($row_vs['dbp']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">mmHg</span>
                                         </div>
@@ -445,7 +482,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-3">E</label>
                                 <div class="col-sm-2">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="e" disabled value="<?=(isset($row_vs['eye']) ? htmlspecialchars($row_vs['eye']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="e" disabled value="<?= (isset($row_vs['eye']) ? htmlspecialchars($row_vs['eye']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                     </div>
                                 </div>
                             </div>
@@ -453,8 +490,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-2">T</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="t" disabled value="<?=(isset($row_vs['bt']) ? htmlspecialchars($row_vs['bt']) : '')?>"
-                                                aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="t" disabled value="<?= (isset($row_vs['bt']) ? htmlspecialchars($row_vs['bt']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">  &#176; C    </span>
                                         </div>
@@ -463,7 +499,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-3">V</label>
                                 <div class="col-sm-2">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="v" disabled value="<?=(isset($row_vs['verbal']) ? htmlspecialchars($row_vs['verbal']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="v" disabled value="<?= (isset($row_vs['verbal']) ? htmlspecialchars($row_vs['verbal']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                     </div>
                                 </div>
                             </div>
@@ -471,7 +507,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-2">PR</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="pr"  disabled value="<?=(isset($row_vs['pr']) ? htmlspecialchars($row_vs['pr']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="pr" disabled value="<?= (isset($row_vs['pr']) ? htmlspecialchars($row_vs['pr']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
                                         </div>
@@ -480,7 +516,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-3">M</label>
                                 <div class="col-sm-2">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="m"  disabled value="<?=(isset($row_vs['movement']) ? htmlspecialchars($row_vs['movement']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="m" disabled value="<?= (isset($row_vs['movement']) ? htmlspecialchars($row_vs['movement']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                     </div>
                                 </div>
                             </div>
@@ -488,7 +524,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-2">RR</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="rr"   disabled value="<?=(isset($row_vs['rr']) ? htmlspecialchars($row_vs['rr']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="rr" disabled value="<?= (isset($row_vs['rr']) ? htmlspecialchars($row_vs['rr']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
                                         </div>
@@ -497,26 +533,30 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-3">Neuro sign GCS</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="gcs"
-                                                disabled value="<?php $i = 0;
-                                                                    if (isset($row_vs['eye'])){
-                                                                        if (is_numeric($row_vs['eye'])) {
-                                                                            $i += $row_vs['eye'];
-                                                                        }
-                                                                    }else{'';}
-                                                                    if (isset($row_vs['verbal'])){
-                                                                        if (is_numeric($row_vs['verbal'])) {
-                                                                            $i += $row_vs['verbal'];
-                                                                        }
-                                                                    }else{'';}
-                                                                    if (isset($row_vs['movement'])){
-                                                                        if (is_numeric($row_vs['movement'])) {
-                                                                            $i += $row_vs['movement'];
-                                                                        }
-                                                                    }else{'';}
-                                                                echo $i;
-                                                                ?>"
-                                                aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="gcs" disabled value="<?php $i = 0;
+                                                                                                                    if (isset($row_vs['eye'])) {
+                                                                                                                        if (is_numeric($row_vs['eye'])) {
+                                                                                                                            $i += $row_vs['eye'];
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        '';
+                                                                                                                    }
+                                                                                                                    if (isset($row_vs['verbal'])) {
+                                                                                                                        if (is_numeric($row_vs['verbal'])) {
+                                                                                                                            $i += $row_vs['verbal'];
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        '';
+                                                                                                                    }
+                                                                                                                    if (isset($row_vs['movement'])) {
+                                                                                                                        if (is_numeric($row_vs['movement'])) {
+                                                                                                                            $i += $row_vs['movement'];
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        '';
+                                                                                                                    }
+                                                                                                                    echo $i;
+                                                                                                                    ?>" aria-describedby="inputGroup-sizing-sm">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">คะแนน</span>
                                         </div>
@@ -527,24 +567,25 @@ $row_period  = $stmt_period->fetch();
                                 <label class="text-right col-sm-2">Braden Scale</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-sm sm-3">
-                                        <input type="text" class="form-control" id="" name="braden_scale"  disabled value="<?=(isset($row_vs['braden']) ? htmlspecialchars($row_vs['braden']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="braden_scale" disabled value="<?= (isset($row_vs['braden']) ? htmlspecialchars($row_vs['braden']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">คะแนน</span>
                                         </div>
                                     </div>
                                 </div>
-                            </div><hr>
+                            </div>
+                            <hr>
                             <div class="form-group row">
                                 <label class="text-right col-sm-2">น้ำหนัก</label>
                                 <div class="col-sm-2">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" id="" name=""  disabled value="<?=(isset($row_ipt['latest_bw']) ? htmlspecialchars($row_ipt['latest_bw']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="" disabled value="<?= (isset($row_ipt['latest_bw']) ? htmlspecialchars($row_ipt['latest_bw']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                     </div>
                                 </div>
                                 <label class="text-right col-sm-1">ส่วนสูง</label>
                                 <div class="col-sm-2">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" id="" name=""  disabled value="<?=(isset($row_ipt['latest_height']) ? htmlspecialchars($row_ipt['latest_height']) : '')?>" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control" id="" name="" disabled value="<?= (isset($row_ipt['latest_height']) ? htmlspecialchars($row_ipt['latest_height']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
                                     </div>
                                 </div>
                             </div>
@@ -563,25 +604,30 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B>Chief complaint</B></label>
                                 <label class="col-sm-2"><B>เด็กแรกคลอด</B></label>
 
-
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row['c_born_type_in'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="born_type_in1" name="c_born_type_in" value="1" onchange="born_typein_check('off_checked');">
+                                    <label class="custom-control-label" for="born_type_in1">ในโรงพยาบาล</label>
+                                </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="transport1" value="อุ้มมา" name="transport">
-                                    <label class="custom-control-label" for="transport1">ในโรงพยาบาล</label>
+                                    <input type="radio" <?php if ($row['c_born_type_in'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="born_type_in2" name="c_born_type_in" value="2" onchange="born_typein_check('on_checked');">
+                                    <label class="custom-control-label" for="born_type_in2">นอกโรงพยาบาล</label>
                                 </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="transport2" value="transport incubator" name="transport">
-                                    <label class="custom-control-label" for="transport2">นอกโรงพยาบาล</label>
-                                </div>
+
+
 
                                 <label>วันที่</label>
                                 <div class="col-sm-2">
-                                    <input type="date" class="form-control form-control-sm" id="receive_date" name="receive_date" value="<?= (isset($row['receive_date']) ? htmlspecialchars($row['receive_date']) : '') ?>">
+                                    <input type="date" class="form-control form-control-sm" id="c_born_date" name="c_born_date" value="<?= (isset($row['c_born_date']) ? htmlspecialchars($row['c_born_date']) : '') ?>">
                                 </div>
 
                                 <label>เวลา</label>
                                 <div class="col-sm-2">
-                                    <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row['receive_time']) ? htmlspecialchars($row['receive_time']) : '') ?>">
+                                    <input type="time" class="form-control form-control-sm" id="c_born_time" name="c_born_time" value="<?= (isset($row['c_born_time']) ? htmlspecialchars($row['c_born_time']) : '') ?>">
                                 </div>
 
                             </div>
@@ -597,37 +643,42 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B>Present illness</B></label>
                                 <label class="col-sm-2"><B>เด็กแรกเกิด คลอดวิธี</B></label>
 
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_labor_type1" name="c_labor_type" value="1" onchange="labor_type_check('off_checked');">
+                                    <label class="custom-control-label" for="c_labor_type1">Normal delivery</label>
+                                </div>
 
-                                <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['taken_by_relative'] == 'Y') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r1" value="Y" name="taken_by_relative" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r1">Normal delivery</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_labor_type2" name="c_labor_type" value="2" onchange="labor_type_check('off_checked');">
+                                    <label class="custom-control-label" for="c_labor_type2">V/E</label>
                                 </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['taken_by_nurse'] == 'Y') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r2" value="Y" name="taken_by_nurse" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r2">V/E</label>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '3') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_labor_type3" name="c_labor_type" value="3" onchange="labor_type_check('off_checked');">
+                                    <label class="custom-control-label" for="c_labor_type3">F/E</label>
                                 </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['taken_by_crib'] == 'Y') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r3" value="Y" name="taken_by_crib" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r3">F/E</label>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '4') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_labor_type4" name="c_labor_type" value="4" onchange="labor_type_check('off_checked');">
+                                    <label class="custom-control-label" for="c_labor_type4">C/S</label>
                                 </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['taken_by_crib'] == 'Y') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r3" value="Y" name="taken_by_crib" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r3">C/S</label>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '5') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_labor_type5" name="c_labor_type" value="5" onchange="labor_type_check('on_checked');">
+                                    <label class="custom-control-label" for="c_labor_type5">Breech assisting</label>
                                 </div>
-                                <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="checkbox" <?php if ($row['taken_by_crib'] == 'Y') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r3" value="Y" name="taken_by_crib" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r3">Breech assisting</label>
-                                </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -639,11 +690,11 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B></B></label>
                                 <label class="col-sm-1"><B>Indication</B></label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['c_indication']) ? htmlspecialchars($row['c_indication']) : '') ?>" id="c_indication" name="c_indication">
                                 </div>
                                 <label class="col-sm-2"><B>Intrapartum complication</B></label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['c_intrapartum']) ? htmlspecialchars($row['c_intrapartum']) : '') ?>" id="" name="c_intrapartum">
                                 </div>
 
                             </div>
@@ -655,10 +706,11 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-1"><B></B></label>
                                 <div class="custom-control custom-checkbox col-sm-5">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?php if ($row['taken_by_relative'] == 'Y') {
-                                                                                                                                                                echo 'checked="checked"';
-                                                                                                                                                            } ?> class="custom-control-input" id="r1" value="Y" name="taken_by_relative" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r1">ไม่มีความผิดปกติระหว่างการคลอด</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" <?php if ($row['c_labor_normal'] == 'Y') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="c_labor_normal" value="Y" name="c_labor_normal" onchange="custom_check('off_taken');">
+                                    <label class="custom-control-label" for="c_labor_normal">ไม่มีความผิดปกติระหว่างการคลอด</label>
                                 </div>
 
                             </div>
@@ -671,35 +723,29 @@ $row_period  = $stmt_period->fetch();
                         <div class="col-sm-1"></div>
                         <div class="custom-control custom-radio col-sm-2">
                             <input type="radio" <?php if (
-                                                    $row['take_medication_by'] == 'มาเอง'
-                                                    || $row['take_medication_by'] == NULL
+                                                    $row['c_drug_allergy'] == 'ไม่ทราบ'
                                                 ) {
                                                     echo 'checked="checked"';
-                                                } ?> class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง" onchange="custom_check('off_entered');">
-                            <label class="custom-control-label" for="entered_by1">ไม่ทราบ</label>
+                                                } ?> class="custom-control-input" id="c_drug_allergy1" name="c_drug_allergy" value="ไม่ทราบ" onchange="allergy_check('off_checked');">
+                            <label class="custom-control-label" for="c_drug_allergy1">ไม่ทราบ</label>
                         </div>
 
                         <div class="custom-control custom-radio col-sm-2">
                             <input type="radio" <?php if (
-                                                    $row['take_medication_by'] != 'มาเอง'
-                                                    && $row['take_medication_by'] != 'แพทย์นัด'
-                                                    && $row['take_medication_by'] != NULL
+                                                    $row['c_drug_allergy'] != 'ไม่ทราบ'
+                                                    && $row['c_drug_allergy'] != NULL
                                                 ) {
                                                     echo 'checked="checked"';
-                                                } ?> class="custom-control-input" id="entered_by3" onchange="custom_check('on_entered');">
-                            <label class="custom-control-label" for="entered_by3">แพ้ ระบุ</label>
+                                                } ?> class="custom-control-input" id="c_drug_allergy2" onchange="allergy_check('on_checked');">
+                            <label class="custom-control-label" for="c_drug_allergy2">แพ้ ระบุ</label>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by" value="<?php if (
-                                                                                                                                            $row['take_medication_by'] != 'มาเอง'
-                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                                                                                        ) {
-                                                                                                                                            echo htmlspecialchars($row['take_medication_by']);
-                                                                                                                                        } ?>" <?php if (!($row['take_medication_by'] != 'มาเอง'
-                                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                                                                                                            && $row['take_medication_by'] != NULL)) {
-                                                                                                                                                            echo 'disabled';
-                                                                                                                                                        } ?>>
+                            <input type="text" class="form-control form-control-sm" id="c_drug_allergy_text" name="c_drug_allergy" value="<?php if ($row['c_drug_allergy'] != 'ไม่ทราบ') {
+                                                                                                                                                echo htmlspecialchars($row['c_drug_allergy']);
+                                                                                                                                            } ?>" <?php if (!($row['c_drug_allergy'] != 'ไม่ทราบ'
+                && $row['c_drug_allergy'] != NULL)) {
+                echo 'disabled';
+            } ?>>
                         </div>
 
 
@@ -711,58 +757,54 @@ $row_period  = $stmt_period->fetch();
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="col-sm-1">
-                         <input type="number" placeholder="G" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                         </div>
-                         <div class="col-sm-1">
-                         <input type="number" placeholder="Tp" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                         </div>
-                         <div class="col-sm-1">
-                         <input type="number" placeholder="Pre" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                         </div>
-                         <div class="col-sm-1">
-                         <input type="number" placeholder="A" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                         </div>
-                         <div class="col-sm-1">
-                         <input type="number" placeholder="L" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                         </div>
-                         
-               </div>
-                         <div class="form-group row">
-                         <label class="col-sm-1"></label>
-                         <label class="col-sm-1"></label>
-                                         <B>Serology</B>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="number" placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="Tp" class="form-control form-control-sm" value="<?= (isset($row['c_tp']) ? htmlspecialchars($row['c_tp']) : '') ?>" id="c_tp" name="c_tp" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="Pre" class="form-control form-control-sm" value="<?= (isset($row['c_pre']) ? htmlspecialchars($row['c_pre']) : '') ?>" id="c_pre" name="c_pre" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="A" class="form-control form-control-sm" value="<?= (isset($row['c_a']) ? htmlspecialchars($row['c_a']) : '') ?>" id="c_a" name="c_a" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="L" class="form-control form-control-sm" value="<?= (isset($row['c_l']) ? htmlspecialchars($row['c_l']) : '') ?>" id="c_l" name="c_l" min="0">
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-1"></label>
+                        <B>Serology</B>&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <div class="custom-control custom-radio col-sm-1">
                             <input type="radio" <?php if (
-                                                    $row['take_medication_by'] == 'มาเอง'
-                                                    || $row['take_medication_by'] == NULL
+                                                    $row['c_serology'] == 'normal'
                                                 ) {
                                                     echo 'checked="checked"';
-                                                } ?> class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง" onchange="custom_check('off_entered');">
-                            <label class="custom-control-label" for="entered_by1">Normal</label>
+                                                } ?> class="custom-control-input" id="c_serology1" name="c_serology" value="normal" onchange="c_serology_check('off_checked');">
+                            <label class="custom-control-label" for="c_serology1">Normal</label>
                         </div>
 
                         <div class="custom-control custom-radio col-sm-1">
                             <input type="radio" <?php if (
-                                                    $row['take_medication_by'] != 'มาเอง'
-                                                    && $row['take_medication_by'] != 'แพทย์นัด'
-                                                    && $row['take_medication_by'] != NULL
+                                                    $row['c_serology'] != 'normal'
+                                                    && $row['c_serology'] != NULL
                                                 ) {
                                                     echo 'checked="checked"';
-                                                } ?> class="custom-control-input" id="entered_by3" onchange="custom_check('on_entered');">
-                            <label class="custom-control-label" for="entered_by3">Abnormal</label>
+                                                } ?> class="custom-control-input" id="c_serology2" onchange="c_serology_check('on_checked');">
+                            <label class="custom-control-label" for="c_serology2">Abnormal</label>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by" value="<?php if (
-                                                                                                                                            $row['take_medication_by'] != 'มาเอง'
-                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                                                                                        ) {
-                                                                                                                                            echo htmlspecialchars($row['take_medication_by']);
-                                                                                                                                        } ?>" <?php if (!($row['take_medication_by'] != 'มาเอง'
-                                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                                                                                                            && $row['take_medication_by'] != NULL)) {
-                                                                                                                                                            echo 'disabled';
-                                                                                                                                                        } ?>>
+                            <input type="text" class="form-control form-control-sm" id="c_serology_text" name="c_serology" value="<?php if (
+                                                                                                                                        $row['c_serology'] != 'normal'
+                                                                                                                                    ) {
+                                                                                                                                        echo htmlspecialchars($row['c_serology']);
+                                                                                                                                    } ?>" <?php if (!($row['c_serology'] != 'normal'                                                                                                                
+                                                                                                                                                    && $row['c_serology'] != NULL)) {
+                                                                                                                                                    echo 'disabled';
+                                                                                                                                                } ?>>
                         </div>
 
                     </div>
@@ -773,7 +815,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B></B></label>
                                 <label class="col-sm-2"><B>Anterpartum Complication</B></label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['c_anterpartum']) ? htmlspecialchars($row['c_anterpartum']) : '') ?>" id="c_anterpartum" name="c_anterpartum">
                                 </div>
 
 
@@ -787,20 +829,20 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B></B></label>
                                 <label class="col-sm-2"><B>Menternal Vaccination dt</B></label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['c_vaccination_dt']) ? htmlspecialchars($row['c_vaccination_dt']) : '') ?>" id="c_vaccination_dt" name="c_vaccination_dt">
                                 </div> <B>Newborn vaccination</B> &nbsp;&nbsp;&nbsp;&nbsp;
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['taken_by_relative'] == 'Y') {
+                                    <input type="checkbox" <?php if ($row['c_hbv'] == 'Y') {
                                                                 echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r1" value="Y" name="taken_by_relative" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r1">HBV</label>
+                                                            } ?> class="custom-control-input" id="c_hbv" value="Y" name="c_hbv" onchange="custom_check('off_taken');">
+                                    <label class="custom-control-label" for="c_hbv">HBV</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['taken_by_nurse'] == 'Y') {
+                                    <input type="checkbox" <?php if ($row['c_bcg'] == 'Y') {
                                                                 echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="r2" value="Y" name="taken_by_nurse" onchange="custom_check('off_taken');">
-                                    <label class="custom-control-label" for="r2">BCG</label>
+                                                            } ?> class="custom-control-input" id="c_bcg" value="Y" name="c_bcg" onchange="custom_check('off_taken');">
+                                    <label class="custom-control-label" for="c_bcg">BCG</label>
                                 </div>
 
 
@@ -816,30 +858,30 @@ $row_period  = $stmt_period->fetch();
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="custom-control custom-checkbox col-sm-1">
-                            <input type="checkbox" <?php if ($row['taken_by_relative'] == 'Y') {
+                            <input type="checkbox" <?php if ($row['c_inform_officer'] == 'Y') {
                                                         echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="r1" value="Y" name="taken_by_relative" onchange="custom_check('off_taken');">
-                            <label class="custom-control-label" for="r1">เจ้าหน้าที่</label>
+                                                    } ?> class="custom-control-input" id="c_inform_officer" value="Y" name="c_inform_officer" onchange="custom_check('off_taken');">
+                            <label class="custom-control-label" for="c_inform_officer">เจ้าหน้าที่</label>
                         </div>
                         <div class="custom-control custom-checkbox col-sm-1">
-                            <input type="checkbox" <?php if ($row['taken_by_nurse'] == 'Y') {
+                            <input type="checkbox" <?php if ($row['c_inform_mother'] == 'Y') {
                                                         echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="r2" value="Y" name="taken_by_nurse" onchange="custom_check('off_taken');">
-                            <label class="custom-control-label" for="r2">มารดา</label>
+                                                    } ?> class="custom-control-input" id="c_inform_mother" value="Y" name="c_inform_mother" onchange="custom_check('off_taken');">
+                            <label class="custom-control-label" for="c_inform_mother">มารดา</label>
                         </div>
 
                         <div class="custom-control custom-checkbox col-sm-1">
-                            <input type="checkbox" <?php if ($row['taken_by_etc'] == 'Y') {
+                            <input type="checkbox" <?php if ($row['c_inform_etc'] == 'Y') {
                                                         echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" value="Y" name="taken_by_etc" id="r4" onchange="custom_check('on_taken');">
-                            <label class="custom-control-label" for="r4">อื่น ๆ ระบุ</label>
+                                                    } ?> class="custom-control-input" value="Y" name="c_inform_etc" id="in4" onchange="custom_check('on_taken');">
+                            <label class="custom-control-label" for="in4">อื่น ๆ ระบุ</label>
                         </div>
                         <div class="col-sm-5">
-                            <input type="text" class="form-control form-control-sm" id="r5" name="taken_by" value="<?php if ($row['taken_by_etc'] == 'Y') {
-                                                                                                                        echo htmlspecialchars($row['taken_by']);
-                                                                                                                    } ?>" <?php if (!($row['taken_by_etc'] == 'Y')) {
-                                                                                                                                        echo 'disabled';
-                                                                                                                                    } ?>>
+                            <input type="text" class="form-control form-control-sm" id="in5" name="c_inform_etc_text" value="<?php if ($row['c_inform_etc'] == 'Y') {
+                                                                                                                        echo htmlspecialchars($row['c_inform_etc_text']);
+                                                                                                                    } ?>" <?php if (!($row['c_inform_etc'] == 'Y')) {
+                                                                                                                                echo 'disabled';
+                                                                                                                            } ?>>
                         </div>
 
                     </div>
@@ -849,7 +891,7 @@ $row_period  = $stmt_period->fetch();
         </div>
 
 
-       
+
 
         <div class="alert alert-info text-center col-sm-12" role="alert">ประวัติการเจ็บป่วยในอดีต</div>
         <div class="form-group row">
@@ -2222,392 +2264,425 @@ $row_period  = $stmt_period->fetch();
                         <div class="col-sm-12">
                             <div class="card border-success">
                                 <div class="card-body">
-                                    
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2"><B></B></label>
+
+                                    <B>GA</B>
+                                    <div class="col-sm-1">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                    </div> Wks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <B>Apgar score นาทีที่ 1</B>
+                                    <div class="col-sm-1">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
+                                    </div>
+                                    <B>Apgar score นาทีที่ 5</B>
+                                    <div class="col-sm-1">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
+                                    </div>
+                                    <B>Apgar score นาทีที่ 10</B>
+                                    <div class="col-sm-1">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
                                     </div>
 
-                                    <div class="form-group row">
-                                        <label class="col-sm-2"><B></B></label>
 
-                                        <B>GA</B>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
-                                        </div> Wks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                        <B>Apgar score นาทีที่ 1</B>
-                                        <div class="col-sm-1">
-                                            <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                                        </div>
-                                        <B>Apgar score นาทีที่ 5</B>
-                                        <div class="col-sm-1">
-                                            <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                                        </div>
-                                        <B>Apgar score นาทีที่ 10</B>
-                                        <div class="col-sm-1">
-                                            <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                    <div class="form-group row">
-                            <label class="text-right col-sm-3">General</label>
-                            <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_ga_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ga_text']) : htmlspecialchars($row['pe_general']))?>" id="pe_general" name="pe_general">
-                            </div>
-                            <div class="col-md-2">
-                                
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_general','Active child , no abnormal feature , Term')"><i class="fas fa-baby"></i> General Normal</button>
-                            </div>
-                        </div>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Skin</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_skin']) ? htmlspecialchars($row['pe_skin']) : '') ?>" id="pe_skin" name="pe_skin">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_skin','No jaundice , no lesion')"><i class="fas fa-baby"></i> Skin Normal</button>
-                                        </div>
-                                    </div>
+                                <div class="form-group row">
+                                <label class="col-sm-2"><B></B></label>
+                                <B>Sex:&nbsp;&nbsp;</B> <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row['c_sex'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_sex1" name="c_sex" value="1" onchange="sex_check('off_checked');">
+                                    <label class="custom-control-label" for="c_sex1">Male</label>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Head</label>
-                                        <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['head']) ? htmlspecialchars($row['head']) : '')?>" id="head" name="head">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('head','Normal contour of head no mass')"><i class="fas fa-baby"></i> Head Normal</button>
-                                        </div>
-                                    </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row['c_sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="c_sex2" name="c_sex" value="2" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="c_sex2">Female</label>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">HEENT</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_heent_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_heent_text']) : htmlspecialchars($row['pe_heent'])) ?>" id="pe_heent" name="pe_heent">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heent','AF 2*2 cm, no cephalhematoma')"><i class="fas fa-baby"></i> HEENT Normal</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Neck</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_neck']) ? htmlspecialchars($row['pe_neck']) : '') ?>" id="pe_neck" name="pe_neck">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neck','No feature , no mass')"><i class="fas fa-baby"></i> Neck Normal</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Breast & Thorax</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_breastthorax']) ? htmlspecialchars($row['pe_breastthorax']) : '') ?>" id="pe_breastthorax" name="pe_breastthorax">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_breastthorax','Normal chest contour')"><i class="fas fa-baby"></i> Normal</button>
-                                        </div>
-                                    </div>
+                                <B>BW</B>
+                                    <div class="col-sm-1">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" id="c_bw" name="c_bw" min="0">
+                                    </div> gms&nbsp;&nbsp;
+                                    <B>HC</B>
+                                    <div class="col-sm-1">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" id="c_hc" name="c_hc" min="0">
+                                    </div> cms&nbsp;&nbsp;
+                                    <B>length</B>
+                                    <div class="col-sm-1">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" id="c_length" name="c_length" min="0">
+                                    </div> cms
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Face</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_face']) ? htmlspecialchars($row['pe_face']) : '') ?>" id="pe_face" name="pe_face">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_face','No facial neve palsy')"><i class="fas fa-baby"></i> Face Normal</button>
-                                        </div>
-                                    </div>
+                                                    </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Ears</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_ears']) ? htmlspecialchars($row['pe_ears']) : '') ?>" id="pe_ears" name="pe_ears">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_ears','Normal position of ears')"><i class="fas fa-baby"></i> Ears Normal</button>
-                                        </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">General</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_ga_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ga_text']) : htmlspecialchars($row['pe_general'])) ?>" id="pe_general" name="pe_general">
                                     </div>
+                                    <div class="col-md-2">
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Eyes</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_eyes']) ? htmlspecialchars($row['pe_eyes']) : '') ?>" id="pe_eyes" name="pe_eyes">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_eyes','Normal conjunctiva')"><i class="fas fa-baby"></i> Eyes Normal</button>
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_general','Active child , no abnormal feature , Term')"><i class="fas fa-baby"></i> General Normal</button>
                                     </div>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Nose</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_nose']) ? htmlspecialchars($row['pe_nose']) : '') ?>" id="pe_nose" name="pe_nose">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_nose','No flaring alar nasai')"><i class="fas fa-baby"></i> Nose Normal</button>
-                                        </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Skin</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_skin']) ? htmlspecialchars($row['pe_skin']) : '') ?>" id="pe_skin" name="pe_skin">
                                     </div>
+                                    <div class="col-md-2">
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Mouth</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_mouth']) ? htmlspecialchars($row['pe_mouth']) : '') ?>" id="pe_mouth" name="pe_mouth">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_mouth','No cleft lip-palate , No tongue tie')"><i class="fas fa-baby"></i> Mouth Normal</button>
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_skin','No jaundice , no lesion')"><i class="fas fa-baby"></i> Skin Normal</button>
                                     </div>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Chest</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_chest']) ? htmlspecialchars($row['pe_chest']) : '') ?>" id="pe_chest" name="pe_chest">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_chest','Normal shape, no retraction')"><i class="fas fa-baby"></i> Chest Normal</button>
-                                        </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Head</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['head']) ? htmlspecialchars($row['head']) : '') ?>" id="head" name="head">
                                     </div>
+                                    <div class="col-md-2">
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Lungs</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_lung_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_lung_text']) : htmlspecialchars($row['pe_lungs'])) ?>" id="pe_lungs" name="pe_lungs">
-                                        </div>
-                                        <div class="col-md-2"> 
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','Normal breat sound , no grunting')"><i class="fas fa-baby"></i> Lungs Normal</button>
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('head','Normal contour of head no mass')"><i class="fas fa-baby"></i> Head Normal</button>
                                     </div>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Heart</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_heart_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_heart_text']) : htmlspecialchars($row['pe_heart'])) ?>" id="pe_heart" name="pe_heart">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heart','No murmur , regular rhythm')"><i class="fas fa-baby"></i> Heart Normal</button>
-                                        </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">HEENT</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_heent_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_heent_text']) : htmlspecialchars($row['pe_heent'])) ?>" id="pe_heent" name="pe_heent">
                                     </div>
-                                   
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Abdomen</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_ab_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ab_text']) : htmlspecialchars($row['pe_abdomen'])) ?>" id="pe_abdomen" name="pe_abdomen">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','No hepatosplenomegaly, no abdominal wall defect')"><i class="fas fa-baby"></i> Abdomen Normal</button>
-                                        </div>
-                                    </div>
-                                    
+                                    <div class="col-md-2">
 
-                                    <div class="form-group row">  
-                                        <label class="text-right col-sm-3">Genitalia</label>
-                                        <div class="col-sm-7">
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heent','AF 2*2 cm, no cephalhematoma')"><i class="fas fa-baby"></i> HEENT Normal</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Neck</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_neck']) ? htmlspecialchars($row['pe_neck']) : '') ?>" id="pe_neck" name="pe_neck">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neck','No feature , no mass')"><i class="fas fa-baby"></i> Neck Normal</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Breast & Thorax</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_breastthorax']) ? htmlspecialchars($row['pe_breastthorax']) : '') ?>" id="pe_breastthorax" name="pe_breastthorax">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_breastthorax','Normal chest contour')"><i class="fas fa-baby"></i> Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Face</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_face']) ? htmlspecialchars($row['pe_face']) : '') ?>" id="pe_face" name="pe_face">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_face','No facial neve palsy')"><i class="fas fa-baby"></i> Face Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Ears</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_ears']) ? htmlspecialchars($row['pe_ears']) : '') ?>" id="pe_ears" name="pe_ears">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_ears','Normal position of ears')"><i class="fas fa-baby"></i> Ears Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Eyes</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_eyes']) ? htmlspecialchars($row['pe_eyes']) : '') ?>" id="pe_eyes" name="pe_eyes">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_eyes','Normal conjunctiva')"><i class="fas fa-baby"></i> Eyes Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Nose</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_nose']) ? htmlspecialchars($row['pe_nose']) : '') ?>" id="pe_nose" name="pe_nose">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_nose','No flaring alar nasai')"><i class="fas fa-baby"></i> Nose Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Mouth</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_mouth']) ? htmlspecialchars($row['pe_mouth']) : '') ?>" id="pe_mouth" name="pe_mouth">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_mouth','No cleft lip-palate , No tongue tie')"><i class="fas fa-baby"></i> Mouth Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Chest</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_chest']) ? htmlspecialchars($row['pe_chest']) : '') ?>" id="pe_chest" name="pe_chest">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_chest','Normal shape, no retraction')"><i class="fas fa-baby"></i> Chest Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Lungs</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_lung_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_lung_text']) : htmlspecialchars($row['pe_lungs'])) ?>" id="pe_lungs" name="pe_lungs">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','Normal breat sound , no grunting')"><i class="fas fa-baby"></i> Lungs Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Heart</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_heart_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_heart_text']) : htmlspecialchars($row['pe_heart'])) ?>" id="pe_heart" name="pe_heart">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heart','No murmur , regular rhythm')"><i class="fas fa-baby"></i> Heart Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Abdomen</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_ab_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ab_text']) : htmlspecialchars($row['pe_abdomen'])) ?>" id="pe_abdomen" name="pe_abdomen">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','No hepatosplenomegaly, no abdominal wall defect')"><i class="fas fa-baby"></i> Abdomen Normal</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Genitalia</label>
+                                    <div class="col-sm-7">
                                         <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_genitalia']) ? htmlspecialchars($row['pe_genitalia']) : '') ?>" id="pe_genitalia" name="pe_genitalia">
-                                        </div>
+                                    </div>
 
-                                        <div class="col-md-2">
+                                    <div class="col-md-2">
 
-                                                <a class="btn btn-secondary btn-sm PhysicalExaminationBtn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fa fa-baby" aria-hidden="true"></i> Genitalia Normal</a>
-                                                <div class="dropdown-menu" aria-labelledby="DropdownId">
+                                        <a class="btn btn-secondary btn-sm PhysicalExaminationBtn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-baby" aria-hidden="true"></i> Genitalia Normal</a>
+                                        <div class="dropdown-menu" aria-labelledby="DropdownId">
 
-                                                    <?php
-                                                    //  General
-                                                    $sql_phy = "SELECT pe_general_text,name_select
+                                            <?php
+                                            //  General
+                                            $sql_phy = "SELECT pe_general_text,name_select
                     FROM " . DbConstant::KPHIS_DBNAME . ".prs_phy_exam_list where exam_group_id = '20' and type_of_person = 'B' and active_ = 'Y' and user_ in('master','$loginname')";
-                                                    $stmt_phy = $conn->prepare($sql_phy);
-                                                    $stmt_phy->execute($reg_parameters);
-                                                    $rows_phy  = $stmt_phy->fetchAll();
-                                                    //  $operation_text = "";
-                                                    foreach ($rows_phy as $ds) {
-                                                    ?>
-                                                        <a class="dropdown-item" onclick="onclick_Normal('pe_genitalia','<?= $ds['pe_general_text'] ?>')"> <?= $ds['name_select'] ?></a>
-                                                    <?php
-                                                        $i++;
-                                                    }
+                                            $stmt_phy = $conn->prepare($sql_phy);
+                                            $stmt_phy->execute($reg_parameters);
+                                            $rows_phy  = $stmt_phy->fetchAll();
+                                            //  $operation_text = "";
+                                            foreach ($rows_phy as $ds) {
+                                            ?>
+                                                <a class="dropdown-item" onclick="onclick_Normal('pe_genitalia','<?= $ds['pe_general_text'] ?>')"> <?= $ds['name_select'] ?></a>
+                                            <?php
+                                                $i++;
+                                            }
 
-                                                    ?>
+                                            ?>
 
-
-                                                </div>
 
                                         </div>
 
                                     </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Anus</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_anus']) ? htmlspecialchars($row['pe_anus']) : '') ?>" id="pe_anus" name="pe_anus">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_anus','Patent')"><i class="fas fa-baby"></i> Anus Normal</button>
-                                        </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Anus</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_anus']) ? htmlspecialchars($row['pe_anus']) : '') ?>" id="pe_anus" name="pe_anus">
                                     </div>
+                                    <div class="col-md-2">
 
-
-                                    
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Extremities</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_ext_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ext_text']) : htmlspecialchars($row['pe_extremities'])) ?>" id="pe_extremities" name="pe_extremities">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','No clubfoot , no hip dislocation')"><i class="fas fa-baby"></i> Extremities Normal</button>
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_anus','Patent')"><i class="fas fa-baby"></i> Anus Normal</button>
                                     </div>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Trunk & Spine</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_trunk_spine']) ? htmlspecialchars($row['pe_trunk_spine']) : '') ?>" id="pe_trunk_spine" name="pe_trunk_spine">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_trunk_spine','No mass & defects')"><i class="fas fa-baby"></i> Trunk Normal</button>
-                                        </div>
+
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Extremities</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_ext_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ext_text']) : htmlspecialchars($row['pe_extremities'])) ?>" id="pe_extremities" name="pe_extremities">
                                     </div>
+                                    <div class="col-md-2">
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Nervous</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_nervose']) ? htmlspecialchars($row['pe_nervose']) : '') ?>" id="pe_nervose" name="pe_nervose">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_nervose','Normal muscle tone , normal reflex, no Erb’s palsy')"><i class="fas fa-baby"></i> Nervous Normal</button>
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','No clubfoot , no hip dislocation')"><i class="fas fa-baby"></i> Extremities Normal</button>
                                     </div>
+                                </div>
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Rectal&Genitalia</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_rectalgenitalia']) ? htmlspecialchars($row['pe_rectalgenitalia']) : '') ?>" id="pe_rectalgenitalia" name="pe_rectalgenitalia">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','Patent anus, no ambiguous genitalia')"><i class="fas fa-baby"></i> Normal</button>
-                                        </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Trunk & Spine</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_trunk_spine']) ? htmlspecialchars($row['pe_trunk_spine']) : '') ?>" id="pe_trunk_spine" name="pe_trunk_spine">
                                     </div>
+                                    <div class="col-md-2">
 
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Neurological</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_neuro_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_neuro_text']) : htmlspecialchars($row['pe_neurological'])) ?>" id="pe_neurological" name="pe_neurological">
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neurological','Moro reflex positive')"><i class="fas fa-baby"></i> Normal</button>
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_trunk_spine','No mass & defects')"><i class="fas fa-baby"></i> Trunk Normal</button>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">OB/Gyn exam</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_ob_gynexam']) ? htmlspecialchars($row['pe_ob_gynexam']) : '') ?>" id="pe_ob_gynexam" name="pe_ob_gynexam">
-                                        </div>
-                                        <div class="col-md-1">
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_ob_gynexam','no mass , no discharge')"><i class="fas fa-baby"></i> Normal</button>
-                                        </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Nervous</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_nervose']) ? htmlspecialchars($row['pe_nervose']) : '') ?>" id="pe_nervose" name="pe_nervose">
                                     </div>
+                                    <div class="col-md-2">
 
-
-
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Other</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
-                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_nervose','Normal muscle tone , normal reflex, no Erb’s palsy')"><i class="fas fa-baby"></i> Nervous Normal</button>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">PE Text</label>
-                                        <div class="col-sm-7">
-                                            <textarea class="form-control" id="pe_text" name="pe_text" rows="6"><?= (isset($row_opdscreen['pe']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe']) : htmlspecialchars($row['pe_text'])) ?></textarea>
-                                        </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Rectal&Genitalia</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_rectalgenitalia']) ? htmlspecialchars($row['pe_rectalgenitalia']) : '') ?>" id="pe_rectalgenitalia" name="pe_rectalgenitalia">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','Patent anus, no ambiguous genitalia')"><i class="fas fa-baby"></i> Normal</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Neurological</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_neuro_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_neuro_text']) : htmlspecialchars($row['pe_neurological'])) ?>" id="pe_neurological" name="pe_neurological">
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neurological','Moro reflex positive')"><i class="fas fa-baby"></i> Normal</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">OB/Gyn exam</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_ob_gynexam']) ? htmlspecialchars($row['pe_ob_gynexam']) : '') ?>" id="pe_ob_gynexam" name="pe_ob_gynexam">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_ob_gynexam','no mass , no discharge')"><i class="fas fa-baby"></i> Normal</button>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">Other</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="text-right col-sm-3">PE Text</label>
+                                    <div class="col-sm-7">
+                                        <textarea class="form-control" id="pe_text" name="pe_text" rows="6"><?= (isset($row_opdscreen['pe']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe']) : htmlspecialchars($row['pe_text'])) ?></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="card border-success">
-                                <div class="card-body">
-                                    <h5 class="card-title"></h5>
-                                    <!-- <div class="text-right">
+                </div>
+            
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <div class="card border-success">
+                            <div class="card-body">
+                                <h5 class="card-title"></h5>
+                                <!-- <div class="text-right">
                             <button type="button" class="btn btn-outline-success" onclick="onclick_img_button()"><i class='fas fa-edit'></i> แก้ไขรูปภาพ</button>
                         </div> -->
-                                    <div class="col-sm-8 offset-sm-3 mb-3">
-                                        <div id="show_img_select" class="text-center">
-                                            <canvas id="c" width="700" height="500"></canvas>
-                                        </div>
+                                <div class="col-sm-8 offset-sm-3 mb-3">
+                                    <div id="show_img_select" class="text-center">
+                                        <canvas id="c" width="700" height="500"></canvas>
                                     </div>
-                                    <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
-                                        <div class="text-center">
-                                            <a href="javascript:undo();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
-                                            <a href="javascript:redo();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
-                                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear()"><i class='fas fa-edit'></i> Clear</button>
-                                        </div>
+                                </div>
+                                <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
+                                    <div class="text-center">
+                                        <a href="javascript:undo();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
+                                        <a href="javascript:redo();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
+                                        <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear()"><i class='fas fa-edit'></i> Clear</button>
                                     </div>
-                                    <div>
-                                        <div class="form-group">
-                                            <label for=""></label>
-                                            <textarea style="display:none;" class="form-control" name="svg_tag" id="svg_tag" rows="10"><?= (isset($row['svg_tag']) ? htmlspecialchars($row['svg_tag']) : '') ?></textarea>
-                                        </div>
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <label for=""></label>
+                                        <textarea style="display:none;" class="form-control" name="svg_tag" id="svg_tag" rows="10"><?= (isset($row['svg_tag']) ? htmlspecialchars($row['svg_tag']) : '') ?></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-sm-9">
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-9">
                                         <div class="form-group row">
-                                                <label class="text-right col-sm-3">Problemlist</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problemlist']) ? htmlspecialchars($row['problemlist']) : '') ?>" id="problemlist" name="problemlist">
-                                                </div>
+                                            <label class="text-right col-sm-3">Problemlist</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problemlist']) ? htmlspecialchars($row['problemlist']) : '') ?>" id="problemlist" name="problemlist">
                                             </div>
+                                        </div>
 
-                                            <div class="form-group row">
-                                                <label class="text-right col-sm-3">Impression</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['impression']) ? htmlspecialchars($row['impression']) : '') ?>" id="" name="impression">
-                                                </div>
+                                        <div class="form-group row">
+                                            <label class="text-right col-sm-3">Impression</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['impression']) ? htmlspecialchars($row['impression']) : '') ?>" id="" name="impression">
                                             </div>
-                                            <div class="form-group row">
-                                                <label class="text-right col-sm-3">Diff. Dx</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['diff_dx']) ? htmlspecialchars($row['diff_dx']) : '') ?>" id="diff_dx" name="diff_dx">
-                                                </div>
-                                                <div class="col-md-1">
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('diff_dx','Normal Newborn')"><i class="fas fa-baby"></i> Normal</button>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class="text-right col-sm-3">Diff. Dx</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['diff_dx']) ? htmlspecialchars($row['diff_dx']) : '') ?>" id="diff_dx" name="diff_dx">
                                             </div>
-                                            <div class="form-group row">
-                                                <label class="text-right col-sm-3">Plan Management</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['plan_management']) ? htmlspecialchars($row['plan_management']) : '') ?>" id="plan_management" name="plan_management">
-                                                </div>
-                                                <div class="col-md-1">
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('plan_management','Observe clinical หลังคลอด')"><i class="fas fa-baby"></i> Normal</button>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('diff_dx','Normal Newborn')"><i class="fas fa-baby"></i> Normal</button>
+                                            </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class="text-right col-sm-3">Plan Management</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['plan_management']) ? htmlspecialchars($row['plan_management']) : '') ?>" id="plan_management" name="plan_management">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('plan_management','Observe clinical หลังคลอด')"><i class="fas fa-baby"></i> Normal</button>
                                             </div>
                                         </div>
                                     </div>
@@ -2615,41 +2690,42 @@ $row_period  = $stmt_period->fetch();
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="action-person-dr-admission">ลงชื่อแพทย์</label>
-                                <button type="button" class="btn btn-secondary btn-sm mb-2" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ลงชื่อ</button>
-                                <div id="dr-admission-group-input-div">
-                                    <template id="template_dr_admission_input_div">
-                                        <div class="dr_admission_input_div">
-                                            <div class="input-group mb-2">
-                                                <input type="hidden" class="form-control form-control" name="admission_note_doctor[]">
-                                                <input type="text" class="form-control form-control" name="doc_name[]" readonly>
-                                                <!-- <input type="text" class="form-control form-control" name="doc_pos[]" readonly> -->
-                                            </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="action-person-dr-admission">ลงชื่อแพทย์</label>
+                            <button type="button" class="btn btn-secondary btn-sm mb-2" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ลงชื่อ</button>
+                            <div id="dr-admission-group-input-div">
+                                <template id="template_dr_admission_input_div">
+                                    <div class="dr_admission_input_div">
+                                        <div class="input-group mb-2">
+                                            <input type="hidden" class="form-control form-control" name="admission_note_doctor[]">
+                                            <input type="text" class="form-control form-control" name="doc_name[]" readonly>
+                                            <!-- <input type="text" class="form-control form-control" name="doc_pos[]" readonly> -->
                                         </div>
-                                    </template>
-                                    <?php $start_count = 0;
-                                    while ($start_count < $admission_note_count) { ?>
-                                        <div class="dr_admission_input_div">
-                                            <div class="input-group mb-2">
-                                                <input type="hidden" class="form-control form-control" name="admission_note_doctor[]" value="<?= $admission_note_doctor[$start_count] ?>">
-                                                <input type="text" class="form-control form-control" name="doc_name[]" value="<?= $admission_note_doctorname[$start_count] ?>" readonly>
-                                                <!-- <input type="text" class="form-control form-control" name="doc_pos[]"  value="<?= $admission_note_doctorentryposition[$start_count] ?>" readonly> -->
-                                            </div>
+                                    </div>
+                                </template>
+                                <?php $start_count = 0;
+                                while ($start_count < $admission_note_count) { ?>
+                                    <div class="dr_admission_input_div">
+                                        <div class="input-group mb-2">
+                                            <input type="hidden" class="form-control form-control" name="admission_note_doctor[]" value="<?= $admission_note_doctor[$start_count] ?>">
+                                            <input type="text" class="form-control form-control" name="doc_name[]" value="<?= $admission_note_doctorname[$start_count] ?>" readonly>
+                                            <!-- <input type="text" class="form-control form-control" name="doc_pos[]"  value="<?= $admission_note_doctorentryposition[$start_count] ?>" readonly> -->
                                         </div>
-                                    <?php $start_count++;
-                                    } ?>
-                                </div>
+                                    </div>
+                                <?php $start_count++;
+                                } ?>
                             </div>
                         </div>
-                       
                     </div>
 
-                  
-                    <div class="form-group row">
-                        <!-- <div class="col-sm-4 text-left">
+                </div>
+
+
+                <div class="form-group row">
+                    <!-- <div class="col-sm-4 text-left">
                 <label class="text-right"><?= (isset($row['doc_name']) ? 'แพทย์ผู้บันทึก   ' . htmlspecialchars($row['doc_name']) : '') ?></label><br>
                 <label class="text-right"> <?= (isset($row['doc_pos']) ? htmlspecialchars($row['doc_pos']) : '') ?></label>
             </div>
@@ -2657,27 +2733,27 @@ $row_period  = $stmt_period->fetch();
                 <label class="text-right"><?= (isset($row['nurse_name']) ? 'พยาบาลผู้บันทึก  ' . htmlspecialchars($row['nurse_name']) : '') ?></label><br>
                 <label class="text-right"> <?= (isset($row['nurse_pos']) ? htmlspecialchars($row['nurse_pos']) : '') ?></label>
             </div> -->
-                        <div class="col-sm-12 text-right">
-                           
-                            <?php
-                            //รอแก้ไข
-                            $a = 1;
-                            if (Session::checkPermission('ADMISSION_NOTE','EDIT') ) {
-                            ?>
-                                <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
-                            <?php
-                            }
-                            ?>
-                             <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
-                        </div>
+                    <div class="col-sm-12 text-right">
+
+                        <?php
+                        //รอแก้ไข
+                        $a = 1;
+                        if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
+                        ?>
+                            <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
+                        <?php
+                        }
+                        ?>
+                        <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                     </div>
-                    <!-- card -->
                 </div>
                 <!-- card -->
             </div>
             <!-- card -->
         </div>
         <!-- card -->
+    </div>
+    <!-- card -->
     </div>
     <div class="form-group text-center">
         <div id="show_check_save"></div>
@@ -2768,6 +2844,62 @@ $row_period  = $stmt_period->fetch();
         canvas.clear();
     }
     //--------------------------------------------canvas----------------------------------------------
+
+
+    function born_typein_check(value) {
+        if (value == "off_checked") {
+            // $('#ros_text').attr("disabled",true).val('');
+            $('#born_type_in2').prop("checked", false);
+        } else if (value == "on_checked") {
+            // $('#ros_text').attr("disabled",false).val('');
+            $('#born_type_in1').prop("checked", false);
+        }
+    }
+
+    function sex_check(value) {
+        if (value == "off_checked") {
+            // $('#ros_text').attr("disabled",true).val('');
+            $('#c_sex2').prop("checked", false);
+        } else if (value == "on_checked") {
+            // $('#ros_text').attr("disabled",false).val('');
+            $('#c_sex1').prop("checked", false);
+        }
+    }
+
+    function labor_type_check(value) {
+        if (value == "off_checked") {
+            // $('#ros_text').attr("disabled",true).val('');
+            $('#c_labor_type5').prop("checked", false);
+        } else if (value == "on_checked") {
+            // $('#ros_text').attr("disabled",false).val('');
+            $('#c_labor_type1').prop("checked", false);
+            $('#c_labor_type2').prop("checked", false);
+            $('#c_labor_type3').prop("checked", false);
+            $('#c_labor_type4').prop("checked", false);
+        }
+    }
+
+    function allergy_check(value) {
+        if (value == "off_checked") {
+            $('#c_drug_allergy_text').attr("disabled", true).val('');
+            $('#c_drug_allergy2').prop("checked", false);
+        } else if (value == "on_checked") {
+            $('#c_drug_allergy_text').attr("disabled", false).val('');
+            $('#c_drug_allergy1').prop("checked", false);
+        }
+    }
+
+    function c_serology_check(value) {
+        if (value == "off_checked") {
+            $('#c_serology_text').attr("disabled", true).val('');
+            $('#c_serology2').prop("checked", false);
+        } else if (value == "on_checked") {
+            $('#c_serology_text').attr("disabled", false).val('');
+            $('#c_serology1').prop("checked", false);
+        }
+    }
+
+
     function custom_check(value) {
         if (value == "off_arrive") {
             $('#w6').attr("disabled", true).val('');
@@ -2810,6 +2942,15 @@ $row_period  = $stmt_period->fetch();
                 $('#r5').attr("disabled", false).val('');
             }
         }
+
+        if (value == "on_taken") {
+            if (!($('#in4').is(':checked'))) {
+                $('#in5').attr("disabled", true).val('');
+            } else {
+                $('#in5').attr("disabled", false).val('');
+            }
+        }
+
 
         if (value == "off_disease") {
             $('#tt1').attr("disabled", true).prop("checked", false);

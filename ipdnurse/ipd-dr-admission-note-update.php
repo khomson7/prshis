@@ -146,6 +146,11 @@
         $version = $version + 1;
             // empty($_REQUEST['']) ? null : $_REQUEST[''];
 
+             //เพิ่มรายการ
+        $c_born_date = $_REQUEST['c_born_date'];
+        $c_born_time = $_REQUEST['c_born_time'];
+        $c_born_type_in = $_REQUEST['c_born_type_in'];
+
         try {
             $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note SET hn=:hn, an=:an,
             receiver_medication_date=:receiver_medication_date, receiver_medication_time=:receiver_medication_time,
@@ -179,6 +184,7 @@
             svg_tag=:svg_tag,impression=:impression, diff_dx=:diff_dx, plan_management=:plan_management,
             nurse_name=:nurse_name,nurse_pos=:nurse_pos,
             update_user=:update_user,update_datetime = NOW(),version=:version
+            ,c_born_date=:c_born_date,c_born_time=:c_born_time,c_born_type_in=:c_born_type_in
             WHERE admission_note_id=:admission_note_id");
             $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
             'receiver_medication_date'=>$receiver_medication_date, 'receiver_medication_time'=>$receiver_medication_time,
@@ -212,7 +218,9 @@
             'pe_ob_gynexam'=>$pe_ob_gynexam, 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression,
             'diff_dx'=>$diff_dx, 'plan_management'=>$plan_management,
             'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,
-            'update_user'=>$update_user,'version'=>$version));
+            'update_user'=>$update_user,'version'=>$version
+            ,'c_born_date'=>$c_born_date,'c_born_time'=>$c_born_time,'c_born_type_in'=>$c_born_type_in
+        ));
 
             if(!empty($_REQUEST['admission_note_doctor'])){
                 $stmt_item_check = "SELECT COUNT(*) AS count_item  FROM ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note_item WHERE an=:an";

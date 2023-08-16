@@ -144,6 +144,10 @@
         // $update_datetime = $_REQUEST['update_datetime'];
         $version = 1;
 
+        //เพิ่มรายการ
+        $c_born_date = $_REQUEST['c_born_date'];
+        $c_born_time = $_REQUEST['c_born_time'];
+
         try {
                 $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note
                 (hn,an,receiver_medication_date,receiver_medication_time,take_medication_by,
@@ -164,7 +168,9 @@
                 inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,
                 pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_abdomen,pe_rectalgenitalia,pe_extremities,
                 pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,impression,diff_dx,plan_management,
-                create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version)
+                create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version
+                ,c_born_date,c_born_time
+                )
                 VALUES (:hn,:an,:receiver_medication_date,:receiver_medication_time,:take_medication_by,
                 :arrive_by,:taken_by_relative,:taken_by_nurse,:taken_by_crib,:taken_by_etc,:taken_by,:informant_patient,:informant_relatives,:informant_deliverer,
                 :informant_etc,:chief_complaints,:medical_history,:bp,:t,:pr,:rr,:gcs,:e,:v,:m,
@@ -184,7 +190,8 @@
                 :inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,
                 :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_abdomen,:pe_rectalgenitalia,
                 :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:svg_tag,:impression,:diff_dx,
-                :plan_management,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version)");
+                :plan_management,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
+                ,:c_born_date,:c_born_time)");
                 $stmt->execute(array('hn'=>$hn, 'an'=>$an, 'receiver_medication_date'=>$receiver_medication_date,
                 'receiver_medication_time'=>$receiver_medication_time, 'take_medication_by'=>$take_medication_by,
                 'arrive_by'=>$arrive_by, 'taken_by_relative'=>$taken_by_relative, 'taken_by_nurse'=>$taken_by_nurse,
@@ -223,7 +230,9 @@
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression, 'diff_dx'=>$diff_dx,
                 'plan_management'=>$plan_management, 'create_user'=>$create_user,
-                'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version));
+                'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version
+                ,'c_born_date'=>$c_born_date,'c_born_time'=>$c_born_time
+            ));
 
                 $admission_note_id = $conn->lastInsertId();
                 if(!empty($_REQUEST['admission_note_doctor'])){
