@@ -246,7 +246,7 @@ while ($row_item = $stmt_item->fetch()){
             <button type="button" class="btn btn-danger btn-block" onclick="self.close()"><i class="fa fa-window-close"></i> ปิด</button> 
             </div>
             <div class="col-md-11">
-                <h4>แบบบันทึกประวัติและตรวจร่างกายผู้ป่วยแรกรับ(ER Form) <?=htmlspecialchars(DbConstant::HOSPITAL_NAME)?></h4>
+                <h4>History - Physical Examination Of Newborn <?=htmlspecialchars(DbConstant::HOSPITAL_NAME)?></h4>
             </div>
         </div><p></p>
         <div class="card-group pb-3 ">

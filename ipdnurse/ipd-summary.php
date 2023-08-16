@@ -22,6 +22,7 @@
       
        
         require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+        require_once '../mains/ipd-show-patient-sticky.php';
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล

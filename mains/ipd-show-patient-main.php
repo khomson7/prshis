@@ -51,6 +51,7 @@
             WHERE ipt.an=:an
             order by ipt.an
             ";
+            
     $stmt_ipt = $conn->prepare($sql_ipt);
     $stmt_ipt->execute(['an'=>$an]);
 
@@ -124,7 +125,7 @@
                             if($row_ipt['admission_note_id'] != ""){
                                 ?>
                                 <script>
-                                    const ADMISSION_NOTE_DRUG_ALLERGY_CHECK = <?=json_encode(SessionManager::checkPermission('ADMISSION_NOTE_DRUG_ALLERGY','CHECK'))?>;
+                                    const ADMISSION_NOTE_DRUG_ALLERGY_CHECK = <?=json_encode(Session::checkPermission('ADMISSION_NOTE_DRUG_ALLERGY','CHECK'))?>;
                                     if(ADMISSION_NOTE_DRUG_ALLERGY_CHECK){
                                         $('.allergyDrugHistoryFromAdmissionNoteLabel').click(function (event) {
                                         allergyDrugHistoryCheck(event, this);
