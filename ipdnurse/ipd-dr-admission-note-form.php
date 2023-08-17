@@ -2069,6 +2069,12 @@
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col-sm-9">
+                            <div class="form-group row">
+                                            <label class="text-right col-sm-3">Problemlist</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problem_list']) ? htmlspecialchars($row['problem_list']) : '') ?>" id="problem_list" name="problem_list">
+                                            </div>
+                                        </div>
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Impression</label>
                                     <div class="col-sm-9">

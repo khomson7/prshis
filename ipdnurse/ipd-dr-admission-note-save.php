@@ -145,8 +145,38 @@
         $version = 1;
 
         //เพิ่มรายการ
-        $c_born_date = $_REQUEST['c_born_date'];
-        $c_born_time = $_REQUEST['c_born_time'];
+        $problem_list = $_REQUEST['problem_list'];
+        $c_a = empty($_REQUEST['c_a']) ? null : $_REQUEST['c_a'];
+        $c_anterpartum = empty($_REQUEST['c_anterpartum']) ? null : $_REQUEST['c_anterpartum'];
+        $c_apgar1 = empty($_REQUEST['c_apgar1']) ? null : $_REQUEST['c_apgar1'];
+        $c_apgar10 = empty($_REQUEST['c_apgar10']) ? null : $_REQUEST['c_apgar10'];
+        $c_apgar5 = empty($_REQUEST['c_apgar5']) ? null : $_REQUEST['c_apgar5'];
+        $c_bcg = empty($_REQUEST['c_bcg']) ? null : $_REQUEST['c_bcg'];
+        $c_born_date = empty($_REQUEST['c_born_date']) ? null : $_REQUEST['c_born_date'];
+        $c_born_time = empty($_REQUEST['c_born_time']) ? null : $_REQUEST['c_born_time'];
+        $c_born_type_in = empty($_REQUEST['c_born_type_in']) ? null : $_REQUEST['c_born_type_in'];
+        $c_bw = empty($_REQUEST['c_bw']) ? null : $_REQUEST['c_bw'];
+        $c_drug_allergy = empty($_REQUEST['c_drug_allergy']) ? null : $_REQUEST['c_drug_allergy'];
+        $c_g = empty($_REQUEST['c_g']) ? null : $_REQUEST['c_g'];
+        $c_ga = empty($_REQUEST['c_ga']) ? null : $_REQUEST['c_ga'];
+        $c_hbv = empty($_REQUEST['c_hbv']) ? null : $_REQUEST['c_hbv'];
+        $c_hc = empty($_REQUEST['c_hc']) ? null : $_REQUEST['c_hc'];
+        $c_indication = empty($_REQUEST['c_indication']) ? null : $_REQUEST['c_indication'];
+        $c_inform_etc = empty($_REQUEST['c_inform_etc']) ? null : $_REQUEST['c_inform_etc'];
+        $c_inform_etc_text = empty($_REQUEST['c_inform_etc_text']) ? null : $_REQUEST['c_inform_etc_text'];
+        $c_inform_mother = empty($_REQUEST['c_inform_mother']) ? null : $_REQUEST['c_inform_mother'];
+        $c_inform_officer = empty($_REQUEST['c_inform_officer']) ? null : $_REQUEST['c_inform_officer'];
+        $c_intrapartum = empty($_REQUEST['c_intrapartum']) ? null : $_REQUEST['c_intrapartum'];
+        $c_l = empty($_REQUEST['c_l']) ? null : $_REQUEST['c_l'];
+        $c_labor_normal = empty($_REQUEST['c_labor_normal']) ? null : $_REQUEST['c_labor_normal'];
+        $c_labor_type = empty($_REQUEST['c_labor_type']) ? null : $_REQUEST['c_labor_type'];
+        $c_length = empty($_REQUEST['c_length']) ? null : $_REQUEST['c_length'];
+        $c_pre = empty($_REQUEST['c_pre']) ? null : $_REQUEST['c_pre'];
+        $c_serology = empty($_REQUEST['c_serology']) ? null : $_REQUEST['c_serology'];
+        $c_sex = empty($_REQUEST['c_sex']) ? null : $_REQUEST['c_sex'];
+        $c_tp = empty($_REQUEST['c_tp']) ? null : $_REQUEST['c_tp'];
+        $c_vaccination_dt = empty($_REQUEST['c_vaccination_dt']) ? null : $_REQUEST['c_vaccination_dt'];
+
 
         try {
                 $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note
@@ -167,9 +197,10 @@
                 supplementary_feeding_start_age_month,disease_operation_allergy,inpatient_history,
                 inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,
                 pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_abdomen,pe_rectalgenitalia,pe_extremities,
-                pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,impression,diff_dx,plan_management,
+                pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,impression,diff_dx,plan_management,problem_list,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version
-                ,c_born_date,c_born_time
+                ,c_born_date,c_born_time,c_born_type_in,c_labor_type,c_indication,c_intrapartum
+                ,c_labor_normal,c_drug_allergy,c_g,c_tp,c_pre,c_a,c_l
                 )
                 VALUES (:hn,:an,:receiver_medication_date,:receiver_medication_time,:take_medication_by,
                 :arrive_by,:taken_by_relative,:taken_by_nurse,:taken_by_crib,:taken_by_etc,:taken_by,:informant_patient,:informant_relatives,:informant_deliverer,
@@ -190,8 +221,12 @@
                 :inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,
                 :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_abdomen,:pe_rectalgenitalia,
                 :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:svg_tag,:impression,:diff_dx,
-                :plan_management,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
-                ,:c_born_date,:c_born_time)");
+                :plan_management,:problem_list,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
+                ,:c_born_date,:c_born_time,:c_born_type_in,:c_labor_type,:c_indication,:c_intrapartum
+                ,:c_labor_normal,:c_drug_allergy,:c_g,:c_tp,:c_pre,:c_a,:c_l
+                
+                
+                )");
                 $stmt->execute(array('hn'=>$hn, 'an'=>$an, 'receiver_medication_date'=>$receiver_medication_date,
                 'receiver_medication_time'=>$receiver_medication_time, 'take_medication_by'=>$take_medication_by,
                 'arrive_by'=>$arrive_by, 'taken_by_relative'=>$taken_by_relative, 'taken_by_nurse'=>$taken_by_nurse,
@@ -229,9 +264,15 @@
                 'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities,
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression, 'diff_dx'=>$diff_dx,
-                'plan_management'=>$plan_management, 'create_user'=>$create_user,
+                'plan_management'=>$plan_management,'problem_list'=>$problem_list, 'create_user'=>$create_user,
                 'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version
-                ,'c_born_date'=>$c_born_date,'c_born_time'=>$c_born_time
+                ,'c_born_date'=>$c_born_date,'c_born_time'=>$c_born_time,'c_born_type_in'=>$c_born_type_in
+                ,'c_labor_type'=>$c_labor_type,'c_indication'=>$c_indication,'c_intrapartum'=>$c_intrapartum
+                ,'c_labor_normal'=>$c_labor_normal,'c_drug_allergy'=>$c_drug_allergy
+                ,'c_g'=>$c_g,'c_tp'=>$c_tp,'c_pre'=>$c_pre,'c_a'=>$c_a,'c_l'=>$c_l
+                /*,'c_serology'=>$c_serology,'c_anterpartum'=>$c_anterpartum
+                ,'c_vaccination_dt'=>$c_vaccination_dt,'c_hbv'=>$c_hbv,'c_bcg'=>$c_bcg,'c_inform_officer'=>$c_inform_officer*/
+                
             ));
 
                 $admission_note_id = $conn->lastInsertId();

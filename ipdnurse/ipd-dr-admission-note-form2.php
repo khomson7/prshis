@@ -757,7 +757,7 @@ $row_period  = $stmt_period->fetch();
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="col-sm-1">
-                            <input type="number" placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" min="0">
+                            <input type="text" pattern="[0-9]" placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" >
                         </div>
                         <div class="col-sm-1">
                             <input type="number" placeholder="Tp" class="form-control form-control-sm" value="<?= (isset($row['c_tp']) ? htmlspecialchars($row['c_tp']) : '') ?>" id="c_tp" name="c_tp" min="0">
@@ -2272,20 +2272,20 @@ $row_period  = $stmt_period->fetch();
 
                                     <B>GA</B>
                                     <div class="col-sm-1">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_ga']) ? htmlspecialchars($row['c_ga']) : '') ?>" id="c_ga" name="c_ga" min="0">
                                     </div> Wks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                     <B>Apgar score นาทีที่ 1</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_apgar1']) ? htmlspecialchars($row['c_apgar1']) : '') ?>" id="c_apgar1" name="c_apgar1" min="0">
                                     </div>
                                     <B>Apgar score นาทีที่ 5</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_apgar5']) ? htmlspecialchars($row['c_apgar5']) : '') ?>" id="c_apgar5" name="c_apgar5" min="0">
                                     </div>
                                     <B>Apgar score นาทีที่ 10</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" id="labor_time" name="labor_time" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_apgar10']) ? htmlspecialchars($row['c_apgar10']) : '') ?>" id="c_apgar10" name="c_apgar10" min="0">
                                     </div>
 
 
@@ -2310,15 +2310,15 @@ $row_period  = $stmt_period->fetch();
 
                                 <B>BW</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" id="c_bw" name="c_bw" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_bw']) ? htmlspecialchars($row['c_bw']) : '') ?>" id="c_bw" name="c_bw" min="0">
                                     </div> gms&nbsp;&nbsp;
                                     <B>HC</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" id="c_hc" name="c_hc" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_hc']) ? htmlspecialchars($row['c_hc']) : '') ?>" id="c_hc" name="c_hc" min="0">
                                     </div> cms&nbsp;&nbsp;
                                     <B>length</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" id="c_length" name="c_length" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_length']) ? htmlspecialchars($row['c_length']) : '') ?>" id="c_length" name="c_length" min="0">
                                     </div> cms
 
                                                     </div>
@@ -2657,7 +2657,7 @@ $row_period  = $stmt_period->fetch();
                                         <div class="form-group row">
                                             <label class="text-right col-sm-3">Problemlist</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problemlist']) ? htmlspecialchars($row['problemlist']) : '') ?>" id="problemlist" name="problemlist">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problem_list']) ? htmlspecialchars($row['problem_list']) : '') ?>" id="problem_list" name="problem_list">
                                             </div>
                                         </div>
 
