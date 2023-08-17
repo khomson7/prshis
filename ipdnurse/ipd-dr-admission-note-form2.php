@@ -766,7 +766,7 @@ $row_period  = $stmt_period->fetch();
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="col-sm-1">
-                            <input type="text" pattern="[0-9]" placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g">
+                            <input type="number"  placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" min="0">
                         </div>
                         <div class="col-sm-1">
                             <input type="number" placeholder="Tp" class="form-control form-control-sm" value="<?= (isset($row['c_tp']) ? htmlspecialchars($row['c_tp']) : '') ?>" id="c_tp" name="c_tp" min="0">
