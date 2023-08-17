@@ -116,20 +116,33 @@
         $inpatient_last_date = empty($_REQUEST['inpatient_last_date']) ? null : $_REQUEST['inpatient_last_date'];
         $inpatient_location = empty($_REQUEST['inpatient_location']) ? null : $_REQUEST['inpatient_location'];
         $inpatient_because = empty($_REQUEST['inpatient_because']) ? null : $_REQUEST['inpatient_because'];
-        $pe_general = $_REQUEST['pe_general'];
-        $pe_skin = $_REQUEST['pe_skin'];
-        $pe_heent = $_REQUEST['pe_heent'];
-        $pe_neck = $_REQUEST['pe_neck'];
-        $pe_breastthorax = $_REQUEST['pe_breastthorax'];
-        $pe_heart = $_REQUEST['pe_heart'];
-        $pe_lungs = $_REQUEST['pe_lungs'];
         $pe_abdomen = $_REQUEST['pe_abdomen'];
-        $pe_rectalgenitalia = $_REQUEST['pe_rectalgenitalia'];
+        $pe_anus = $_REQUEST['pe_anus'];
+        $pe_breastthorax = $_REQUEST['pe_breastthorax'];
+        $pe_chest = $_REQUEST['pe_chest'];
+        $pe_cns = $_REQUEST['pe_cns'];
+        $pe_cvs = $_REQUEST['pe_cvs'];
+        $pe_ears = $_REQUEST['pe_ears'];
         $pe_extremities = $_REQUEST['pe_extremities'];
+        $pe_eyes = $_REQUEST['pe_eyes'];
+        $pe_face = $_REQUEST['pe_face'];
+        $pe_general = $_REQUEST['pe_general'];
+        $pe_genitalia = $_REQUEST['pe_genitalia'];
+        $pe_head = $_REQUEST['pe_head'];
+        $pe_heart = $_REQUEST['pe_heart'];
+        $pe_heent = $_REQUEST['pe_heent'];
+        $pe_lungs = $_REQUEST['pe_lungs'];
+        $pe_mouth = $_REQUEST['pe_mouth'];
+        $pe_neck = $_REQUEST['pe_neck'];
+        $pe_nervose = $_REQUEST['pe_nervose'];
         $pe_neurological = $_REQUEST['pe_neurological'];
+        $pe_nose = $_REQUEST['pe_nose'];
         $pe_ob_gynexam = $_REQUEST['pe_ob_gynexam'];
         $pe_other = $_REQUEST['pe_other'];
+        $pe_rectalgenitalia = $_REQUEST['pe_rectalgenitalia'];
+        $pe_skin = $_REQUEST['pe_skin'];
         $pe_text = $_REQUEST['pe_text'];
+        $pe_trunk_spine = $_REQUEST['pe_trunk_spine'];
         $svg_tag = $_REQUEST['svg_tag'];
         $impression = $_REQUEST['impression'];
         $diff_dx = $_REQUEST['diff_dx'];
@@ -201,7 +214,8 @@
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version
                 ,c_born_date,c_born_time,c_born_type_in,c_labor_type,c_indication,c_intrapartum
                 ,c_labor_normal,c_drug_allergy,c_g,c_tp,c_pre,c_a,c_l,c_serology,c_anterpartum
-                ,c_vaccination_dt,c_hbv,c_bcg,c_inform_officer
+                ,c_vaccination_dt,c_hbv,c_bcg,c_inform_officer,c_inform_mother,c_inform_etc,c_inform_etc_text,c_ga,c_apgar1,c_apgar5,c_apgar10,c_sex,c_bw,c_hc,c_length
+                ,pe_head,pe_face,pe_ears,pe_eyes,pe_nose,pe_mouth,pe_chest,pe_genitalia,pe_anus,pe_trunk_spine,pe_nervose
                 )
                 VALUES (:hn,:an,:receiver_medication_date,:receiver_medication_time,:take_medication_by,
                 :arrive_by,:taken_by_relative,:taken_by_nurse,:taken_by_crib,:taken_by_etc,:taken_by,:informant_patient,:informant_relatives,:informant_deliverer,
@@ -225,8 +239,8 @@
                 :plan_management,:problem_list,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
                 ,:c_born_date,:c_born_time,:c_born_type_in,:c_labor_type,:c_indication,:c_intrapartum
                 ,:c_labor_normal,:c_drug_allergy,:c_g,:c_tp,:c_pre,:c_a,:c_l,:c_serology,:c_anterpartum
-                ,:c_vaccination_dt,:c_hbv,:c_bcg,:c_inform_officer
-                
+                ,:c_vaccination_dt,:c_hbv,:c_bcg,:c_inform_officer,:c_inform_mother,:c_inform_etc,:c_inform_etc_text,:c_ga,:c_apgar1,:c_apgar5,:c_apgar10,:c_sex,:c_bw,:c_hc,:c_length   
+                ,:pe_head,:pe_face,:pe_ears,:pe_eyes,:pe_nose,:pe_mouth,:pe_chest,:pe_genitalia,:pe_anus,:pe_trunk_spine,:pe_nervose
                 )");
                 $stmt->execute(array('hn'=>$hn, 'an'=>$an, 'receiver_medication_date'=>$receiver_medication_date,
                 'receiver_medication_time'=>$receiver_medication_time, 'take_medication_by'=>$take_medication_by,
@@ -273,7 +287,10 @@
                 ,'c_g'=>$c_g,'c_tp'=>$c_tp,'c_pre'=>$c_pre,'c_a'=>$c_a,'c_l'=>$c_l
                 ,'c_serology'=>$c_serology,'c_anterpartum'=>$c_anterpartum
                 ,'c_vaccination_dt'=>$c_vaccination_dt,'c_hbv'=>$c_hbv,'c_bcg'=>$c_bcg,'c_inform_officer'=>$c_inform_officer
-                
+                ,'c_inform_mother'=>$c_inform_mother,'c_inform_etc'=>$c_inform_etc,'c_inform_etc_text'=>$c_inform_etc_text
+                ,'c_ga'=>$c_ga,'c_apgar1'=>$c_apgar1,'c_apgar5'=>$c_apgar5,'c_apgar10'=>$c_apgar10,'c_sex'=>$c_sex,'c_bw'=>$c_bw,'c_hc'=>$c_hc,'c_length'=>$c_length
+                , 'pe_head'=>$pe_head,'pe_face'=>$pe_face,'pe_ears'=>$pe_ears,'pe_eyes'=>$pe_eyes,'pe_nose'=>$pe_nose,'pe_mouth'=>$pe_mouth,'pe_chest'=>$pe_chest,'pe_genitalia'=>$pe_genitalia
+                ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose
             ));
 
                 $admission_note_id = $conn->lastInsertId();

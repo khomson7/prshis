@@ -17,5 +17,6 @@ echo "<script>window.history.back();</script>";
 } else {
 //	header("Location: index.php");
 //	window.history.back();
-exit();
+echo "<script>window.history.back();</script>";
+//exit();
 }

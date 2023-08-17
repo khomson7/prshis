@@ -11,7 +11,7 @@ session_start();
 <html lang="en">
 
 <head>
-    <title>KPHIS</title>
+    <title>PRHIS</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

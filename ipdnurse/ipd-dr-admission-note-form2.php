@@ -65,7 +65,7 @@ while ($row_item = $stmt_item->fetch()) {
 //------------------------Doctor admission note
 
 //cc,pi
-if ($admission_note_id == null) {
+if ($admission_note_id == null || $admission_note_id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
                             round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
                             round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
@@ -2408,11 +2408,11 @@ $row_period  = $stmt_period->fetch();
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Head</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['head']) ? htmlspecialchars($row['head']) : '') ?>" id="head" name="head">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_head']) ? htmlspecialchars($row['pe_head']) : '') ?>" id="pe_head" name="pe_head">
                                     </div>
                                     <div class="col-md-2">
 
-                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('head','Normal contour of head no mass')"><i class="fas fa-baby"></i> Head Normal</button>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_head','Normal contour of head no mass')"><i class="fas fa-baby"></i> Head Normal</button>
                                     </div>
                                 </div>
 

@@ -116,20 +116,33 @@
         $inpatient_last_date = empty($_REQUEST['inpatient_last_date']) ? null : $_REQUEST['inpatient_last_date'];
         $inpatient_location = empty($_REQUEST['inpatient_location']) ? null : $_REQUEST['inpatient_location'];
         $inpatient_because = empty($_REQUEST['inpatient_because']) ? null : $_REQUEST['inpatient_because'];
-        $pe_general = $_REQUEST['pe_general'];
-        $pe_skin = $_REQUEST['pe_skin'];
-        $pe_heent = $_REQUEST['pe_heent'];
-        $pe_neck = $_REQUEST['pe_neck'];
-        $pe_breastthorax = $_REQUEST['pe_breastthorax'];
-        $pe_heart = $_REQUEST['pe_heart'];
-        $pe_lungs = $_REQUEST['pe_lungs'];
         $pe_abdomen = $_REQUEST['pe_abdomen'];
-        $pe_rectalgenitalia = $_REQUEST['pe_rectalgenitalia'];
+        $pe_anus = $_REQUEST['pe_anus'];
+        $pe_breastthorax = $_REQUEST['pe_breastthorax'];
+        $pe_chest = $_REQUEST['pe_chest'];
+        $pe_cns = $_REQUEST['pe_cns'];
+        $pe_cvs = $_REQUEST['pe_cvs'];
+        $pe_ears = $_REQUEST['pe_ears'];
         $pe_extremities = $_REQUEST['pe_extremities'];
+        $pe_eyes = $_REQUEST['pe_eyes'];
+        $pe_face = $_REQUEST['pe_face'];
+        $pe_general = $_REQUEST['pe_general'];
+        $pe_genitalia = $_REQUEST['pe_genitalia'];
+        $pe_head = $_REQUEST['pe_head'];
+        $pe_heart = $_REQUEST['pe_heart'];
+        $pe_heent = $_REQUEST['pe_heent'];
+        $pe_lungs = $_REQUEST['pe_lungs'];
+        $pe_mouth = $_REQUEST['pe_mouth'];
+        $pe_neck = $_REQUEST['pe_neck'];
+        $pe_nervose = $_REQUEST['pe_nervose'];
         $pe_neurological = $_REQUEST['pe_neurological'];
+        $pe_nose = $_REQUEST['pe_nose'];
         $pe_ob_gynexam = $_REQUEST['pe_ob_gynexam'];
         $pe_other = $_REQUEST['pe_other'];
+        $pe_rectalgenitalia = $_REQUEST['pe_rectalgenitalia'];
+        $pe_skin = $_REQUEST['pe_skin'];
         $pe_text = $_REQUEST['pe_text'];
+        $pe_trunk_spine = $_REQUEST['pe_trunk_spine'];
         $svg_tag = $_REQUEST['svg_tag'];
         $impression = $_REQUEST['impression'];
         $diff_dx = $_REQUEST['diff_dx'];
@@ -206,7 +219,7 @@
             supplementary_feeding=:supplementary_feeding,supplementary_feeding_start_age_month=:supplementary_feeding_start_age_month,
             disease_operation_allergy=:disease_operation_allergy, inpatient_history=:inpatient_history,
             inpatient_last_date=:inpatient_last_date, inpatient_location=:inpatient_location,inpatient_because=:inpatient_because,
-            pe_general=:pe_general, pe_skin=:pe_skin, pe_heent=:pe_heent, pe_neck=:pe_neck,pe_breastthorax=:pe_breastthorax,
+            pe_general=:pe_general, pe_skin=:pe_skin,pe_head=:pe_head,pe_heent=:pe_heent, pe_neck=:pe_neck,pe_breastthorax=:pe_breastthorax,
             pe_heart=:pe_heart, pe_lungs=:pe_lungs, pe_abdomen=:pe_abdomen, pe_rectalgenitalia=:pe_rectalgenitalia,
             pe_extremities=:pe_extremities, pe_neurological=:pe_neurological, pe_ob_gynexam=:pe_ob_gynexam, pe_other=:pe_other, pe_text=:pe_text,
             svg_tag=:svg_tag,impression=:impression,diff_dx=:diff_dx, plan_management=:plan_management,problem_list=:problem_list, 
@@ -218,6 +231,8 @@
             ,c_a=:c_a,c_l=:c_l,c_serology=:c_serology,c_anterpartum=:c_anterpartum,c_vaccination_dt=:c_vaccination_dt,c_hbv=:c_hbv,c_bcg=:c_bcg,c_inform_officer=:c_inform_officer
             ,c_inform_mother=:c_inform_mother,c_inform_etc=:c_inform_etc,c_inform_etc_text=:c_inform_etc_text
             ,c_ga=:c_ga,c_apgar1=:c_apgar1,c_apgar5=:c_apgar5,c_apgar10=:c_apgar10,c_sex=:c_sex,c_bw=:c_bw,c_hc=:c_hc,c_length=:c_length
+            ,pe_face=:pe_face,pe_ears=:pe_ears,pe_eyes=:pe_eyes,pe_nose=:pe_nose,pe_mouth=:pe_mouth,pe_chest=:pe_chest,pe_genitalia=:pe_genitalia
+            ,pe_anus=:pe_anus,pe_trunk_spine=:pe_trunk_spine,pe_nervose=:pe_nervose
             WHERE admission_note_id=:admission_note_id");
             $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
             'receiver_medication_date'=>$receiver_medication_date, 'receiver_medication_time'=>$receiver_medication_time,
@@ -245,7 +260,7 @@
             'supplementary_feeding'=>$supplementary_feeding,'supplementary_feeding_start_age_month'=>$supplementary_feeding_start_age_month,
             'disease_operation_allergy'=>$disease_operation_allergy, 'inpatient_history'=>$inpatient_history,
             'inpatient_last_date'=>$inpatient_last_date, 'inpatient_location'=>$inpatient_location,
-            'inpatient_because'=>$inpatient_because, 'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin, 'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,
+            'inpatient_because'=>$inpatient_because, 'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin, 'pe_head'=>$pe_head,'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,
             'pe_breastthorax'=>$pe_breastthorax, 'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs, 'pe_abdomen'=>$pe_abdomen,
             'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities, 'pe_neurological'=>$pe_neurological,
             'pe_ob_gynexam'=>$pe_ob_gynexam, 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression,
@@ -258,6 +273,8 @@
             ,'c_a'=>$c_a,'c_l'=>$c_l,'c_serology'=>$c_serology,'c_anterpartum'=>$c_anterpartum,'c_vaccination_dt'=>$c_vaccination_dt,'c_hbv'=>$c_hbv,'c_bcg'=>$c_bcg,'c_inform_officer'=>$c_inform_officer
             ,'c_inform_mother'=>$c_inform_mother,'c_inform_etc'=>$c_inform_etc,'c_inform_etc_text'=>$c_inform_etc_text
             ,'c_ga'=>$c_ga,'c_apgar1'=>$c_apgar1,'c_apgar5'=>$c_apgar5,'c_apgar10'=>$c_apgar10,'c_sex'=>$c_sex,'c_bw'=>$c_bw,'c_hc'=>$c_hc,'c_length'=>$c_length
+            ,'pe_face'=>$pe_face,'pe_ears'=>$pe_ears,'pe_eyes'=>$pe_eyes,'pe_nose'=>$pe_nose,'pe_mouth'=>$pe_mouth,'pe_chest'=>$pe_chest,'pe_genitalia'=>$pe_genitalia
+            ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose
         ));
 
             if(!empty($_REQUEST['admission_note_doctor'])){
