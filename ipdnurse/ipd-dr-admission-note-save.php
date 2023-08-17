@@ -200,7 +200,8 @@
                 pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,impression,diff_dx,plan_management,problem_list,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version
                 ,c_born_date,c_born_time,c_born_type_in,c_labor_type,c_indication,c_intrapartum
-                ,c_labor_normal,c_drug_allergy,c_g,c_tp,c_pre,c_a,c_l
+                ,c_labor_normal,c_drug_allergy,c_g,c_tp,c_pre,c_a,c_l,c_serology,c_anterpartum
+                ,c_vaccination_dt,c_hbv,c_bcg,c_inform_officer
                 )
                 VALUES (:hn,:an,:receiver_medication_date,:receiver_medication_time,:take_medication_by,
                 :arrive_by,:taken_by_relative,:taken_by_nurse,:taken_by_crib,:taken_by_etc,:taken_by,:informant_patient,:informant_relatives,:informant_deliverer,
@@ -223,8 +224,8 @@
                 :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:svg_tag,:impression,:diff_dx,
                 :plan_management,:problem_list,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
                 ,:c_born_date,:c_born_time,:c_born_type_in,:c_labor_type,:c_indication,:c_intrapartum
-                ,:c_labor_normal,:c_drug_allergy,:c_g,:c_tp,:c_pre,:c_a,:c_l
-                
+                ,:c_labor_normal,:c_drug_allergy,:c_g,:c_tp,:c_pre,:c_a,:c_l,:c_serology,:c_anterpartum
+                ,:c_vaccination_dt,:c_hbv,:c_bcg,:c_inform_officer
                 
                 )");
                 $stmt->execute(array('hn'=>$hn, 'an'=>$an, 'receiver_medication_date'=>$receiver_medication_date,
@@ -270,8 +271,8 @@
                 ,'c_labor_type'=>$c_labor_type,'c_indication'=>$c_indication,'c_intrapartum'=>$c_intrapartum
                 ,'c_labor_normal'=>$c_labor_normal,'c_drug_allergy'=>$c_drug_allergy
                 ,'c_g'=>$c_g,'c_tp'=>$c_tp,'c_pre'=>$c_pre,'c_a'=>$c_a,'c_l'=>$c_l
-                /*,'c_serology'=>$c_serology,'c_anterpartum'=>$c_anterpartum
-                ,'c_vaccination_dt'=>$c_vaccination_dt,'c_hbv'=>$c_hbv,'c_bcg'=>$c_bcg,'c_inform_officer'=>$c_inform_officer*/
+                ,'c_serology'=>$c_serology,'c_anterpartum'=>$c_anterpartum
+                ,'c_vaccination_dt'=>$c_vaccination_dt,'c_hbv'=>$c_hbv,'c_bcg'=>$c_bcg,'c_inform_officer'=>$c_inform_officer
                 
             ));
 
