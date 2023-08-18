@@ -2,6 +2,7 @@
 session_start();
 //error_reporting(0);
    require_once '../include/Session.php';
+   
 
    $mylink = DbConstant::MAIN_LINK;
    $root = $_SERVER['DOCUMENT_ROOT'];

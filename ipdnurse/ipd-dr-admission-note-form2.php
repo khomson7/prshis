@@ -2289,7 +2289,7 @@ $row_period  = $stmt_period->fetch();
 
                                     <B>GA</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_ga']) ? htmlspecialchars($row['c_ga']) : '') ?>" id="c_ga" name="c_ga" min="0">
+                                        <input type="text" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_ga']) ? htmlspecialchars($row['c_ga']) : '') ?>" id="c_ga" name="c_ga" min="0">
                                     </div> Wks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                     <B>Apgar score นาทีที่ 1</B>

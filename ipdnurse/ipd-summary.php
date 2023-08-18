@@ -13,12 +13,16 @@
             
 				
           }
+          
+
+     
 //ส่วนหัวหน้า
         require_once '../mains/main-report.php';
-//check session and permission        
-       Session::checkLoginSessionAndShowMessage(); //เช็ค session
-       Session::checkPermissionAndShowMessage('IPD_DOCTOR_SUMMARY','VIEW');
-      // 
+//check session and permission  
+//Session::checkLoginSessionAndShowMessage(); //เช็ค session      
+Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
+
+
       
        
         require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
@@ -45,6 +49,8 @@
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
         date_default_timezone_set('asia/bangkok');
+
+       
 ?>
 <form id="ipd_summary_form">
     <div class="container-fluid">
