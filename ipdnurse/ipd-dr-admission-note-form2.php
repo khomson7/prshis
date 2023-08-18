@@ -2629,17 +2629,12 @@ $row_period  = $stmt_period->fetch();
                     <div class="col-md-4">
                         <div class="form-group">
 
-                        <?php
-                        //รอแก้ไข
-                        if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
-                        ?>
+                    
 
                             <label for="action-person-dr-admission">ลงชื่อแพทย์</label>
                             <button type="button" class="btn btn-secondary btn-sm mb-2" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ลงชื่อ</button>
 
-                            <?php
-                        }
-                        ?>
+                      
                             <div id="dr-admission-group-input-div">
                                 <template id="template_dr_admission_input_div">
                                     <div class="dr_admission_input_div">
