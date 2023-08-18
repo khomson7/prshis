@@ -75,8 +75,9 @@ if ($admission_note_id == null || $admission_note_id != null) {
                             opdscreen.pe_heart_text, opdscreen.pe_lung_text,
                             opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
                             opdscreen.pe_ext_text, opdscreen.pe, pt.cid, pt.passport_no, pt.hn,pt.pname,pt.fname,pt.lname,
-                            vn.age_y,vn.age_m,vn.age_d
+                            vn.age_y,vn.age_m,vn.age_d,opdscreen.bw,opdscreen.height,(select oi.name from " . DbConstant::HOSXP_DBNAME . ".ovstist oi where oi.ovstist = ov.ovstist) as ovst_ist
                             FROM " . DbConstant::HOSXP_DBNAME . ".opdscreen
+                            INNER JOIN " . DbConstant::HOSXP_DBNAME . ".ovst ov on ov.vn = opdscreen.vn
                             INNER JOIN " . DbConstant::HOSXP_DBNAME . ".vn_stat vn on vn.vn = opdscreen.vn
                             INNER JOIN " . DbConstant::HOSXP_DBNAME . ".patient pt on pt.hn = opdscreen.hn
                             WHERE opdscreen.vn= :vn ";
@@ -100,6 +101,7 @@ $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.ln
             an_stat.age_y,an_stat.age_m,an_stat.age_d,
             concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
             ipt.dchdate,ipt.dchtime,
+            ipt.regdate,ipt.regtime,
             ipt.ward,ward.name,
             ipt.pttype, pttype.`name` as pttype_name,
             iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
@@ -239,11 +241,11 @@ $row_period  = $stmt_period->fetch();
                                         <div class="col-sm-1"></div>
                                         <label>วันที่</label>
                                         <div class="col-sm-4">
-                                            <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row['receiver_medication_date']) ? htmlspecialchars($row['receiver_medication_date']) : '') ?>">
+                                            <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row_ipt['regdate']) ? htmlspecialchars($row_ipt['regdate']) : '') ?>" disabled>
                                         </div>
                                         <label>เวลา</label>
                                         <div class="col-sm-4">
-                                            <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row['receiver_medication_time']) ? htmlspecialchars($row['receiver_medication_time']) : '') ?>">
+                                            <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) ? htmlspecialchars($row_ipt['regtime']) : '') ?>" disabled>
                                         </div>
                                     </div>
                                     <hr>
@@ -303,12 +305,12 @@ $row_period  = $stmt_period->fetch();
                                                                                                                                     ) {
                                                                                                                                         echo htmlspecialchars($row['arrive_by']);
                                                                                                                                     } ?>" <?php if (!($row['arrive_by'] != 'เดินมา'
-                                                                                                                                        && $row['arrive_by'] != 'รถนั่ง'
-                                                                                                                                        && $row['arrive_by'] != 'รถนอน'
-                                                                                                                                        && $row['arrive_by'] != 'รถ Transfer'
-                                                                                                                                        && $row['arrive_by'] != NULL)) {
-                                                                                                                                        echo 'disabled';
-                                                                                                                                    } ?>>
+                                                                                                                                                && $row['arrive_by'] != 'รถนั่ง'
+                                                                                                                                                && $row['arrive_by'] != 'รถนอน'
+                                                                                                                                                && $row['arrive_by'] != 'รถ Transfer'
+                                                                                                                                                && $row['arrive_by'] != NULL)) {
+                                                                                                                                                echo 'disabled';
+                                                                                                                                            } ?>>
                                         </div>
                                     </div>
                                     <hr>
@@ -317,7 +319,7 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-12">
-                                            <textarea class="form-control" id="" name="chief_complaints" rows="6"><?= (isset($row_opdscreen['cc']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['chief_complaints'])) ?></textarea>
+                                            <textarea disabled class="form-control" id="" name="chief_complaints" rows="6"><?= (isset($row_opdscreen['cc']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['chief_complaints'])) ?></textarea>
                                         </div>
                                     </div>
                                     <hr>
@@ -383,43 +385,12 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-1"></div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if (
-                                                                    $row['take_medication_by'] == 'มาเอง'
-                                                                    || $row['take_medication_by'] == NULL
-                                                                ) {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง" onchange="custom_check('off_entered');">
-                                            <label class="custom-control-label" for="entered_by1">มาเอง</label>
+                                        
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?=(isset($row_opdscreen['ovst_ist']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['ovst_ist']) : htmlspecialchars($row['take_medication_by']))?>" >
                                         </div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if ($row['take_medication_by'] == 'แพทย์นัด') {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="entered_by2" name="take_medication_by" value="แพทย์นัด" onchange="custom_check('off_entered');">
-                                            <label class="custom-control-label" for="entered_by2">แพทย์นัด</label>
-                                        </div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if (
-                                                                    $row['take_medication_by'] != 'มาเอง'
-                                                                    && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                    && $row['take_medication_by'] != NULL
-                                                                ) {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="entered_by3" onchange="custom_check('on_entered');">
-                                            <label class="custom-control-label" for="entered_by3">ส่งตัวจาก</label>
-                                        </div>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by" value="<?php if (
-                                                                                                                                                            $row['take_medication_by'] != 'มาเอง'
-                                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                                                                                                        ) {
-                                                                                                                                                            echo htmlspecialchars($row['take_medication_by']);
-                                                                                                                                                        } ?>" <?php if (!($row['take_medication_by'] != 'มาเอง'
-                                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
-                                                                                                                                                            && $row['take_medication_by'] != NULL)) {
-                                                                                                                                                            echo 'disabled';
-                                                                                                                                                        } ?>>
-                                        </div>
+                                       
+                                      
                                     </div>
                                     <hr>
                                     <div class="form-group row">
@@ -458,8 +429,8 @@ $row_period  = $stmt_period->fetch();
                                             <input type="text" class="form-control form-control-sm" id="r5" name="taken_by" value="<?php if ($row['taken_by_etc'] == 'Y') {
                                                                                                                                         echo htmlspecialchars($row['taken_by']);
                                                                                                                                     } ?>" <?php if (!($row['taken_by_etc'] == 'Y')) {
-                                                                                                                                        echo 'disabled';
-                                                                                                                                    } ?>>
+                                                                                                                                                echo 'disabled';
+                                                                                                                                            } ?>>
                                         </div>
                                     </div>
                                     <hr>
@@ -468,133 +439,13 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-12">
-                                            <textarea class="form-control" id="" name="medical_history" rows="6"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history'])) ?></textarea>
+                                            <textarea disabled class="form-control" id="" name="medical_history" rows="6"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history'])) ?></textarea>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="form-group row">
-                                        <label class="col-sm-12"><B>สัญญาณชีพแรกรับ</B></label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-2">BP</label>
-                                        <div class="col-sm-3">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="bp" disabled value="<?= (isset($row_vs['sbp']) ? htmlspecialchars($row_vs['sbp']) . '/' : '') ?><?= (isset($row_vs['dbp']) ? htmlspecialchars($row_vs['dbp']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm">mmHg</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <label class="text-right col-sm-3">E</label>
-                                        <div class="col-sm-2">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="e" disabled value="<?= (isset($row_vs['eye']) ? htmlspecialchars($row_vs['eye']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-2">T</label>
-                                        <div class="col-sm-3">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="t" disabled value="<?= (isset($row_vs['bt']) ? htmlspecialchars($row_vs['bt']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm">  &#176; C    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <label class="text-right col-sm-3">V</label>
-                                        <div class="col-sm-2">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="v" disabled value="<?= (isset($row_vs['verbal']) ? htmlspecialchars($row_vs['verbal']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-2">PR</label>
-                                        <div class="col-sm-3">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="pr" disabled value="<?= (isset($row_vs['pr']) ? htmlspecialchars($row_vs['pr']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <label class="text-right col-sm-3">M</label>
-                                        <div class="col-sm-2">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="m" disabled value="<?= (isset($row_vs['movement']) ? htmlspecialchars($row_vs['movement']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-2">RR</label>
-                                        <div class="col-sm-3">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="rr" disabled value="<?= (isset($row_vs['rr']) ? htmlspecialchars($row_vs['rr']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <label class="text-right col-sm-3">Neuro sign GCS</label>
-                                        <div class="col-sm-3">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="gcs" disabled value="<?php $i = 0;
-                                                                                                                            if (isset($row_vs['eye'])) {
-                                                                                                                                if (is_numeric($row_vs['eye'])) {
-                                                                                                                                    $i += $row_vs['eye'];
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                '';
-                                                                                                                            }
-                                                                                                                            if (isset($row_vs['verbal'])) {
-                                                                                                                                if (is_numeric($row_vs['verbal'])) {
-                                                                                                                                    $i += $row_vs['verbal'];
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                '';
-                                                                                                                            }
-                                                                                                                            if (isset($row_vs['movement'])) {
-                                                                                                                                if (is_numeric($row_vs['movement'])) {
-                                                                                                                                    $i += $row_vs['movement'];
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                '';
-                                                                                                                            }
-                                                                                                                            echo $i;
-                                                                                                                            ?>" aria-describedby="inputGroup-sizing-sm">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm">คะแนน</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-2">Braden Scale</label>
-                                        <div class="col-sm-3">
-                                            <div class="input-group input-group-sm sm-3">
-                                                <input type="text" class="form-control" id="" name="braden_scale" disabled value="<?= (isset($row_vs['braden']) ? htmlspecialchars($row_vs['braden']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm">คะแนน</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-2">น้ำหนัก</label>
-                                        <div class="col-sm-2">
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" class="form-control" id="" name="" disabled value="<?= (isset($row_ipt['latest_bw']) ? htmlspecialchars($row_ipt['latest_bw']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                            </div>
-                                        </div>
-                                        <label class="text-right col-sm-1">ส่วนสูง</label>
-                                        <div class="col-sm-2">
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" class="form-control" id="" name="" disabled value="<?= (isset($row_ipt['latest_height']) ? htmlspecialchars($row_ipt['latest_height']) : '') ?>" aria-describedby="inputGroup-sizing-sm">
-                                            </div>
-                                        </div>
-                                    </div>
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -766,7 +617,7 @@ $row_period  = $stmt_period->fetch();
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="col-sm-1">
-                            <input type="number"  placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" min="0">
+                            <input type="number" placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" min="0">
                         </div>
                         <div class="col-sm-1">
                             <input type="number" placeholder="Tp" class="form-control form-control-sm" value="<?= (isset($row['c_tp']) ? htmlspecialchars($row['c_tp']) : '') ?>" id="c_tp" name="c_tp" min="0">
@@ -889,8 +740,8 @@ $row_period  = $stmt_period->fetch();
                             <input type="text" class="form-control form-control-sm" id="in5" name="c_inform_etc_text" value="<?php if ($row['c_inform_etc'] == 'Y') {
                                                                                                                                     echo htmlspecialchars($row['c_inform_etc_text']);
                                                                                                                                 } ?>" <?php if (!($row['c_inform_etc'] == 'Y')) {
-                                                                                                                                echo 'disabled';
-                                                                                                                            } ?>>
+                                                                                                                                            echo 'disabled';
+                                                                                                                                        } ?>>
                         </div>
 
                     </div>
@@ -902,7 +753,7 @@ $row_period  = $stmt_period->fetch();
 
 
 
-        
+
 
         <div class="accordion-item">
             <div class="accordion-header text-center"> <label class="col-sm-12 font-weight-bold">ประวัติการเจ็บป่วยในอดีต</label></div>
@@ -1071,8 +922,8 @@ $row_period  = $stmt_period->fetch();
                                         <textarea <?= ((($row['operation_history'] == 'ไม่มี'
                                                         || $row['operation_history'] == NULL)
                                                         && ($operation_text == "")) ? 'disabled' : '') ?> class="form-control" rows="3" id="y2_operation" name="operation_history"><?php if ($row['operation_history'] != 'ไม่มี') {
-                                                                                                                                                                                echo htmlspecialchars($row['operation_history']);
-                                                                                                                                                                            } ?></textarea>
+                                                                                                                                                                                        echo htmlspecialchars($row['operation_history']);
+                                                                                                                                                                                    } ?></textarea>
                                     </div>
                                 </div>
 
@@ -2306,7 +2157,7 @@ $row_period  = $stmt_period->fetch();
                                     </div>
 
                                 </div>
-                                
+
 
                                 <div class="form-group row">
                                     <label class="col-sm-2"><B></B></label>
@@ -2341,46 +2192,67 @@ $row_period  = $stmt_period->fetch();
                                 </div>
 
                                 <div class="form-group row">
-                                <label class="col-sm-2"><B>&nbsp;Vital sign</B></label>
-                       <div class="col-sm-2">
-                <div class="input-group input-group-sm sm-1">
-                BP: &nbsp;<input type="text" class="form-control" id="bp" name="bp"  value="<?=(isset($row_opdscreen['sbp']) ? htmlspecialchars($row_opdscreen['sbp']).'/' : '')?><?=(isset($row_opdscreen['dbp']) ? htmlspecialchars($row_opdscreen['dbp']) : '')?>"
-                aria-describedby="inputGroup-sizing-sm" readonly>
-                                  <div class="input-group-append">
-                                      <span class="input-group-text" id="inputGroup-sizing-sm">mmHg</span>
-                                  </div>
-                              </div>
-                            </div>
-                        <div class="col-sm-2">
-                              <div class="input-group input-group-sm sm-1">
-                PR: &nbsp;<input type="text" class="form-control" id="pr" name="pr"   value="<?=(isset($row_opdscreen['pr']) ? htmlspecialchars($row_opdscreen['pr']) : '')?>" aria-describedby="inputGroup-sizing-sm" readonly>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
+                                    <label class="col-sm-2"><B>&nbsp;Vital sign</B></label>
+                                    <div class="col-sm-2">
+                                        <div class="input-group input-group-sm sm-1">
+                                            BP: &nbsp;<input type="text" class="form-control" id="bp" name="bp" value="<?= (isset($row_opdscreen['sbp']) ? htmlspecialchars($row_opdscreen['sbp']) . '/' : '') ?><?= (isset($row_opdscreen['dbp']) ? htmlspecialchars($row_opdscreen['dbp']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">mmHg</span>
+                                            </div>
                                         </div>
-                              </div>
-                           </div>
-
-                           <div class="col-sm-2">
-                              <div class="input-group input-group-sm sm-1">
-                RR: &nbsp; <input type="text" class="form-control" id="rr" name="rr"    value="<?=(isset($row_opdscreen['rr']) ? htmlspecialchars($row_opdscreen['rr']) : '')?>" aria-describedby="inputGroup-sizing-sm" readonly>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="input-group input-group-sm sm-1">
+                                            PR: &nbsp;<input type="text" class="form-control" id="pr" name="pr" value="<?= (isset($row_opdscreen['pr']) ? htmlspecialchars($row_opdscreen['pr']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
+                                            </div>
                                         </div>
-                              </div>
-                           </div>
-                           <div class="col-sm-2">
-                              <div class="input-group input-group-sm sm-1">
-                BT: &nbsp; <input type="text" class="form-control" id="t" name="t"  value="<?=(isset($row_opdscreen['bt']) ? htmlspecialchars($row_opdscreen['bt']) : '')?>"
-                                                aria-describedby="inputGroup-sizing-sm" readonly>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">  &#176; C    </span>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <div class="input-group input-group-sm sm-1">
+                                            RR: &nbsp; <input type="text" class="form-control" id="rr" name="rr" value="<?= (isset($row_opdscreen['rr']) ? htmlspecialchars($row_opdscreen['rr']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm"> /min  </span>
+                                            </div>
                                         </div>
-                              </div>
-                           </div>
-</div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="input-group input-group-sm sm-1">
+                                            BT: &nbsp; <input type="text" class="form-control" id="t" name="t" value="<?= (isset($row_opdscreen['bt']) ? htmlspecialchars($row_opdscreen['bt']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">  &#176; C    </span>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
 
+                                </div>
+
+
+                                <div class="form-group row">
+                                    
+                                    <label class="col-sm-2"><B></B></label>
+                                    <div class="col-sm-2">
+                                        <div class="input-group input-group-sm sm-1">
+                                            น้ำหนัก: &nbsp;<input type="text" class="form-control" id="bp" name="bp" value="<?= (isset($row_opdscreen['bw']) ? htmlspecialchars($row_opdscreen['bw']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">Kg</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="input-group input-group-sm sm-1">
+                                        ส่วนสูง: &nbsp;<input type="text" class="form-control" id="" name="" value="<?= (isset($row_opdscreen['height']) ? htmlspecialchars($row_opdscreen['height']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">cms</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
 
 
                                 <div class="form-group row">
@@ -2735,7 +2607,7 @@ $row_period  = $stmt_period->fetch();
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['diff_dx']) ? htmlspecialchars($row['diff_dx']) : '') ?>" id="diff_dx" name="diff_dx">
                                             </div>
-                                            
+
                                         </div>
                                         <div class="form-group row">
                                             <label class="text-right col-sm-3">Plan Management</label>
@@ -2752,11 +2624,22 @@ $row_period  = $stmt_period->fetch();
                         </div>
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="form-group">
+
+                        <?php
+                        //รอแก้ไข
+                        if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
+                        ?>
+
                             <label for="action-person-dr-admission">ลงชื่อแพทย์</label>
                             <button type="button" class="btn btn-secondary btn-sm mb-2" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ลงชื่อ</button>
+
+                            <?php
+                        }
+                        ?>
                             <div id="dr-admission-group-input-div">
                                 <template id="template_dr_admission_input_div">
                                     <div class="dr_admission_input_div">
@@ -2798,7 +2681,7 @@ $row_period  = $stmt_period->fetch();
 
                         <?php
                         //รอแก้ไข
-                        $a = 1;
+                      
                         if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
                         ?>
                             <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
