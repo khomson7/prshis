@@ -241,11 +241,11 @@ $row_period  = $stmt_period->fetch();
                                         <div class="col-sm-1"></div>
                                         <label>วันที่</label>
                                         <div class="col-sm-4">
-                                            <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row_ipt['regdate']) ? htmlspecialchars($row_ipt['regdate']) : '') ?>" >
+                                            <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row_ipt['regdate']) && $admission_note_id == null ? htmlspecialchars($row_ipt['regdate']) : htmlspecialchars($row['receiver_medication_date'])) ?>" >
                                         </div>
                                         <label>เวลา</label>
                                         <div class="col-sm-4">
-                                            <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) ? htmlspecialchars($row_ipt['regtime']) : '') ?>" >
+                                            <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) && $admission_note_id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receiver_medication_time'])) ?>" >
                                         </div>
                                     </div>
                                     <hr>
@@ -387,7 +387,7 @@ $row_period  = $stmt_period->fetch();
                                         <div class="col-sm-1"></div>
                                         
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="" >
+                                            <input type="text" class="form-control form-control-sm" id="take_medication_by" name="take_medication_by" value="<?= (isset($row_opdscreen['ovst_ist']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['ovst_ist']) : htmlspecialchars($row['take_medication_by'])) ?>" >
                                         </div>
                                        
                                       
