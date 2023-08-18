@@ -241,11 +241,11 @@ $row_period  = $stmt_period->fetch();
                                         <div class="col-sm-1"></div>
                                         <label>วันที่</label>
                                         <div class="col-sm-4">
-                                            <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row_ipt['regdate']) ? htmlspecialchars($row_ipt['regdate']) : '') ?>" disabled>
+                                            <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row_ipt['regdate']) ? htmlspecialchars($row_ipt['regdate']) : '') ?>" >
                                         </div>
                                         <label>เวลา</label>
                                         <div class="col-sm-4">
-                                            <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) ? htmlspecialchars($row_ipt['regtime']) : '') ?>" disabled>
+                                            <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) ? htmlspecialchars($row_ipt['regtime']) : '') ?>" >
                                         </div>
                                     </div>
                                     <hr>
@@ -319,7 +319,7 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-12">
-                                            <textarea disabled class="form-control" id="" name="chief_complaints" rows="6"><?= (isset($row_opdscreen['cc']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['chief_complaints'])) ?></textarea>
+                                            <textarea  class="form-control" id="" name="chief_complaints" rows="6"><?= (isset($row_opdscreen['cc']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['chief_complaints'])) ?></textarea>
                                         </div>
                                     </div>
                                     <hr>
@@ -387,7 +387,7 @@ $row_period  = $stmt_period->fetch();
                                         <div class="col-sm-1"></div>
                                         
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?=(isset($row_opdscreen['ovst_ist']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['ovst_ist']) : htmlspecialchars($row['take_medication_by']))?>" >
+                                            <input type="text" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="" >
                                         </div>
                                        
                                       
@@ -439,7 +439,7 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-12">
-                                            <textarea disabled class="form-control" id="" name="medical_history" rows="6"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history'])) ?></textarea>
+                                            <textarea  class="form-control" id="" name="medical_history" rows="6"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history'])) ?></textarea>
                                         </div>
                                     </div>
 
