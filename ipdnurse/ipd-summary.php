@@ -52,6 +52,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 
        
 ?>
+
 <form id="ipd_summary_form">
     <div class="container-fluid">
         <div class="row">
@@ -67,11 +68,11 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
         <div class="row mb-2">
             <label class="col-auto text-right font-weight-bold">Discharge วันที่</label>
             <div class="col-auto">
-                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="<?php echo date('Y-m-d');?>">
+                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
             </div>
             <label class="col-auto text-right font-weight-bold">เวลา</label>
             <div class="col-auto">
-                <input type="time" class="form-control form-control-sm CheckPer_1" id="summary_plan_time" name="summary_plan_time" value="<?php echo date('H:i');?>">
+                <input type="time" class="form-control form-control-sm CheckPer_1" id="summary_plan_time" name="summary_plan_time" value="">
             </div>
         </div>
         <div class="row mb-2">
@@ -350,7 +351,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                             <div class="row">
                                 <label class="col-sm-4 offset-md-1">ชื่อสถานพยาบาลที่ส่งต่อ</label>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" id="hospital_refer" name="hospital_refer">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" id="hospital_refer" name="hospital_refer"  placeholder="ไม่เกิน 50 ตัวอักษร">
                                 </div>
                             </div>
                             <div class="custom-control custom-radio col-sm-11 offset-md-1">
@@ -450,11 +451,11 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                                 <div class="col-sm-1"></div>
                                 
                                 <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="was_born_live_date" name="was_born_live_date" value="">
                                 </div>
                                 <label>at</label>
                                 <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
+                                    <input type="number" class="form-control form-control-sm" id="was_born_live_hours" name="was_born_live_hours" min = "1">
                                 </div>
                                 <label>hours</label>
 
@@ -473,7 +474,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                                 <div class="col-sm-1"></div>
                                 <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and died on</label>
                                 <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
                                 <label>at</label>
                                 <div class="col-auto">
@@ -491,7 +492,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                                 <div class="col-sm-1"></div>
                                 
                                 <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
                                 <label>at</label>
                                 <div class="col-auto">
@@ -541,7 +542,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                        <div class = "row">     
                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and died on</label>
                        <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
                                 <div class="row">
@@ -561,7 +562,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                             </div>
 
                             <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
                            <label class="col-sm-3">or,if unknow, estimated duration of pregnacy</label>
                            <div class="col-sm-1">
@@ -657,7 +658,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     </div>
          <br>
     <div class="col-sm-3">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
     </div>
@@ -678,7 +679,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     </div>
          <br>
     <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
     </div>
@@ -701,7 +702,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <div class = "row"> 
                         <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Birthweight</label>
                         <div class="col-sm-2">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
                                 <label class="text-left">&nbsp;grams</label>
@@ -761,7 +762,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                     </div>
 
                     <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
     </div>
     </div>   
@@ -784,7 +785,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคหรือภาวะหลักเพียงภาวะเดียวของลูกในท้องหรือทารก)</label>
                         </div>
                         <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
                                 <div class = "row"> 
@@ -794,7 +795,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคหรือภาวะอื่นๆ ของลูกในท้องหรือทารก)</label>
                         </div>
                         <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
                                 <div class = "row"> 
@@ -804,7 +805,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคหรือภาวะหลักเพียงภาวะเดียวของมารดาที่มีผลต่อลูกในท้องหรือทารก)</label>
                         </div>
                         <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
                                 <div class = "row"> 
@@ -814,7 +815,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคภาวะอื่นๆ ของมารดาที่มีผลต่อลูกในท้องหรือทารก)</label>
                         </div>
                         <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
 
                                 <div class = "row"> 
@@ -824,7 +825,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคภาวะอื่นๆ ของมารดาที่มีผลต่อลูกในท้องหรือทารก)</label>
                         </div>
                         <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
                             
                                 <hr>
@@ -914,7 +915,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 
             <div class="col-md-12 text-right">
                 <?php
-                if(Session::checkPermission('IPD_DOCTOR_SUMMARY','VIEW')){?>
+                if(Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW')){?>
                     <button type="button" class="btn btn-primary" id="btn_summary" onclick="summary_save()"><i class="fas fa-save"></i> บันทึก</button>
                 <?php } ?>
                 <a href="ipd-summary-pdf.php?an=<?php echo $an;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
@@ -958,6 +959,8 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     function summary_save(){
         var summary_plan_date = $("#summary_plan_date").val();
         var summary_plan_time = $("#summary_plan_time").val();
+        var was_born_live_date = $("#was_born_live_date").val();
+       // var summary_plan_time = $("#summary_plan_time").val();
         //var principal_diagnosis = $("#principal_diagnosis").val();
         var summary_id = $("#summary_id").val();
 

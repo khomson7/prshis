@@ -59,6 +59,7 @@
         $cause_of_death_b= $row['cause_of_death_b'];
         $cause_of_death_c= $row['cause_of_death_c'];
         $onset_and_death= $row['onset_and_death'];
+        $was_born_live_date =$row['was_born_live_date'];
         
         $version = $row['version'];
 ?>
@@ -70,6 +71,7 @@
 
         $("input[name=summary_plan_date]").val(<?=json_encode($summary_plan_date )?>);
         $("input[name=summary_plan_time]").val(<?=json_encode($summary_plan_time )?>);
+        $("input[name=was_born_live_date]").val(<?=json_encode($was_born_live_date )?>);
 
         $("textarea#principal_diagnosis").val(<?=json_encode($principal_diagnosis)?>);
         $("textarea#pre_admission_comorbidity").val(<?=json_encode($pre_admission_comorbidity)?>);

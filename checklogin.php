@@ -11,7 +11,9 @@ $an  = $_REQUEST['an'];
 $conn = DbUtils::get_hosxp_connection();
 
 if(Session::checklogin($conn, $username, $password)){
-	header("Location: index.php");
+	//header("Location: index.php");
+	echo "<script>window.history.back();</script>";
 } else {
-	header("Location: index.php");
+	//header("Location: index.php");
+	echo "<script>window.history.back();</script>";
 }

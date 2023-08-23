@@ -7,12 +7,15 @@
  //   require_once 'ipd-show-patient-main-sticky.php';
  //   require_once 'ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
  //   require_once './project/function/KphisQueryUtils.php';
+ 
    $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
    $hn = KphisQueryUtils::getHnByAn($an);
    $vn = KphisQueryUtils::getVnByAn($an);
    $patient_name = KphisQueryUtils::getPatientName($hn);
  require_once './header.php';
  require_once 'ipd-show-patient-main.php';
+
+
 
 ?>
 
@@ -21,6 +24,7 @@
 
     <div class="container-fluid">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+       <?php  echo $login?>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo $mylink ?>ipd-dr-search-patient.php" role="tab" ><i class="fas fa-arrow-left"></i> กลับ</a>
             </li>

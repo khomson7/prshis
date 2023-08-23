@@ -25,13 +25,13 @@
     //check for require field
     if(empty($an)
     || empty($summary_id)
-    || empty($_REQUEST['summary_plan_date'])
-    || empty($_REQUEST['summary_plan_time'])
+    /*|| empty($_REQUEST['summary_plan_date'])
+    || empty($_REQUEST['summary_plan_time'])*/
     ){
         exit;
     }
 
-    $summary_plan_date = empty($_REQUEST['summary_plan_date']) ? null : $_REQUEST['summary_plan_date'];
+    $summary_plan_date = /*empty($_REQUEST['summary_plan_date']) ? null : */$_REQUEST['summary_plan_date'];
     $summary_plan_time = empty($_REQUEST['summary_plan_time']) ? null : $_REQUEST['summary_plan_time'];
     $principal_diagnosis = empty($_REQUEST['principal_diagnosis']) ? null : $_REQUEST['principal_diagnosis'];
     $pre_admission_comorbidity = empty($_REQUEST['pre_admission_comorbidity']) ? null : $_REQUEST['pre_admission_comorbidity'];
@@ -64,7 +64,16 @@
     $cause_of_death_b= empty($_REQUEST['cause_of_death_b']) ? null : $_REQUEST['cause_of_death_b'];
     $cause_of_death_c = empty($_REQUEST['cause_of_death_c']) ? null : $_REQUEST['cause_of_death_c'];
     $onset_and_death = empty($_REQUEST['onset_and_death']) ? null : $_REQUEST['onset_and_death'];
-
+    $child_was_born_live = empty($_REQUEST['child_was_born_live']) ? null : $_REQUEST['child_was_born_live'];
+    $child_was_stilborn = empty($_REQUEST['child_was_stilborn']) ? null : $_REQUEST['child_was_stilborn'];
+    $died_before_labour = empty($_REQUEST['died_before_labour']) ? null : $_REQUEST['died_before_labour'];
+    $during_labour = empty($_REQUEST['during_labour']) ? null : $_REQUEST['during_labour'];
+    $not_know = empty($_REQUEST['not_know']) ? null : $_REQUEST['not_know'];
+    $was_born_live_date = empty($_REQUEST['was_born_live_date']) ? null : $_REQUEST['was_born_live_date'];
+    $was_born_live_hours = empty($_REQUEST['was_born_live_hours']) ? null : $_REQUEST['was_born_live_hours'];
+    $died_on_date = empty($_REQUEST['died_on_date']) ? null : $_REQUEST['died_on_date'];
+    
+    
 
     //$update_datetime = ใช้ NOW()
     $update_user  = $_SESSION['loginname'];
@@ -86,7 +95,9 @@
                                     discharge_status=:discharge_status,discharge_type=:discharge_type,
                                     hospital_refer=:hospital_refer,additional_code=:additional_code,morphology_code=:morphology_code,
                                     cause_of_death_a=:cause_of_death_a,cause_of_death_b=:cause_of_death_b,cause_of_death_c=:cause_of_death_c,onset_and_death=:onset_and_death,
-                                    update_user=:update_user, update_datetime=NOW()
+                                    update_user=:update_user, update_datetime=NOW(),child_was_born_live=:child_was_born_live
+                                    ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
+                                    ,was_born_live_date=:was_born_live_date,was_born_live_hours=:was_born_live_hours,died_on_date=:died_on_date
                                     WHERE summary_id = :summary_id AND an = :an
                                     ");
             $stmt->execute(array('summary_plan_date'=>$summary_plan_date, 'summary_plan_time'=>$summary_plan_time,
@@ -104,8 +115,10 @@
                                     'discharge_status'=>$discharge_status, 'discharge_type'=>$discharge_type,
                                     'hospital_refer'=>$hospital_refer,'additional_code'=>$additional_code,'morphology_code'=>$morphology_code,
                                     'cause_of_death_a'=>$cause_of_death_a,'cause_of_death_b'=>$cause_of_death_b,'cause_of_death_c'=>$cause_of_death_c,'onset_and_death'=>$onset_and_death,
-                                    'update_user'=>$update_user,
-                                    'summary_id'=>$summary_id, 'an'=>$an,
+                                    'update_user'=>$update_user,'child_was_born_live'=>$child_was_born_live,'child_was_stilborn'=>$child_was_stilborn,
+                                    'died_before_labour'=>$died_before_labour,'during_labour'=>$during_labour,'not_know'=>$not_know,
+                                    'was_born_live_date'=>$was_born_live_date,'was_born_live_hours'=>$was_born_live_hours,'died_on_date'=>$died_on_date,
+                                    'summary_id'=>$summary_id, 'an'=>$an
 
                                 ));
 

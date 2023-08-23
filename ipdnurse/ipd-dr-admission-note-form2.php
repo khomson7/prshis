@@ -220,6 +220,10 @@ $row_period  = $stmt_period->fetch();
             <div class="col-md-11">
                 <h4>History - Physical Examination Of Newborn <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?></h4>
             </div>
+            <div class="custom-control custom-radio col-sm-2">
+                                            <input type="radio" checked="checked" class="custom-control-input" id="c_form_type" name="c_form_type" value="1" ">
+                                            <label class="custom-control-label" for="c_form_type">NewBorn</label>
+                                        </div>
         </div>
         <p></p>
 

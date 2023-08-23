@@ -23,14 +23,17 @@ require_once '../include/KphisQueryUtils.php';
     $output_error = '';
 
     //check for require field
+    
     if(empty($an)
-    || empty($_REQUEST['summary_plan_date'])
-    || empty($_REQUEST['summary_plan_time'])
+    /*|| empty($_REQUEST['summary_plan_date'])
+    || empty($_REQUEST['summary_plan_time'])*/
     ){
         exit;
     }
 
-    $summary_plan_date = empty($_REQUEST['summary_plan_date']) ? null : $_REQUEST['summary_plan_date'];
+    
+
+    $summary_plan_date = /*empty($_REQUEST['summary_plan_date']) ? null : */$_REQUEST['summary_plan_date'];
     $summary_plan_time = empty($_REQUEST['summary_plan_time']) ? null : $_REQUEST['summary_plan_time'];
     $principal_diagnosis = empty($_REQUEST['principal_diagnosis']) ? null : $_REQUEST['principal_diagnosis'];
     $pre_admission_comorbidity = empty($_REQUEST['pre_admission_comorbidity']) ? null : $_REQUEST['pre_admission_comorbidity'];
@@ -75,7 +78,7 @@ require_once '../include/KphisQueryUtils.php';
                                 :hemodialysis,:non_or_other,:non_or_other_text,:discharge_status,:discharge_type,:hospital_refer,:hn,:an,:create_user,NOW(),
                                 :update_user,NOW(),:version)");
 
-        $stmt->execute(array('summary_plan_date'=>$summary_plan_date, 'summary_plan_time'=>$summary_plan_time, 'principal_diagnosis'=>$principal_diagnosis, 'pre_admission_comorbidity'=>$pre_admission_comorbidity, 'post_admission_comorbidity'=>$post_admission_comorbidity,
+        $stmt->execute(array( 'summary_plan_date'=>$summary_plan_date, 'summary_plan_time'=>$summary_plan_time,'principal_diagnosis'=>$principal_diagnosis, 'pre_admission_comorbidity'=>$pre_admission_comorbidity, 'post_admission_comorbidity'=>$post_admission_comorbidity,
                                 'other_diagnosis'=>$other_diagnosis, 'external_cause'=>$external_cause, 'operating_room'=>$operating_room, 'tracheostomy'=>$tracheostomy, 'mechanical_ventilation'=>$mechanical_ventilation, 'mechanical_ventilation1'=>$mechanical_ventilation1,
                                 'mechanical_ventilation2'=>$mechanical_ventilation2, 'packed_redcells'=>$packed_redcells, 'fresh_frozen_plasma'=>$fresh_frozen_plasma, 'platelets'=>$platelets, 'cryoprecipitate'=>$cryoprecipitate,
                                 'whole_blood'=>$whole_blood, 'computer_tomography'=>$computer_tomography, 'computer_tomography_text'=>$computer_tomography_text, 'chemotherapy'=>$chemotherapy, 'mri'=>$mri,

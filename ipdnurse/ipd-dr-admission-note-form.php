@@ -2152,8 +2152,8 @@
                 <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an;?>&admission_note_id=<?php echo $admission_note_id;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                 <?php
                 //รอแก้ไข
-                $a = 1;
-                if($a > 1/*Session::checkPermission('ADMISSION_NOTE','EDIT') */){
+               // $a = 1;
+                if(Session::checkPermission('ADMISSION_NOTE','EDIT') ){
                 ?>
                     <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
                 <?php
