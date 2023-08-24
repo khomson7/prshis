@@ -272,7 +272,7 @@
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-radio col-sm-2">
                                     <input type="radio" <?php   if ($row['arrive_by'] == 'เดินมา'
-                                                                ||  $row['arrive_by'] == NULL)  {echo 'checked="checked"';} ?>
+                                                               /* ||  $row['arrive_by'] == NULL*/)  {echo 'checked="checked"';} ?>
                                         class="custom-control-input" id="w1" name="arrive_by" value="เดินมา" onchange="custom_check('off_arrive');">
                                     <label class="custom-control-label" for="w1">เดินมา</label>
                                 </div>
@@ -1968,6 +1968,18 @@
                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','No adventitious sound, no subcostal retraction')"><i class="fas fa-baby"></i> Normal</button>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="text-right col-sm-3">CVS</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_cvs']) ? htmlspecialchars($row['pe_cvs']) : '')?>" id="pe_cvs" name="pe_cvs">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cvs','Regular rhythm Normal s1 s2 no murmur Normal PMI')"><i class="fas fa-user"></i> Normal</button>
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cvs','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Abdomen</label>
                             <div class="col-sm-7">
@@ -1978,6 +1990,7 @@
                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Rectal&Genitalia</label>
                             <div class="col-sm-7">
@@ -1988,14 +2001,28 @@
                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','Patent anus, no ambiguous genitalia')"><i class="fas fa-baby"></i> Normal</button>
                             </div>
                         </div>
+
+
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Extremities</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_ext_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ext_text']) : htmlspecialchars($row['pe_extremities']))?>" id="pe_extremities" name="pe_extremities">
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','no limit ROM')"><i class="fas fa-user"></i> Normal</button>
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','No deformity No edema')"><i class="fas fa-user"></i> Normal</button>
                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','No deformity')"><i class="fas fa-baby"></i> Normal</button>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label class="text-right col-sm-3">CNS</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_cns']) ? htmlspecialchars($row['pe_cns']) : '')?>" id="pe_cns" name="pe_cns">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cns','E4V5N6 Pupil 3 mm RTLBE Motor and Sensory grossly intact')"><i class="fas fa-user"></i> Normal</button>
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cns','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -2126,6 +2153,7 @@
                     </div>
                 </div>
             </div>
+            <!--
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="mb-3" for="action-person-nurse">ลงชื่อพยาบาล</label>
@@ -2137,7 +2165,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
+
         </div>
         <div class="form-group row">
             <!-- <div class="col-sm-4 text-left">

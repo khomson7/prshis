@@ -11,9 +11,13 @@
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 
         $an = $_REQUEST['an'];
-        $report_type_id = '1'; //from table prs_report_type
+       // $report_type_id = '1'; //from table prs_report_type
       //  $an = $_REQUEST['an'];
         $hn = $_REQUEST['hn'];
+        $informant_patient = empty($_REQUEST['informant_patient'])? null : $_REQUEST['informant_patient'];
+        $informant_relatives = empty($_REQUEST['informant_relatives'])? null : $_REQUEST['informant_relatives'];
+        $informant_deliverer = empty($_REQUEST['informant_deliverer'])? null : $_REQUEST['informant_deliverer'];
+        $informant_etc = empty($_REQUEST['informant_etc'])? null : $_REQUEST['informant_etc'];
         $chief_complaints = $_REQUEST['chief_complaints'];
         $medical_history  = $_REQUEST['medical_history'];
         $hpi = $_REQUEST['hpi'];
@@ -66,6 +70,11 @@
             $deliver_anomalies  = empty($_REQUEST['deliver_anomalies_text']) ? null : $_REQUEST['deliver_anomalies_text'];
         }
 
+        $inpatient_history = empty($_REQUEST['inpatient_history']) ? null : $_REQUEST['inpatient_history'];
+        $inpatient_last_date = empty($_REQUEST['inpatient_last_date']) ? null : $_REQUEST['inpatient_last_date'];
+        $inpatient_location = empty($_REQUEST['inpatient_location']) ? null : $_REQUEST['inpatient_location'];
+        $inpatient_because = empty($_REQUEST['inpatient_because']) ? null : $_REQUEST['inpatient_because'];
+
         $pe_general = $_REQUEST['pe_general'];
         $pe_skin = $_REQUEST['pe_skin'];
         $pe_heent = $_REQUEST['pe_heent'];
@@ -101,20 +110,31 @@
 
         try {
                 $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_dr_admission_note
-                (report_type_id,hn,an,chief_complaints,medical_history,req_hospital,ros,vaccineation,history_from,pmh,fh,
-                gd,fdh,lmp,bp,t,pr,rr,pe_general,pe_skin,pe_heent,
+                (hn,an,chief_complaints,medical_history,req_hospital
+                ,informant_patient,informant_relatives, informant_deliverer,informant_etc
+                ,ros,vaccineation,history_from,
+                inpatient_history,inpatient_last_date,inpatient_location,inpatient_because,
+                pmh,fh,gd,fdh,lmp,bp,t,pr,rr,pe_general,pe_skin,pe_heent,
                 pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_abdomen,pe_rectalgenitalia,pe_extremities,
                 pe_neurological,pe_ob_gynexam,pe_other,pe_text,pe_cvs,pe_cns,svg_tag,plan_management,problem_list,
                 impression,diff_dx,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version)
-                VALUES (:report_type_id,:hn,:an,:chief_complaints,:medical_history,:req_hospital,:ros,:vaccineation,:history_from,
+                VALUES (:hn,:an,:chief_complaints,:medical_history,:req_hospital
+                ,:informant_patient,:informant_relatives,:informant_deliverer,:informant_etc
+                ,:ros,:vaccineation,:history_from,
+                :inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,
                 :pmh,:fh,:gd,:fdh,:lmp,:bp,:t,:pr,:rr,:pe_general,
                 :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_abdomen,:pe_rectalgenitalia,
                 :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:pe_cvs,:pe_cns,:svg_tag,:plan_management,:problem_list,
                 :impression,:diff_dx,
                 :create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version)");
-                $stmt->execute(array('report_type_id'=>$report_type_id,'hn'=>$hn,'an'=>$an ,'chief_complaints'=>$chief_complaints,
-                'medical_history'=>$medical_history,'req_hospital'=>$req_hospital,'ros'=>$ros,'vaccineation'=>$vaccineation,'history_from'=>$history_from,
+                $stmt->execute(array('hn'=>$hn,'an'=>$an ,'chief_complaints'=>$chief_complaints,
+                'medical_history'=>$medical_history,'req_hospital'=>$req_hospital
+                ,'informant_patient'=>$informant_patient,
+                'informant_relatives'=>$informant_relatives, 'informant_deliverer'=>$informant_deliverer,'informant_etc'=>$informant_etc
+                ,'ros'=>$ros,'vaccineation'=>$vaccineation,'history_from'=>$history_from,
+                'inpatient_history'=>$inpatient_history,'inpatient_last_date'=>$inpatient_last_date, 'inpatient_location'=>$inpatient_location,
+                'inpatient_because'=>$inpatient_because,
                 'pmh'=>$pmh,'fh'=>$fh,'gd'=>$gd,'fdh'=>$fdh,'lmp'=>$lmp,'bp'=>$bp,'t'=>$t,'pr'=>$pr,'rr'=>$rr,'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin,
                 'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,'pe_breastthorax'=>$pe_breastthorax,
                 'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs, 'pe_abdomen'=>$pe_abdomen,

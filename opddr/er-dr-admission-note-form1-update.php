@@ -165,9 +165,12 @@
 
             try {
                 $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_dr_admission_note SET hn=:hn, an=:an,
-                chief_complaints=:chief_complaints,medical_history=:medical_history,req_hospital=:req_hospital,
-                ros=:ros,vaccineation=:vaccineation,history_from=:history_from,pmh=:pmh,fh=:fh,
-                gd=:gd,fdh=:fdh,lmp=:lmp,
+                chief_complaints=:chief_complaints,medical_history=:medical_history,req_hospital=:req_hospital
+                ,informant_patient=:informant_patient,informant_relatives=:informant_relatives, informant_deliverer=:informant_deliverer
+                ,informant_etc=:informant_etc
+                ,ros=:ros,vaccineation=:vaccineation,history_from=:history_from,pmh=:pmh,fh=:fh
+                ,gd=:gd,fdh=:fdh,lmp=:lmp,
+                inpatient_history=:inpatient_history,inpatient_last_date=:inpatient_last_date,inpatient_location=:inpatient_location,inpatient_because=:inpatient_because,
                 pe_general=:pe_general, pe_skin=:pe_skin,
                 pe_heent=:pe_heent, pe_neck=:pe_neck,pe_breastthorax=:pe_breastthorax,
                 pe_heart=:pe_heart, pe_lungs=:pe_lungs, pe_abdomen=:pe_abdomen,
@@ -179,8 +182,13 @@
                 WHERE admission_note_id=:admission_note_id");
                 $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
                 'chief_complaints'=>$chief_complaints,'medical_history'=>$medical_history,'req_hospital'=>$req_hospital,
+                'informant_patient'=>$informant_patient,
+                'informant_relatives'=>$informant_relatives, 'informant_deliverer'=>$informant_deliverer,
+                'informant_etc'=>$informant_etc,
                 'ros'=>$ros,'vaccineation'=>$vaccineation,'history_from'=>$history_from,'pmh'=>$pmh,'fh'=>$fh,
                 'gd'=>$gd,'fdh'=>$fdh,'lmp'=>$lmp,
+                'inpatient_history'=>$inpatient_history,'inpatient_last_date'=>$inpatient_last_date
+                ,'inpatient_location'=>$inpatient_location,'inpatient_because'=>$inpatient_because,
                 'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin,
                 'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,'pe_breastthorax'=>$pe_breastthorax,
                 'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs, 'pe_abdomen'=>$pe_abdomen,

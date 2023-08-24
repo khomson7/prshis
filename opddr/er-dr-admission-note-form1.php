@@ -91,7 +91,7 @@ while ($row_item = $stmt_item->fetch()){
         //------------------------Doctor admission note
 
         //cc,pi
-        if($admission_note_id == null || $admission_note_id != null){
+        if($admission_note_id == null /*|| $admission_note_id != null*/){
             $sql_opdscreen="SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
                             round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
                             round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
@@ -169,10 +169,10 @@ while ($row_item = $stmt_item->fetch()){
         // $row_sql_drug_allergy = $stmt_sql_drug_allergy->fetch();
 
         //ipt ล่าสุดก่อน an ปัจจุบัน
-        $hnan_para = ['an' => $an,'hn'=>$hn];
+        $hnan_para = ['vn' => $vn,'hn'=>$hn];
         $sql_ipt = "SELECT concat(ipt.regdate,' ',ipt.regtime) as old_regdatetime
                     FROM  ".DbConstant::HOSXP_DBNAME.".ipt
-                    where ipt.hn = :hn and ipt.an < :an
+                    where ipt.hn = :hn and ipt.vn < :vn
                     ORDER BY ipt.an DESC limit 1";
         $stmt_old_ipt = $conn->prepare($sql_ipt);
         $stmt_old_ipt->execute($hnan_para);
@@ -513,6 +513,72 @@ while ($row_item = $stmt_item->fetch()){
             </div>
         </div>
 
+
+
+        <div class="form-group row">
+                            <label class="col-sm-12">การเข้ารับการรักษาในโรงพยาบาล</label>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1"></div>
+                            <div class="custom-control custom-radio col-sm-2">
+                                <input type="radio"
+                                    <?php   if ($admission_note_id != null){
+                                                if ($row['inpatient_history'] == "ไม่เคย")  {echo 'checked="checked"';}
+                                                if (isset($row_old_ipt['old_regdatetime']) != null){echo 'disabled="disabled"';}
+                                            }else{
+                                                if (!isset($row_old_ipt['old_regdatetime']))  {echo 'checked="checked"';}
+                                                if (isset($row_old_ipt['old_regdatetime']) != null){echo 'disabled="disabled"';}
+                                            }?>
+                                    class="custom-control-input" id="h1" name="inpatient_history" value="ไม่เคย" onchange="custom_check('off_inpatient');">
+                                <label class="custom-control-label" for="h1">ไม่เคย</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1"></div>
+                            <div class="custom-control custom-radio col-sm-1">
+                                <input type="radio"
+                                    <?php   if ($admission_note_id != null){
+                                                if ($row['inpatient_history'] == "เคย")  {echo 'checked="checked"';}
+                                            }else{
+                                                if (isset($row_old_ipt['old_regdatetime']))  {echo 'checked="checked"';}
+                                            }?>
+                                    class="custom-control-input" id="h2" value="เคย" name="inpatient_history" onchange="custom_check('on_inpatient');">
+                                <label class="custom-control-label" for="h2">เคย</label>
+                            </div>
+                            <label class="text-right col-sm-2">ครั้งสุดท้ายเมื่อ</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-sm" id="h3" name="inpatient_last_date"
+                                value="<?php    if ($admission_note_id != null){
+                                                    echo htmlspecialchars($row['inpatient_last_date']);
+                                                }else{
+                                                    if (isset($row_old_ipt['old_regdatetime'])) {echo htmlspecialchars($row_old_ipt['old_regdatetime']);}
+                                                }?>">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="text-right col-sm-4">รพ.</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-sm" id="h4" name="inpatient_location"
+                                value="<?php    if ($admission_note_id != null){
+                                                    echo htmlspecialchars($row['inpatient_location']);
+                                                }else{
+                                                    if (isset($row_old_ipt['old_regdatetime'])) {echo htmlspecialchars(DbConstant::HOSPITAL_NAME);}
+                                                }?>">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="text-right col-sm-4">เนื่องจาก</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-sm" id="h5" name="inpatient_because"
+                                value="<?=(isset($row['inpatient_because']) ? htmlspecialchars($row['inpatient_because']) : '')?>">
+                            </div>
+                            </div>
+
+
+
+
+
+
         <div class="patient-info-container alert alert-secondary" role="alert" style="z-index: 600;">
             <div class="d-flex">
 
@@ -697,6 +763,17 @@ while ($row_item = $stmt_item->fetch()){
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','soft, not tender,  no mass palpation')"><i class="fas fa-user"></i> Normal</button>
                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="text-right col-sm-3">Rectal&Genitalia</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_rectalgenitalia']) ? htmlspecialchars($row['pe_rectalgenitalia']) : '')?>" id="pe_rectalgenitalia" name="pe_rectalgenitalia">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','PR no mass , Good sphincter tone , normal genital appearance')"><i class="fas fa-user"></i> Normal</button>
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','Patent anus, no ambiguous genitalia')"><i class="fas fa-baby"></i> Normal</button>
                             </div>
                         </div>
 
