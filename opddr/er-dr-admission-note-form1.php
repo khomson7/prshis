@@ -91,7 +91,7 @@ while ($row_item = $stmt_item->fetch()){
         //------------------------Doctor admission note
 
         //cc,pi
-        if($admission_note_id == null /*|| $admission_note_id != null*/){
+        if($admission_note_id == null || $admission_note_id != null){
             $sql_opdscreen="SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
                             round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
                             round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
