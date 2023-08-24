@@ -12,6 +12,8 @@
    $hn = KphisQueryUtils::getHnByAn($an);
    $vn = KphisQueryUtils::getVnByAn($an);
    $patient_name = KphisQueryUtils::getPatientName($hn);
+   $login = $_SESSION['loginname'];
+
  require_once './header.php';
  require_once 'ipd-show-patient-main.php';
 

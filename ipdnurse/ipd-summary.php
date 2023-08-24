@@ -445,8 +445,8 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     <div class="row">
 
     <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">this child was born live on </label>
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="child_was_born_live" id="child_was_born_live" value="Y">
+                        <label class="custom-control-label" style ="font-size:15px;" for="child_was_born_live">this child was born live on </label>
                     </div>
                                 <div class="col-sm-1"></div>
                                 
@@ -474,11 +474,11 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                                 <div class="col-sm-1"></div>
                                 <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and died on</label>
                                 <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="died_on_date" name="died_on_date" value="">
                                 </div>
                                 <label>at</label>
                                 <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
+                                    <input type="number" class="form-control form-control-sm" id="died_on_hours" name="died_on_hours" min = "1">
                                 </div>
                                 <label>hours</label>                    
 
@@ -486,17 +486,17 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     <br>
     <div class="row">
     <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">this child was stilborn on</label>
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="child_was_stilborn" id="child_was_stilborn" value="Y">
+                        <label class="custom-control-label" style ="font-size:15px;" for="child_was_stilborn">this child was stilborn on</label>
                     </div>
                                 <div class="col-sm-1"></div>
                                 
                                 <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="was_stilborn_date" name="was_stilborn_date" value="">
                                 </div>
                                 <label>at</label>
                                 <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
+                                    <input type="number" class="form-control form-control-sm" id="was_stilborn_hours" name="was_stilborn_hours" min = "1">
                                 </div>
                                 <label>hours</label>
 
@@ -507,16 +507,16 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     <br>
     <div class="row">
     <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">and died before labour</label>
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="died_before_labour" id="died_before_labour" value="Y">
+                        <label class="custom-control-label" style ="font-size:15px;" for="died_before_labour">and died before labour</label>
                     </div>
                     <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">during labour</label>
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="during_labour" id="during_labour" value="Y">
+                        <label class="custom-control-label" style ="font-size:15px;" for="during_labour">during labour</label>
                     </div>
                     <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">not know</label>
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="not_know" id="not_know" value="Y">
+                        <label class="custom-control-label" style ="font-size:15px;" for="not_know">not know</label>
                     </div>
                                 
                                 

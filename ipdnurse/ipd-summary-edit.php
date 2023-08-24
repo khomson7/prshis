@@ -60,7 +60,17 @@
         $cause_of_death_c= $row['cause_of_death_c'];
         $onset_and_death= $row['onset_and_death'];
         $was_born_live_date =$row['was_born_live_date'];
-        
+        $was_born_live_hours =$row['was_born_live_hours'];
+        $died_on_date =$row['died_on_date'];
+        $died_on_hours =$row['died_on_hours'];
+        $was_stilborn_date =$row['was_stilborn_date'];
+        $was_stilborn_hours =$row['was_stilborn_hours'];
+        $child_was_born_live =$row['child_was_born_live'];
+        $child_was_stilborn =$row['child_was_stilborn'];
+        $died_before_labour=$row['died_before_labour'];
+        $during_labour=$row['during_labour'];
+        $not_know=$row['not_know'];
+            
         $version = $row['version'];
 ?>
 <script>
@@ -72,7 +82,38 @@
         $("input[name=summary_plan_date]").val(<?=json_encode($summary_plan_date )?>);
         $("input[name=summary_plan_time]").val(<?=json_encode($summary_plan_time )?>);
         $("input[name=was_born_live_date]").val(<?=json_encode($was_born_live_date )?>);
+        $("input[name=was_born_live_hours]").val(<?=json_encode($was_born_live_hours )?>);
+        $("input[name=died_on_date]").val(<?=json_encode($died_on_date )?>);
+        $("input[name=died_on_hours]").val(<?=json_encode($died_on_hours )?>);
+        $("input[name=was_stilborn_date]").val(<?=json_encode($was_stilborn_date )?>);
+        $("input[name=was_stilborn_hours]").val(<?=json_encode($was_stilborn_hours )?>);
 
+        var child_was_born_live = <?=json_encode($child_was_born_live)?>;
+        if(child_was_born_live == "Y"){
+            $("#child_was_born_live").attr('checked',true);
+        }
+
+        var child_was_stilborn = <?=json_encode($child_was_stilborn)?>;
+        if(child_was_stilborn == "Y"){
+            $("#child_was_stilborn").attr('checked',true);
+        }
+
+        var died_before_labour = <?=json_encode($died_before_labour)?>;
+        if(died_before_labour == "Y"){
+            $("#died_before_labour").attr('checked',true);
+        }
+
+        var during_labour = <?=json_encode($during_labour)?>;
+        if(during_labour == "Y"){
+            $("#during_labour").attr('checked',true);
+        }
+
+        var not_know = <?=json_encode($not_know)?>;
+        if(not_know == "Y"){
+            $("#not_know").attr('checked',true);
+        }
+        
+        
         $("textarea#principal_diagnosis").val(<?=json_encode($principal_diagnosis)?>);
         $("textarea#pre_admission_comorbidity").val(<?=json_encode($pre_admission_comorbidity)?>);
         $("textarea#post_admission_comorbidity").val(<?=json_encode($post_admission_comorbidity)?>);

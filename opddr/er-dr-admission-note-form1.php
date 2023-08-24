@@ -340,39 +340,48 @@ while ($row_item = $stmt_item->fetch()){
 
      <label><B> ที่มาของข้อมูล: &nbsp;</B></label>
 
+     <div class="form-group row">
+                                <div class="col-sm-1"></div>
+                                <div class="custom-control custom-checkbox col-sm-2">
+                                    <input type="checkbox" <?php if ($row['informant_patient'] == 'ผู้ป่วย')  {echo 'checked="checked"';} ?>
+                                        class="custom-control-input" id="e1" value="ผู้ป่วย" name="informant_patient"   >
+                                    <label class="custom-control-label" for="e1">ผู้ป่วย</label>
+                                </div>
+                            </div>
                             <div class="form-group row">
-    <div class="col-sm-1"></div>
-    <div class="custom-control custom-radio col-sm-1">
-        <input type="radio" <?php if ($row['history_from'] == 'ผู้ป่วย' ||$row['history_from'] == NULL)  {echo 'checked="checked"';} ?>
-            class="custom-control-input" id="history_from1" name="history_from" value="ผู้ป่วย"    onchange="history_from_check('off_checked');">
-        <label class="custom-control-label" for="history_from1">ผู้ป่วย</label>
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="custom-control custom-radio col-sm-1">
-    <input type="radio" <?php if ($row['history_from'] == 'บิดา / มารดา')  {echo 'checked="checked"';} ?>
-            class="custom-control-input" id="history_from2"  name="history_from" value="บิดา / มารดา"  onchange="history_from_check('off_checked');">
-        <label class="custom-control-label" for="history_from2">บิดา / มารดา</label>
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="custom-control custom-radio col-sm-1">
-    <input type="radio" <?php if ($row['history_from'] != 'ผู้ป่วย'
-                                    &&$row['history_from'] != 'บิดา / มารดา'
-                                    &&$row['history_from'] != NULL)  {echo 'checked="checked"';} ?>
-            class="custom-control-input" id="history_from3" name="history_from"   onchange="history_from_check('on_checked');">
-        <label class="custom-control-label" for="history_from3"> อื่นๆ ระบุ</label>
-    </div>
-
-    <div class="col-sm-6">
-        <input type="text" class="form-control form-control-sm" id="history_from_text" name="history_from"
-            value="<?php if ($row['history_from'] !='ผู้ป่วย' && $row['history_from'] != 'บิดา / มารดา') {echo htmlspecialchars($row['history_from']);}?>"
-            <?php if (!($row['history_from'] !='ผู้ป่วย'
-                            && $row['history_from'] != 'บิดา / มารดา'
-                            &&$row['history_from'] != NULL)) {echo 'disabled';}?>>
-    </div>
-
-
-
-</div>
+                                <div class="col-sm-1"></div>
+                                <div class="custom-control custom-checkbox col-sm-1">
+                                    <input type="checkbox" <?php if ($row['informant_relatives'] != null)  {echo 'checked="checked"';} ?>
+                                        class="custom-control-input" id="e2"    onchange="custom_check('on_informant1');">
+                                    <label class="custom-control-label" for="e2">ญาติ</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control form-control-sm" id="e_informant1" name="informant_relatives"
+                                            value="<?=(isset($row['informant_relatives']) ? htmlspecialchars($row['informant_relatives']) : '')?>"
+                                            <?php if ($row['informant_relatives'] == null)  {echo 'disabled';} ?>>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-1"></div>
+                                <div class="custom-control custom-checkbox col-sm-2">
+                                    <input type="checkbox" <?php if ($row['informant_deliverer'] == 'ผู้นำส่ง')  {echo 'checked="checked"';} ?>
+                                        class="custom-control-input" id="e3" value="ผู้นำส่ง" name="informant_deliverer"   >
+                                    <label class="custom-control-label" for="e3">ผู้นำส่ง</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-1"></div>
+                                <div class="custom-control custom-checkbox col-sm-1">
+                                    <input type="checkbox" <?php if ($row['informant_etc'] != null)  {echo 'checked="checked"';} ?>
+                                        class="custom-control-input" id="e4"    onchange="custom_check('on_informant2');">
+                                    <label class="custom-control-label" for="e4">อื่นๆ</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control form-control-sm" id="e_informant2" name="informant_etc"
+                                            value="<?=(isset($row['informant_etc']) ? htmlspecialchars($row['informant_etc']) : '')?>"
+                                            <?php if ($row['informant_etc'] == null)  {echo 'disabled';} ?>>
+                                </div>
+                            </div>
 
 
 
@@ -1048,6 +1057,155 @@ while ($row_item = $stmt_item->fetch()){
         canvas.clear();
     }
     //--------------------------------------------canvas----------------------------------------------
+
+
+    function custom_check(value){
+        if (value == "off_arrive") {
+            $('#w6').attr("disabled",true).val('');
+            $('#w5').prop("checked", false);
+        }else if (value == "on_arrive"){
+            $('#w6').attr("disabled",false).val('');
+            $('#w1').prop("checked", false);
+            $('#w2').prop("checked", false);
+            $('#w3').prop("checked", false);
+            $('#w4').prop("checked", false);
+        }
+
+        if (value == "off_entered") {
+            $('#entered_hos').attr("disabled",true).val('');
+            $('#entered_by3').prop("checked", false);
+        }else if (value == "on_entered"){
+            $('#entered_hos').attr("disabled",false).val('');
+            $('#entered_by1').prop("checked", false);
+            $('#entered_by2').prop("checked", false);
+        }
+
+        if (value == "on_informant1") {
+            if (!($('#e2').is(':checked'))) {
+                $('#e_informant1').attr("disabled",true).val('');
+            }else{
+                $('#e_informant1').attr("disabled",false).val('');
+            }
+        }else if (value == "on_informant2"){
+            if (!($('#e4').is(':checked'))) {
+                $('#e_informant2').attr("disabled",true).val('');
+            }else{
+                $('#e_informant2').attr("disabled",false).val('');
+            }
+        }
+
+        if (value == "on_taken"){
+            if (!($('#r4').is(':checked'))) {
+                $('#r5').attr("disabled",true).val('');
+            }else{
+                $('#r5').attr("disabled",false).val('');
+            }
+        }
+
+        if (value == "off_disease") {
+            $('#tt1').attr("disabled",true).prop("checked", false);
+            $('#t_text1').attr("disabled",true).val('');
+            $('#tt2').attr("disabled",true).prop("checked", false);
+            $('#t_text2').attr("disabled",true).val('');
+            $('#tt3').attr("disabled",true).prop("checked", false);
+            $('#t_text3').attr("disabled",true).val('');
+        }else if (value == "on_disease"){
+            $('#tt1').attr("disabled",false).val('');
+            $('#t_text1').attr("disabled",false).val('');
+            $('#tt2').attr("disabled",false).val('');
+            $('#t_text2').attr("disabled",false).val('');
+            $('#tt3').attr("disabled",false).val('');
+            $('#t_text3').attr("disabled",false).val('');
+        }
+
+        if (value == "off_operation") {
+            $('#y2_operation').attr("disabled",true).val('');
+            $('#y2').prop("checked", false);
+        }else if (value == "on_operation"){
+            $('#y2_operation').attr("disabled",false).val('');
+            $('#y1').prop("checked", false);
+        }
+
+        if (value == "off_allergy") {
+            $('#uu1').attr("disabled",true).prop("checked", false);
+            $('#uu1_in').attr("disabled",true).val('');
+            $('#uu2').attr("disabled",true).prop("checked", false);
+            $('#uu2_in').attr("disabled",true).val('');
+            $('#uu3').attr("disabled",true).prop("checked", false);
+            $('#uu3_in').attr("disabled",true).val('');
+            $('#uu4_in').attr("disabled",true).val('');
+        }else if (value == "on_allergy"){
+            $('#uu1').attr("disabled",false).val('');
+            $('#uu1_in').attr("disabled",false).val('');
+            $('#uu2').attr("disabled",false).val('');
+            $('#uu2_in').attr("disabled",false).val('');
+            $('#uu3').attr("disabled",false).val('');
+            $('#uu3_in').attr("disabled",false).val('');
+            $('#uu4_in').attr("disabled",false).val('');
+        }
+
+        if (value == "off_immunisation") {
+            $('#o3').attr("disabled",true).val('');
+            $('#o2').prop("checked", false);
+        }else if (value == "on_immunisation"){
+            $('#o3').attr("disabled",false).val('');
+            $('#o1').prop("checked", false);
+        }
+
+        if (value == "off_developmentally") {
+            $('#p3').attr("disabled",true).val('');
+            $('#p2').prop("checked", false);
+        }else if (value == "on_developmentally"){
+            $('#p3').attr("disabled",false).val('');
+            $('#p1').prop("checked", false);
+        }
+
+        if (value == "off_deliver") {
+            $('#s3').attr("disabled",true).val('');
+            $('#s4').attr("disabled",true).val('');
+            $('#s2').prop("checked", false);
+        }else if (value == "on_deliver"){
+            $('#s3').attr("disabled",false).val('');
+            $('#s4').attr("disabled",false).val('');
+            $('#s1').prop("checked", false);
+        }
+
+        if (value == "off_condition") {
+            $('#a3').attr("disabled",true).val('');
+            $('#a2').prop("checked", false);
+        }else if (value == "on_condition"){
+            $('#a3').attr("disabled",false).val('');
+            $('#a1').prop("checked", false);
+        }
+
+        if (value == "off_family_medical") {
+            $('#i3').attr("disabled",true).val('');
+            $('#i2').prop("checked", false);
+        }else if (value == "on_family_medical"){
+            $('#i3').attr("disabled",false).val('');
+            $('#i1').prop("checked", false);
+        }
+
+        if (value == "off_disease_operation_allergy") {
+            $('#g2_text').attr("disabled",true).val('');
+            $('#g2').prop("checked", false);
+        }else if (value == "on_disease_operation_allergy"){
+            $('#g2_text').attr("disabled",false).val('');
+            $('#g1').prop("checked", false);
+        }
+
+        if (value == "off_inpatient") {
+            $('#h3').attr("disabled",true).val('');
+            $('#h4').attr("disabled",true).val('');
+            $('#h5').attr("disabled",true).val('');
+            $('#h2').prop("checked", false);
+        }else if (value == "on_inpatient"){
+            $('#h3').attr("disabled",false).val('');
+            $('#h4').attr("disabled",false).val('');
+            $('#h5').attr("disabled",false).val('');
+            $('#h1').prop("checked", false);
+        }
+    }
 
     function plan_management_check(value){
         if (value == "off_checked") {

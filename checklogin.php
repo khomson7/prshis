@@ -6,13 +6,15 @@ require_once './include/Session.php';
 
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
-$an  = $_REQUEST['an'];
-
+//$an  = $_REQUEST['an'];
+//echo $username;
 $conn = DbUtils::get_hosxp_connection();
 
 if(Session::checklogin($conn, $username, $password)){
+
+	header("Location: index.php?loginname=".$_REQUEST['username']);
 	//header("Location: index.php");
-	echo "<script>window.history.back();</script>";
+	//echo "<script>window.history.back();</script>";
 } else {
 	//header("Location: index.php");
 	echo "<script>window.history.back();</script>";

@@ -9,7 +9,7 @@
     //     return;
     // }
 
-    require_once '../mains/main.php'; //เรียกใช้งาน เมนู
+    require_once '../mains/main-report.php'; //เรียกใช้งาน เมนู
     require_once '../include/SelectUtils.php';
 
 ?>

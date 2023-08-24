@@ -72,9 +72,15 @@
     $was_born_live_date = empty($_REQUEST['was_born_live_date']) ? null : $_REQUEST['was_born_live_date'];
     $was_born_live_hours = empty($_REQUEST['was_born_live_hours']) ? null : $_REQUEST['was_born_live_hours'];
     $died_on_date = empty($_REQUEST['died_on_date']) ? null : $_REQUEST['died_on_date'];
+    $died_on_hours = empty($_REQUEST['died_on_hours']) ? null : $_REQUEST['died_on_hours'];
+    $was_stilborn_date = empty($_REQUEST['was_stilborn_date']) ? null : $_REQUEST['was_stilborn_date'];
+    $was_stilborn_hours = empty($_REQUEST['was_stilborn_hours']) ? null : $_REQUEST['was_stilborn_hours'];
+    $child_was_born_live = empty($_REQUEST['child_was_born_live']) ? null : $_REQUEST['child_was_born_live'];
+    $child_was_stilborn = empty($_REQUEST['child_was_stilborn']) ? null : $_REQUEST['child_was_stilborn'];
+    $died_before_labour = empty($_REQUEST['died_before_labour']) ? null : $_REQUEST['died_before_labour'];
+    $during_labour = empty($_REQUEST['during_labour']) ? null : $_REQUEST['during_labour'];
+    $not_know = empty($_REQUEST['not_know']) ? null : $_REQUEST['not_know'];
     
-    
-
     //$update_datetime = ใช้ NOW()
     $update_user  = $_SESSION['loginname'];
 
@@ -97,7 +103,9 @@
                                     cause_of_death_a=:cause_of_death_a,cause_of_death_b=:cause_of_death_b,cause_of_death_c=:cause_of_death_c,onset_and_death=:onset_and_death,
                                     update_user=:update_user, update_datetime=NOW(),child_was_born_live=:child_was_born_live
                                     ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
-                                    ,was_born_live_date=:was_born_live_date,was_born_live_hours=:was_born_live_hours,died_on_date=:died_on_date
+                                    ,was_born_live_date=:was_born_live_date,was_born_live_hours=:was_born_live_hours,died_on_date=:died_on_date,died_on_hours=:died_on_hours
+                                    ,was_stilborn_date=:was_stilborn_date,was_stilborn_hours=:was_stilborn_hours,child_was_born_live=:child_was_born_live
+                                    ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
                                     WHERE summary_id = :summary_id AND an = :an
                                     ");
             $stmt->execute(array('summary_plan_date'=>$summary_plan_date, 'summary_plan_time'=>$summary_plan_time,
@@ -118,7 +126,10 @@
                                     'update_user'=>$update_user,'child_was_born_live'=>$child_was_born_live,'child_was_stilborn'=>$child_was_stilborn,
                                     'died_before_labour'=>$died_before_labour,'during_labour'=>$during_labour,'not_know'=>$not_know,
                                     'was_born_live_date'=>$was_born_live_date,'was_born_live_hours'=>$was_born_live_hours,'died_on_date'=>$died_on_date,
-                                    'summary_id'=>$summary_id, 'an'=>$an
+                                    'died_on_hours'=>$died_on_hours,'was_stilborn_date'=>$was_stilborn_date,'was_stilborn_hours'=>$was_stilborn_hours
+                                    ,'child_was_born_live'=>$child_was_born_live,'child_was_stilborn'=>$child_was_stilborn,'died_before_labour'=>$died_before_labour
+                                    ,'during_labour'=>$during_labour,'not_know'=>$not_know
+                                    ,'summary_id'=>$summary_id, 'an'=>$an
 
                                 ));
 

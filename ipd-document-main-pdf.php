@@ -20,11 +20,18 @@ if(($getDocumentSummary)){
     $image_checkSummary = $image_check;
 }
 
-$getDocumentAddmissionDoctor = KphisQueryUtils::getDocumentAddmissionDoctor($an);
+$getDocumentAddmissionDoctor = (KphisQueryUtils::getDocumentAddmissionDoctor($an));
 $image_checkAddmissionDoctor = '';
 if(($getDocumentAddmissionDoctor)){
     $image_checkAddmissionDoctor = $image_check;
 }
+
+$getDocumentAddmissionDoctor2 = (KphisQueryUtils::getDocumentAddmissionDoctor2($an));
+$image_checkAddmissionDoctor2 = '';
+if(($getDocumentAddmissionDoctor2)){
+    $image_checkAddmissionDoctor2 = $image_check;
+}
+
 $getDocumentAddmissionNurse = KphisQueryUtils::getDocumentAddmissionNurse($an);
 $image_checkAddmissionNurse = '';
 if(($getDocumentAddmissionNurse)){
@@ -208,7 +215,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
-            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">'.$image_checkAddmissionDoctor.'</td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">'.$image_checkAddmissionDoctor.$image_checkAddmissionDoctor2.'</td>
             <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;แบบประเมินแรกรับใหม่ผู้ป่วยใน</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
