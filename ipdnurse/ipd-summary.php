@@ -37,14 +37,16 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 
           
           
-        $sql = "SELECT count(*) AS count_row, summary_id FROM ".DbConstant::KPHIS_DBNAME.".ipd_summary WHERE an = :an ";
+        $sql = "SELECT count(*) AS count_row, summary_id,create_user FROM ".DbConstant::KPHIS_DBNAME.".ipd_summary WHERE an = :an ";
         $summary_id  = null;
+        $create_  = null;
         $parameters['an'] = $an;
         $stmt = $conn->prepare($sql);
         $stmt->execute($parameters);
         $row = $stmt->fetch();
         if($row['count_row'] > 0){
             $summary_id = $row['summary_id'];
+            $create_ = $row['create_user'];
         }
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
@@ -60,8 +62,17 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 <button type="button" class="btn btn-danger btn-block" onclick="self.close()"><i class="fa fa-window-close"></i> ปิด</button> 
             </div>
             <div class="col-auto p-1 font-weight-bold">
-                IN-PATIENT-SUMMARY
+                IN-PATIENT-SUMMARY&nbsp;&nbsp;
             </div>
+
+            <?php
+                if((Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW') && $summary_id)){?>
+
+<a href="ipd_summary_ordit.php?an=<?php echo $an;?>&loginname=<?php echo $loginname;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Audit <U>เอกสาร</U></a>
+       
+
+                <?php } ?>
+
         </div>
         <link rel="stylesheet" href="../include/css/accordion.css">
         <hr>
@@ -564,7 +575,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                             <div class="col-auto">
                                 <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
                                 </div>
-                           <label class="col-sm-3">or,if unknow, estimated duration of pregnacy</label>
+                           <label class="offset-md-1">or,if unknow, estimated duration of pregnacy</label>
                            <div class="col-sm-1">
                            <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
                                     <div style="color:red !important;">*only number</div>
@@ -581,21 +592,28 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                             <div class="col-sm-6">
                             <label class="col-sm-12">Antenatal care, two or more visits:</label>
                             <div class="row">
-    <div class="custom-control custom-checkbox offset-md-1">
+
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="antenatal_care" id="antenatal_care1" value="01">
+                                <label class="custom-control-label" for="antenatal_care1">Yes</label>
+                            </div>
+
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="antenatal_care" id="antenatal_care2" value="02">
+                                <label class="custom-control-label" for="antenatal_care2">No</label>
+                            </div>
+
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="antenatal_care" id="antenatal_care3" value="03">
+                                <label class="custom-control-label" for="antenatal_care3">Not khow</label>
+                            </div>
+
+   <!-- <div class="custom-control custom-checkbox offset-md-1">
                         <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
                         <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Yes</label>
-                    </div>
-                    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">No</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">not know</label>
-                    </div>
-                                
-                                
-
+                    </div> -->
+                          
+                    
     </div>
                             </div>  
 
@@ -640,25 +658,27 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     <div class="col-sm-6">
                             <label class="col-sm-12">Outcome of last previous pregnancy</label>
                             <div class="row">
-    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Live Births</label>
-                    </div>
-                    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Stillbirths</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Abortions</label>
-                    </div>
 
-                    
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="outcome_last_preg" id="outcome_last_preg1" value="01">
+                                <label class="custom-control-label" for="outcome_last_preg1">Live Births</label>
+                            </div>
+
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="outcome_last_preg" id="outcome_last_preg2" value="02">
+                                <label class="custom-control-label" for="outcome_last_preg2">Stillbirths</label>
+                            </div>
+
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="outcome_last_preg" id="outcome_last_preg3" value="03">
+                                <label class="custom-control-label" for="outcome_last_preg3">Abortions</label>
+                            </div>
+           
 
     </div>
          <br>
     <div class="col-sm-3">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
+                                <input type="date" class="form-control form-control-sm CheckPer_1" id="outcome_last_preg_date" name="outcome_last_preg_date" value="">
                                 </div>
 
     </div>
@@ -667,19 +687,21 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     <div class="col-sm-6">
                             <label class="col-sm-12">Delivery:</label>
                             <div class="row">
-    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Normal spontaneous vertex</label>
-                    </div>
-                    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Other (specify)</label>
-                    </div>
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="delivery" id="delivery1" value="01">
+                                <label class="custom-control-label" for="delivery1">Normal spontaneous vertex</label>
+                            </div>
+
+                            <div class="custom-control custom-radio  offset-md-1">
+                                <input type="radio" class="custom-control-input CheckPer_2" name="delivery" id="delivery2" value="02">
+                                <label class="custom-control-label" for="delivery2">Other (specify)</label>
+                            </div>
+
                    
     </div>
          <br>
     <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
+                                <input type="text" class="form-control form-control-sm CheckPer_1" id="delivery_text" name="delivery_text" value="">
                                 </div>
 
     </div>
@@ -861,37 +883,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     <br>
 
 
-    <div class="form-row ">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="action-person-dr-admission">&nbsp;&nbsp;&nbsp;&nbsp;ลงนามแพทย์ผู้รักษา</label>
-                    <button type="button"  class="btn btn-secondary btn-sm mb-2t" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ลงชื่อ</button>
-                    <div id="dr-admission-group-input-div">
-                    <template id="template_dr_admission_input_div">
-                        <div class="dr_admission_input_div">
-                            <div class="input-group mb-2">
-                                <input type="hidden" class="form-control form-control" name="admission_note_doctor[]">
-                                <input type="text" class="form-control form-control" name="doc_name[]" readonly>
-                                <!-- <input type="text" class="form-control form-control" name="doc_pos[]" readonly> -->
-                            </div>
-                        </div>
-                    </template>
-                        <?php $start_count = 0; while ($start_count < $admission_note_count) {?>
-                        <div class="dr_admission_input_div">
-                            <div class="input-group mb-2">
-                                <input type="hidden" class="form-control form-control" name="admission_note_doctor[]" value="<?=$admission_note_doctor[$start_count]?>">
-                                <input type="text" class="form-control form-control" name="doc_name[]" value="<?=$admission_note_doctorname[$start_count]?>" readonly>
-                                <!-- <input type="text" class="form-control form-control" name="doc_pos[]"  value="<?=$admission_note_doctorentryposition[$start_count]?>" readonly> -->
-                            </div>
-                        </div>
-                        <?php $start_count++;} ?>
-                    </div>
-                </div>
-            </div>
-
-            </div>    
-        
-
+   
            
     
         <!-- <div class="row">
@@ -911,12 +903,15 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 <div id="data_summary_update"></div>
             </div>
 
-         
+       
+
 
             <div class="col-md-12 text-right">
                 <?php
-                if(Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW')){?>
+                if((Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW') && !$summary_id) || $create_ == $loginname){?>
+
                     <button type="button" class="btn btn-primary" id="btn_summary" onclick="summary_save()"><i class="fas fa-save"></i> บันทึก</button>
+
                 <?php } ?>
                 <a href="ipd-summary-pdf.php?an=<?php echo $an;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
             </div>

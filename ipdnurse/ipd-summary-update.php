@@ -75,11 +75,18 @@
     $died_on_hours = empty($_REQUEST['died_on_hours']) ? null : $_REQUEST['died_on_hours'];
     $was_stilborn_date = empty($_REQUEST['was_stilborn_date']) ? null : $_REQUEST['was_stilborn_date'];
     $was_stilborn_hours = empty($_REQUEST['was_stilborn_hours']) ? null : $_REQUEST['was_stilborn_hours'];
-    $child_was_born_live = empty($_REQUEST['child_was_born_live']) ? null : $_REQUEST['child_was_born_live'];
-    $child_was_stilborn = empty($_REQUEST['child_was_stilborn']) ? null : $_REQUEST['child_was_stilborn'];
-    $died_before_labour = empty($_REQUEST['died_before_labour']) ? null : $_REQUEST['died_before_labour'];
-    $during_labour = empty($_REQUEST['during_labour']) ? null : $_REQUEST['during_labour'];
-    $not_know = empty($_REQUEST['not_know']) ? null : $_REQUEST['not_know'];
+    $died_on_date2 = empty($_REQUEST['died_on_date2']) ? null : $_REQUEST['died_on_date2'];
+    $died_on_age = empty($_REQUEST['died_on_age']) ? null : $_REQUEST['died_on_age'];
+    $last_menstrual_period = empty($_REQUEST['last_menstrual_period']) ? null : $_REQUEST['last_menstrual_period'];
+    $estimated_duration_of_pregnacy = empty($_REQUEST['estimated_duration_of_pregnacy']) ? null : $_REQUEST['estimated_duration_of_pregnacy'];
+    $live_births = empty($_REQUEST['live_births']) ? null : $_REQUEST['live_births'];
+    $stillbirths = empty($_REQUEST['stillbirths']) ? null : $_REQUEST['stillbirths'];
+    $abortions = empty($_REQUEST['abortions']) ? null : $_REQUEST['abortions'];
+    $antenatal_care = empty($_REQUEST['antenatal_care']) ? null : $_REQUEST['antenatal_care'];
+    $outcome_last_preg = empty($_REQUEST['outcome_last_preg']) ? null : $_REQUEST['outcome_last_preg'];
+    $outcome_last_preg_date = empty($_REQUEST['outcome_last_preg_date']) ? null : $_REQUEST['outcome_last_preg_date'];
+    $delivery = empty($_REQUEST['delivery']) ? null : $_REQUEST['delivery'];
+    $delivery_text = empty($_REQUEST['delivery_text']) ? null : $_REQUEST['delivery_text'];
     
     //$update_datetime = ใช้ NOW()
     $update_user  = $_SESSION['loginname'];
@@ -104,8 +111,10 @@
                                     update_user=:update_user, update_datetime=NOW(),child_was_born_live=:child_was_born_live
                                     ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
                                     ,was_born_live_date=:was_born_live_date,was_born_live_hours=:was_born_live_hours,died_on_date=:died_on_date,died_on_hours=:died_on_hours
-                                    ,was_stilborn_date=:was_stilborn_date,was_stilborn_hours=:was_stilborn_hours,child_was_born_live=:child_was_born_live
-                                    ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
+                                    ,was_stilborn_date=:was_stilborn_date,was_stilborn_hours=:was_stilborn_hours,died_on_date2=:died_on_date2
+                                    ,died_on_age=:died_on_age,last_menstrual_period=:last_menstrual_period,estimated_duration_of_pregnacy=:estimated_duration_of_pregnacy
+                                    ,live_births=:live_births,stillbirths=:stillbirths,abortions=:abortions,antenatal_care=:antenatal_care
+                                    ,outcome_last_preg=:outcome_last_preg,outcome_last_preg_date=:outcome_last_preg_date,delivery=:delivery,delivery_text=:delivery_text
                                     WHERE summary_id = :summary_id AND an = :an
                                     ");
             $stmt->execute(array('summary_plan_date'=>$summary_plan_date, 'summary_plan_time'=>$summary_plan_time,
@@ -127,8 +136,10 @@
                                     'died_before_labour'=>$died_before_labour,'during_labour'=>$during_labour,'not_know'=>$not_know,
                                     'was_born_live_date'=>$was_born_live_date,'was_born_live_hours'=>$was_born_live_hours,'died_on_date'=>$died_on_date,
                                     'died_on_hours'=>$died_on_hours,'was_stilborn_date'=>$was_stilborn_date,'was_stilborn_hours'=>$was_stilborn_hours
-                                    ,'child_was_born_live'=>$child_was_born_live,'child_was_stilborn'=>$child_was_stilborn,'died_before_labour'=>$died_before_labour
-                                    ,'during_labour'=>$during_labour,'not_know'=>$not_know
+                                    ,'died_on_date2'=>$died_on_date2,'died_on_age'=>$died_on_age,'last_menstrual_period'=>$last_menstrual_period
+                                    ,'estimated_duration_of_pregnacy'=>$estimated_duration_of_pregnacy,'live_births'=>$live_births
+                                    ,'stillbirths'=>$stillbirths,'abortions'=>$abortions,'antenatal_care'=>$antenatal_care,'outcome_last_preg'=>$outcome_last_preg
+                                    ,'outcome_last_preg_date'=>$outcome_last_preg_date,'delivery'=>$delivery,'delivery_text'=>$delivery_text
                                     ,'summary_id'=>$summary_id, 'an'=>$an
 
                                 ));

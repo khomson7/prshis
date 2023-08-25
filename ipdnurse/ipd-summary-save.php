@@ -60,6 +60,29 @@ require_once '../include/KphisQueryUtils.php';
     $discharge_status = empty($_REQUEST['discharge_status']) ? null : $_REQUEST['discharge_status'];
     $discharge_type = empty($_REQUEST['discharge_type']) ? null : $_REQUEST['discharge_type'];
     $hospital_refer = empty($_REQUEST['hospital_refer']) ? null : $_REQUEST['hospital_refer'];
+    $additional_code = empty($_REQUEST['additional_code']) ? null : $_REQUEST['additional_code'];
+    $morphology_code = empty($_REQUEST['morphology_code']) ? null : $_REQUEST['morphology_code'];
+    $cause_of_death_a = empty($_REQUEST['cause_of_death_a']) ? null : $_REQUEST['cause_of_death_a'];
+    $cause_of_death_b= empty($_REQUEST['cause_of_death_b']) ? null : $_REQUEST['cause_of_death_b'];
+    $cause_of_death_c = empty($_REQUEST['cause_of_death_c']) ? null : $_REQUEST['cause_of_death_c'];
+    $onset_and_death = empty($_REQUEST['onset_and_death']) ? null : $_REQUEST['onset_and_death'];
+    $child_was_born_live = empty($_REQUEST['child_was_born_live']) ? null : $_REQUEST['child_was_born_live'];
+    $child_was_stilborn = empty($_REQUEST['child_was_stilborn']) ? null : $_REQUEST['child_was_stilborn'];
+    $died_before_labour = empty($_REQUEST['died_before_labour']) ? null : $_REQUEST['died_before_labour'];
+    $during_labour = empty($_REQUEST['during_labour']) ? null : $_REQUEST['during_labour'];
+    $not_know = empty($_REQUEST['not_know']) ? null : $_REQUEST['not_know'];
+    $was_born_live_date = empty($_REQUEST['was_born_live_date']) ? null : $_REQUEST['was_born_live_date'];
+    $was_born_live_hours = empty($_REQUEST['was_born_live_hours']) ? null : $_REQUEST['was_born_live_hours'];
+    $died_on_date = empty($_REQUEST['died_on_date']) ? null : $_REQUEST['died_on_date'];
+    $died_on_hours = empty($_REQUEST['died_on_hours']) ? null : $_REQUEST['died_on_hours'];
+    $was_stilborn_date = empty($_REQUEST['was_stilborn_date']) ? null : $_REQUEST['was_stilborn_date'];
+    $was_stilborn_hours = empty($_REQUEST['was_stilborn_hours']) ? null : $_REQUEST['was_stilborn_hours'];
+    $child_was_born_live = empty($_REQUEST['child_was_born_live']) ? null : $_REQUEST['child_was_born_live'];
+    $child_was_stilborn = empty($_REQUEST['child_was_stilborn']) ? null : $_REQUEST['child_was_stilborn'];
+    $died_before_labour = empty($_REQUEST['died_before_labour']) ? null : $_REQUEST['died_before_labour'];
+    $during_labour = empty($_REQUEST['during_labour']) ? null : $_REQUEST['during_labour'];
+    $not_know = empty($_REQUEST['not_know']) ? null : $_REQUEST['not_know'];
+    
 
     //$create_datetime = ใช้ NOW()
     $create_user  = $_SESSION['loginname'];
@@ -70,7 +93,15 @@ require_once '../include/KphisQueryUtils.php';
     try {
         $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_summary (summary_plan_date,summary_plan_time,principal_diagnosis,pre_admission_comorbidity,post_admission_comorbidity,other_diagnosis,external_cause,operating_room,tracheostomy,mechanical_ventilation,mechanical_ventilation1,
                                 mechanical_ventilation2,packed_redcells,fresh_frozen_plasma,platelets,cryoprecipitate,whole_blood,computer_tomography,computer_tomography_text,chemotherapy,mri,
-                                hemodialysis,non_or_other,non_or_other_text,discharge_status,discharge_type,hospital_refer,hn,an,create_user,create_datetime,
+                                hemodialysis,non_or_other,non_or_other_text,discharge_status,discharge_type,hospital_refer
+                                ,additional_code=:additional_code,morphology_code=:morphology_code
+                                ,cause_of_death_a=:cause_of_death_a,cause_of_death_b=:cause_of_death_b,cause_of_death_c=:cause_of_death_c,onset_and_death=:onset_and_death
+                                ,update_user=:update_user, update_datetime=NOW(),child_was_born_live=:child_was_born_live
+                                ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
+                                ,was_born_live_date=:was_born_live_date,was_born_live_hours=:was_born_live_hours,died_on_date=:died_on_date,died_on_hours=:died_on_hours
+                                ,was_stilborn_date=:was_stilborn_date,was_stilborn_hours=:was_stilborn_hours,child_was_born_live=:child_was_born_live
+                                ,child_was_stilborn=:child_was_stilborn,died_before_labour=:died_before_labour,during_labour=:during_labour,not_know=:not_know
+                                ,hn,an,create_user,create_datetime,
                                 update_user,update_datetime,version)
 
                                 VALUES (:summary_plan_date,:summary_plan_time,:principal_diagnosis,:pre_admission_comorbidity,:post_admission_comorbidity,:other_diagnosis,:external_cause,:operating_room,:tracheostomy,:mechanical_ventilation,:mechanical_ventilation1,

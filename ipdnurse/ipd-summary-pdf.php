@@ -158,7 +158,8 @@ $sql_ipt = "SELECT ipt.an, ipt.hn as ipt_hn,patient.pname,patient.fname,patient.
         $external_cause = $row_ipt['external_cause'];
         $operating_room = $row_ipt['operating_room'];
 
-        $image_check = "<img src='../include/images/check-mark.png' width='1.2%'>";
+     
+        $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 
         $tracheostomy = $row_ipt['tracheostomy'];
         $tracheostomy_check = "&nbsp;&nbsp;&nbsp;";
