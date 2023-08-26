@@ -51,7 +51,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
         $sql_ = "SELECT  summary_id,summary_plan_date,summary_plan_time,create_user,principal_diagnosis,pre_admission_comorbidity 
-        ,post_admission_comorbidity,other_diagnosis,external_cause,additional_code,morphology_code,operating_room
+        ,post_admission_comorbidity,other_diagnosis,external_cause,additional_code,morphology_code,operating_room,tracheostomy
         FROM ".DbConstant::KPHIS_DBNAME.".ipd_summary WHERE an = :an ";
 $stmt_ = $conn->prepare($sql_);
 $stmt_->execute($parameters);
@@ -247,6 +247,96 @@ while ($row_ = $stmt_->fetch()){
                 <textarea class="form-control CheckPer_1" name="operating_room" id="operating_room" rows="4"></textarea>
             </div>
         </div><hr>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="row">
+                    <label class="col-sm-12 font-weight-bold">NON OPERATING ROOM PROCEDURES</label>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-3 offset-md-1">
+                    <input type="checkbox"  <?php   if (isset($row_['tracheostomy'])) {
+                                                                            if($row_['tracheostomy'] == "Y"){echo 'checked="checked"';}
+                                                                        }?>
+                                        class="custom-control-input" id="tracheostomy"  name="tracheostomy" disabled>
+                        
+                        <label class="custom-control-label" for="tracheostomy">TRACHEOSTOMY</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-3 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="mechanical_ventilation" id="mechanical_ventilation" value="Y">
+                        <label class="custom-control-label" for="mechanical_ventilation">MECHANICAL VENTILATION</label>
+                    </div>
+                    <div class="custom-control custom-checkbox col-sm-2">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="mechanical_ventilation1" id="mechanical_ventilation1" value="Y">
+                        <label class="custom-control-label" for="mechanical_ventilation1">มากกว่า 96 ชม.</label>
+                    </div>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="mechanical_ventilation2" id="mechanical_ventilation2" value="Y">
+                        <label class="custom-control-label" for="mechanical_ventilation2">น้อยกว่า 96 ชม.</label>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="custom-control custom-checkbox col-sm-3 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="packed_redcells"  id="packed_redcells" value="Y">
+                        <label class="custom-control-label" for="packed_redcells">PACKED RED CELLS</label>
+                    </div>
+                    <div class="custom-control custom-checkbox col-sm-2">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="fresh_frozen_plasma" id="fresh_frozen_plasma" value="Y">
+                        <label class="custom-control-label" for="fresh_frozen_plasma">FRESH FROZEN PLASMA</label>
+                    </div>
+                    <div class="custom-control custom-checkbox col-sm-2">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="platelets" id="platelets" value="Y">
+                        <label class="custom-control-label" for="platelets">PLATELETS</label>
+                    </div>
+                    <div class="custom-control custom-checkbox col-sm-2">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="cryoprecipitate" id="cryoprecipitate" value="Y">
+                        <label class="custom-control-label" for="cryoprecipitate">CRYOPRECIPITATE</label>
+                    </div>
+                    <div class="custom-control custom-checkbox col-sm-2">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="whole_blood" id="whole_blood" value="Y">
+                        <label class="custom-control-label" for="whole_blood">Whole Blood</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-2 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
+                        <label class="custom-control-label" for="computer_tomography">Computer Tomography</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control form-control-sm CheckPer_2" name="computer_tomography_text" id="computer_tomography_text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-3 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="chemotherapy" id="chemotherapy" value="Y">
+                        <label class="custom-control-label" for="chemotherapy">CHEMOTHERAPY</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-3 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="mri" id="mri" value="Y">
+                        <label class="custom-control-label" for="mri">MRI</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-3 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="hemodialysis" id="hemodialysis" value="Y">
+                        <label class="custom-control-label" for="hemodialysis">Hemodialysis</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-checkbox col-sm-2 offset-md-1">
+                        <input type="checkbox" class="custom-control-input CheckPer_2" name="non_or_other" id="non_or_other" value="Y">
+                        <label class="custom-control-label" for="non_or_other">อื่นๆ</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control form-control-sm CheckPer_2" name="non_or_other_text" id="non_or_other_text">
+                    </div>
+                </div>
+            </div>
+        </div>
         
         
 
