@@ -148,7 +148,7 @@
         $pe_cns = $_REQUEST['pe_cns'];
         $svg_tag = $_REQUEST['svg_tag'];
         $impression = $_REQUEST['impression'];
-        $problem_list = empty($_REQUEST['problem_list']) ? null : $_REQUEST['problem_list'];
+        $problem_list = $_REQUEST['problem_list'];
         $diff_dx = $_REQUEST['diff_dx'];
         $plan_management = $_REQUEST['plan_management'];
         $nurse_name = empty($_REQUEST['nurse_name']) ? null : $_REQUEST['nurse_name'];

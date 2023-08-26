@@ -93,7 +93,6 @@
         $pe_cns = $_REQUEST['pe_cns'];
         $svg_tag = $_REQUEST['svg_tag'];
         $impression = $_REQUEST['impression'];
-        $problem_list = $_REQUEST['problem_list'];
         $diff_dx = $_REQUEST['diff_dx'];
         $plan_management = $_REQUEST['plan_management'];
         $diff_dx = $_REQUEST['diff_dx'];

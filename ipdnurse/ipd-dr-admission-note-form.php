@@ -2528,4 +2528,4 @@
     function onclick_Normal(id,value) {
         $('#'+id).val(value);
     }
-</script>ห
+</script>

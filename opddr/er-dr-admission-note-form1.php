@@ -866,105 +866,47 @@ while ($row_item = $stmt_item->fetch()){
                 </div>
             </div>
         </div>
+
         <div class="form-group row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                          <div class="col-sm-9">
-
-                          
-                      <div class="form-group row">
-                          <label class="text-right col-sm-3">Problem list</label>
-                          <div class="col-sm-9">
-                              <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['problem_list']) ? htmlspecialchars($row['problem_list']) : '')?>" id="" name="problem_list">
-                          </div>
-                      </div>
-
-                      <div class="form-group row">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                            <div class="form-group row">
+                                            <label class="text-right col-sm-3">Problemlist</label>
+                                            <div class="col-sm-9">
+                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['problem_list']) ? htmlspecialchars($row['problem_list']) : '')?>" id="" name="problem_list">
+                                            </div>
+                                        </div>
+                                <div class="form-group row">
                                     <label class="text-right col-sm-3">Impression</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['impression']) ? htmlspecialchars($row['impression']) : '')?>" id="" name="impression">
                                     </div>
                                 </div>
-
-
-
                                 <div class="form-group row">
-                                    <label class="text-right col-sm-3">Provisional Diagnosis</label>
+                                    <label class="text-right col-sm-3">Diff. Dx</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['diff_dx']) ? htmlspecialchars($row['diff_dx']) : '')?>" id="" name="diff_dx">
                                     </div>
                                 </div>
-
-                                <label><B> Plan for treatment: </B></label>
                                 <div class="form-group row">
-              <div class="col-sm-1"></div>
-              <div class="custom-control custom-radio col-sm-1">
-              <input type="radio" <?php if ($row['plan_management'] == 'Supportive'|| $row['plan_management'] == NULL)  {echo 'checked="checked"';} ?>
-                class="custom-control-input" id="plan_management1" name="plan_management" value="Supportive"
-                onchange="plan_management_check('off_checked');">
-              <label class="custom-control-label" for="plan_management1">Supportive</label>
-              </div>
-
-              <div class="col-sm-1"></div>
-              <div class="custom-control custom-radio col-sm-1">
-              <input type="radio" <?php if ($row['plan_management'] == 'Investigation')  {echo 'checked="checked"';} ?>
-                class="custom-control-input" id="plan_management2" name="plan_management" value="Investigation"
-                onchange="plan_management_check('off_checked');">
-              <label class="custom-control-label" for="plan_management2">Investigation</label>
-              </div>
-
-              <div class="col-sm-1"></div>
-              <div class="custom-control custom-radio col-sm-1">
-            <input type="radio" <?php if ($row['plan_management'] == 'On ATB')  {echo 'checked="checked"';} ?>
-                class="custom-control-input" id="plan_management3" name="plan_management" value="On ATB"
-                onchange="plan_management_check('off_checked');">
-              <label class="custom-control-label" for="plan_management3">On ATB</label>
-              </div>
-
-              <div class="col-sm-1"></div>
-              <div class="custom-control custom-radio col-sm-1">
-              <input type="radio" <?php if ($row['plan_management'] != 'Supportive'
-                              &&$row['plan_management'] != 'Investigation'
-                              &&$row['plan_management'] != 'On ATB'
-                              &&$row['plan_management'] != NULL)  {echo 'checked="checked"';} ?>
-                class="custom-control-input" id="plan_management4"
-                onchange="plan_management_check('on_checked');">
-              <label class="custom-control-label" for="plan_management4"> อื่นๆ ระบุ</label>
-              </div>
-
-              <div class="col-sm-6">
-                  <input type="text" class="form-control form-control-sm" id="plan_management_text" name="plan_management"
-                      value="<?php if ($row['plan_management'] != 'Supportive'
-                                      &&$row['plan_management'] != 'Investigation'
-                                      &&$row['plan_management'] != 'On ATB') {echo htmlspecialchars($row['plan_management']);}?>"
-                      <?php if (!($row['plan_management'] != 'Supportive'
-                                      &&$row['plan_management'] != 'Investigation'
-                                      &&$row['plan_management'] != 'On ATB'
-                                      &&$row['plan_management'] != NULL)) {echo 'disabled';}?>>
-              </div>
-
-            <!--  <div class="col-sm-5">
-              <textarea class="form-control" id="plan_management_text" name="plan_management"
-                    value="<?php if ($row['plan_management'] != 'Supportive'
-                                    &&$row['plan_management'] != 'Investigation'
-                                    &&$row['plan_management'] != 'On ATB') {echo htmlspecialchars($row['plan_management']);}?>"
-                    <?php if (!($row['plan_management'] != 'Supportive'
-                                    &&$row['plan_management'] != 'Investigation'
-                                    &&$row['plan_management'] != 'On ATB'
-                                    &&$row['plan_management'] != NULL)) {echo 'disabled';} ?>></textarea>
-              </div> -->
-
-              </div>
-
-
-
+                                    <label class="text-right col-sm-3">Plan Management</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['plan_management']) ? htmlspecialchars($row['plan_management']) : '')?>" id="" name="plan_management">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        
+
+                                            
 
     <!--    <div class="patient-info-container alert alert-secondary" role="alert">
             <div class="d-flex">
