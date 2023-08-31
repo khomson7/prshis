@@ -67,8 +67,9 @@ while ($row_item = $stmt_item->fetch()) {
 //cc,pi
 if ($admission_note_id == null || $admission_note_id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
-                            round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
+                            pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
                             round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
+                            round((opdscreen.bw)*1000,0) as bw2,
                             round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
                             opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
                             opdscreen.pmh,opdscreen.fh,opdscreen.pe,
@@ -229,9 +230,9 @@ $row_period  = $stmt_period->fetch();
 
         <link rel="stylesheet" href="../include/css/accordion.css">
 
-        <div class="accordion-item">
-            <div class="accordion-header"> <label class="col-sm-12 font-weight-bold">ส่วนที่1</label></div>
-            <div class="accordion-content">
+        <div>
+            <div > <label class="col-sm-12 font-weight-bold">ส่วนที่1</label></div>
+            <div >
 
                 <div class="card-group pb-3 ">
                     <div class="card">
@@ -2166,23 +2167,43 @@ $row_period  = $stmt_period->fetch();
                                 <div class="form-group row">
                                     <label class="col-sm-2"><B></B></label>
                                     <B>Sex:&nbsp;&nbsp;</B>
+                                    <!--<div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?php if ($admission_note_id != null) {
+                                                                if ($row['c_sex'] == "1") {
+                                                                    echo 'checked="checked"';
+                                                                }
+                                                                if (isset($row_opdscreen['sex']) != "1") {
+                                                                    echo 'disabled="disabled"';
+                                                                }
+                                                            } else {
+                                                                if (!isset($row_opdscreen['sex'])) {
+                                                                    echo 'checked="checked"';
+                                                                }
+                                                                if (isset($row_old_ipt['old_regdatetime']) != null) {
+                                                                    echo 'disabled="disabled"';
+                                                                }
+                                                            } ?> class="custom-control-input" id="c_sex1" name="c_sex" value="1" onchange="sex_check('off_checked');">
+                                        <label class="custom-control-label" for="c_sex1">Male</label>
+                                    </div>
+                                                        -->
+
                                     <div class="custom-control custom-radio col-sm-1">
                                         <input type="radio" <?php if ($row['c_sex'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="c_sex1" name="c_sex" value="1" onchange="sex_check('off_checked');">
+                                                            } ?> class="custom-control-input" id="c_sex1" name="c_sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['c_sex'])) ?>" onchange="sex_check('off_checked');">
                                         <label class="custom-control-label" for="c_sex1">Male</label>
                                     </div>
 
                                     <div class="custom-control custom-radio col-sm-1">
                                         <input type="radio" <?php if ($row['c_sex'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="c_sex2" name="c_sex" value="2" onchange="sex_check('on_checked');">
+                                                            } ?> class="custom-control-input" id="c_sex2" name="c_sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['c_sex'])) ?>" onchange="sex_check('on_checked');">
                                         <label class="custom-control-label" for="c_sex2">Female</label>
                                     </div>
 
                                     <B>BW</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_bw']) ? htmlspecialchars($row['c_bw']) : '') ?>" id="c_bw" name="c_bw" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_opdscreen['bw2']) ? htmlspecialchars($row_opdscreen['bw2']) : htmlspecialchars($row['c_bw'])) ?>" id="c_bw" name="c_bw" min="0">
                                     </div> gms&nbsp;&nbsp;
                                     <B>HC</B>
                                     <div class="col-sm-1">
@@ -2190,7 +2211,7 @@ $row_period  = $stmt_period->fetch();
                                     </div> cms&nbsp;&nbsp;
                                     <B>length</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_length']) ? htmlspecialchars($row['c_length']) : '') ?>" id="c_length" name="c_length" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_opdscreen['height']) ? htmlspecialchars($row_opdscreen['height']) : htmlspecialchars($row['c_length'])) ?>" id="c_length" name="c_length" min="0">
                                     </div> cms
 
                                 </div>
@@ -2280,17 +2301,18 @@ $row_period  = $stmt_period->fetch();
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_skin','No jaundice , no lesion')"><i class="fas fa-baby"></i> Skin Normal</button>
                                     </div>
                                 </div>
-
+<!--
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Head</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_head']) ? htmlspecialchars($row['pe_head']) : '') ?>" id="pe_head" name="pe_head">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_head" name="pe_head">
                                     </div>
                                     <div class="col-md-2">
 
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_head','Normal contour of head no mass')"><i class="fas fa-baby"></i> Head Normal</button>
                                     </div>
                                 </div>
+                                                        -->
 
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">HEENT</label>
@@ -2302,16 +2324,19 @@ $row_period  = $stmt_period->fetch();
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heent','AF 2*2 cm, no cephalhematoma')"><i class="fas fa-baby"></i> HEENT Normal</button>
                                     </div>
                                 </div>
+<!--
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Neck</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_neck']) ? htmlspecialchars($row['pe_neck']) : '') ?>" id="pe_neck" name="pe_neck">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_neck" name="pe_neck">
                                     </div>
                                     <div class="col-md-2">
 
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neck','No feature , no mass')"><i class="fas fa-baby"></i> Neck Normal</button>
                                     </div>
                                 </div>
+                                                        -->
+
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Breast & Thorax</label>
                                     <div class="col-sm-7">
@@ -2333,11 +2358,11 @@ $row_period  = $stmt_period->fetch();
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_face','No facial neve palsy')"><i class="fas fa-baby"></i> Face Normal</button>
                                     </div>
                                 </div>
-
+<!--
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Ears</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_ears']) ? htmlspecialchars($row['pe_ears']) : '') ?>" id="pe_ears" name="pe_ears">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_ears" name="pe_ears">
                                     </div>
                                     <div class="col-md-2">
 
@@ -2348,7 +2373,7 @@ $row_period  = $stmt_period->fetch();
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Eyes</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_eyes']) ? htmlspecialchars($row['pe_eyes']) : '') ?>" id="pe_eyes" name="pe_eyes">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_eyes" name="pe_eyes">
                                     </div>
                                     <div class="col-md-2">
 
@@ -2359,13 +2384,15 @@ $row_period  = $stmt_period->fetch();
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Nose</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_nose']) ? htmlspecialchars($row['pe_nose']) : '') ?>" id="pe_nose" name="pe_nose">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_nose" name="pe_nose">
                                     </div>
                                     <div class="col-md-2">
 
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_nose','No flaring alar nasai')"><i class="fas fa-baby"></i> Nose Normal</button>
                                     </div>
                                 </div>
+
+                                                        -->
 
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Mouth</label>
@@ -2421,42 +2448,15 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                 </div>
 
-
+<!--
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Genitalia</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_genitalia']) ? htmlspecialchars($row['pe_genitalia']) : '') ?>" id="pe_genitalia" name="pe_genitalia">
-                                    </div>
-
-                                    <div class="col-md-2">
-
-                                        <a class="btn btn-secondary btn-sm PhysicalExaminationBtn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-baby" aria-hidden="true"></i> Genitalia Normal</a>
-                                        <div class="dropdown-menu" aria-labelledby="DropdownId">
-
-                                            <?php
-                                            //  General
-                                            $sql_phy = "SELECT pe_general_text,name_select
-                    FROM " . DbConstant::KPHIS_DBNAME . ".prs_phy_exam_list where exam_group_id = '20' and type_of_person = 'B' and active_ = 'Y' and user_ in('master','$loginname')";
-                                            $stmt_phy = $conn->prepare($sql_phy);
-                                            $stmt_phy->execute($reg_parameters);
-                                            $rows_phy  = $stmt_phy->fetchAll();
-                                            //  $operation_text = "";
-                                            foreach ($rows_phy as $ds) {
-                                            ?>
-                                                <a class="dropdown-item" onclick="onclick_Normal('pe_genitalia','<?= $ds['pe_general_text'] ?>')"> <?= $ds['name_select'] ?></a>
-                                            <?php
-                                                $i++;
-                                            }
-
-                                            ?>
-
-
-                                        </div>
-
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_genitalia" name="pe_genitalia">
                                     </div>
 
                                 </div>
+                                                        -->
 
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Anus</label>
@@ -2511,7 +2511,30 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <div class="col-md-2">
 
-                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','Patent anus, no ambiguous genitalia')"><i class="fas fa-baby"></i> Normal</button>
+                                        <a class="btn btn-secondary btn-sm PhysicalExaminationBtn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-baby" aria-hidden="true"></i> Genitalia Normal</a>
+                                        <div class="dropdown-menu" aria-labelledby="DropdownId">
+
+                                            <?php
+                                            //  General
+                                            $sql_phy = "SELECT pe_general_text,name_select
+                    FROM " . DbConstant::KPHIS_DBNAME . ".prs_phy_exam_list where exam_group_id = '20' and type_of_person = 'B' and active_ = 'Y' and user_ in('master','$loginname')";
+                                            $stmt_phy = $conn->prepare($sql_phy);
+                                            $stmt_phy->execute($reg_parameters);
+                                            $rows_phy  = $stmt_phy->fetchAll();
+                                            //  $operation_text = "";
+                                            foreach ($rows_phy as $ds) {
+                                            ?>
+                                                <a class="dropdown-item" onclick="onclick_Normal('pe_rectalgenitalia','<?= $ds['pe_general_text'] ?>')"> <?= $ds['name_select'] ?></a>
+                                            <?php
+                                                $i++;
+                                            }
+
+                                            ?>
+
+
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -2606,13 +2629,15 @@ $row_period  = $stmt_period->fetch();
                                                 <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('impression','Normal Newborn')"><i class="fas fa-baby"></i> Normal</button>
                                             </div>
                                         </div>
+<!--
                                         <div class="form-group row">
                                             <label class="text-right col-sm-3">Diff. Dx</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['diff_dx']) ? htmlspecialchars($row['diff_dx']) : '') ?>" id="diff_dx" name="diff_dx">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="diff_dx" name="diff_dx">
                                             </div>
 
                                         </div>
+                                        -->
                                         <div class="form-group row">
                                             <label class="text-right col-sm-3">Plan Management</label>
                                             <div class="col-sm-8">
