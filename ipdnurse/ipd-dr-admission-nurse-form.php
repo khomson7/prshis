@@ -1837,72 +1837,17 @@
                 <div class="card border-success">
                     <div class="card-body">
                         <div class="form-group row">
-                            <div class="col-sm-10"></div>
-                            <div class="col-sm-2"><i class="fas fa-user"></i> ผู้ใหญ่       <i class="fas fa-baby"></i> เด็ก</div>
+                            
                         </div>
                         <div class="form-group row">
                             <label class="text-right col-sm-3">General</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_ga_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ga_text']) : htmlspecialchars($row['pe_general']))?>" id="pe_general" name="pe_general">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_general']) ? htmlspecialchars($row['pe_general']) : '')?>" id="pe_general" name="pe_general" readonly>
                             </div>
 
                             <div class="col-md-2">
 
-                            <a class="btn btn-secondary btn-sm PhysicalExaminationBtn" href="#" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><em class="fas fa-user"></em> General</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownId">
-                 <?php
-                 //  General
-                     $sql_phy = "SELECT pe_general_text,name_select
-                    FROM ".DbConstant::KPHIS_DBNAME.".prs_phy_exam_list where exam_group_id = '1' and type_of_person = 'A' and active_ = 'Y' and user_ in('master','$loginname')";
-        $stmt_phy = $conn->prepare($sql_phy);
-        $stmt_phy->execute($reg_parameters);
-        $rows_phy  = $stmt_phy->fetchAll();
-      //  $operation_text = "";
-            foreach ($rows_phy as $ds) {
-                ?>
-                <a class="dropdown-item" onclick="onclick_Normal('pe_general','<?= $ds['pe_general_text'] ?>')"> <?= $ds['name_select'] ?></a>
-                <?php
-                 $i++;
-            }
-
-            ?>
-
-                    </div>
-
-                    <span>
-                    <a class="btn btn-secondary btn-sm PhysicalExaminationBtn" href="#"  data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-baby" aria-hidden="true"></i> General</a>
-                    <div class="dropdown-menu" aria-labelledby="DropdownId">
-
-                    <?php
-                 //  General
-                     $sql_phy = "SELECT pe_general_text,name_select
-                    FROM ".DbConstant::KPHIS_DBNAME.".prs_phy_exam_list where exam_group_id = '1' and type_of_person = 'B' and active_ = 'Y' and user_ in('master','$loginname')";
-        $stmt_phy = $conn->prepare($sql_phy);
-        $stmt_phy->execute($reg_parameters);
-        $rows_phy  = $stmt_phy->fetchAll();
-      //  $operation_text = "";
-            foreach ($rows_phy as $ds) {
-                ?>
-                <a class="dropdown-item" onclick="onclick_Normal('pe_general','<?= $ds['pe_general_text'] ?>')"> <?= $ds['name_select'] ?></a>
-                <?php
-                 $i++;
-            }
-
-            ?>
-
-
-                    </div>
-                </span>
-
-
-
-
-
-
-
+                    
 
                 </div>
 
@@ -1911,21 +1856,19 @@
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Skin</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_skin']) ? htmlspecialchars($row['pe_skin']) : '')?>" id="pe_skin" name="pe_skin">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_skin']) ? htmlspecialchars($row['pe_skin']) : '')?>" id="pe_skin" name="pe_skin" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_skin','no rash, not pale, no jaundice')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_skin','Pink, no rash')"><i class="fas fa-baby"></i> Normal</button>
+                                
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="text-right col-sm-3">HEENT</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_heent_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_heent_text']) : htmlspecialchars($row['pe_heent']))?>" id="pe_heent" name="pe_heent">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_heent']) ? htmlspecialchars($row['pe_heent']) : '')?>" id="pe_heent" name="pe_heent" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heent','not pale conjunctiva, no icteric sclera')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_heent','AF 2*2 cm, no cephalhematoma')"><i class="fas fa-baby"></i> Normal</button>
+                                
                             </div>
                         </div>
                         <!--
@@ -1965,44 +1908,40 @@
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Lungs</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_lung_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_lung_text']) : htmlspecialchars($row['pe_lungs']))?>" id="pe_lungs" name="pe_lungs">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_lungs']) ? htmlspecialchars($row['pe_lungs']) : '')?>" id="pe_lungs" name="pe_lungs" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','equal breath sounds both lung, clear, no wheezing')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','No adventitious sound, no subcostal retraction')"><i class="fas fa-baby"></i> Normal</button>
+                               
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="text-right col-sm-3">CVS</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_cvs']) ? htmlspecialchars($row['pe_cvs']) : '')?>" id="pe_cvs" name="pe_cvs">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_cvs']) ? htmlspecialchars($row['pe_cvs']) : '')?>" id="pe_cvs" name="pe_cvs" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cvs','Regular rhythm Normal s1 s2 no murmur Normal PMI')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cvs','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
+                                
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Abdomen</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_ab_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ab_text']) : htmlspecialchars($row['pe_abdomen']))?>" id="pe_abdomen" name="pe_abdomen">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_abdomen']) ? htmlspecialchars($row['pe_abdomen']) : '')?>" id="pe_abdomen" name="pe_abdomen" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','soft, not tender,  no mass palpation')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_abdomen','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
+                                
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Rectal&Genitalia</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_rectalgenitalia']) ? htmlspecialchars($row['pe_rectalgenitalia']) : '')?>" id="pe_rectalgenitalia" name="pe_rectalgenitalia">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_rectalgenitalia']) ? htmlspecialchars($row['pe_rectalgenitalia']) : '')?>" id="pe_rectalgenitalia" name="pe_rectalgenitalia" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','PR no mass , Good sphincter tone , normal genital appearance')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_rectalgenitalia','Patent anus, no ambiguous genitalia')"><i class="fas fa-baby"></i> Normal</button>
+                              
                             </div>
                         </div>
 
@@ -2010,11 +1949,10 @@
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Extremities</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row_opdscreen['pe_ext_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_ext_text']) : htmlspecialchars($row['pe_extremities']))?>" id="pe_extremities" name="pe_extremities">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_rectalgenitalia']) ? htmlspecialchars($row['pe_rectalgenitalia']) : '')?>" id="pe_extremities" name="pe_extremities" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','No deformity No edema')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_extremities','No deformity')"><i class="fas fa-baby"></i> Normal</button>
+                                
                             </div>
                         </div>
 
@@ -2022,11 +1960,10 @@
                         <div class="form-group row">
                             <label class="text-right col-sm-3">CNS</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_cns']) ? htmlspecialchars($row['pe_cns']) : '')?>" id="pe_cns" name="pe_cns">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_cns']) ? htmlspecialchars($row['pe_cns']) : '')?>" id="pe_cns" name="pe_cns" readonly>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cns','E4V5N6 Pupil 3 mm RTLBE Motor and Sensory grossly intact')"><i class="fas fa-user"></i> Normal</button>
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cns','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
+                                
                             </div>
                         </div>
                         <!--
@@ -2044,22 +1981,22 @@
                         <div class="form-group row">
                             <label class="text-right col-sm-3">OB/Gyn exam</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_ob_gynexam']) ? htmlspecialchars($row['pe_ob_gynexam']) : '')?>" id="pe_ob_gynexam" name="pe_ob_gynexam">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_ob_gynexam']) ? htmlspecialchars($row['pe_ob_gynexam']) : '')?>" id="pe_ob_gynexam" name="pe_ob_gynexam" readonly>
                             </div>
                             <div class="col-md-1">
-                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_ob_gynexam','no mass , no discharge')"><i class="fas fa-user"></i> Normal</button>
+                                
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="text-right col-sm-3">Other</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '')?>" id="" name="pe_other">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '')?>" id="" name="pe_other" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="text-right col-sm-3">PE Text</label>
                             <div class="col-sm-7">
-                                <textarea class="form-control" id="pe_text" name="pe_text" rows="6" ><?=(isset($row_opdscreen['pe']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe']) : htmlspecialchars($row['pe_text']))?></textarea>
+                                <textarea  readonly class="form-control" id="pe_text" name="pe_text" rows="6" ><?=(isset($row_opdscreen['pe']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe']) : htmlspecialchars($row['pe_text']))?></textarea>
                             </div>
                         </div>
                     </div>
@@ -2087,10 +2024,12 @@
                             </div>
                         </div>
                         <div>
+
                             <div class="form-group">
                                 <label for=""></label>
-                                <textarea style="display:none;" class="form-control" name="svg_tag" id="svg_tag" rows="10"><?=(isset($row['svg_tag']) ? htmlspecialchars($row['svg_tag']) : '')?></textarea>
+                                <textarea  style="display:none;" class="form-control" name="svg_tag" id="svg_tag" rows="10"><?=(isset($row['svg_tag']) ? htmlspecialchars($row['svg_tag']) : '')?></textarea>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -2105,13 +2044,13 @@
                             <div class="form-group row">
                                             <label class="text-right col-sm-3">Problemlist</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problem_list']) ? htmlspecialchars($row['problem_list']) : '') ?>" id="problem_list" name="problem_list">
+                                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['problem_list']) ? htmlspecialchars($row['problem_list']) : '') ?>" id="problem_list" name="problem_list" readonly>
                                             </div>
                                         </div>
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Impression</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['impression']) ? htmlspecialchars($row['impression']) : '')?>" id="" name="impression">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['impression']) ? htmlspecialchars($row['impression']) : '')?>" id="" name="impression" readonly>
                                     </div>
                                 </div>
 <!--
@@ -2125,7 +2064,7 @@
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Plan Management</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['plan_management']) ? htmlspecialchars($row['plan_management']) : '')?>" id="" name="plan_management">
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?=(isset($row['plan_management']) ? htmlspecialchars($row['plan_management']) : '')?>" id="" name="plan_management" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -2162,21 +2101,25 @@
                 </div>
             </div>
 
-       <!--                                      
+            <?php
+            if(Session::checkPermission('IPD_NURSE','EDIT') ){
+                ?>                                  
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="mb-3" for="action-person-nurse">ลงชื่อพยาบาล</label>
                
                     <div class="input-group">
-                        <input type="text" class="form-control form-control" id="nurse_name"  name="nurse_name"  value="" readonly>
-                        <input type="text" class="form-control form-control" id="nurse_pos"   name="nurse_pos"   value="" readonly>
+                        <input type="text" class="form-control form-control" id="nurse_name"  name="nurse_name"  value="<?=htmlspecialchars($row['nurse_name'])?>" readonly>
+                        <input type="text" class="form-control form-control" id="nurse_pos"   name="nurse_pos"   value="<?=htmlspecialchars($row['nurse_pos'])?>" readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" onclick="PersonAsCurrentUser_1()">ลงชื่อ</button>
                         </div>
                     </div>
                 </div>
             </div> 
-                        -->
+            <?php
+                }
+                ?>
 
         </div>
         <div class="form-group row">

@@ -28,7 +28,7 @@ from   ".DbConstant::HOSXP_DBNAME.".ovst
 left outer join ".DbConstant::HOSXP_DBNAME.".vn_stat on vn_stat.vn=ovst.vn
 left outer join ".DbConstant::HOSXP_DBNAME.".patient on patient.hn=ovst.hn
 LEFT OUTER JOIN ".DbConstant::HOSXP_DBNAME.".pttype ON pttype.pttype = ovst.pttype
-WHERE ovst.hn=:hn and ovst.vn in(select om.vn from ".DbConstant::KPHIS_DBNAME.".opd_er_order_master om)
+WHERE ovst.hn=:hn and concat(ovst.hn,ovst.vstdate) in(select concat(om.hn,om.order_for_date) from ".DbConstant::KPHIS_DBNAME.".ipd_pre_order_master om)
 order by ovst.vn desc limit 1";
 
 $stmt_opd = $conn->prepare($sql_opd);

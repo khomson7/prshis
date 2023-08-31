@@ -943,13 +943,9 @@ $head =
                 <br>&nbsp;
                 HEENT  : '.htmlspecialchars($row['pe_heent']).'
                 <br>&nbsp;
-                Neck     : '.htmlspecialchars($row['pe_neck']).'
-                <br>&nbsp;
-                Breast & Thorax : '.htmlspecialchars($row['pe_breastthorax']).'
-                <br>&nbsp;
-                Heart  : '.htmlspecialchars($row['pe_heart']).'
-                <br>&nbsp;
                 Lungs : '.htmlspecialchars($row['pe_lungs']).'
+                <br>&nbsp;
+                CVS : '.htmlspecialchars($row['pe_cvs']).'
                 <br>&nbsp;
                 Abdomen : '.htmlspecialchars($row['pe_abdomen']).'
                 <br>&nbsp;
@@ -957,7 +953,7 @@ $head =
                 <br>&nbsp;
                 Extremities     : '.htmlspecialchars($row['pe_extremities']).'
                 <br>&nbsp;
-                Neurological   : '.htmlspecialchars($row['pe_neurological']).'
+                CNS  : '.htmlspecialchars($row['pe_cns']).'
                 <br>&nbsp;
                 OB/Gyn exam : '.htmlspecialchars($row['pe_ob_gynexam']).'
                 <br>&nbsp;
@@ -973,8 +969,8 @@ $head =
 
         <tr style="border:1px solid #000;margin: 35px;">
             <td colspan="2" width="50%" style="margin: 35px;padding:4px;">&nbsp;
-                Impression :&nbsp;'.htmlspecialchars($row['impression']).'<br>&nbsp;
-                Diff. Dx     :&nbsp;'.htmlspecialchars($row['diff_dx']).'<br>&nbsp;
+                Problem List :&nbsp;'.htmlspecialchars($row['problem_list']).'<br>&nbsp;
+                Impression :&nbsp;'.htmlspecialchars($row['impression']).'<br>&nbsp;  
                 Plan Management :&nbsp;'.htmlspecialchars($row['plan_management']).'<br>
             </td>
             <td width="50%" style="border-left:0.5px solid #000;margin: 35px;padding:4px;">

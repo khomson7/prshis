@@ -11,7 +11,9 @@
     $conn = DbUtils::get_hosxp_connection();
     $opd_er_order_master_id = $_REQUEST['opd_er_order_master_id'];//รับค่า opd_er_order_master_id
 
-    $sql_opd_er = "select ovst.vn, ovst.an, patient.cid, patient.passport_no, patient.hn,patient.pname,patient.fname,patient.lname,
+    
+
+    $sql_opd_er = "select om.opd_er_order_master_id,ovst.vn, ovst.an, patient.cid, patient.passport_no, patient.hn,patient.pname,patient.fname,patient.lname,
                 (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
                     from ".DbConstant::HOSXP_DBNAME.".opd_allergy
                     where opd_allergy.hn = ovst.hn /*and (opd_allergy.no_alert<>'Y' or opd_allergy.no_alert is null)*/
@@ -43,7 +45,7 @@
                 
                 <div class="p-1 flex">
                     <h5 class="alert-heading">ข้อมูลผู้ป่วย</h5>
-                    <label>HN : <?=htmlspecialchars($row_opd_er['hn']);?> | VN : <?=htmlspecialchars($row_opd_er['vn'])?></label>
+                    <label>HN : <?=htmlspecialchars($row_opd_er['hn']);?> | VN : <?=htmlspecialchars($row_opd_er['vn'])?> <?=htmlspecialchars($row_opd_er['opd_er_order_master_id']);?></label>
                     <?php if($row_opd_er['an'] != null && $row_opd_er['an'] != ""){ ?>
                         | <label>AN : <?=htmlspecialchars($row_opd_er['an']);?></label>
                     <?php } ?>

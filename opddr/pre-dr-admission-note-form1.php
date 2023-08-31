@@ -6,20 +6,21 @@
 
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
 require_once '../mains/main-report.php';
-require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
-require_once '../mains/opd-show-patient-main-sticky.php';
+require_once '../mains/pre-opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+require_once '../mains/pre-opd-show-patient-main-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $hn = empty($_REQUEST['hn']) ? null : $_REQUEST['hn'];
 $vn = empty($_REQUEST['vn']) ? null : $_REQUEST['vn'];
+$vstdate = empty($_REQUEST['vstdate']) ? null : $_REQUEST['vstdate'];
 // $vn= '111';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 //  $hn = '000000001';
 // $hn = KphisQueryUtils::getHnByAn($an);
 // $vn = KphisQueryUtils::getVnByAn($an);
-// $vn = KphisQueryUtils::getVnByHn($hn);
+ $vn = KphisQueryUtils::getVnByHn($hn);
 //$vn = $_SESSION['vn'];
 $an_parameters = ['vn' => $vn];
 $hn_parameters = ['hn' => $hn];
