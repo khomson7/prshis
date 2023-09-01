@@ -2712,7 +2712,7 @@ $row_period  = $stmt_period->fetch();
                         <?php
                         }
                         ?>
-                        <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                        <a href="ipd-dr-newborn-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                     </div>
                 </div>
                 <!-- card -->
