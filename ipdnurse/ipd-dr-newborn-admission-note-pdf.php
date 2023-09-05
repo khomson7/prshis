@@ -1104,15 +1104,7 @@ $head =
                     <var style="' . $style_c_inform_etc_text . '"> &nbsp;' . htmlspecialchars($row['c_inform_etc_text']) . ' </var>
                     
                 </p>
-                            
-                <p style="' . $style_deliver_anomalies . '"><br>
-                    วิธีคลอด&nbsp;
-                    <label>' . $checkbox_deliver_anomalies1 . ' ปกติ</label>
-                    <label>' . $checkbox_deliver_anomalies2 . ' ผิดปกติ (ระบุ)</label>
-                    &nbsp;&nbsp;&ensp;&nbsp;&nbsp;&ensp;' . $textbox_deliver_anomalies . '
-                    <label>เนื่องจาก ' . htmlspecialchars($row['deliver_anomalies_means']) . ' </label>
-                </p>
-                
+                               
             </td>
         </tr>
 
