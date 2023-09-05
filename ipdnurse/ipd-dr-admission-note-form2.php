@@ -2673,6 +2673,19 @@ $row_period  = $stmt_period->fetch();
                         </div>
                     </div>
 
+                    <div class="col-md-4">
+                <div class="form-group">
+                    <label class="mb-3" for="action-person-nurse">ลงชื่อพยาบาล</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control" id="nurse_name"  name="nurse_name"  value="<?=htmlspecialchars($row['nurse_name'])?>" readonly>
+                        <input type="text" class="form-control form-control" id="nurse_pos"   name="nurse_pos"   value="<?=htmlspecialchars($row['nurse_pos'])?>" readonly>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" onclick="PersonAsCurrentUser_1()">ลงชื่อ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
                 </div>
 
 

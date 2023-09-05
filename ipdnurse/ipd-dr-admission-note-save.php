@@ -210,7 +210,7 @@
                 fant_artificial_feeding_start_age_month,fant_feeding_etc,supplementary_feeding,
                 supplementary_feeding_start_age_month,disease_operation_allergy,inpatient_history,
                 inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,
-                pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_abdomen,pe_rectalgenitalia,pe_extremities,
+                pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_cvs,pe_cns,pe_abdomen,pe_rectalgenitalia,pe_extremities,
                 pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,impression,diff_dx,plan_management,problem_list,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version
                 ,c_born_date,c_born_time,c_born_type_in,c_labor_type,c_indication,c_intrapartum
@@ -235,7 +235,7 @@
                 :fant_breast_feeding_end_age_month,:fant_artificial_feeding_start_age_month,:fant_feeding_etc,
                 :supplementary_feeding,:supplementary_feeding_start_age_month,:disease_operation_allergy,
                 :inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,
-                :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_abdomen,:pe_rectalgenitalia,
+                :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_cvs,:pe_cns,:pe_abdomen,:pe_rectalgenitalia,
                 :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:svg_tag,:impression,:diff_dx,
                 :plan_management,:problem_list,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
                 ,:c_born_date,:c_born_time,:c_born_type_in,:c_labor_type,:c_indication,:c_intrapartum
@@ -276,7 +276,7 @@
                 'inpatient_last_date'=>$inpatient_last_date, 'inpatient_location'=>$inpatient_location,
                 'inpatient_because'=>$inpatient_because, 'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin,
                 'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,'pe_breastthorax'=>$pe_breastthorax,
-                'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs, 'pe_abdomen'=>$pe_abdomen,
+                'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns,'pe_abdomen'=>$pe_abdomen,
                 'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities,
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression, 'diff_dx'=>$diff_dx,

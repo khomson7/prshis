@@ -1197,6 +1197,7 @@ $head =
             </td>
         </tr>
     </table>
+    <h2 style="text-align:right;font-size:8pt;">FM-OBS-007 แก้ไขครั้งที่ 2 ประกาศใช้ 16 พฤศจิกายน 2558</h2>
 ';
 $mpdf->WriteHTML($head);
 $mpdf->Output();

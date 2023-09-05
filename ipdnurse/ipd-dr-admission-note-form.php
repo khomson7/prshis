@@ -83,24 +83,27 @@
         //------------------------Doctor admission note
 
         //cc,pi
-        if($admission_note_id == null){
-            $sql_opdscreen="SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
-                            round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
-                            round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
-                            round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
-                            opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
-                            opdscreen.pmh,opdscreen.fh,opdscreen.pe,
-                            opdscreen.pe_heart_text, opdscreen.pe_lung_text,
-                            opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
-                            opdscreen.pe_ext_text, opdscreen.pe, pt.cid, pt.passport_no, pt.hn,pt.pname,pt.fname,pt.lname,
-                            vn.age_y,vn.age_m,vn.age_d
-                            FROM ".DbConstant::HOSXP_DBNAME.".opdscreen
-                            INNER JOIN ".DbConstant::HOSXP_DBNAME.".vn_stat vn on vn.vn = opdscreen.vn
-                            INNER JOIN ".DbConstant::HOSXP_DBNAME.".patient pt on pt.hn = opdscreen.hn
-                            WHERE opdscreen.vn= :vn ";
+        if ($admission_note_id == null || $admission_note_id != null) {
+            $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
+                                    pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
+                                    round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
+                                    round((opdscreen.bw)*1000,0) as bw2,
+                                    round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
+                                    opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
+                                    opdscreen.pmh,opdscreen.fh,opdscreen.pe,
+                                    opdscreen.pe_heart_text, opdscreen.pe_lung_text,
+                                    opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
+                                    opdscreen.pe_ext_text, opdscreen.pe, pt.cid, pt.passport_no, pt.hn,pt.pname,pt.fname,pt.lname,
+                                    vn.age_y,vn.age_m,vn.age_d,opdscreen.bw,opdscreen.height,(select oi.name from " . DbConstant::HOSXP_DBNAME . ".ovstist oi where oi.ovstist = ov.ovstist) as ovst_ist
+                                    FROM " . DbConstant::HOSXP_DBNAME . ".opdscreen
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".ovst ov on ov.vn = opdscreen.vn
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".vn_stat vn on vn.vn = opdscreen.vn
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".patient pt on pt.hn = opdscreen.hn
+                                    WHERE opdscreen.vn= :vn ";
             $stmt_opdscreen = $conn->prepare($sql_opdscreen);
-            $stmt_opdscreen->execute(['vn'=>$vn]);
+            $stmt_opdscreen->execute(['vn' => $vn]);
             $row_opdscreen  = $stmt_opdscreen->fetch();
+        
         }
 
         $sql_opduser = "SELECT opduser.entryposition,opduser.name
@@ -111,31 +114,32 @@
         $row_opduser  = $stmt_opduser->fetch();
 
         $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
-            (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
-                from ".DbConstant::HOSXP_DBNAME.".opd_allergy
-                where opd_allergy.hn = ipt.hn /*and (opd_allergy.no_alert<>'Y' or opd_allergy.no_alert is null)*/
-                order by display_order) as drugallergy,
-            an_stat.age_y,an_stat.age_m,an_stat.age_d,
-            concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
-            ipt.dchdate,ipt.dchtime,
-            ipt.ward,ward.name,
-            ipt.pttype, pttype.`name` as pttype_name,
-            iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
-            , (select vs.height from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_height
-            , (select vs.vs_datetime from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw_datetime
-            from ".DbConstant::HOSXP_DBNAME.".ipt
-            left outer join ".DbConstant::HOSXP_DBNAME.".an_stat on an_stat.an=ipt.an
-            left outer join ".DbConstant::HOSXP_DBNAME.".patient on patient.hn=ipt.hn
-            left outer join ".DbConstant::HOSXP_DBNAME.".ward on ward.ward=ipt.ward
-            LEFT OUTER JOIN ".DbConstant::HOSXP_DBNAME.".pttype ON pttype.pttype = ipt.pttype
-            LEFT OUTER JOIN ".DbConstant::HOSXP_DBNAME.".iptadm ON iptadm.an = ipt.an
-            WHERE ipt.an=:an
-            order by ipt.an
-            ";
-        $stmt_ipt = $conn->prepare($sql_ipt);
-        $stmt_ipt->execute(['an'=>$an]);
-        $row_ipt = $stmt_ipt->fetch();
-        $regdatetime = $row_ipt["regdatetime"];
+        (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
+            from " . DbConstant::HOSXP_DBNAME . ".opd_allergy
+            where opd_allergy.hn = ipt.hn /*and (opd_allergy.no_alert<>'Y' or opd_allergy.no_alert is null)*/
+            order by display_order) as drugallergy,
+        an_stat.age_y,an_stat.age_m,an_stat.age_d,
+        concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
+        ipt.dchdate,ipt.dchtime,
+        ipt.regdate,ipt.regtime,
+        ipt.ward,ward.name,
+        ipt.pttype, pttype.`name` as pttype_name,
+        iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
+        , (select vs.height from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_height
+        , (select vs.vs_datetime from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw_datetime
+        from " . DbConstant::HOSXP_DBNAME . ".ipt
+        left outer join " . DbConstant::HOSXP_DBNAME . ".an_stat on an_stat.an=ipt.an
+        left outer join " . DbConstant::HOSXP_DBNAME . ".patient on patient.hn=ipt.hn
+        left outer join " . DbConstant::HOSXP_DBNAME . ".ward on ward.ward=ipt.ward
+        LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".pttype ON pttype.pttype = ipt.pttype
+        LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".iptadm ON iptadm.an = ipt.an
+        WHERE ipt.an=:an
+        order by ipt.an
+        ";
+$stmt_ipt = $conn->prepare($sql_ipt);
+$stmt_ipt->execute(['an' => $an]);
+$row_ipt = $stmt_ipt->fetch();
+$regdatetime = $row_ipt["regdatetime"];
 
         //sql_drug_allergy
         // $sql_drug_allergy = "select (concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
@@ -257,11 +261,11 @@
                                 <div class="col-sm-1"></div>
                                 <label >วันที่</label>
                                 <div class="col-sm-4">
-                                    <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?=(isset($row['receiver_medication_date']) ? htmlspecialchars($row['receiver_medication_date']) : '')?>">
+                                <input type="date" class="form-control form-control-sm" id="receiver_medication_date" name="receiver_medication_date" value="<?= (isset($row_ipt['regdate'])  ? htmlspecialchars($row_ipt['regdate']) : htmlspecialchars($row['receiver_medication_date'])) ?>">
                                 </div>
                                 <label>เวลา</label>
                                 <div class="col-sm-4">
-                                    <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?=(isset($row['receiver_medication_time']) ? htmlspecialchars($row['receiver_medication_time']) : '')?>">
+                                <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) && $admission_note_id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receiver_medication_time'])) ?>">
                                 </div>
                             </div><hr>
                             <div class="form-group row">
@@ -381,35 +385,18 @@
                             <div class="form-group row">
                             <label class="col-sm-12"><B>เข้ารับการรักษาโดย</B></label>
                             </div>
+
                             <div class="form-group row">
-                                <div class="col-sm-1"></div>
-                                <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['take_medication_by'] == 'มาเอง'
-                                                                ||$row['take_medication_by'] == NULL)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง"    onchange="custom_check('off_entered');">
-                                    <label class="custom-control-label" for="entered_by1">มาเอง</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['take_medication_by'] == 'แพทย์นัด')  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="entered_by2" name="take_medication_by" value="แพทย์นัด"    onchange="custom_check('off_entered');">
-                                    <label class="custom-control-label" for="entered_by2">แพทย์นัด</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['take_medication_by'] != 'มาเอง'
-                                                                &&$row['take_medication_by'] != 'แพทย์นัด'
-                                                                &&$row['take_medication_by'] != NULL)  {echo 'checked="checked"';} ?>
-                                        class="custom-control-input" id="entered_by3"    onchange="custom_check('on_entered');">
-                                    <label class="custom-control-label" for="entered_by3">ส่งตัวจาก</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by"
-                                            value="<?php if ($row['take_medication_by'] != 'มาเอง'
-                                                            &&$row['take_medication_by'] != 'แพทย์นัด') {echo htmlspecialchars($row['take_medication_by']);}?>"
-                                            <?php if (!($row['take_medication_by'] != 'มาเอง'
-                                                    &&$row['take_medication_by'] != 'แพทย์นัด'
-                                                    &&$row['take_medication_by'] != NULL)) {echo 'disabled';} ?>>
-                                </div>
-                            </div><hr>
+                                        <div class="col-sm-1"></div>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="take_medication_by" name="take_medication_by" value="<?= (isset($row_opdscreen['ovst_ist']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['ovst_ist']) : htmlspecialchars($row['take_medication_by'])) ?>">
+                                        </div>
+
+
+                                    </div>
+
+                           <hr>
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> นำส่งผู้ป่วยโดย</B></label>
                             </div>
@@ -2162,21 +2149,20 @@
                 </div>
             </div>
 
-       <!--                                      
+                                            
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="mb-3" for="action-person-nurse">ลงชื่อพยาบาล</label>
-               
                     <div class="input-group">
-                        <input type="text" class="form-control form-control" id="nurse_name"  name="nurse_name"  value="" readonly>
-                        <input type="text" class="form-control form-control" id="nurse_pos"   name="nurse_pos"   value="" readonly>
+                        <input type="text" class="form-control form-control" id="nurse_name"  name="nurse_name"  value="<?=htmlspecialchars($row['nurse_name'])?>" readonly>
+                        <input type="text" class="form-control form-control" id="nurse_pos"   name="nurse_pos"   value="<?=htmlspecialchars($row['nurse_pos'])?>" readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" onclick="PersonAsCurrentUser_1()">ลงชื่อ</button>
                         </div>
                     </div>
                 </div>
-            </div> 
-                        -->
+            </div>
+                        
 
         </div>
         <div class="form-group row">
