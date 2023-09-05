@@ -2427,6 +2427,7 @@ $row_period  = $stmt_period->fetch();
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_chest','Normal shape, no retraction')"><i class="fas fa-baby"></i> Chest Normal</button>
                                     </div>
                                 </div>
+                                
 
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Lungs</label>
