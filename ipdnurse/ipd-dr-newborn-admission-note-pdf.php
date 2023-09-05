@@ -941,11 +941,17 @@ $head =
                 <br>&nbsp;
                 Skin      : '.htmlspecialchars($row['pe_skin']).'
                 <br>&nbsp;
-                HEENT  : '.htmlspecialchars($row['pe_heent']).'
+                Head  : '.htmlspecialchars($row['pe_head']).'
                 <br>&nbsp;
-                Breast & Thorax  : '.htmlspecialchars($row['pe_breastthorax']).'
+                Neck  : '.htmlspecialchars($row['pe_neck']).'
                 <br>&nbsp;
-                Face : '.htmlspecialchars($row['pe_face']).'
+                Face  : '.htmlspecialchars($row['pe_face']).'
+                <br>&nbsp;
+                Ears  : '.htmlspecialchars($row['pe_ears']).'
+                <br>&nbsp;
+                Eyes  : '.htmlspecialchars($row['pe_eyes']).'
+                <br>&nbsp;
+                Nose  : '.htmlspecialchars($row['pe_nose']).'
                 <br>&nbsp;
                 Mouth : '.htmlspecialchars($row['pe_mouth']).'
                 <br>&nbsp;
@@ -954,32 +960,38 @@ $head =
                 Lungs : '.htmlspecialchars($row['pe_lungs']).'
                 <br>&nbsp;
                 Heart : '.htmlspecialchars($row['pe_heart']).'
-                <br>&nbsp;
-                Abdomen : '.htmlspecialchars($row['pe_abdomen']).'
-                <br>&nbsp;
-                Anus : '.htmlspecialchars($row['pe_anus']).'
-                <br>&nbsp; 
-                Extremities     : '.htmlspecialchars($row['pe_extremities']).'
+                <br>&nbsp;        
+            </td>
+            <td  width="50%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;text-align:center;" id="show_img_select">&nbsp;
+            '.$svg_tag.'
+        </td>
+        </tr>
+
+        <tr style="border:1px solid #000;margin: 35px;">
+        <td colspan="2" width="50%" style="margin: 35px;padding:4px;">&nbsp;
+        <br>&nbsp;
+        Abdomen : '.htmlspecialchars($row['pe_abdomen']).'
+        <br>&nbsp;
+Anus : '.htmlspecialchars($row['pe_anus']).'
+        <br>&nbsp; 
+        Extremities     : '.htmlspecialchars($row['pe_extremities']).'
                 <br>&nbsp;
                 Trunk & Spine : '.htmlspecialchars($row['pe_trunk_spine']).'
                 <br>&nbsp;
                 Nervous : '.htmlspecialchars($row['pe_nervose']).'
                 <br>&nbsp;
-                Rectal & Genitalia : '.htmlspecialchars($row['pe_rectalgenitalia']).'
-                <br>&nbsp;
-                Neurological : '.htmlspecialchars($row['pe_neurological']).'
-                <br>&nbsp;
-                OB/Gyn exam : '.htmlspecialchars($row['pe_ob_gynexam']).'
+                Genitalia : '.htmlspecialchars($row['pe_rectalgenitalia']).'
                 <br>&nbsp;
                 Other : '.htmlspecialchars($row['pe_other']).'
                 <br>&nbsp;
                 PE Text : '.htmlspecialchars($row['pe_text']).'
                 <br>&nbsp;
+        </td>
+        <td width="50%" style="border-left:0.5px solid #000;margin: 35px;padding:4px;">
+               
             </td>
-            <td  width="50%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;text-align:center;" id="show_img_select">&nbsp;
-                '.$svg_tag.'
-            </td>
-        </tr>
+        
+    </tr>
 
         <tr style="border:1px solid #000;margin: 35px;">
             <td colspan="2" width="50%" style="margin: 35px;padding:4px;">&nbsp;

@@ -899,73 +899,7 @@ $row_period  = $stmt_period->fetch();
                         }
                     </script>
 
-                    <div style="<?php if (($row_ipt['age_y'] >  15 && $row_ipt['age_m'] >= 0 && $row_ipt['age_d'] >= 0)
-                                    || ($row_ipt['age_y'] == 15 && $row_ipt['age_m'] >  0 && $row_ipt['age_d'] >  0)
-                                ) {
-                                    echo 'display:none;';
-                                } ?>">
-                        <div class="form-group row">
-                            <label class="col-sm-12">ประวัติการได้รับภูมิคุ้มกัน (เฉพาะเด็ก)</label>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row['receives_immunisation_history_kid'] == 'ครบตามวัย') {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="o1" name="receives_immunisation_history_kid" value="ครบตามวัย" onchange="custom_check('off_immunisation');">
-                                <label class="custom-control-label" for="o1">ครบตามวัย</label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if (
-                                                        $row['receives_immunisation_history_kid'] != 'ครบตามวัย'
-                                                        && $row['receives_immunisation_history_kid'] != null
-                                                        && $row['receives_immunisation_history_kid'] != ''
-                                                    ) {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="o2" name="receives_immunisation_history_kid" onchange="custom_check('on_immunisation');" value="ไม่ครบตามวัย">
-                                <label class="custom-control-label" for="o2">ไม่ครบ (ระบุ)</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-sm" id="o3" value="<?php if (!($row['receives_immunisation_history_kid'] == 'ครบตามวัย')) {
-                                                                                                            echo htmlspecialchars($row['receives_immunisation_history_kid']);
-                                                                                                        } ?>" name="receives_immunisation_history_kid_text">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-12">การพัฒนาการ (เฉพาะเด็ก)</label>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row['developmentally_kid'] == 'ปกติ') {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="p1" name="developmentally_kid" value="ปกติ" onchange="custom_check('off_developmentally');">
-                                <label class="custom-control-label" for="p1">ปกติ</label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if (
-                                                        $row['developmentally_kid'] != 'ปกติ'
-                                                        && $row['developmentally_kid'] != NULL
-                                                        && $row['developmentally_kid'] != ''
-                                                    ) {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="p2" name="developmentally_kid" value="ผิดปกติ" onchange="custom_check('on_developmentally');">
-                                <label class="custom-control-label" for="p2">ผิดปกติ (ระบุ)</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-sm" id="p3" value="<?php if (!($row['developmentally_kid'] == 'ปกติ')) {
-                                                                                                            echo htmlspecialchars($row['developmentally_kid']);
-                                                                                                        } ?>" name="developmentally_kid_text">
-                            </div>
-                        </div>
-                        <!-- display:none -->
-                    </div>
+                 
 
 
                     <div style="<?php if ($row_ipt['age_y'] >  14) {
@@ -1997,7 +1931,76 @@ $row_period  = $stmt_period->fetch();
                                         </div>
                                         <label class="col-sm-2">กรัม</label>
                                     </div>
-                                                                                                                -->
+                                             
+                                -->
+
+                                <div style="<?php if (($row_ipt['age_y'] >  15 && $row_ipt['age_m'] >= 0 && $row_ipt['age_d'] >= 0)
+                                    || ($row_ipt['age_y'] == 15 && $row_ipt['age_m'] >  0 && $row_ipt['age_d'] >  0)
+                                ) {
+                                    echo 'display:none;';
+                                } ?>">
+                        <div class="form-group row">
+                            <label class="col-sm-12">ประวัติการได้รับภูมิคุ้มกัน (เฉพาะเด็ก)</label>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1"></div>
+                            <div class="custom-control custom-radio col-sm-2">
+                                <input type="radio" <?php if ($row['receives_immunisation_history_kid'] == 'ครบตามวัย') {
+                                                        echo 'checked="checked"';
+                                                    } ?> class="custom-control-input" id="o1" name="receives_immunisation_history_kid" value="ครบตามวัย" onchange="custom_check('off_immunisation');">
+                                <label class="custom-control-label" for="o1">ครบตามวัย</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1"></div>
+                            <div class="custom-control custom-radio col-sm-2">
+                                <input type="radio" <?php if (
+                                                        $row['receives_immunisation_history_kid'] != 'ครบตามวัย'
+                                                        && $row['receives_immunisation_history_kid'] != null
+                                                        && $row['receives_immunisation_history_kid'] != ''
+                                                    ) {
+                                                        echo 'checked="checked"';
+                                                    } ?> class="custom-control-input" id="o2" name="receives_immunisation_history_kid" onchange="custom_check('on_immunisation');" value="ไม่ครบตามวัย">
+                                <label class="custom-control-label" for="o2">ไม่ครบ (ระบุ)</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-sm" id="o3" value="<?php if (!($row['receives_immunisation_history_kid'] == 'ครบตามวัย')) {
+                                                                                                            echo htmlspecialchars($row['receives_immunisation_history_kid']);
+                                                                                                        } ?>" name="receives_immunisation_history_kid_text">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12">การพัฒนาการ (เฉพาะเด็ก)</label>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1"></div>
+                            <div class="custom-control custom-radio col-sm-2">
+                                <input type="radio" <?php if ($row['developmentally_kid'] == 'ปกติ') {
+                                                        echo 'checked="checked"';
+                                                    } ?> class="custom-control-input" id="p1" name="developmentally_kid" value="ปกติ" onchange="custom_check('off_developmentally');">
+                                <label class="custom-control-label" for="p1">ปกติ</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-1"></div>
+                            <div class="custom-control custom-radio col-sm-2">
+                                <input type="radio" <?php if (
+                                                        $row['developmentally_kid'] != 'ปกติ'
+                                                        && $row['developmentally_kid'] != NULL
+                                                        && $row['developmentally_kid'] != ''
+                                                    ) {
+                                                        echo 'checked="checked"';
+                                                    } ?> class="custom-control-input" id="p2" name="developmentally_kid" value="ผิดปกติ" onchange="custom_check('on_developmentally');">
+                                <label class="custom-control-label" for="p2">ผิดปกติ (ระบุ)</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-sm" id="p3" value="<?php if (!($row['developmentally_kid'] == 'ปกติ')) {
+                                                                                                            echo htmlspecialchars($row['developmentally_kid']);
+                                                                                                        } ?>" name="developmentally_kid_text">
+                            </div>
+                        </div>
+                        <!-- display:none -->
+                    </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-12">การเลี้ยงทารก</label>
@@ -2431,7 +2434,7 @@ $row_period  = $stmt_period->fetch();
                                         <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_lung_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_lung_text']) : htmlspecialchars($row['pe_lungs'])) ?>" id="pe_lungs" name="pe_lungs">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','Normal breat sound , no grunting')"><i class="fas fa-baby"></i> Lungs Normal</button>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','Normal breats sound , no grunting')"><i class="fas fa-baby"></i> Lungs Normal</button>
                                     </div>
                                 </div>
 
