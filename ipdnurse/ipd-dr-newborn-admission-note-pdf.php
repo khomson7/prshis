@@ -311,6 +311,21 @@ if ($row['c_bcg'] == 'Y') {
     $checkbox_bcg = '(' . $image_check . ')';
 }
 
+$checkbox_inf_office = '( )';
+if ($row['c_inform_officer'] == 'Y') {
+    $checkbox_inf_office = '(' . $image_check . ')';
+}
+
+$checkbox_inf_mother = '( )';
+if ($row['c_inform_mother'] == 'Y') {
+    $checkbox_inf_mother = '(' . $image_check . ')';
+}
+
+$checkbox_inf_etc = '( )';
+if ($row['c_inform_etc'] == 'Y') {
+    $checkbox_inf_etc = '(' . $image_check . ')';
+}
+
 
 
 $checkbox_allergy_1 = '( )';
@@ -601,6 +616,10 @@ $style_c_serology = '';
 $style_c_anterpartum = '';
 $style_c_hbv = '';
 $style_c_bcg = '';
+$style_c_inform_officer = '';
+$style_c_inform_mother = '';
+$style_c_inform_etc = '';
+$style_c_inform_etc_text = '';
 
 if (($row['g'] == null || $row['g'] == '')
     && ($row['p'] == null || $row['p'] == '')
@@ -675,6 +694,23 @@ if ($row['c_hbv'] == null || $row['c_hbv'] == '') {
 if ($row['c_bcg'] == null || $row['c_bcg'] == '') {
     $style_c_bcg = 'display: none;';
 }
+
+if ($row['c_inform_officer'] == null || $row['c_inform_officer'] == '') {
+    $style_c_inform_officer = 'display: none;';
+}
+
+if ($row['c_inform_mother'] == null || $row['c_inform_mother'] == '') {
+    $style_c_inform_mother = 'display: none;';
+}
+
+if ($row['c_inform_etc'] == null || $row['c_inform_etc'] == '') {
+    $style_c_inform_etc = 'display: none;';
+}
+
+if ($row['c_inform_etc_text'] == null || $row['c_inform_etc_text'] == '') {
+    $style_c_inform_etc_text = 'display: none;';
+}
+
 
 
 
@@ -1060,7 +1096,12 @@ $head =
                     <var style="' . $style_tt . '"> &nbsp;ได้ TT:   ' . htmlspecialchars($row['tt']) . '  เข็ม</var><br><br>
                     <var style="' .  '"> <b>Newborn vaccination : </b> '. ' </var>
                     <var style="' . $style_c_hbv . '"> <label>'. $checkbox_hbv .' HBV</label> ' . ' </var>
-                    <var style="' . $style_c_bcg . '"> <label>'. $checkbox_bcg .' BCG</label> ' . ' </var>
+                    <var style="' . $style_c_bcg . '"> <label>'. $checkbox_bcg .' BCG</label> ' . ' </var><br><br>
+                    <var style="' .  '"> <b>ผู้ให้ข้อมูล : </b> '. ' </var>
+                    <var style="' . $style_c_inform_officer . '"> <label>'. $checkbox_inf_office .' เจ้าหน้าที่</label> ' . ' </var>
+                    <var style="' . $style_c_inform_mother . '"> <label>'. $checkbox_inf_mother .' มารดา</label> ' . ' </var>
+                    <var style="' . $style_c_inform_etc . '"> <label>'. $checkbox_inf_etc .' อื่นๆ ระบุ</label> ' . ' </var>
+                    <var style="' . $style_c_inform_etc_text . '"> &nbsp;' . htmlspecialchars($row['c_inform_etc_text']) . ' </var>
                     
                 </p>
                             
