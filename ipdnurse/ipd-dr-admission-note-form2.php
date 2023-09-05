@@ -2401,7 +2401,7 @@ $row_period  = $stmt_period->fetch();
                                         <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_opdscreen['pe_lung_text']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['pe_lung_text']) : htmlspecialchars($row['pe_lungs'])) ?>" id="pe_lungs" name="pe_lungs">
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','Normal breats sound , no grunting')"><i class="fas fa-baby"></i> Lungs Normal</button>
+                                        <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_lungs','Normal breath sound , no grunting')"><i class="fas fa-baby"></i> Lungs Normal</button>
                                     </div>
                                 </div>
 
@@ -2557,27 +2557,27 @@ $row_period  = $stmt_period->fetch();
                     </div>
                 </div>
 
-                <div class="form-group row">
+              <!--  <div class="form-group row">
                     <div class="col-sm-12">
                         <div class="card border-success">
                             <div class="card-body">
-                                <h5 class="card-title"></h5>
+                                <h5 class="card-title"></h5> -->
                                 <!-- <div class="text-right">
                             <button type="button" class="btn btn-outline-success" onclick="onclick_img_button()"><i class='fas fa-edit'></i> แก้ไขรูปภาพ</button>
                         </div> -->
-                                <div class="col-sm-8 offset-sm-3 mb-3">
+                              <!--  <div class="col-sm-8 offset-sm-3 mb-3">
                                     <div id="show_img_select" class="text-center">
                                         <canvas id="c" width="700" height="500"></canvas>
                                     </div>
-                                </div>
+                                </div> 
                                 <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                                     <div class="text-center">
                                         <a href="javascript:undo();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                         <a href="javascript:redo();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                         <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear()"><i class='fas fa-edit'></i> Clear</button>
                                     </div>
-                                </div>
-                                <div>
+                                </div> -->
+                        <!--        <div>
                                     <div class="form-group">
                                         <label for=""></label>
                                         <textarea style="display:none;" class="form-control" name="svg_tag" id="svg_tag" rows="10"><?= (isset($row['svg_tag']) ? htmlspecialchars($row['svg_tag']) : '') ?></textarea>
@@ -2586,7 +2586,8 @@ $row_period  = $stmt_period->fetch();
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <div class="card">
