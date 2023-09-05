@@ -90,17 +90,14 @@ if ($admission_note_id == null || $admission_note_id != null) {
 
 //labor
 if ($admission_note_id == null || $admission_note_id != null) {
-    $sql_labor = "select :hospital_name as hospname,(select concat(pt.hn,' : ',pname,pt.fname,' ',pt.lname,' อายุ ',a.age_y,' ปี') from hos.patient pt where pt.hn = i.hn) as mother_,li.birth_date,li.birth_time,li.body_length,li.apgar_score_min1,li.apgar_score_min5,li.apgar_score_min10, i1.name as pdx_name ,
-    il.g,concat(il.t,il.p,il.a,il.l) as p,birth_weight,round(body_length,0) as body_length,round(head_length,0) as head_length
-    ,d1.name as adm_doctor_name  ,  d2.name as dch_doctor_name ,  s.name as spclty_name,
+    $sql_labor = "select li.birth_date,li.birth_time,li.body_length,li.apgar_score_min1, i1.name as pdx_name ,
+    d1.name as adm_doctor_name  ,  d2.name as dch_doctor_name ,  s.name as spclty_name,
     p.name as pttype_name ,  dc.name as dchstts_name,
-     dt.name as dchtype_name,  y.ipt_type_name,  wd.name as ward_name,  idm.bedno,idm.roomno,ii.infant_indication_type_name,il.ga
-     ,li.infant_check_hepb,li.infant_check_bcg,li.infant_delivery_type_id
+     dt.name as dchtype_name,  y.ipt_type_name,  wd.name as ward_name,  idm.bedno,idm.roomno
      from " . DbConstant::HOSXP_DBNAME . ".ipt i
      left outer join " . DbConstant::HOSXP_DBNAME . ".an_stat a on a.an=i.an
      left outer join " . DbConstant::HOSXP_DBNAME . ".ipt_labour il on il.an =i.an
      left outer join " . DbConstant::HOSXP_DBNAME . ".ipt_labour_infant li on li.ipt_labour_id=il.ipt_labour_id
-     LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".infant_indication_type ii on ii.infant_indication_type_id=li.infant_indication_type_id
      left outer join " . DbConstant::HOSXP_DBNAME . ".ipt_pregnancy ip on ip.an =i.an
      left outer join " . DbConstant::HOSXP_DBNAME . ".labor la on la.an =i.an
      left outer join " . DbConstant::HOSXP_DBNAME . ".ipt_pregnancy_vital_sign  iv on iv.an =i.an
@@ -116,7 +113,7 @@ if ($admission_note_id == null || $admission_note_id != null) {
      left outer join " . DbConstant::HOSXP_DBNAME . ".iptadm idm on idm.an = i.an
      left outer join " . DbConstant::HOSXP_DBNAME . ".ipt_type y on y.ipt_type = i.ipt_type  where /*i.an='520008059'*/ la.laborid =:laborid";
     $stmt_labor = $conn->prepare($sql_labor);
-    $stmt_labor->execute(['laborid' => $laborid, 'hospital_name' => DbConstant::HOSPITAL_NAME]);
+    $stmt_labor->execute(['laborid' => $laborid]);
     $row_labor  = $stmt_labor->fetch();
 }
 
@@ -522,7 +519,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B>เด็กแรกคลอด</B></label>
 
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" <?php if ($row_labor['birth_date'] != null || $row['c_born_type_in'] == '1') {
+                                    <input type="radio" <?php if ($row['c_born_type_in'] == '1') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="born_type_in1" name="c_born_type_in" value="1" onchange="born_typein_check('off_checked');">
                                     <label class="custom-control-label" for="born_type_in1">ในโรงพยาบาล</label>
@@ -561,35 +558,35 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B>เด็กแรกเกิด คลอดวิธี</B></label>
 
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['c_labor_type'] == '1' ||$row_labor['infant_delivery_type_id'] == '1') {
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '1') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="c_labor_type1" name="c_labor_type" value="1" onchange="labor_type_check('off_checked');">
                                     <label class="custom-control-label" for="c_labor_type1">Normal delivery</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" <?php if ($row['c_labor_type'] == '2' || $row_labor['infant_delivery_type_id']  == '2') {
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '2') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="c_labor_type2" name="c_labor_type" value="2" onchange="labor_type_check('off_checked');">
                                     <label class="custom-control-label" for="c_labor_type2">V/E</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" <?php if ($row['c_labor_type'] == '3' || $row_labor['infant_delivery_type_id']  == '3') {
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '3') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="c_labor_type3" name="c_labor_type" value="3" onchange="labor_type_check('off_checked');">
                                     <label class="custom-control-label" for="c_labor_type3">F/E</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" <?php if ($row['c_labor_type'] == '4' || $row_labor['infant_delivery_type_id']  == '4') {
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '4') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="c_labor_type4" name="c_labor_type" value="4" onchange="labor_type_check('off_checked');">
                                     <label class="custom-control-label" for="c_labor_type4">C/S</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['c_labor_type'] == '5' || $row_labor['infant_delivery_type_id']  == '5') {
+                                    <input type="radio" <?php if ($row['c_labor_type'] == '5') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="c_labor_type5" name="c_labor_type" value="5" onchange="labor_type_check('on_checked');">
                                     <label class="custom-control-label" for="c_labor_type5">Breech assisting</label>
@@ -607,7 +604,7 @@ $row_period  = $stmt_period->fetch();
                                 <label class="col-sm-2"><B></B></label>
                                 <label class="col-sm-1"><B>Indication</B></label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_labor['infant_indication_type_name'])  ? htmlspecialchars($row_labor['infant_indication_type_name']) : htmlspecialchars($row['c_indication'])) ?>" id="c_indication" name="c_indication">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['c_indication']) ? htmlspecialchars($row['c_indication']) : '') ?>" id="c_indication" name="c_indication">
                                 </div>
                                 <label class="col-sm-2"><B>Intrapartum complication</B></label>
                                 <div class="col-sm-3">
@@ -635,351 +632,62 @@ $row_period  = $stmt_period->fetch();
                     </div>
 
 
-                    <?php
-                                if ($admission_note_id == null) {
-                                    $allergy_drug_pos = [];
-                                    $opd_er_allergy_history_list = KphisQueryUtils::getOpdErAllergyListByAn($an);
-                                    foreach ($opd_er_allergy_history_list as $opd_er_allergy_history_item) {
-                                        array_push($allergy_drug_pos, $opd_er_allergy_history_item['er_allergy_history_agent'], $opd_er_allergy_history_item['er_allergy_history_symptom']);
-                                    }
-                                    array_push($allergy_drug_pos, '');
-                                } else {
-                                    $allergy_drug_pos = explode(" ", $row['allergy_drug_history']);
-                                }
-                                ?>
-                                <div class="form-group row">
-                                    <label class="col-sm-12">ประวัติแพ้</label>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-1"></div>
-                                    <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?= ($row['allergy_history'] == "ไม่มี"
-                                                                || $row['allergy_history'] == NULL ? 'checked="checked"' : '') ?> <?= (isset($row_ipt['drugallergy'])  ? 'disabled' : '') ?> class="custom-control-input" id="u1" name="allergy_history" value="ไม่มี" onchange="custom_check('off_allergy');">
-                                        <label class="custom-control-label" for="u1">ไม่มี</label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-1"></div>
-                                    <div class="custom-control custom-radio col-sm-2">
-                                        <input type="radio" <?= ($row['allergy_history'] == "มี"
-                                                                || (count($allergy_drug_pos) >= 2) ? 'checked="checked"' : '') ?> class="custom-control-input" id="u2" name="allergy_history" value="มี" onchange="custom_check('on_allergy');">
-                                        <label class="custom-control-label" for="u2">มี (ระบุ)</label>
-                                    </div>
-                                    <div class="col-sm-2">ประวัติการแพ้ยาใน HOSxP<br><small class="text-info">(ณ เวลาที่บันทึกแรกรับครั้งแรก)</small></div>
-                                    <div class="col-sm-6">
-                                        <textarea class="form-control text-danger" rows="3" readonly="readonly" id="allergy_drug_history_hosxp" name="allergy_drug_history_hosxp"><?= htmlspecialchars(($admission_note_id == null) ? ($row_ipt['drugallergy']) : ($row['allergy_drug_history_hosxp'])) ?></textarea>
-                                    </div>
-                                </div>
-                                <?php
-                                $opd_er_allergy_history = KphisQueryUtils::getOpdErAllergyWithSymptomByAn($an, 'Y');
-                                if ($opd_er_allergy_history != null) { ?>
-                                    <div class="form-group row">
-                                        <div class="col-sm-1"></div>
-                                        <div class="custom-control custom-radio col-sm-2"></div>
-                                        <div class="col-sm-2">แจ้งแพ้ยา (ER)<br><small class="text-info"></small></div>
-                                        <div class="col-sm-6">
-                                            <textarea class="form-control text-danger" rows="3" readonly="readonly"><?= htmlspecialchars($opd_er_allergy_history) ?></textarea>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <div class="form-group row">
-                                    <div class="col-sm-3"></div>
-                                    <div class="custom-control col-sm-2">
-                                    </div>
-                                    <div class="col-sm-3"><label class="text-right">ชื่อ</label></div>
-                                    <div class="col-sm-2"><label class="text-right">อาการที่แพ้</label></div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-3"></div>
-                                    <div class="custom-control col-sm-2">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_drug()'><i class="fas fa-plus-square"></i></a>
-                                        <label for="uu1">   ยา</label>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_drug_pri1" name="allergy_drug_pri1" value="<?= ((count($allergy_drug_pos) >= 2) ? htmlspecialchars($allergy_drug_pos[0]) : '') ?>">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_drug_sec1" name="allergy_drug_sec1" value="<?= ((count($allergy_drug_pos) >= 2) ? htmlspecialchars($allergy_drug_pos[1]) : '') ?>">
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove_drug()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
-                                        <label> </label>
-                                    </div>
-                                </div>
-                                <?php
-                                $y = 2;
-                                $z = 2;
-                                for ($x = 1; $x < (count($allergy_drug_pos) - 1) / 2; $x++) {
-                                    echo "<div id='allergy_drug_row" . $z . "' class='form-group row'>
-                                        <div class='col-sm-5'></div>
-                                        <div class='col-sm-3'>
-                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_pri" . $z . "' name='allergy_drug_pri" . $z . "' value='" . htmlspecialchars($allergy_drug_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='col-sm-3'>
-                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_sec" . $z . "' name='allergy_drug_sec" . $z . "' value='" . htmlspecialchars($allergy_drug_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='col-sm-1'>
-                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_drug(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
-                                            <label> </label>
-                                        </div>
-                                    </div>";
-                                    $z++;
-                                }
-                                ?>
-                                <div id="new_chq_drug"></div><input type="hidden" id="total_chq_drug" value="<?php if ((count($allergy_drug_pos) < 2)) {
-                                                                                                                    echo 1;
-                                                                                                                } else {
-                                                                                                                    echo (count($allergy_drug_pos) - 1) / 2;
-                                                                                                                } ?>">
-                                <div class="form-group row"><textarea style="display:none;" name="allergy_drug_history" id="allergy_drug_history" cols="30" rows="10"></textarea></div>
-                                <script>
-                                    function add_drug() {
-                                        var new_chq_no_drug = parseInt($('#total_chq_drug').val()) + 1;
-                                        var new_input_drug = "<div id='allergy_drug_row" + new_chq_no_drug + "'class='form-group row'> <div class='col-sm-3'></div><div class='custom-control col-sm-2'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_pri" +
-                                            new_chq_no_drug + "'name='allergy_drug_pri" + new_chq_no_drug + "'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_sec" +
-                                            new_chq_no_drug + "'name='allergy_drug_sec" + new_chq_no_drug + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_drug(" +
-                                            new_chq_no_drug + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
-                                        $('#new_chq_drug').append(new_input_drug);
-                                        $('#total_chq_drug').val(new_chq_no_drug);
-                                    }
+                    <div class="form-group row">
+                        <label class="col-sm-1"><B>ประวัติแพ้ยา</B></label>
+                        <div class="col-sm-1"></div>
+                        <div class="custom-control custom-radio col-sm-2">
+                            <input type="radio" <?php if (
+                                                    $row['c_drug_allergy'] == 'ไม่ทราบ'
+                                                ) {
+                                                    echo 'checked="checked"';
+                                                } ?> class="custom-control-input" id="c_drug_allergy1" name="c_drug_allergy" value="ไม่ทราบ" onchange="allergy_check('off_checked');">
+                            <label class="custom-control-label" for="c_drug_allergy1">ไม่ทราบ</label>
+                        </div>
 
-                                    function remove_pos_drug(last_chq_no) {
-                                        $('#allergy_drug_row' + last_chq_no).remove();
-                                        $('#allergy_drug_pri' + last_chq_no).remove();
-                                        $('#allergy_drug_sec' + last_chq_no).remove();
-                                    }
+                        <div class="custom-control custom-radio col-sm-2">
+                            <input type="radio" <?php if (
+                                                    $row['c_drug_allergy'] != 'ไม่ทราบ'
+                                                    && $row['c_drug_allergy'] != NULL
+                                                ) {
+                                                    echo 'checked="checked"';
+                                                } ?> class="custom-control-input" id="c_drug_allergy2" onchange="allergy_check('on_checked');">
+                            <label class="custom-control-label" for="c_drug_allergy2">แพ้ ระบุ</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-sm" id="c_drug_allergy_text" name="c_drug_allergy" value="<?php if ($row['c_drug_allergy'] != 'ไม่ทราบ') {
+                                                                                                                                                echo htmlspecialchars($row['c_drug_allergy']);
+                                                                                                                                            } ?>" <?php if (!($row['c_drug_allergy'] != 'ไม่ทราบ'
+                                                                                                                                                        && $row['c_drug_allergy'] != NULL)) {
+                                                                                                                                                        echo 'disabled';
+                                                                                                                                                    } ?>>
+                        </div>
 
-                                    function remove_drug() {
-                                        $('#allergy_drug_pri1').val('');
-                                        $('#allergy_drug_sec1').val('');
-                                    }
-                                </script>
-                                <div class="form-group row">
-                                    <div class="col-sm-3"></div>
-                                    <div class="custom-control col-sm-2">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_food()'><i class="fas fa-plus-square"></i></a>
-                                        <label for="uu2">   อาหาร</label><?php $allergy_food_pos = explode(" ", $row['allergy_food_history']); ?>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_food_pri1" name="allergy_food_pri1" value="<?= (isset($row['allergy_food_history']) ? htmlspecialchars($allergy_food_pos[0]) : '') ?>">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_food_sec1" name="allergy_food_sec1" value="<?= (isset($row['allergy_food_history']) ? htmlspecialchars($allergy_food_pos[1]) : '') ?>">
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove_food()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
-                                        <label> </label>
-                                    </div>
-                                </div>
-                                <?php $y = 2;
-                                $z = 2;
-                                for ($x = 1; $x < (count($allergy_food_pos) - 1) / 2; $x++) {
-                                    echo "<div id='allergy_food_row" . $z . "' class='form-group row'>
-                                        <div class='col-sm-5'></div>
-                                        <div class='col-sm-3'>
-                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_pri" . $z . "' name='allergy_food_pri" . $z . "' value='" . htmlspecialchars($allergy_food_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='col-sm-3'>
-                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_sec" . $z . "' name='allergy_food_sec" . $z . "' value='" . htmlspecialchars($allergy_food_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='col-sm-1'>
-                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_food(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
-                                            <label> </label>
-                                        </div>
-                                    </div>";
-                                    $z++;
-                                }
-                                ?>
-                                <div id="new_chq_food"></div><input type="hidden" id="total_chq_food" value="<?php if ($row['allergy_food_history'] == null) {
-                                                                                                                    echo 1;
-                                                                                                                } else {
-                                                                                                                    echo (count($allergy_food_pos) - 1) / 2;
-                                                                                                                } ?>">
-                                <div class="form-group row"><textarea style="display:none;" name="allergy_food_history" id="allergy_food_history" cols="30" rows="10"></textarea></div>
-                                <script>
-                                    function add_food() {
-                                        var new_chq_no_food = parseInt($('#total_chq_food').val()) + 1;
-                                        var new_input_food = "<div id='allergy_food_row" + new_chq_no_food + "'class='form-group row'> <div class='col-sm-3'></div><div class='custom-control col-sm-2'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_pri" +
-                                            new_chq_no_food + "'name='allergy_food_pri" + new_chq_no_food + "'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_sec" +
-                                            new_chq_no_food + "'name='allergy_food_sec" + new_chq_no_food + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_food(" +
-                                            new_chq_no_food + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
-                                        $('#new_chq_food').append(new_input_food);
-                                        $('#total_chq_food').val(new_chq_no_food);
-                                    }
 
-                                    function remove_pos_food(last_chq_no) {
-                                        $('#allergy_food_row' + last_chq_no).remove();
-                                        $('#allergy_food_pri' + last_chq_no).remove();
-                                        $('#allergy_food_sec' + last_chq_no).remove();
-                                    }
-
-                                    function remove_food() {
-                                        $('#allergy_food_pri1').val('');
-                                        $('#allergy_food_sec1').val('');
-                                    }
-                                </script>
-                                <div class="form-group row">
-                                    <div class="col-sm-3"></div>
-                                    <div class="custom-control col-sm-2">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_etc()'><i class="fas fa-plus-square"></i></a>
-                                        <label for="uu3">   อื่นๆ</label><?php $allergy_etc_pos = explode(" ", $row['allergy_etc_history']); ?>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_etc_pri1" name="allergy_etc_pri1" value="<?= (isset($row['allergy_etc_history']) ? htmlspecialchars($allergy_etc_pos[0]) : '') ?>">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_etc_sec1" name="allergy_etc_sec1" value="<?= (isset($row['allergy_etc_history']) ? htmlspecialchars($allergy_etc_pos[1]) : '') ?>">
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove_etc()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
-                                        <label> </label>
-                                    </div>
-                                </div>
-                                <?php $y = 2;
-                                $z = 2;
-                                for ($x = 1; $x < (count($allergy_etc_pos) - 1) / 2; $x++) {
-                                    echo "<div id='allergy_etc_row" . $z . "'class='form-group row'>
-                                        <div class='col-sm-5'></div>
-                                        <div class='col-sm-3'>
-                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_pri" . $z . "' name='allergy_etc_pri" . $z . "' value='" . htmlspecialchars($allergy_etc_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='col-sm-3'>
-                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_sec" . $z . "' name='allergy_etc_sec" . $z . "' value='" . htmlspecialchars($allergy_etc_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='col-sm-1'>
-                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_etc(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
-                                            <label> </label>
-                                        </div>
-                                    </div>";
-                                    $z++;
-                                }
-                                ?>
-                                <div id="new_chq_etc"></div><input type="hidden" id="total_chq_etc" value="<?php if ($row['allergy_etc_history'] == null) {
-                                                                                                                echo 1;
-                                                                                                            } else {
-                                                                                                                echo (count($allergy_etc_pos) - 1) / 2;
-                                                                                                            } ?>">
-                                <div class="form-group row"><textarea style="display:none;" name="allergy_etc_history" id="allergy_etc_history" cols="30" rows="10"></textarea></div>
-                                <script>
-                                    function add_etc() {
-                                        var new_chq_no_etc = parseInt($('#total_chq_etc').val()) + 1;
-                                        var new_input_etc = "<div id='allergy_etc_row" + new_chq_no_etc + "'class='form-group row'> <div class='col-sm-3'></div><div class='custom-control col-sm-2'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_pri" +
-                                            new_chq_no_etc + "'name='allergy_etc_pri" + new_chq_no_etc + "'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_sec" +
-                                            new_chq_no_etc + "'name='allergy_etc_sec" + new_chq_no_etc + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_etc(" +
-                                            new_chq_no_etc + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
-                                        $('#new_chq_etc').append(new_input_etc);
-                                        $('#total_chq_etc').val(new_chq_no_etc);
-                                    }
-
-                                    function remove_pos_etc(last_chq_no) {
-                                        $('#allergy_etc_row' + last_chq_no).remove();
-                                        $('#allergy_etc_pri' + last_chq_no).remove();
-                                        $('#allergy_etc_sec' + last_chq_no).remove();
-                                    }
-
-                                    function remove_etc() {
-                                        $('#allergy_etc_pri1').val('');
-                                        $('#allergy_etc_sec1').val('');
-                                    }
-                                </script>
-
-                    <div style="<?php if (($row_ipt['age_y'] >  15 && $row_ipt['age_m'] >= 0 && $row_ipt['age_d'] >= 0)
-                                                || ($row_ipt['age_y'] == 15 && $row_ipt['age_m'] >  0 && $row_ipt['age_d'] >  0)
-                                            ) {
-                                                echo 'display:none;';
-                                            } ?>">
-                                    <div class="form-group row">
-                                        <label class="col-sm-12">ประวัติการได้รับภูมิคุ้มกัน (เฉพาะเด็ก)</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-1"></div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if ($row['receives_immunisation_history_kid'] == 'ครบตามวัย') {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="o1" name="receives_immunisation_history_kid" value="ครบตามวัย" onchange="custom_check('off_immunisation');">
-                                            <label class="custom-control-label" for="o1">ครบตามวัย</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-1"></div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if (
-                                                                    $row['receives_immunisation_history_kid'] != 'ครบตามวัย'
-                                                                    && $row['receives_immunisation_history_kid'] != null
-                                                                    && $row['receives_immunisation_history_kid'] != ''
-                                                                ) {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="o2" name="receives_immunisation_history_kid" onchange="custom_check('on_immunisation');" value="ไม่ครบตามวัย">
-                                            <label class="custom-control-label" for="o2">ไม่ครบ (ระบุ)</label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="o3" value="<?php if (!($row['receives_immunisation_history_kid'] == 'ครบตามวัย')) {
-                                                                                                                        echo htmlspecialchars($row['receives_immunisation_history_kid']);
-                                                                                                                    } ?>" name="receives_immunisation_history_kid_text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-12">การพัฒนาการ (เฉพาะเด็ก)</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-1"></div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if ($row['developmentally_kid'] == 'ปกติ') {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="p1" name="developmentally_kid" value="ปกติ" onchange="custom_check('off_developmentally');">
-                                            <label class="custom-control-label" for="p1">ปกติ</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-1"></div>
-                                        <div class="custom-control custom-radio col-sm-2">
-                                            <input type="radio" <?php if (
-                                                                    $row['developmentally_kid'] != 'ปกติ'
-                                                                    && $row['developmentally_kid'] != NULL
-                                                                    && $row['developmentally_kid'] != ''
-                                                                ) {
-                                                                    echo 'checked="checked"';
-                                                                } ?> class="custom-control-input" id="p2" name="developmentally_kid" value="ผิดปกติ" onchange="custom_check('on_developmentally');">
-                                            <label class="custom-control-label" for="p2">ผิดปกติ (ระบุ)</label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="p3" value="<?php if (!($row['developmentally_kid'] == 'ปกติ')) {
-                                                                                                                        echo htmlspecialchars($row['developmentally_kid']);
-                                                                                                                    } ?>" name="developmentally_kid_text">
-                                        </div>
-                                    </div>
-                                    <!-- display:none -->
-                                </div>
+                    </div>
 
 
                     <div style="<?php if ($row_ipt['age_y'] >  14) {
                                                 echo 'display:none;';
                                             } ?>">
-                                       
-                                        <div class="input-group input-group-sm sm-1">
-                                            <font color="red"><B>ข้อมูลแม่:</B></font> &nbsp;<input type="text" style="color: red;" class="form-control" id="aa" name="aa" value="<?= (isset($row_labor['mother_']) ? htmlspecialchars($row_labor['mother_']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
-                                           
-                                        </div>
-                                    
                                     <div class="form-group row">
-                                        <label class="col-sm-12"><b>Menternal history</b></label>
+                                        <label class="col-sm-12">มารดา</label>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-1"></div>
                                         <label class="text-right col-sm-1">G</label>
                                         <div class="col-sm-2">
-                                            <input type="text" class="form-control form-control-sm" value="<?= (isset($row_labor['g'])  ? htmlspecialchars($row_labor['g']) : htmlspecialchars($row['g'])) ?>" id="g" name="g">
+                                            <input type="text" class="form-control form-control-sm" value="<?= (isset($row['g']) ? htmlspecialchars($row['g']) : '') ?>" id="" name="g">
                                         </div>
                                         <label class="text-right col-sm-1">P</label>
                                         <div class="col-sm-2">
-                                            <input type="text" class="form-control form-control-sm" value="<?= (isset($row_labor['p'])  ? htmlspecialchars($row_labor['p']) : htmlspecialchars($row['p'])) ?>" id="" name="p">
+                                            <input type="text" class="form-control form-control-sm" value="<?= (isset($row['p']) ? htmlspecialchars($row['p']) : '') ?>" id="" name="p">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-1"></div>
                                         <label class="text-right col-sm-1">ANC ที่</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control form-control-sm" value="<?= (isset($row_labor['hospname'])  ? htmlspecialchars($row_labor['hospname']) : htmlspecialchars($row['anc'])) ?>" id="anc" name="anc">
+                                            <input type="text" class="form-control form-control-sm" value="<?= (isset($row['anc']) ? htmlspecialchars($row['anc']) : '') ?>" id="" name="anc">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -998,16 +706,48 @@ $row_period  = $stmt_period->fetch();
                                         <label class="text-right col-sm-2">อายุครรภ์</label>
                                         <div class="col-sm-2">
                                             <div class="input-group input-group-sm sm-2">
-                                                <input type="text" class="form-control" value="<?= (isset($row['gestational_age']) ? htmlspecialchars($row['gestational_age']) : '') ?>" id="gestational_age" name="gestational_age" aria-describedby="inputGroup-sizing-sm">
+                                                <input type="text" class="form-control" value="<?= (isset($row['gestational_age']) ? htmlspecialchars($row['gestational_age']) : '') ?>" id="" name="gestational_age" aria-describedby="inputGroup-sizing-sm">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm"> สัปดาห์  </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        
+                                        <div class="col-sm-2">
+                                            <div class="input-group input-group-sm sm-2">
+                                                <input type="text" class="form-control" value="<?= (isset($row['gestational_day']) ? htmlspecialchars($row['gestational_day']) : '') ?>" id="" name="gestational_day" aria-describedby="inputGroup-sizing-sm">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm"> วัน  </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- display:none -->
                                 </div>
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-1"><B>Menternal history</B></label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="G" class="form-control form-control-sm" value="<?= (isset($row['c_g']) ? htmlspecialchars($row['c_g']) : '') ?>" id="c_g" name="c_g" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="Tp" class="form-control form-control-sm" value="<?= (isset($row['c_tp']) ? htmlspecialchars($row['c_tp']) : '') ?>" id="c_tp" name="c_tp" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="Pre" class="form-control form-control-sm" value="<?= (isset($row['c_pre']) ? htmlspecialchars($row['c_pre']) : '') ?>" id="c_pre" name="c_pre" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="A" class="form-control form-control-sm" value="<?= (isset($row['c_a']) ? htmlspecialchars($row['c_a']) : '') ?>" id="c_a" name="c_a" min="0">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="number" placeholder="L" class="form-control form-control-sm" value="<?= (isset($row['c_l']) ? htmlspecialchars($row['c_l']) : '') ?>" id="c_l" name="c_l" min="0">
+                        </div>
+
+                    </div>
+
+
 
 
                     <div class="form-group row">
@@ -1304,7 +1044,253 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                 </div>
 
-                              
+                                <?php
+                                if ($admission_note_id == null) {
+                                    $allergy_drug_pos = [];
+                                    $opd_er_allergy_history_list = KphisQueryUtils::getOpdErAllergyListByAn($an);
+                                    foreach ($opd_er_allergy_history_list as $opd_er_allergy_history_item) {
+                                        array_push($allergy_drug_pos, $opd_er_allergy_history_item['er_allergy_history_agent'], $opd_er_allergy_history_item['er_allergy_history_symptom']);
+                                    }
+                                    array_push($allergy_drug_pos, '');
+                                } else {
+                                    $allergy_drug_pos = explode(" ", $row['allergy_drug_history']);
+                                }
+                                ?>
+                                <div class="form-group row">
+                                    <label class="col-sm-12">ประวัติแพ้</label>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="custom-control custom-radio col-sm-1">
+                                        <input type="radio" <?= ($row['allergy_history'] == "ไม่มี"
+                                                                || $row['allergy_history'] == NULL ? 'checked="checked"' : '') ?> <?= (isset($row_ipt['drugallergy'])  ? 'disabled' : '') ?> class="custom-control-input" id="u1" name="allergy_history" value="ไม่มี" onchange="custom_check('off_allergy');">
+                                        <label class="custom-control-label" for="u1">ไม่มี</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?= ($row['allergy_history'] == "มี"
+                                                                || (count($allergy_drug_pos) >= 2) ? 'checked="checked"' : '') ?> class="custom-control-input" id="u2" name="allergy_history" value="มี" onchange="custom_check('on_allergy');">
+                                        <label class="custom-control-label" for="u2">มี (ระบุ)</label>
+                                    </div>
+                                    <div class="col-sm-2">ประวัติการแพ้ยาใน HOSxP<br><small class="text-info">(ณ เวลาที่บันทึกแรกรับครั้งแรก)</small></div>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control text-danger" rows="3" readonly="readonly" id="allergy_drug_history_hosxp" name="allergy_drug_history_hosxp"><?= htmlspecialchars(($admission_note_id == null) ? ($row_ipt['drugallergy']) : ($row['allergy_drug_history_hosxp'])) ?></textarea>
+                                    </div>
+                                </div>
+                                <?php
+                                $opd_er_allergy_history = KphisQueryUtils::getOpdErAllergyWithSymptomByAn($an, 'Y');
+                                if ($opd_er_allergy_history != null) { ?>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="custom-control custom-radio col-sm-2"></div>
+                                        <div class="col-sm-2">แจ้งแพ้ยา (ER)<br><small class="text-info"></small></div>
+                                        <div class="col-sm-6">
+                                            <textarea class="form-control text-danger" rows="3" readonly="readonly"><?= htmlspecialchars($opd_er_allergy_history) ?></textarea>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                                <div class="form-group row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="custom-control col-sm-2">
+                                    </div>
+                                    <div class="col-sm-3"><label class="text-right">ชื่อ</label></div>
+                                    <div class="col-sm-2"><label class="text-right">อาการที่แพ้</label></div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="custom-control col-sm-2">
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_drug()'><i class="fas fa-plus-square"></i></a>
+                                        <label for="uu1">   ยา</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_drug_pri1" name="allergy_drug_pri1" value="<?= ((count($allergy_drug_pos) >= 2) ? htmlspecialchars($allergy_drug_pos[0]) : '') ?>">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_drug_sec1" name="allergy_drug_sec1" value="<?= ((count($allergy_drug_pos) >= 2) ? htmlspecialchars($allergy_drug_pos[1]) : '') ?>">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove_drug()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
+                                        <label> </label>
+                                    </div>
+                                </div>
+                                <?php
+                                $y = 2;
+                                $z = 2;
+                                for ($x = 1; $x < (count($allergy_drug_pos) - 1) / 2; $x++) {
+                                    echo "<div id='allergy_drug_row" . $z . "' class='form-group row'>
+                                        <div class='col-sm-5'></div>
+                                        <div class='col-sm-3'>
+                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_pri" . $z . "' name='allergy_drug_pri" . $z . "' value='" . htmlspecialchars($allergy_drug_pos[$y++]) . "'>
+                                        </div>
+                                        <div class='col-sm-3'>
+                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_sec" . $z . "' name='allergy_drug_sec" . $z . "' value='" . htmlspecialchars($allergy_drug_pos[$y++]) . "'>
+                                        </div>
+                                        <div class='col-sm-1'>
+                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_drug(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
+                                            <label> </label>
+                                        </div>
+                                    </div>";
+                                    $z++;
+                                }
+                                ?>
+                                <div id="new_chq_drug"></div><input type="hidden" id="total_chq_drug" value="<?php if ((count($allergy_drug_pos) < 2)) {
+                                                                                                                    echo 1;
+                                                                                                                } else {
+                                                                                                                    echo (count($allergy_drug_pos) - 1) / 2;
+                                                                                                                } ?>">
+                                <div class="form-group row"><textarea style="display:none;" name="allergy_drug_history" id="allergy_drug_history" cols="30" rows="10"></textarea></div>
+                                <script>
+                                    function add_drug() {
+                                        var new_chq_no_drug = parseInt($('#total_chq_drug').val()) + 1;
+                                        var new_input_drug = "<div id='allergy_drug_row" + new_chq_no_drug + "'class='form-group row'> <div class='col-sm-3'></div><div class='custom-control col-sm-2'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_pri" +
+                                            new_chq_no_drug + "'name='allergy_drug_pri" + new_chq_no_drug + "'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_drug_sec" +
+                                            new_chq_no_drug + "'name='allergy_drug_sec" + new_chq_no_drug + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_drug(" +
+                                            new_chq_no_drug + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
+                                        $('#new_chq_drug').append(new_input_drug);
+                                        $('#total_chq_drug').val(new_chq_no_drug);
+                                    }
+
+                                    function remove_pos_drug(last_chq_no) {
+                                        $('#allergy_drug_row' + last_chq_no).remove();
+                                        $('#allergy_drug_pri' + last_chq_no).remove();
+                                        $('#allergy_drug_sec' + last_chq_no).remove();
+                                    }
+
+                                    function remove_drug() {
+                                        $('#allergy_drug_pri1').val('');
+                                        $('#allergy_drug_sec1').val('');
+                                    }
+                                </script>
+                                <div class="form-group row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="custom-control col-sm-2">
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_food()'><i class="fas fa-plus-square"></i></a>
+                                        <label for="uu2">   อาหาร</label><?php $allergy_food_pos = explode(" ", $row['allergy_food_history']); ?>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_food_pri1" name="allergy_food_pri1" value="<?= (isset($row['allergy_food_history']) ? htmlspecialchars($allergy_food_pos[0]) : '') ?>">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_food_sec1" name="allergy_food_sec1" value="<?= (isset($row['allergy_food_history']) ? htmlspecialchars($allergy_food_pos[1]) : '') ?>">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove_food()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
+                                        <label> </label>
+                                    </div>
+                                </div>
+                                <?php $y = 2;
+                                $z = 2;
+                                for ($x = 1; $x < (count($allergy_food_pos) - 1) / 2; $x++) {
+                                    echo "<div id='allergy_food_row" . $z . "' class='form-group row'>
+                                        <div class='col-sm-5'></div>
+                                        <div class='col-sm-3'>
+                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_pri" . $z . "' name='allergy_food_pri" . $z . "' value='" . htmlspecialchars($allergy_food_pos[$y++]) . "'>
+                                        </div>
+                                        <div class='col-sm-3'>
+                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_sec" . $z . "' name='allergy_food_sec" . $z . "' value='" . htmlspecialchars($allergy_food_pos[$y++]) . "'>
+                                        </div>
+                                        <div class='col-sm-1'>
+                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_food(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
+                                            <label> </label>
+                                        </div>
+                                    </div>";
+                                    $z++;
+                                }
+                                ?>
+                                <div id="new_chq_food"></div><input type="hidden" id="total_chq_food" value="<?php if ($row['allergy_food_history'] == null) {
+                                                                                                                    echo 1;
+                                                                                                                } else {
+                                                                                                                    echo (count($allergy_food_pos) - 1) / 2;
+                                                                                                                } ?>">
+                                <div class="form-group row"><textarea style="display:none;" name="allergy_food_history" id="allergy_food_history" cols="30" rows="10"></textarea></div>
+                                <script>
+                                    function add_food() {
+                                        var new_chq_no_food = parseInt($('#total_chq_food').val()) + 1;
+                                        var new_input_food = "<div id='allergy_food_row" + new_chq_no_food + "'class='form-group row'> <div class='col-sm-3'></div><div class='custom-control col-sm-2'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_pri" +
+                                            new_chq_no_food + "'name='allergy_food_pri" + new_chq_no_food + "'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_food_sec" +
+                                            new_chq_no_food + "'name='allergy_food_sec" + new_chq_no_food + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_food(" +
+                                            new_chq_no_food + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
+                                        $('#new_chq_food').append(new_input_food);
+                                        $('#total_chq_food').val(new_chq_no_food);
+                                    }
+
+                                    function remove_pos_food(last_chq_no) {
+                                        $('#allergy_food_row' + last_chq_no).remove();
+                                        $('#allergy_food_pri' + last_chq_no).remove();
+                                        $('#allergy_food_sec' + last_chq_no).remove();
+                                    }
+
+                                    function remove_food() {
+                                        $('#allergy_food_pri1').val('');
+                                        $('#allergy_food_sec1').val('');
+                                    }
+                                </script>
+                                <div class="form-group row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="custom-control col-sm-2">
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_etc()'><i class="fas fa-plus-square"></i></a>
+                                        <label for="uu3">   อื่นๆ</label><?php $allergy_etc_pos = explode(" ", $row['allergy_etc_history']); ?>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_etc_pri1" name="allergy_etc_pri1" value="<?= (isset($row['allergy_etc_history']) ? htmlspecialchars($allergy_etc_pos[0]) : '') ?>">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style='color: #E60000;' class="form-control form-control-sm" id="allergy_etc_sec1" name="allergy_etc_sec1" value="<?= (isset($row['allergy_etc_history']) ? htmlspecialchars($allergy_etc_pos[1]) : '') ?>">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove_etc()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
+                                        <label> </label>
+                                    </div>
+                                </div>
+                                <?php $y = 2;
+                                $z = 2;
+                                for ($x = 1; $x < (count($allergy_etc_pos) - 1) / 2; $x++) {
+                                    echo "<div id='allergy_etc_row" . $z . "'class='form-group row'>
+                                        <div class='col-sm-5'></div>
+                                        <div class='col-sm-3'>
+                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_pri" . $z . "' name='allergy_etc_pri" . $z . "' value='" . htmlspecialchars($allergy_etc_pos[$y++]) . "'>
+                                        </div>
+                                        <div class='col-sm-3'>
+                                            <input type='text'  style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_sec" . $z . "' name='allergy_etc_sec" . $z . "' value='" . htmlspecialchars($allergy_etc_pos[$y++]) . "'>
+                                        </div>
+                                        <div class='col-sm-1'>
+                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_etc(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
+                                            <label> </label>
+                                        </div>
+                                    </div>";
+                                    $z++;
+                                }
+                                ?>
+                                <div id="new_chq_etc"></div><input type="hidden" id="total_chq_etc" value="<?php if ($row['allergy_etc_history'] == null) {
+                                                                                                                echo 1;
+                                                                                                            } else {
+                                                                                                                echo (count($allergy_etc_pos) - 1) / 2;
+                                                                                                            } ?>">
+                                <div class="form-group row"><textarea style="display:none;" name="allergy_etc_history" id="allergy_etc_history" cols="30" rows="10"></textarea></div>
+                                <script>
+                                    function add_etc() {
+                                        var new_chq_no_etc = parseInt($('#total_chq_etc').val()) + 1;
+                                        var new_input_etc = "<div id='allergy_etc_row" + new_chq_no_etc + "'class='form-group row'> <div class='col-sm-3'></div><div class='custom-control col-sm-2'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_pri" +
+                                            new_chq_no_etc + "'name='allergy_etc_pri" + new_chq_no_etc + "'></div><div class='col-sm-3'><input type='text' style='color: #E60000;' class='form-control form-control-sm' id='allergy_etc_sec" +
+                                            new_chq_no_etc + "'name='allergy_etc_sec" + new_chq_no_etc + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos_etc(" +
+                                            new_chq_no_etc + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
+                                        $('#new_chq_etc').append(new_input_etc);
+                                        $('#total_chq_etc').val(new_chq_no_etc);
+                                    }
+
+                                    function remove_pos_etc(last_chq_no) {
+                                        $('#allergy_etc_row' + last_chq_no).remove();
+                                        $('#allergy_etc_pri' + last_chq_no).remove();
+                                        $('#allergy_etc_sec' + last_chq_no).remove();
+                                    }
+
+                                    function remove_etc() {
+                                        $('#allergy_etc_pri1').val('');
+                                        $('#allergy_etc_sec1').val('');
+                                    }
+                                </script>
                                 <!-- <div class="form-group row">
                             <div class="col-sm-3"></div>
                             <label class="col-sm-2">อาการที่แพ้</label>
@@ -1596,7 +1582,73 @@ $row_period  = $stmt_period->fetch();
                                 </div>
                                 <!-- display:none --> <!-- </div> -->
                                 <!-- display:none -->
-                                
+                                <div style="<?php if (($row_ipt['age_y'] >  15 && $row_ipt['age_m'] >= 0 && $row_ipt['age_d'] >= 0)
+                                                || ($row_ipt['age_y'] == 15 && $row_ipt['age_m'] >  0 && $row_ipt['age_d'] >  0)
+                                            ) {
+                                                echo 'display:none;';
+                                            } ?>">
+                                    <div class="form-group row">
+                                        <label class="col-sm-12">ประวัติการได้รับภูมิคุ้มกัน (เฉพาะเด็ก)</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="custom-control custom-radio col-sm-2">
+                                            <input type="radio" <?php if ($row['receives_immunisation_history_kid'] == 'ครบตามวัย') {
+                                                                    echo 'checked="checked"';
+                                                                } ?> class="custom-control-input" id="o1" name="receives_immunisation_history_kid" value="ครบตามวัย" onchange="custom_check('off_immunisation');">
+                                            <label class="custom-control-label" for="o1">ครบตามวัย</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="custom-control custom-radio col-sm-2">
+                                            <input type="radio" <?php if (
+                                                                    $row['receives_immunisation_history_kid'] != 'ครบตามวัย'
+                                                                    && $row['receives_immunisation_history_kid'] != null
+                                                                    && $row['receives_immunisation_history_kid'] != ''
+                                                                ) {
+                                                                    echo 'checked="checked"';
+                                                                } ?> class="custom-control-input" id="o2" name="receives_immunisation_history_kid" onchange="custom_check('on_immunisation');" value="ไม่ครบตามวัย">
+                                            <label class="custom-control-label" for="o2">ไม่ครบ (ระบุ)</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="o3" value="<?php if (!($row['receives_immunisation_history_kid'] == 'ครบตามวัย')) {
+                                                                                                                        echo htmlspecialchars($row['receives_immunisation_history_kid']);
+                                                                                                                    } ?>" name="receives_immunisation_history_kid_text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-12">การพัฒนาการ (เฉพาะเด็ก)</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="custom-control custom-radio col-sm-2">
+                                            <input type="radio" <?php if ($row['developmentally_kid'] == 'ปกติ') {
+                                                                    echo 'checked="checked"';
+                                                                } ?> class="custom-control-input" id="p1" name="developmentally_kid" value="ปกติ" onchange="custom_check('off_developmentally');">
+                                            <label class="custom-control-label" for="p1">ปกติ</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="custom-control custom-radio col-sm-2">
+                                            <input type="radio" <?php if (
+                                                                    $row['developmentally_kid'] != 'ปกติ'
+                                                                    && $row['developmentally_kid'] != NULL
+                                                                    && $row['developmentally_kid'] != ''
+                                                                ) {
+                                                                    echo 'checked="checked"';
+                                                                } ?> class="custom-control-input" id="p2" name="developmentally_kid" value="ผิดปกติ" onchange="custom_check('on_developmentally');">
+                                            <label class="custom-control-label" for="p2">ผิดปกติ (ระบุ)</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="p3" value="<?php if (!($row['developmentally_kid'] == 'ปกติ')) {
+                                                                                                                        echo htmlspecialchars($row['developmentally_kid']);
+                                                                                                                    } ?>" name="developmentally_kid_text">
+                                        </div>
+                                    </div>
+                                    <!-- display:none -->
+                                </div>
                                 <!-- display:none -->
                                 
                                 <!-- display:none -->
@@ -2147,7 +2199,10 @@ $row_period  = $stmt_period->fetch();
                                 <div class="form-group row">
                                     <label class="col-sm-2"><B></B></label>
 
-                                    
+                                    <B>GA</B>
+                                    <div class="col-sm-1">
+                                        <input type="text" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_ga']) ? htmlspecialchars($row['c_ga']) : '') ?>" id="c_ga" name="c_ga" min="0">
+                                    </div> Wks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                     <B>Apgar score นาทีที่ 1</B>
                                     <div class="col-sm-1">
@@ -2155,11 +2210,11 @@ $row_period  = $stmt_period->fetch();
                                     </div>
                                     <B>Apgar score นาทีที่ 5</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['apgar_score_min5'])  ? htmlspecialchars($row_labor['apgar_score_min5']) : htmlspecialchars($row['c_apgar5'])) ?>" id="c_apgar5" name="c_apgar5" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_apgar5']) ? htmlspecialchars($row['c_apgar5']) : '') ?>" id="c_apgar5" name="c_apgar5" min="0">
                                     </div>
                                     <B>Apgar score นาทีที่ 10</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['apgar_score_min10'])  ? htmlspecialchars($row_labor['apgar_score_min10']) : htmlspecialchars($row['c_apgar10'])) ?>" id="c_apgar10" name="c_apgar10" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_apgar10']) ? htmlspecialchars($row['c_apgar10']) : '') ?>" id="c_apgar10" name="c_apgar10" min="0">
                                     </div>
 
                                 </div>
@@ -2189,14 +2244,14 @@ $row_period  = $stmt_period->fetch();
                                                         -->
 
                                     <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['c_sex'] == '1') {
+                                        <input type="radio" <?php if ($row['c_sex'] == '1') {
                                                                 echo 'checked="checked"';
                                                             } ?> class="custom-control-input" id="c_sex1" name="c_sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['c_sex'])) ?>" onchange="sex_check('off_checked');">
                                         <label class="custom-control-label" for="c_sex1">Male</label>
                                     </div>
 
                                     <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['c_sex'] == '2') {
+                                        <input type="radio" <?php if ($row['c_sex'] == '2') {
                                                                 echo 'checked="checked"';
                                                             } ?> class="custom-control-input" id="c_sex2" name="c_sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['c_sex'])) ?>" onchange="sex_check('on_checked');">
                                         <label class="custom-control-label" for="c_sex2">Female</label>
@@ -2204,15 +2259,15 @@ $row_period  = $stmt_period->fetch();
 
                                     <B>BW</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['birth_weight'])  ? htmlspecialchars($row_labor['birth_weight']) : htmlspecialchars($row['c_bw'])) ?>"" id="c_bw" name="c_bw" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_opdscreen['bw2']) ? htmlspecialchars($row_opdscreen['bw2']) : htmlspecialchars($row['c_bw'])) ?>" id="c_bw" name="c_bw" min="0">
                                     </div> gms&nbsp;&nbsp;
                                     <B>HC</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['head_length'])  ? htmlspecialchars($row_labor['head_length']) : htmlspecialchars($row['c_hc'])) ?>" id="c_hc" name="c_hc" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row['c_hc']) ? htmlspecialchars($row['c_hc']) : '') ?>" id="c_hc" name="c_hc" min="0">
                                     </div> cms&nbsp;&nbsp;
                                     <B>length</B>
                                     <div class="col-sm-1">
-                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['body_length'])  ? htmlspecialchars($row_labor['body_length']) : htmlspecialchars($row['c_length'])) ?>" id="c_length" name="c_length" min="0">
+                                        <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_opdscreen['height']) ? htmlspecialchars($row_opdscreen['height']) : htmlspecialchars($row['c_length'])) ?>" id="c_length" name="c_length" min="0">
                                     </div> cms
 
                                 </div>
