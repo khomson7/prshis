@@ -94,7 +94,7 @@ if ($admission_note_id == null || $admission_note_id != null) {
     il.g,concat(il.t,il.p,il.a,il.l) as p,birth_weight,round(body_length,0) as body_length,round(head_length,0) as head_length
     ,d1.name as adm_doctor_name  ,  d2.name as dch_doctor_name ,  s.name as spclty_name,
     p.name as pttype_name ,  dc.name as dchstts_name,
-     dt.name as dchtype_name,  y.ipt_type_name,  wd.name as ward_name,  idm.bedno,idm.roomno,ii.infant_indication_type_name,il.ga
+     dt.name as dchtype_name,  y.ipt_type_name,  wd.name as ward_name,  idm.bedno,idm.roomno,ii.infant_indication_type_name,(to_days(i.regdate)-to_days(il.lmp)) div 7 as ga_1
      ,li.infant_check_hepb,li.infant_check_bcg,li.infant_delivery_type_id
      from " . DbConstant::HOSXP_DBNAME . ".ipt i
      left outer join " . DbConstant::HOSXP_DBNAME . ".an_stat a on a.an=i.an
@@ -603,19 +603,7 @@ $row_period  = $stmt_period->fetch();
 
                     </div>
 
-                    <div class="form-group row">
-                        <label class="text-right col-sm-3">คลอดที่</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control form-control-sm" id="s5" value="<?= (isset($row_labor['hospname'])  ? htmlspecialchars($row_labor['hospname']) : htmlspecialchars($row['deliver_location'])) ?>" name="deliver_location">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="text-right col-sm-3">สุขภาพแรกเกิด</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control form-control-sm" id="s7" value="<?= (isset($row['deliver_first_health']) ? htmlspecialchars($row['deliver_first_health']) : '') ?>" name="deliver_first_health">
-                        </div>
-                    </div>
-
+                 
 
                     <div class="row">
                         <div class="col-md-12">
@@ -907,8 +895,8 @@ $row_period  = $stmt_period->fetch();
                                 } ?>">
 
                         <div class="input-group input-group-sm sm-1">
-                            <font color="red"><B>ข้อมูลแม่:</B></font> &nbsp;<input type="text" style="color: red;" class="form-control" id="aa" name="aa" value="<?= (isset($row_labor['mother_']) ? htmlspecialchars($row_labor['mother_']) : '') ?>" aria-describedby="inputGroup-sizing-sm" readonly>
-
+                            
+                            <font color="red"><B>ข้อมูลแม่:</B></font> &nbsp;<input type="text" style="color: red;" class="form-control" id="c_mother_his" name="c_mother_his" value="<?= (isset($row_labor['mother_'])  ? htmlspecialchars($row_labor['mother_']) : htmlspecialchars($row['c_mother_his'])) ?>" aria-describedby="inputGroup-sizing-sm" readonly>
                         </div>
 
                         <div class="form-group row">
@@ -925,37 +913,9 @@ $row_period  = $stmt_period->fetch();
                                 <input type="text" class="form-control form-control-sm" value="<?= (isset($row_labor['p'])  ? htmlspecialchars($row_labor['p']) : htmlspecialchars($row['p'])) ?>" id="" name="p">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <label class="text-right col-sm-1">ANC ที่</label>
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control form-control-sm" value="<?= (isset($row_labor['hospname'])  ? htmlspecialchars($row_labor['hospname']) : htmlspecialchars($row['anc'])) ?>" id="anc" name="anc">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <label class="text-right col-sm-1">ได้ TT</label>
-                            <div class="col-sm-2">
-                                <div class="input-group input-group-sm sm-3">
-                                    <input type="text" class="form-control" value="<?= (isset($row['tt']) ? htmlspecialchars($row['tt']) : '') ?>" id="" name="tt" aria-describedby="inputGroup-sizing-sm">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">   เข็ม  </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="text-right col-sm-2">อายุครรภ์</label>
-                            <div class="col-sm-2">
-                                <div class="input-group input-group-sm sm-2">
-                                    <input type="text" class="form-control" value="<?= (isset($row['gestational_age']) ? htmlspecialchars($row['gestational_age']) : '') ?>" id="gestational_age" name="gestational_age" aria-describedby="inputGroup-sizing-sm">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm"> สัปดาห์  </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        
+                      
+                      
                         <!-- display:none -->
                     </div>
 
@@ -1014,19 +974,21 @@ $row_period  = $stmt_period->fetch();
                         <div class="col-md-12">
                             <div class="form-group row">
                                 <label class="col-sm-2"><B></B></label>
-                                <label class="col-sm-2"><B>Menternal Vaccination dt</B></label>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['c_vaccination_dt']) ? htmlspecialchars($row['c_vaccination_dt']) : '') ?>" id="c_vaccination_dt" name="c_vaccination_dt">
-                                </div> <B>Newborn vaccination</B> &nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                            
+                                <B>ได้ TT</B> <div class="col-sm-2">
+                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['tt']) ? htmlspecialchars($row['tt']) : '') ?>" id="tt" name="tt">
+                               
+                                </div>&nbsp; เข็ม &nbsp;&nbsp;<B>Newborn vaccination</B> &nbsp;&nbsp;&nbsp;&nbsp;
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['c_hbv'] == 'Y') {
+                                    <input type="checkbox" <?php if ($row['c_hbv'] == 'Y' || $row['c_hbv'] == null)   {
                                                                 echo 'checked="checked"';
                                                             } ?> class="custom-control-input" id="c_hbv" value="Y" name="c_hbv" onchange="custom_check('off_taken');">
                                     <label class="custom-control-label" for="c_hbv">HBV</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['c_bcg'] == 'Y') {
+                                    <input type="checkbox" <?php if ($row['c_bcg'] == 'Y' || $row['c_bcg'] == null) {
                                                                 echo 'checked="checked"';
                                                             } ?> class="custom-control-input" id="c_bcg" value="Y" name="c_bcg" onchange="custom_check('off_taken');">
                                     <label class="custom-control-label" for="c_bcg">BCG</label>
@@ -2156,9 +2118,13 @@ $row_period  = $stmt_period->fetch();
 
                                 <div class="form-group row">
                                     <label class="col-sm-2"><B></B></label>
-
-
-
+                                    
+                        <B>อายุครรภ์</B>
+                                    <div class="col-sm-1">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_labor['ga_1'])  ? htmlspecialchars($row_labor['ga_1']) : htmlspecialchars($row['gestational_age'])) ?>" id="" name="gestational_age">
+                                    
+                                    
+                                </div> &nbsp;Wks.&nbsp;&nbsp;
                                     <B>Apgar score นาทีที่ 1</B>
                                     <div class="col-sm-1">
                                         <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['apgar_score_min1'])  ? htmlspecialchars($row_labor['apgar_score_min1']) : htmlspecialchars($row['c_apgar1'])) ?>" id="c_apgar1" name="c_apgar1" min="0">
@@ -2427,7 +2393,7 @@ $row_period  = $stmt_period->fetch();
                                         <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_chest','Normal shape, no retraction')"><i class="fas fa-baby"></i> Chest Normal</button>
                                     </div>
                                 </div>
-                                
+
 
                                 <div class="form-group row">
                                     <label class="text-right col-sm-3">Lungs</label>

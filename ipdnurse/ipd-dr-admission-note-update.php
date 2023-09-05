@@ -192,6 +192,8 @@
              $c_tp = empty($_REQUEST['c_tp']) ? 0 : $_REQUEST['c_tp'];
              $c_vaccination_dt = empty($_REQUEST['c_vaccination_dt']) ? null : $_REQUEST['c_vaccination_dt'];
              $c_form_type = empty($_REQUEST['c_form_type']) ? null : $_REQUEST['c_form_type'];
+             $c_mother_his = $_REQUEST['c_mother_his']; 
+            //$c_mother_his = 'abc';
 
         try {
             $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note SET hn=:hn, an=:an,
@@ -233,7 +235,7 @@
             ,c_inform_mother=:c_inform_mother,c_inform_etc=:c_inform_etc,c_inform_etc_text=:c_inform_etc_text
             ,c_ga=:c_ga,c_apgar1=:c_apgar1,c_apgar5=:c_apgar5,c_apgar10=:c_apgar10,c_sex=:c_sex,c_bw=:c_bw,c_hc=:c_hc,c_length=:c_length
             ,pe_face=:pe_face,pe_ears=:pe_ears,pe_eyes=:pe_eyes,pe_nose=:pe_nose,pe_mouth=:pe_mouth,pe_chest=:pe_chest,pe_genitalia=:pe_genitalia
-            ,pe_anus=:pe_anus,pe_trunk_spine=:pe_trunk_spine,pe_nervose=:pe_nervose,c_form_type=:c_form_type
+            ,pe_anus=:pe_anus,pe_trunk_spine=:pe_trunk_spine,pe_nervose=:pe_nervose,c_form_type=:c_form_type,c_mother_his=:c_mother_his
             WHERE admission_note_id=:admission_note_id");
             $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
             'receiver_medication_date'=>$receiver_medication_date, 'receiver_medication_time'=>$receiver_medication_time,
@@ -275,7 +277,7 @@
             ,'c_inform_mother'=>$c_inform_mother,'c_inform_etc'=>$c_inform_etc,'c_inform_etc_text'=>$c_inform_etc_text
             ,'c_ga'=>$c_ga,'c_apgar1'=>$c_apgar1,'c_apgar5'=>$c_apgar5,'c_apgar10'=>$c_apgar10,'c_sex'=>$c_sex,'c_bw'=>$c_bw,'c_hc'=>$c_hc,'c_length'=>$c_length
             ,'pe_face'=>$pe_face,'pe_ears'=>$pe_ears,'pe_eyes'=>$pe_eyes,'pe_nose'=>$pe_nose,'pe_mouth'=>$pe_mouth,'pe_chest'=>$pe_chest,'pe_genitalia'=>$pe_genitalia
-            ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose,'c_form_type'=>$c_form_type 
+            ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose,'c_form_type'=>$c_form_type,'c_mother_his'=>$c_mother_his 
         ));
 
             if(!empty($_REQUEST['admission_note_doctor'])){

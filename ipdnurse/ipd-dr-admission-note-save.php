@@ -189,6 +189,7 @@
         $c_sex = empty($_REQUEST['c_sex']) ? null : $_REQUEST['c_sex'];
         $c_tp = empty($_REQUEST['c_tp']) ? 0 : $_REQUEST['c_tp'];
         $c_vaccination_dt = empty($_REQUEST['c_vaccination_dt']) ? null : $_REQUEST['c_vaccination_dt'];
+        $c_mother_his = empty($_REQUEST['c_mother_his']) ? null : $_REQUEST['c_mother_his'];
 
 
         try {
@@ -215,7 +216,7 @@
                 ,c_born_date,c_born_time,c_born_type_in,c_labor_type,c_indication,c_intrapartum
                 ,c_labor_normal,c_drug_allergy,c_g,c_tp,c_pre,c_a,c_l,c_serology,c_anterpartum
                 ,c_vaccination_dt,c_hbv,c_bcg,c_inform_officer,c_inform_mother,c_inform_etc,c_inform_etc_text,c_ga,c_apgar1,c_apgar5,c_apgar10,c_sex,c_bw,c_hc,c_length
-                ,pe_head,pe_face,pe_ears,pe_eyes,pe_nose,pe_mouth,pe_chest,pe_genitalia,pe_anus,pe_trunk_spine,pe_nervose
+                ,pe_head,pe_face,pe_ears,pe_eyes,pe_nose,pe_mouth,pe_chest,pe_genitalia,pe_anus,pe_trunk_spine,pe_nervose,c_mother_his
                 )
                 VALUES (:hn,:an,:receiver_medication_date,:receiver_medication_time,:take_medication_by,
                 :arrive_by,:taken_by_relative,:taken_by_nurse,:taken_by_crib,:taken_by_etc,:taken_by,:informant_patient,:informant_relatives,:informant_deliverer,
@@ -240,7 +241,7 @@
                 ,:c_born_date,:c_born_time,:c_born_type_in,:c_labor_type,:c_indication,:c_intrapartum
                 ,:c_labor_normal,:c_drug_allergy,:c_g,:c_tp,:c_pre,:c_a,:c_l,:c_serology,:c_anterpartum
                 ,:c_vaccination_dt,:c_hbv,:c_bcg,:c_inform_officer,:c_inform_mother,:c_inform_etc,:c_inform_etc_text,:c_ga,:c_apgar1,:c_apgar5,:c_apgar10,:c_sex,:c_bw,:c_hc,:c_length   
-                ,:pe_head,:pe_face,:pe_ears,:pe_eyes,:pe_nose,:pe_mouth,:pe_chest,:pe_genitalia,:pe_anus,:pe_trunk_spine,:pe_nervose
+                ,:pe_head,:pe_face,:pe_ears,:pe_eyes,:pe_nose,:pe_mouth,:pe_chest,:pe_genitalia,:pe_anus,:pe_trunk_spine,:pe_nervose,:c_mother_his
                 )");
                 $stmt->execute(array('hn'=>$hn, 'an'=>$an, 'receiver_medication_date'=>$receiver_medication_date,
                 'receiver_medication_time'=>$receiver_medication_time, 'take_medication_by'=>$take_medication_by,
@@ -290,7 +291,7 @@
                 ,'c_inform_mother'=>$c_inform_mother,'c_inform_etc'=>$c_inform_etc,'c_inform_etc_text'=>$c_inform_etc_text
                 ,'c_ga'=>$c_ga,'c_apgar1'=>$c_apgar1,'c_apgar5'=>$c_apgar5,'c_apgar10'=>$c_apgar10,'c_sex'=>$c_sex,'c_bw'=>$c_bw,'c_hc'=>$c_hc,'c_length'=>$c_length
                 , 'pe_head'=>$pe_head,'pe_face'=>$pe_face,'pe_ears'=>$pe_ears,'pe_eyes'=>$pe_eyes,'pe_nose'=>$pe_nose,'pe_mouth'=>$pe_mouth,'pe_chest'=>$pe_chest,'pe_genitalia'=>$pe_genitalia
-                ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose
+                ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose,'c_mother_his'=>$c_mother_his
             ));
 
                 $admission_note_id = $conn->lastInsertId();
