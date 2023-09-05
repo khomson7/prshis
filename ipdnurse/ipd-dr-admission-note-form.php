@@ -23,7 +23,10 @@
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
 
-    
+        Session::insertSystemAccessLog(json_encode(array(
+            'form'=>'IPD-DR-ADMISSION-NOTE-FORM',
+            'an'=>$an,
+        ),JSON_UNESCAPED_UNICODE));
     
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];

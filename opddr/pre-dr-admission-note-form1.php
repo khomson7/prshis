@@ -38,7 +38,10 @@ if ($login != $loginname) {
     session_destroy();
 }
 
-
+Session::insertSystemAccessLog(json_encode(array(
+    'form'=>'PRE-DR-ADMISSION-NOTE-FORM',
+    'vn'=>$vn,
+),JSON_UNESCAPED_UNICODE));
 
 
 //-------------------------Doctor admission note

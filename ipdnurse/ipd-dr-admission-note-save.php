@@ -294,6 +294,8 @@
                 ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose,'c_mother_his'=>$c_mother_his
             ));
 
+           
+
                 $admission_note_id = $conn->lastInsertId();
                 if(!empty($_REQUEST['admission_note_doctor'])){
                     foreach($_REQUEST['admission_note_doctor'] as $admission_note_doctor){
@@ -304,6 +306,7 @@
                         'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version));
                     }
                 }
+
                 $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
             } catch (PDOException  $e) {

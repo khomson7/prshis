@@ -300,6 +300,13 @@
                     'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version));
                 }
             }
+
+            Session::insertSystemAccessLog(json_encode(array(
+                'form'=>'IPD-DR-ADMISSION-NOTE-FORM',
+                'action'=>'UPDATE',
+                'an'=>$an,
+            ),JSON_UNESCAPED_UNICODE));
+
             $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
             } catch (PDOException  $e) {

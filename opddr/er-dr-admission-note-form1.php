@@ -11,6 +11,7 @@ require_once '../mains/opd-show-patient-main-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 
+
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $hn = empty($_REQUEST['hn']) ? null : $_REQUEST['hn'];
 $vn = empty($_REQUEST['vn']) ? null : $_REQUEST['vn'];
@@ -37,6 +38,10 @@ if ($login != $loginname) {
     session_destroy();
 }
 
+Session::insertSystemAccessLog(json_encode(array(
+    'form'=>'ER-DR-ADMISSION-NOTE-FORM',
+    'vn'=>$vn,
+),JSON_UNESCAPED_UNICODE));
 
 
 
