@@ -5,13 +5,17 @@
        // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
         require_once '../mains/main-report.php';
 
+        Session::checkLoginSessionAndShowMessage(); //เช็ค session
+        Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
         require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+        require_once '../mains/ipd-show-patient-sticky.php';
 
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = $_REQUEST['an'];//รับค่า an
         $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
+        $vn = KphisQueryUtils::getVnByAn($an);
 
         $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
         $loginname = $_SESSION['loginname'];
@@ -31,6 +35,57 @@
         if($row['count_row'] > 0){
             $id = $row['id'];
         }
+
+        if ($id == null || $id != null) {
+            $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
+                                    pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
+                                    round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
+                                    round((opdscreen.bw)*1000,0) as bw2,
+                                    round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
+                                    opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
+                                    opdscreen.pmh,opdscreen.fh,opdscreen.pe,
+                                    opdscreen.pe_heart_text, opdscreen.pe_lung_text,
+                                    opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
+                                    opdscreen.pe_ext_text, opdscreen.pe, pt.cid, pt.passport_no, pt.hn,pt.pname,pt.fname,pt.lname,
+                                    vn.age_y,vn.age_m,vn.age_d,opdscreen.bw,opdscreen.height,(select oi.name from " . DbConstant::HOSXP_DBNAME . ".ovstist oi where oi.ovstist = ov.ovstist) as ovst_ist
+                                    FROM " . DbConstant::HOSXP_DBNAME . ".opdscreen
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".ovst ov on ov.vn = opdscreen.vn
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".vn_stat vn on vn.vn = opdscreen.vn
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".patient pt on pt.hn = opdscreen.hn
+                                    WHERE opdscreen.vn= :vn ";
+            $stmt_opdscreen = $conn->prepare($sql_opdscreen);
+            $stmt_opdscreen->execute(['vn' => $vn]);
+            $row_opdscreen  = $stmt_opdscreen->fetch();
+        }
+
+        $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
+            (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
+                from " . DbConstant::HOSXP_DBNAME . ".opd_allergy
+                where opd_allergy.hn = ipt.hn /*and (opd_allergy.no_alert<>'Y' or opd_allergy.no_alert is null)*/
+                order by display_order) as drugallergy,
+            an_stat.age_y,an_stat.age_m,an_stat.age_d,
+            concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
+            ipt.dchdate,ipt.dchtime,
+            ipt.regdate,ipt.regtime,
+            ipt.ward,ward.name,
+            ipt.pttype, pttype.`name` as pttype_name,
+            iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
+            , (select vs.height from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_height
+            , (select vs.vs_datetime from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw_datetime
+            from " . DbConstant::HOSXP_DBNAME . ".ipt
+            left outer join " . DbConstant::HOSXP_DBNAME . ".an_stat on an_stat.an=ipt.an
+            left outer join " . DbConstant::HOSXP_DBNAME . ".patient on patient.hn=ipt.hn
+            left outer join " . DbConstant::HOSXP_DBNAME . ".ward on ward.ward=ipt.ward
+            LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".pttype ON pttype.pttype = ipt.pttype
+            LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".iptadm ON iptadm.an = ipt.an
+            WHERE ipt.an=:an
+            order by ipt.an
+            ";
+$stmt_ipt = $conn->prepare($sql_ipt);
+$stmt_ipt->execute(['an' => $an]);
+$row_ipt = $stmt_ipt->fetch();
+$regdatetime = $row_ipt["regdatetime"];
+
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
         date_default_timezone_set('asia/bangkok');
@@ -83,6 +138,8 @@
 .sticky + .content {
   padding-top: 102px;
 }
+
+
     </style>
 
 
@@ -221,18 +278,25 @@
                                 </div>
                                 <label>เพศ</label>
 
-                                &nbsp;&nbsp;<div class="custom-control custom-radio col-sm-1">
-                                <input type="radio"  class="custom-control-input" id="sex1" value="1"  name="sex">
-                                <label class="custom-control-label" for="sex1">ชาย</label>
-                            </div>
-                            <div class="custom-control custom-radio col-sm-1">
-                                <input type="radio" class="custom-control-input" id="sex2" value="2"   name="sex">
-                                <label class="custom-control-label" for="sex2">หญิง</label>
-                            </div>
+                                &nbsp;&nbsp;
+                                <div class="custom-control custom-radio col-sm-1">
+                                        <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['c_sex'] == '1') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
+                                        <label class="custom-control-label" for="sex1">ชาย</label>
+                                    </div>
 
+                                    <div class="custom-control custom-radio col-sm-1">
+                                        <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                        <label class="custom-control-label" for="sex2">หญิง</label>
+                                    </div>
+
+                            
                             <label>น้ำหนัก</label>
                                 <div class="col-md-1">
-                        <input type="text" class="form-control form-control-sm CheckPer_2"
+                        <input type="text" class="form-control form-control-sm CheckPer_2" value="<?= (isset($row_opdscreen['bw2'])  ? htmlspecialchars($row_opdscreen['bw2']) : htmlspecialchars($row['weight'])) ?>"
                          placeholder="00.00" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                         name="weight" id="weight">
                     </div> &nbsp;<label>gms
@@ -243,36 +307,46 @@
 
       &nbsp;&nbsp;&nbsp;&nbsp;<label>Apgar score นาทีที่1</label>
           <div class="col-md-1">
-  <input type="text" class="form-control form-control-sm CheckPer_2"
-placeholder="000" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-   name="apgar_score" id="apgar_score">
+  <input type="text" style="width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background-color: #FF7F50;
+  color: white;" class="form-control form-control-sm CheckPer_2"
+placeholder="00" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+   name="apgar_score_1" id="apgar_score_1">
 </div> &nbsp;<label> ( </label>
   <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2"
 placeholder="หักคะแนน" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
- name="apgar_score" id="apgar_score"> </div><label>)</label>
+ name="subtract_1" id="subtract_1"> </div><label>)</label>
 
 
 
 
  &nbsp;&nbsp;&nbsp;&nbsp;<label>Apgar score นาทีที่5</label>
           <div class="col-md-1">
-  <input type="text" class="form-control form-control-sm CheckPer_2"
-placeholder="000" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-   name="apgar_score" id="apgar_score">
+  <input type="text" style="width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background-color: #FF7F50;" class="form-control form-control-sm CheckPer_2"
+placeholder="00" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+   name="apgar_score_5" id="apgar_score_5">
 </div> &nbsp;<label> ( </label>
   <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2"
 placeholder="หักคะแนน" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
- name="apgar_score" id="apgar_score"> </div><label>)</label>
+ name="subtract_5" id="subtract_5"> </div><label>)</label>
 
  &nbsp;&nbsp;&nbsp;&nbsp;<label>Apgar score นาทีที่15</label>
           <div class="col-md-1">
-  <input type="text" class="form-control form-control-sm CheckPer_2"
-placeholder="000" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-   name="apgar_score" id="apgar_score">
+  <input type="text" style="width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background-color: #FF7F50;" class="form-control form-control-sm CheckPer_2"
+placeholder="00" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+   name="apgar_score_10" id="apgar_score_10">
 </div> &nbsp;<label> ( </label>
   <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2"
 placeholder="หักคะแนน" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
- name="apgar_score" id="apgar_score"> </div><label>)</label>
+ name="subtract_10" id="subtract_10"> </div><label>)</label>
 
 
     </div>
@@ -288,15 +362,18 @@ placeholder="หักคะแนน" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
 
     <div class="row">
 
-      &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติมารดา</label>
-          <div class="col-md-2">
-  <input type="text" class="form-control form-control-sm CheckPer_2"
-  placeholder="G__P__ __ __ __"
-   name="gp" id="gp">
+      &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติมารดา&nbsp; G&nbsp;</label>
+          <div >
+          <input type="text" class="form-control form-control-sm CheckPer_2"
+  placeholder="G"
+   name="g" id="g"></div>&nbsp; P&nbsp;<div>
+   <input type="text" class="form-control form-control-sm CheckPer_2"
+  placeholder="P"
+   name="p" id="p">
  </div> &nbsp;<label>Serology</label>
   <div class="col-md-3"><input type="text" class="form-control form-control-sm CheckPer_2"
   placeholder="xxxxxxxxxxx"
-  name="apgar_score" id="apgar_score"> </div><label></label>
+  name="serology" id="serology"> </div><label></label>
     </div>
 <br>
     <div class="row">
@@ -317,7 +394,7 @@ placeholder="หักคะแนน" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
     </div>
     <div class="form-group row">
         <div class="col-sm-12">
-            <textarea class="form-control" id="family_history" placeholder=" xxxxxxxxxxxxxxxx" name="family_history" rows="2" ></textarea>
+            <textarea class="form-control" id="family" placeholder=" xxxxxxxxxxxxxxxx" name="family" rows="2" ></textarea>
         </div>
     </div>
 
@@ -1216,6 +1293,16 @@ if (value == "off_checked") {
     $('#expression2').prop("checked", false);
   //  $('#entered_by2').prop("checked", false);
 }
+
+function sex_check(value) {
+        if (value == "off_checked") {
+            // $('#ros_text').attr("disabled",true).val('');
+            $('#sex2').prop("checked", false);
+        } else if (value == "on_checked") {
+            // $('#ros_text').attr("disabled",false).val('');
+            $('#sex1').prop("checked", false);
+        }
+    }
 
 }
 

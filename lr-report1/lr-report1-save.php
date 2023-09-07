@@ -24,6 +24,7 @@
     $receive_date = empty($_REQUEST['receive_date']) ? null : $_REQUEST['receive_date'];
     $receive_time = empty($_REQUEST['receive_time']) ? null : $_REQUEST['receive_time'];
     $receive_from = empty($_REQUEST['receive_from']) ? null : $_REQUEST['receive_from'];
+    $transport = empty($_REQUEST['transport']) ? null : $_REQUEST['transport'];
     $cc = empty($_REQUEST['cc']) ? null : $_REQUEST['cc'];
 
     //$create_datetime = ใช้ NOW()
@@ -38,12 +39,12 @@
     try {
 //บันทึกรายการ
         $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_labor_report1(receive_date,receive_time,receive_from
-        ,cc
+        ,transport,cc
         ,an,create_user,update_user,version,create_datetime,update_datetime)
-        VALUES(:receive_date,:receive_time,:receive_from,:an,:create_user,:update_user,:version,:create_datetime,:update_datetime)");
+        VALUES(:receive_date,:receive_time,:receive_from,:cc,:an,:create_user,:update_user,:version,:create_datetime,:update_datetime)");
 
         $stmt->execute(array('receive_date'=>$receive_date,'receive_time'=>$receive_time,'receive_from'=>$receive_from
-        ,'cc'=>$cc
+        ,'transport'=>$transport,'cc'=>$cc
       ,'an'=>$an,'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version , 'create_datetime' =>$create_datetime , 'update_datetime' =>$create_datetime));
 
         $output_error = '<div class="alert alert-success">บันทึกข้อมูลสำเร็จ</div>';
