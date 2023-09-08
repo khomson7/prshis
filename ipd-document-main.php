@@ -15,6 +15,9 @@
     //     )){
     //     return;
     // }
+
+    Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
     require_once './header.php';
     require_once './include/DbUtils.php';
     require_once './include/KphisQueryUtils.php';
@@ -26,10 +29,14 @@
     $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
     $vn = KphisQueryUtils::getVnByAn($an);
     $getDocumentSummary = KphisQueryUtils::getDocumentSummary($an);
+
+    $loginname = $_SESSION['loginname'];
+   
    // $getsess = json_encode(KphisQueryUtils::getDocumentSummary($an));
 
    // echo $getsess;
 ?>
+
 
 
 
@@ -388,6 +395,7 @@ function check_document_countRowData(){
 
 const getDocumentSummary = <?=json_encode(KphisQueryUtils::getDocumentSummary($an))?>;
 
+
 if((getDocumentSummary==true)){
             $('#check_1').attr("class","text-success fas fa-check-square");
             $("#show_text_DischargeSummary_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
@@ -399,11 +407,18 @@ if((getDocumentSummary==true)){
         }
 
         const getDocumentAddmissionDoctor = <?=json_encode(KphisQueryUtils::getDocumentAddmissionDoctor($an))?>;
+        const getAddmissionDoctor1 = <?=json_encode(KphisQueryUtils::getDocumentAddmissionDoctor1($an))?>;
+        const getAddmissionDoctor2 = <?=json_encode(KphisQueryUtils::getDocumentAddmissionDoctor2($an))?>;
+
         if((getDocumentAddmissionDoctor==true)){
             $("#check_countRowData_AddmissionDoctor").attr("class","text-success fas fa-check-square");
             $("#show_text_AddmissionDoctor_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
-            if(IPD_DOCUMENT_PRINT){
+            if(IPD_DOCUMENT_PRINT && getAddmissionDoctor1==true){
+                $("#AddmissionDoctor_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-dr-newborn-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+              
+            }else  if(IPD_DOCUMENT_PRINT && getAddmissionDoctor2==true){
                 $("#AddmissionDoctor_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-dr-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+              
             }
             }else{
             $("#check_countRowData_AddmissionDoctor").attr("class","text-secondary fas fa-square");
@@ -416,6 +431,7 @@ if((getDocumentSummary==true)){
             if(IPD_DOCUMENT_PRINT){
                 $("#AddmissionNurse_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
             }
+            
         }else{
             $("#check_countRowData_AddmissionNurse").attr("class","text-secondary fas fa-square");
         }

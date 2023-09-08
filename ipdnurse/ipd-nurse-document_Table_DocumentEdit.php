@@ -27,7 +27,7 @@
             <?php }
         }
 
-        $getreport = 'AddmissionDoctor';
+        $getreport = 'AddmissionDoctor2';
         $docmain = $getDoc.$getreport;
         $docmain2 = '$'.$docmain ;
         $data = $getData.'Document'.$getreport;
@@ -52,7 +52,7 @@
         }
 
 
-        $getreport = 'AddmissionDoctor2';
+        $getreport = 'AddmissionDoctor1';
         $docmain = $getDoc.$getreport;
         $docmain2 = '$'.$docmain ;
         $data = $getData.'Document'.$getreport;

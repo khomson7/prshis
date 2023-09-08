@@ -12,7 +12,9 @@
    $hn = KphisQueryUtils::getHnByAn($an);
    $vn = KphisQueryUtils::getVnByAn($an);
    $patient_name = KphisQueryUtils::getPatientName($hn);
-   $login = $_SESSION['loginname'];
+  // $login = $_SESSION['loginname'];
+
+  
 
  require_once './header.php';
  require_once 'ipd-show-patient-main.php';
@@ -64,7 +66,9 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-io" role="tabpanel" aria-labelledby="pills-io-tab"><?php /*require_once 'ipd-vital-sign-io-1.php'; */?></div>
+
             <div class="tab-pane fade" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'ipd-nurse-document.php'; ?></div>
+
             <div class="tab-pane fade" id="pills-consult" role="tabpanel" aria-labelledby="pills-consult-tab"><?php /*require_once 'ipd-dr-consult.php'; */?></div>    
             <div class="tab-pane fade" id="pills-his_or" role="tabpanel" aria-labelledby="pills-his_or-tab">...</div>
             <div class="tab-pane fade" id="pills-nurse_note" role="tabpanel" aria-labelledby="pills-nurse_note-tab"><div class="row"><?php /*require_once 'ipd-nurse-focus-note-table-all-searchDate.php'; */?></div></div>
