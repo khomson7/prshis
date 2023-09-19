@@ -525,7 +525,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_VitalSign").attr("class","text-success fas fa-check-circle");
             $("#show_text_VitalSign_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
             if(IPD_DOCUMENT_PRINT){
-                $("#VitalSign_pdf").attr({"class":"badge badge-secondary","onclick":"onclick_VitalSign_pdf()"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"}).tab('show');
+              //  $("#VitalSign_pdf").attr({"class":"badge badge-secondary","onclick":"onclick_VitalSign_pdf()"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"}).tab('show');
             }
         }else{
             $("#check_countRowData_VitalSign").attr("class","text-secondary fas fa-circle");
@@ -545,7 +545,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_Index").attr("class","text-success fas fa-check-circle");
             $("#show_text_Index_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
             if(IPD_DOCUMENT_PRINT){
-                $("#Index_pdf").attr({"class":"badge badge-secondary","href":"ipd-nurse-index-plan-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+                $("#Index_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-index-plan-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
             }
         }else{
             $("#check_countRowData_Index").attr("class","text-secondary fas fa-circle");
