@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once './project/function/DbUtils.php';
-require_once './project/function/Session.php';
-require_once './project/function/KphisQueryUtils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+require_once '../include/DbUtils.php';
+require_once '../include/Session.php';
+require_once '../include/KphisQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
