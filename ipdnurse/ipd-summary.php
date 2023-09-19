@@ -19,7 +19,8 @@
 //ส่วนหัวหน้า
         require_once '../mains/main-report.php';
 //check session and permission  
-//Session::checkLoginSessionAndShowMessage(); //เช็ค session      
+//Session::checkLoginSessionAndShowMessage(); //เช็ค session  
+Session::checkLoginSessionAndShowMessage(); //เช็ค session    
 Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 
 
@@ -29,6 +30,12 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
         require_once '../mains/ipd-show-patient-sticky.php';
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
+
+        Session::insertSystemAccessLog(json_encode(array(
+            'form'=>'IPD-SUMMARY',
+            'an'=>$an,
+        ),JSON_UNESCAPED_UNICODE));
+
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = $_REQUEST['an'];//รับค่า an
         $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา

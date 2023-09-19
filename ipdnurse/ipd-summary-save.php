@@ -23,18 +23,18 @@ require_once '../include/KphisQueryUtils.php';
     $output_error = '';
 
     //check for require field
-    
+ /*   
     if(empty($an)
-    /*|| empty($_REQUEST['summary_plan_date'])
-    || empty($_REQUEST['summary_plan_time'])*/
+    || empty($_REQUEST['summary_plan_date'])
+    || empty($_REQUEST['summary_plan_time'])
     ){
         exit;
     }
-
+*/
     
 
     $summary_plan_date = /*empty($_REQUEST['summary_plan_date']) ? null : */$_REQUEST['summary_plan_date'];
-    $summary_plan_time = empty($_REQUEST['summary_plan_time']) ? null : $_REQUEST['summary_plan_time'];
+    $summary_plan_time = /*empty($_REQUEST['summary_plan_time']) ? null : */$_REQUEST['summary_plan_time'];
     $principal_diagnosis = empty($_REQUEST['principal_diagnosis']) ? null : $_REQUEST['principal_diagnosis'];
     $pre_admission_comorbidity = empty($_REQUEST['pre_admission_comorbidity']) ? null : $_REQUEST['pre_admission_comorbidity'];
     $post_admission_comorbidity = empty($_REQUEST['post_admission_comorbidity']) ? null : $_REQUEST['post_admission_comorbidity'];

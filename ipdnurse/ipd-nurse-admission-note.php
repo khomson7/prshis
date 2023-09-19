@@ -1,9 +1,24 @@
 <?php
-        require_once '../include/Session.php';
+       require_once '../include/Session.php';
+       //ตรวจสอบว่า session login ตรงกันหรือไม่
+              $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+               $loginname = $_SESSION['loginname'];
+               $values =['loginname'=>$loginname];
+       
+               //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+               if($login != $loginname){
+                   session_start();
+                   session_destroy();
+                   
+                       
+                 }
+       //ส่วนหัวหน้า
+               require_once '../mains/main-report.php';
        // Session::checkLoginSessionAndShowMessage(); //เช็ค session
        // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
-        require_once '../mains/main-report.php';
+        //require_once '../mains/main-report.php';
         require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+        require_once '../mains/ipd-show-patient-sticky.php';
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
         date_default_timezone_set("Asia/Bangkok");
@@ -11,14 +26,7 @@
         $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
         $hn = KphisQueryUtils::getHnByAn($an);
 
-        $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-        $loginname = $_SESSION['loginname'];
-        $values =['loginname'=>$loginname];
-        if($login != $loginname){
-            session_start();
-            session_destroy();
-          }
-
+      
 
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
         $sql = "SELECT count(*) AS count_row, nurse_admission_note_id, version FROM ".DbConstant::KPHIS_DBNAME.".ipd_nurse_admission_note WHERE an = :an ";

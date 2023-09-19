@@ -1,18 +1,16 @@
 <?php
         require_once '../include/Session.php';
         Session::checkLoginSessionAndShowMessage(); //เช็ค session
-        // SessionManager::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_NURSE_ADMISSION_NOTE');
-        if(!(Session::checkPermission('IPD_NURSE_ADDMISSION_NOTE','EDIT'))){
+        // SessionManager::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_DOCTOR_IN_CHARGE');
+        if(!(Session::checkPermission('IPD_NURSE_ADDMISSION_NOTE','ADD'))){
             return;
         }
+        // SessionManager::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_NURSE_ADMISSION_NOTE');
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
-
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
-
         $an = $_REQUEST['an'];
         $hn = KphisQueryUtils::getHnByAn($an);   // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
-        $nurse_admission_note_id = $_REQUEST['nurse_admission_note_id'];
 
         $concious       = empty($_REQUEST['concious']) ? null : $_REQUEST['concious'];
         $normal_breath  = empty($_REQUEST['normal_breath']) ? null : $_REQUEST['normal_breath'];
@@ -41,8 +39,8 @@
         $pitting_edema_text       = empty($_REQUEST['pitting_edema_text']) ? null : $_REQUEST['pitting_edema_text'];
         $circulation_orther       = empty($_REQUEST['circulation_orther']) ? null : $_REQUEST['circulation_orther'];
         $circulation_orther_text  = empty($_REQUEST['circulation_orther_text']) ? null : $_REQUEST['circulation_orther_text'];
-        $no_mental_state  = empty($_REQUEST['no_mental_state']) ? null : $_REQUEST['no_mental_state'];
-        $no_mental_state_text  = empty($_REQUEST['no_mental_state_text']) ? null : $_REQUEST['no_mental_state_text'];
+        $no_mental_state          = empty($_REQUEST['no_mental_state']) ? null : $_REQUEST['no_mental_state'];
+        $no_mental_state_text     = empty($_REQUEST['no_mental_state_text']) ? null : $_REQUEST['no_mental_state_text'];
 
         $normal_skin     = empty($_REQUEST['normal_skin']) ? null : $_REQUEST['normal_skin'];
         $dry             = empty($_REQUEST['dry']) ? null : $_REQUEST['dry'];
@@ -53,19 +51,19 @@
         $skin_other      = empty($_REQUEST['skin_other']) ? null : $_REQUEST['skin_other'];
         $skin_other_text = empty($_REQUEST['skin_other_text']) ? null : $_REQUEST['skin_other_text'];
 
-        $pain = empty($_REQUEST['pain']) ? null : $_REQUEST['pain'];
-        $location = empty($_REQUEST['location']) ? null : $_REQUEST['location'];
-        $pain_charac = empty($_REQUEST['pain_charac']) ? null : $_REQUEST['pain_charac'];
-        $pain_charac_text = empty($_REQUEST['pain_charac_text']) ? null : $_REQUEST['pain_charac_text'];
-        $pain_score = empty($_REQUEST['pain_score']) ? null : $_REQUEST['pain_score'];
+        $pain               = empty($_REQUEST['pain']) ? null : $_REQUEST['pain'];
+        $location           = empty($_REQUEST['location']) ? null : $_REQUEST['location'];
+        $pain_charac        = empty($_REQUEST['pain_charac']) ? null : $_REQUEST['pain_charac'];
+        $pain_charac_text   = empty($_REQUEST['pain_charac_text']) ? null : $_REQUEST['pain_charac_text'];
+        $pain_score         = empty($_REQUEST['pain_score']) ? null : $_REQUEST['pain_score'];
 
-        $normal_behav = empty($_REQUEST['normal_behav']) ? null : $_REQUEST['normal_behav'];
-        $agitate = empty($_REQUEST['agitate']) ? null : $_REQUEST['agitate'];
-        $aggressive = empty($_REQUEST['aggressive']) ? null : $_REQUEST['aggressive'];
-        $depression = empty($_REQUEST['depression']) ? null : $_REQUEST['depression'];
-        $madness = empty($_REQUEST['madness']) ? null : $_REQUEST['madness'];
-        $behaviour_other = empty($_REQUEST['behaviour_other']) ? null : $_REQUEST['behaviour_other'];
-        $behaviour_other_text = empty($_REQUEST['behaviour_other_text']) ? null : $_REQUEST['behaviour_other_text'];
+        $normal_behav           = empty($_REQUEST['normal_behav']) ? null : $_REQUEST['normal_behav'];
+        $agitate                = empty($_REQUEST['agitate']) ? null : $_REQUEST['agitate'];
+        $aggressive             = empty($_REQUEST['aggressive']) ? null : $_REQUEST['aggressive'];
+        $depression             = empty($_REQUEST['depression']) ? null : $_REQUEST['depression'];
+        $madness                = empty($_REQUEST['madness']) ? null : $_REQUEST['madness'];
+        $behaviour_other        = empty($_REQUEST['behaviour_other']) ? null : $_REQUEST['behaviour_other'];
+        $behaviour_other_text   = empty($_REQUEST['behaviour_other_text']) ? null : $_REQUEST['behaviour_other_text'];
 
         $normal_emotional = empty($_REQUEST['normal_emotional']) ? null : $_REQUEST['normal_emotional'];
         $angry = empty($_REQUEST['angry']) ? null : $_REQUEST['angry'];
@@ -210,106 +208,100 @@
         $religious_activity = empty($_REQUEST['religious_activity']) ? null : $_REQUEST['religious_activity'];
         $religious_activity_text = empty($_REQUEST['religious_activity_text']) ? null : $_REQUEST['religious_activity_text'];
 
+        $create_user = $_SESSION['loginname'];
         $update_user = $_SESSION['loginname'];
+        // $create_datetime = $_REQUEST['create_datetime'];
+        // $update_datetime = $_REQUEST['update_datetime'];
+        $version = 1;
 
-        //-----------------เช็คเลข version ว่าตรงกับฐานข้อมูลหรือไม่
-        $query_parameters_version = ['an' => $an];
-        $version_request = $_REQUEST['version'];//รับค่าเลข version
-        $sql_version = "SELECT version FROM ".DbConstant::KPHIS_DBNAME.".ipd_nurse_admission_note WHERE an=:an";
-        $stmt_version = $conn->prepare($sql_version);
-        $stmt_version->execute($query_parameters_version);
-        $row_version = $stmt_version->fetch();
-        $version = $row_version['version'];
-        if($version_request == $version){
-            $version = $version+1;
 
-            try {
-                $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".ipd_nurse_admission_note SET hn=:hn, an=:an, concious=:concious, normal_breath=:normal_breath, kussmaul=:kussmaul,
-                tachypnea=:tachypnea, dyspnea=:dyspnea, apnea=:apnea, tube=:tube, normal_hr=:normal_hr,
-                arregular=:arregular, weakness=:weakness, arrhythmia=:arrhythmia, chestpain=:chestpain, pacemaker=:pacemaker,
-                cardio_other=:cardio_other, cardio_other_text=:cardio_other_text, normal_cir=:normal_cir, pale=:pale, cyanosis=:cyanosis,
-                generalized_edema=:generalized_edema, localized_edema=:localized_edema, localized_edema_text=:localized_edema_text, pitting_edema=:pitting_edema, pitting_edema_text=:pitting_edema_text,
-                circulation_orther=:circulation_orther, circulation_orther_text=:circulation_orther_text, no_mental_state=:no_mental_state, no_mental_state_text=:no_mental_state_text,
-                normal_skin=:normal_skin, dry=:dry, bruise=:bruise,
-                erythema=:erythema, abscess=:abscess, joudice=:joudice, skin_other=:skin_other, skin_other_text=:skin_other_text,
-                pain=:pain, location=:location, pain_charac=:pain_charac, pain_charac_text=:pain_charac_text, pain_score=:pain_score,
-                normal_behav=:normal_behav, agitate=:agitate, aggressive=:aggressive, depression=:depression, madness=:madness,
-                behaviour_other=:behaviour_other, behaviour_other_text=:behaviour_other_text, normal_emotional=:normal_emotional, angry=:angry, moody=:moody,
-                anxiety=:anxiety, fear=:fear, emotional_other=:emotional_other, emotional_other_text=:emotional_other_text, no_anxiety=:no_anxiety,
-                study=:study, family=:family, economy=:economy, habitation=:habitation, illness=:illness,
-                spiritual_no=:spiritual_no, spiritual_back_home=:spiritual_back_home, spiritual_need_family=:spiritual_need_family, spiritual_other=:spiritual_other, spiritual_other_text=:spiritual_other_text,
-                spiritual_cant_rated=:spiritual_cant_rated, spiritual_cant_rated_text=:spiritual_cant_rated_text, education=:education, education_result=:education_result, occupation=:occupation,
-                income=:income, self=:self, person_family=:person_family, neighbor=:neighbor, assistant_other=:assistant_other, assistant_other_text=:assistant_other_text,
-                assistant_occupation=:assistant_occupation, clinic=:clinic, buy_medicine=:buy_medicine, no_risk=:no_risk, smoking=:smoking,
-                smoke_year=:smoke_year, smoke_frequency=:smoke_frequency, smoke_stopped=:smoke_stopped, alcohol=:alcohol, alc_year=:alc_year,
-                alc_frequency=:alc_frequency, alc_stopped=:alc_stopped, medication_used=:medication_used, med_name=:med_name, med_year=:med_year,
-                med_frequency=:med_frequency, med_stopped=:med_stopped, diet_regular=:diet_regular, diet_spec=:diet_spec, nutrition_risk=:nutrition_risk,
-                loss_appetite=:loss_appetite, dysphagia=:dysphagia, loss_gustation=:loss_gustation, denture=:denture, nutrition_risk_other=:nutrition_risk_other, nutrition_risk_other_text=:nutrition_risk_other_text,
-                normal_urine=:normal_urine, dysuria=:dysuria, incontinence=:incontinence, staining=:staining, hematuria=:hematuria,
-                catheter=:catheter, normal_feces=:normal_feces, constipation=:constipation, diarrhea=:diarrhea, bowel_incontinence=:bowel_incontinence,
-                hemorrhoid=:hemorrhoid, colostomy=:colostomy, activity1=:activity1, activity2=:activity2, activity3=:activity3, activity4=:activity4,
-                o_p_use=:o_p_use, sleep_per_day=:sleep_per_day,
-                sleep_hour=:sleep_hour, sleep_problems=:sleep_problems, sleep_problems_detail=:sleep_problems_detail, sleep_med_name=:sleep_med_name, sleep_med_name_detail=:sleep_med_name_detail,
-                cognitive=:cognitive, memory=:memory, memory_detail=:memory_detail, hearing=:hearing, hearing_detail=:hearing_detail,
-                eartone=:eartone, vision=:vision, vision_detail=:vision_detail, vision_eyeglasses=:vision_eyeglasses, vision_contactlens=:vision_contactlens,
-                speech=:speech, speech_detail=:speech_detail, self_image=:self_image, self_image_detail=:self_image_detail, self_activity=:self_activity,
-                self_activity_detail=:self_activity_detail, sickness_effect=:sickness_effect, sickness_family=:sickness_family, sickness_occupation=:sickness_occupation, sickness_education=:sickness_education,
-                sickness_other=:sickness_other, sickness_other_text=:sickness_other_text, period=:period, period_normal=:period_normal, period_disorders=:period_disorders,
-                period_lmp=:period_lmp, period_menopause=:period_menopause, breast=:breast, breast_disorders=:breast_disorders, consult=:consult,
-                seclude=:seclude, medication=:medication, medication_detail=:medication_detail, religion=:religion, coping_stress_other=:coping_stress_other,
-                coping_stress_other_detail=:coping_stress_other_detail, belief_sickness_behave=:belief_sickness_behave, belief_sickness_age=:belief_sickness_age, belief_sickness_destiny=:belief_sickness_destiny, belief_sickness_other=:belief_sickness_other,
-                belief_sickness_other_text=:belief_sickness_other_text, belief_believe=:belief_believe, belief_believe_text=:belief_believe_text, religious_activity=:religious_activity, religious_activity_text=:religious_activity_text,
-                update_user=:update_user, update_datetime=now(), version=:version
-                WHERE nurse_admission_note_id=:nurse_admission_note_id");
-                $stmt->execute(array('nurse_admission_note_id'=>$nurse_admission_note_id, 'hn'=>$hn, 'an'=>$an, 'concious'=>$concious, 'normal_breath'=>$normal_breath, 'kussmaul'=>$kussmaul,
+        try {
+                $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_nurse_admission_note (hn,an,concious,normal_breath,kussmaul,tachypnea,dyspnea,apnea,tube,normal_hr,arregular,weakness,
+                arrhythmia,chestpain,pacemaker,
+                cardio_other,cardio_other_text,normal_cir,pale,cyanosis,generalized_edema,localized_edema,localized_edema_text,pitting_edema,pitting_edema_text,circulation_orther,
+                circulation_orther_text,no_mental_state,no_mental_state_text,normal_skin,dry,bruise,
+                erythema,abscess,joudice,skin_other,skin_other_text,pain,location,pain_charac,pain_charac_text,pain_score,normal_behav,agitate,aggressive,depression,madness,
+                behaviour_other,behaviour_other_text,normal_emotional,angry,moody,anxiety,fear,emotional_other,emotional_other_text,no_anxiety,study,family,economy,habitation,illness,spiritual_no,spiritual_back_home,
+                spiritual_need_family,spiritual_other,spiritual_other_text,spiritual_cant_rated,spiritual_cant_rated_text,education,education_result,occupation,income,self,person_family,
+                neighbor,assistant_other,assistant_other_text,assistant_occupation,clinic,
+                buy_medicine,no_risk,smoking,smoke_year,smoke_frequency,smoke_stopped,alcohol,alc_year,alc_frequency,alc_stopped,medication_used,med_name,med_year,med_frequency,med_stopped,
+                diet_regular,diet_spec,nutrition_risk,loss_appetite,dysphagia,loss_gustation,denture,nutrition_risk_other,nutrition_risk_other_text,normal_urine,dysuria,incontinence,staining,hematuria,catheter,normal_feces,
+                constipation,diarrhea,bowel_incontinence,hemorrhoid,colostomy,activity1,activity2,activity3,activity4,
+                o_p_use,sleep_per_day,sleep_hour,sleep_problems,sleep_problems_detail,sleep_med_name,sleep_med_name_detail,
+                cognitive,memory,
+                memory_detail,hearing,hearing_detail,eartone,vision,vision_detail,vision_eyeglasses,vision_contactlens,speech,speech_detail,self_image,self_image_detail,self_activity,self_activity_detail,
+                sickness_effect,
+                sickness_family,sickness_occupation,sickness_education,sickness_other,sickness_other_text,period,period_normal,period_disorders,period_lmp,period_menopause,breast,breast_disorders,consult,
+                seclude,medication,
+                medication_detail,religion,coping_stress_other,coping_stress_other_detail,belief_sickness_behave,belief_sickness_age,belief_sickness_destiny,belief_sickness_other,belief_sickness_other_text,
+                belief_believe,belief_believe_text,religious_activity,religious_activity_text,create_user,create_datetime,update_user,update_datetime,version)
+                VALUES (:hn,:an,:concious,:normal_breath,:kussmaul,:tachypnea,:dyspnea,:apnea,:tube,:normal_hr,:arregular,:weakness,:arrhythmia,:chestpain,:pacemaker,
+                :cardio_other,:cardio_other_text,:normal_cir,:pale,:cyanosis,:generalized_edema,:localized_edema,:localized_edema_text,:pitting_edema,:pitting_edema_text,:circulation_orther,
+                :circulation_orther_text,:no_mental_state,:no_mental_state_text,:normal_skin,:dry,:bruise,
+                :erythema,:abscess,:joudice,:skin_other,:skin_other_text,:pain,:location,:pain_charac,:pain_charac_text,:pain_score,:normal_behav,:agitate,:aggressive,:depression,:madness,
+                :behaviour_other,:behaviour_other_text,:normal_emotional,:angry,:moody,:anxiety,:fear,:emotional_other,:emotional_other_text,:no_anxiety,:study,:family,:economy,:habitation,:illness,:spiritual_no,:spiritual_back_home,
+                :spiritual_need_family,:spiritual_other,:spiritual_other_text,:spiritual_cant_rated,:spiritual_cant_rated_text,:education,:education_result,:occupation,:income,:self,:person_family,
+                :neighbor,:assistant_other,:assistant_other_text,:assistant_occupation,:clinic,
+                :buy_medicine,:no_risk,:smoking,:smoke_year,:smoke_frequency,:smoke_stopped,:alcohol,:alc_year,:alc_frequency,:alc_stopped,:medication_used,:med_name,:med_year,:med_frequency,:med_stopped,
+                :diet_regular,:diet_spec,:nutrition_risk,:loss_appetite,:dysphagia,:loss_gustation,:denture,:nutrition_risk_other,:nutrition_risk_other_text,:normal_urine,:dysuria,:incontinence,:staining,:hematuria,:catheter,
+                :normal_feces,:constipation,:diarrhea,:bowel_incontinence,:hemorrhoid,:colostomy,:activity1,:activity2,:activity3,:activity4,
+                :o_p_use,:sleep_per_day,:sleep_hour,:sleep_problems,:sleep_problems_detail,:sleep_med_name,
+                :sleep_med_name_detail,:cognitive,:memory,
+                :memory_detail,:hearing,:hearing_detail,:eartone,:vision,:vision_detail,:vision_eyeglasses,:vision_contactlens,:speech,:speech_detail,:self_image,:self_image_detail,
+                :self_activity,:self_activity_detail,:sickness_effect,
+                :sickness_family,:sickness_occupation,:sickness_education,:sickness_other,:sickness_other_text,:period,:period_normal,:period_disorders,:period_lmp,:period_menopause,
+                :breast,:breast_disorders,:consult,:seclude,:medication,
+                :medication_detail,:religion,:coping_stress_other,:coping_stress_other_detail,:belief_sickness_behave,:belief_sickness_age,:belief_sickness_destiny,:belief_sickness_other,
+                :belief_sickness_other_text,:belief_believe,:belief_believe_text,:religious_activity,:religious_activity_text,:create_user,now(),:update_user,now(),:version)");
+                $stmt->execute(array('hn'=>$hn, 'an'=>$an, 'concious'=>$concious, 'normal_breath'=>$normal_breath, 'kussmaul'=>$kussmaul,
                 'tachypnea'=>$tachypnea, 'dyspnea'=>$dyspnea, 'apnea'=>$apnea, 'tube'=>$tube, 'normal_hr'=>$normal_hr,
                 'arregular'=>$arregular, 'weakness'=>$weakness, 'arrhythmia'=>$arrhythmia, 'chestpain'=>$chestpain, 'pacemaker'=>$pacemaker,
                 'cardio_other'=>$cardio_other, 'cardio_other_text'=>$cardio_other_text, 'normal_cir'=>$normal_cir, 'pale'=>$pale, 'cyanosis'=>$cyanosis,
-                'generalized_edema'=>$generalized_edema, 'localized_edema'=>$localized_edema, 'localized_edema_text'=>$localized_edema_text, 'pitting_edema'=>$pitting_edema, 'pitting_edema_text'=>$pitting_edema_text,
+                'generalized_edema'=>$generalized_edema, 'localized_edema'=>$localized_edema, 'localized_edema_text'=>$localized_edema_text, 'pitting_edema'=>$pitting_edema,
+                'pitting_edema_text'=>$pitting_edema_text,
                 'circulation_orther'=>$circulation_orther, 'circulation_orther_text'=>$circulation_orther_text, 'no_mental_state'=>$no_mental_state, 'no_mental_state_text'=>$no_mental_state_text,
                 'normal_skin'=>$normal_skin, 'dry'=>$dry, 'bruise'=>$bruise,
                 'erythema'=>$erythema, 'abscess'=>$abscess, 'joudice'=>$joudice, 'skin_other'=>$skin_other, 'skin_other_text'=>$skin_other_text,
                 'pain'=>$pain, 'location'=>$location, 'pain_charac'=>$pain_charac, 'pain_charac_text'=>$pain_charac_text, 'pain_score'=>$pain_score,
                 'normal_behav'=>$normal_behav, 'agitate'=>$agitate, 'aggressive'=>$aggressive, 'depression'=>$depression, 'madness'=>$madness,
-                'behaviour_other'=>$behaviour_other, 'behaviour_other_text'=>$behaviour_other_text, 'normal_emotional'=>$normal_emotional, 'angry'=>$angry, 'moody'=>$moody,
-                'anxiety'=>$anxiety, 'fear'=>$fear, 'emotional_other'=>$emotional_other, 'emotional_other_text'=>$emotional_other_text, 'no_anxiety'=>$no_anxiety,
-                'study'=>$study, 'family'=>$family, 'economy'=>$economy, 'habitation'=>$habitation, 'illness'=>$illness,
-                'spiritual_no'=>$spiritual_no, 'spiritual_back_home'=>$spiritual_back_home, 'spiritual_need_family'=>$spiritual_need_family, 'spiritual_other'=>$spiritual_other,
-                'spiritual_other_text'=>$spiritual_other_text,
-                'spiritual_cant_rated'=>$spiritual_cant_rated, 'spiritual_cant_rated_text'=>$spiritual_cant_rated_text, 'education'=>$education, 'education_result'=>$education_result, 'occupation'=>$occupation,
-                'income'=>$income, 'self'=>$self, 'person_family'=>$person_family, 'neighbor'=>$neighbor, 'assistant_other'=>$assistant_other, 'assistant_other_text'=>$assistant_other_text,
-                'assistant_occupation'=>$assistant_occupation, 'clinic'=>$clinic, 'buy_medicine'=>$buy_medicine, 'no_risk'=>$no_risk, 'smoking'=>$smoking,
-                'smoke_year'=>$smoke_year, 'smoke_frequency'=>$smoke_frequency, 'smoke_stopped'=>$smoke_stopped, 'alcohol'=>$alcohol, 'alc_year'=>$alc_year,
-                'alc_frequency'=>$alc_frequency, 'alc_stopped'=>$alc_stopped, 'medication_used'=>$medication_used, 'med_name'=>$med_name, 'med_year'=>$med_year,
-                'med_frequency'=>$med_frequency, 'med_stopped'=>$med_stopped, 'diet_regular'=>$diet_regular, 'diet_spec'=>$diet_spec, 'nutrition_risk'=>$nutrition_risk,
-                'loss_appetite'=>$loss_appetite, 'dysphagia'=>$dysphagia, 'loss_gustation'=>$loss_gustation, 'denture'=>$denture, 'nutrition_risk_other'=>$nutrition_risk_other, 'nutrition_risk_other_text'=>$nutrition_risk_other_text,
-                'normal_urine'=>$normal_urine, 'dysuria'=>$dysuria, 'incontinence'=>$incontinence, 'staining'=>$staining, 'hematuria'=>$hematuria,
-                'catheter'=>$catheter, 'normal_feces'=>$normal_feces, 'constipation'=>$constipation, 'diarrhea'=>$diarrhea, 'bowel_incontinence'=>$bowel_incontinence,
-                'hemorrhoid'=>$hemorrhoid, 'colostomy'=>$colostomy, 'activity1'=>$activity1,  'activity2'=>$activity2, 'activity3'=>$activity3, 'activity4'=>$activity4,
-                'o_p_use'=>$o_p_use, 'sleep_per_day'=>$sleep_per_day,
-                'sleep_hour'=>$sleep_hour, 'sleep_problems'=>$sleep_problems, 'sleep_problems_detail'=>$sleep_problems_detail, 'sleep_med_name'=>$sleep_med_name, 'sleep_med_name_detail'=>$sleep_med_name_detail,
-                'cognitive'=>$cognitive, 'memory'=>$memory, 'memory_detail'=>$memory_detail, 'hearing'=>$hearing, 'hearing_detail'=>$hearing_detail,
-                'eartone'=>$eartone, 'vision'=>$vision, 'vision_detail'=>$vision_detail, 'vision_eyeglasses'=>$vision_eyeglasses, 'vision_contactlens'=>$vision_contactlens,
-                'speech'=>$speech, 'speech_detail'=>$speech_detail, 'self_image'=>$self_image, 'self_image_detail'=>$self_image_detail, 'self_activity'=>$self_activity,
-                'self_activity_detail'=>$self_activity_detail, 'sickness_effect'=>$sickness_effect, 'sickness_family'=>$sickness_family, 'sickness_occupation'=>$sickness_occupation, 'sickness_education'=>$sickness_education,
-                'sickness_other'=>$sickness_other, 'sickness_other_text'=>$sickness_other_text, 'period'=>$period, 'period_normal'=>$period_normal, 'period_disorders'=>$period_disorders,
-                'period_lmp'=>$period_lmp, 'period_menopause'=>$period_menopause, 'breast'=>$breast, 'breast_disorders'=>$breast_disorders, 'consult'=>$consult,
-                'seclude'=>$seclude, 'medication'=>$medication, 'medication_detail'=>$medication_detail, 'religion'=>$religion, 'coping_stress_other'=>$coping_stress_other,
-                'coping_stress_other_detail'=>$coping_stress_other_detail, 'belief_sickness_behave'=>$belief_sickness_behave, 'belief_sickness_age'=>$belief_sickness_age, 'belief_sickness_destiny'=>$belief_sickness_destiny, 'belief_sickness_other'=>$belief_sickness_other,
-                'belief_sickness_other_text'=>$belief_sickness_other_text, 'belief_believe'=>$belief_believe, 'belief_believe_text'=>$belief_believe_text, 'religious_activity'=>$religious_activity, 'religious_activity_text'=>$religious_activity_text,
-                'update_user'=>$update_user, 'version'=>$version
-                ));
+                'behaviour_other'=>$behaviour_other,'behaviour_other_text'=>$behaviour_other_text, 'normal_emotional'=>$normal_emotional, 'angry'=>$angry, 'moody'=>$moody, 'anxiety'=>$anxiety,
+                'fear'=>$fear, 'emotional_other'=>$emotional_other,'emotional_other_text'=>$emotional_other_text, 'no_anxiety'=>$no_anxiety, 'study'=>$study, 'family'=>$family,
+                'economy'=>$economy, 'habitation'=>$habitation, 'illness'=>$illness, 'spiritual_no'=>$spiritual_no, 'spiritual_back_home'=>$spiritual_back_home,
+                'spiritual_need_family'=>$spiritual_need_family, 'spiritual_other'=>$spiritual_other, 'spiritual_other_text'=>$spiritual_other_text, 'spiritual_cant_rated'=>$spiritual_cant_rated,
+                'spiritual_cant_rated_text'=>$spiritual_cant_rated_text,
+                'education'=>$education, 'education_result'=>$education_result, 'occupation'=>$occupation, 'income'=>$income, 'self'=>$self,
+                'person_family'=>$person_family, 'neighbor'=>$neighbor, 'assistant_other'=>$assistant_other, 'assistant_other_text'=>$assistant_other_text, 'assistant_occupation'=>$assistant_occupation, 'clinic'=>$clinic,
+                'buy_medicine'=>$buy_medicine, 'no_risk'=>$no_risk, 'smoking'=>$smoking, 'smoke_year'=>$smoke_year, 'smoke_frequency'=>$smoke_frequency,
+                'smoke_stopped'=>$smoke_stopped, 'alcohol'=>$alcohol, 'alc_year'=>$alc_year, 'alc_frequency'=>$alc_frequency, 'alc_stopped'=>$alc_stopped,
+                'medication_used'=>$medication_used, 'med_name'=>$med_name, 'med_year'=>$med_year, 'med_frequency'=>$med_frequency, 'med_stopped'=>$med_stopped,
+                'diet_regular'=>$diet_regular, 'diet_spec'=>$diet_spec, 'nutrition_risk'=>$nutrition_risk, 'loss_appetite'=>$loss_appetite, 'dysphagia'=>$dysphagia,
+                'loss_gustation'=>$loss_gustation, 'denture'=>$denture, 'nutrition_risk_other'=>$nutrition_risk_other, 'nutrition_risk_other_text'=>$nutrition_risk_other_text, 'normal_urine'=>$normal_urine, 'dysuria'=>$dysuria,
+                'incontinence'=>$incontinence, 'staining'=>$staining, 'hematuria'=>$hematuria, 'catheter'=>$catheter, 'normal_feces'=>$normal_feces,
+                'constipation'=>$constipation, 'diarrhea'=>$diarrhea, 'bowel_incontinence'=>$bowel_incontinence, 'hemorrhoid'=>$hemorrhoid, 'colostomy'=>$colostomy,
+                'activity1'=>$activity1, 'activity2'=>$activity2, 'activity3'=>$activity3, 'activity4'=>$activity4,
+                'o_p_use'=>$o_p_use, 'sleep_per_day'=>$sleep_per_day, 'sleep_hour'=>$sleep_hour, 'sleep_problems'=>$sleep_problems,
+                'sleep_problems_detail'=>$sleep_problems_detail, 'sleep_med_name'=>$sleep_med_name, 'sleep_med_name_detail'=>$sleep_med_name_detail, 'cognitive'=>$cognitive, 'memory'=>$memory,
+                'memory_detail'=>$memory_detail, 'hearing'=>$hearing, 'hearing_detail'=>$hearing_detail, 'eartone'=>$eartone, 'vision'=>$vision,
+                'vision_detail'=>$vision_detail, 'vision_eyeglasses'=>$vision_eyeglasses, 'vision_contactlens'=>$vision_contactlens, 'speech'=>$speech, 'speech_detail'=>$speech_detail,
+                'self_image'=>$self_image, 'self_image_detail'=>$self_image_detail, 'self_activity'=>$self_activity, 'self_activity_detail'=>$self_activity_detail, 'sickness_effect'=>$sickness_effect,
+                'sickness_family'=>$sickness_family, 'sickness_occupation'=>$sickness_occupation, 'sickness_education'=>$sickness_education, 'sickness_other'=>$sickness_other,
+                'sickness_other_text'=>$sickness_other_text,
+                'period'=>$period, 'period_normal'=>$period_normal, 'period_disorders'=>$period_disorders, 'period_lmp'=>$period_lmp, 'period_menopause'=>$period_menopause,
+                'breast'=>$breast, 'breast_disorders'=>$breast_disorders, 'consult'=>$consult, 'seclude'=>$seclude, 'medication'=>$medication,
+                'medication_detail'=>$medication_detail, 'religion'=>$religion, 'coping_stress_other'=>$coping_stress_other, 'coping_stress_other_detail'=>$coping_stress_other_detail,
+                'belief_sickness_behave'=>$belief_sickness_behave,
+                'belief_sickness_age'=>$belief_sickness_age, 'belief_sickness_destiny'=>$belief_sickness_destiny, 'belief_sickness_other'=>$belief_sickness_other,
+                'belief_sickness_other_text'=>$belief_sickness_other_text, 'belief_believe'=>$belief_believe,
+                'belief_believe_text'=>$belief_believe_text, 'religious_activity'=>$religious_activity, 'religious_activity_text'=>$religious_activity_text,
+                'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version));
 
-            $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
+        $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
-                } catch (PDOException  $e) {
-                    echo $e->getMessage();
-                    $output_error = '<div class="alert alert-danger">ERROR !!</div>';
-                }
+            } catch (PDOException  $e) {
+                echo $e->getMessage();
+                $output_error = '<div class="alert alert-danger">ERROR !!</div>';
+            }
 
-            echo $output_error;
-        }else{
+        echo $output_error;
 
-            exit;
-        }
 ?>

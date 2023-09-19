@@ -109,6 +109,27 @@
         
         }
 
+             //from prs_dr_admission_note
+             if ($admission_note_id != null) {
+                $sql_from_er = "SELECT hn,an,receiver_medication_date,receiver_medication_time
+                ,take_medication_by,arrive_by,informant_patient,informant_relatives,informant_deliverer,informant_etc
+                ,inpatient_history,inpatient_last_date,inpatient_location,inpatient_because
+                ,chief_complaints,medical_history
+                ,req_hospital,ros
+                ,history_from,pmh,fh,vaccineation,gd,fdh,lmp
+                ,bp,t,pr,rr,pe_general,pe_skin,pe_heent,pe_neck,pe_breastthorax
+                ,pe_heart,pe_lungs,pe_cvs,pe_abdomen
+                ,pe_rectalgenitalia,pe_extremities,pe_cns,pe_neurological,pe_ob_gynexam
+                ,pe_other,pe_text,svg_tag,impression,diff_dx,problem_list,plan_management
+                ,create_user,create_datetime,update_user,update_datetime,version
+                FROM prs_dr_admission_note WHERE an= :vn ";
+                $stmt_fromer = $conn->prepare($sql_from_er);
+                $stmt_fromer->execute(['vn' => $vn]);
+                $row_fromer  = $stmt_fromer->fetch();
+            
+            }
+
+
         $sql_opduser = "SELECT opduser.entryposition,opduser.name
                         FROM ".DbConstant::HOSXP_DBNAME.".opduser
                         WHERE loginname = :loginname";
