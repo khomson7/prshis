@@ -20,7 +20,7 @@ if(($getDocumentSummary)){
     $image_checkSummary = $image_check;
 }
 
-$getDocumentAddmissionDoctor = (KphisQueryUtils::getDocumentAddmissionDoctor($an));
+$getDocumentAddmissionDoctor = (KphisQueryUtils::getDocumentAddmissionDoctor1($an));
 $image_checkAddmissionDoctor = '';
 if(($getDocumentAddmissionDoctor)){
     $image_checkAddmissionDoctor = $image_check;
@@ -135,9 +135,9 @@ $query_parameters_REQUEST = ['an'=>$an];
         $sql_ipt = "select patient.hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,
                     an_stat.age_y,an_stat.age_m,an_stat.age_d,
                     ipt.regdate,ipt.regtime,ipt.ward,
-                    ipt.pttype,
+                    ipt.pttype,ipt.dchdate,
                     pttype.`name` as pttype_name,
-                    ward.shortname
+                    ward.shortname,ward.name as wardname
                     from ".DbConstant::HOSXP_DBNAME.".ipt
                     left outer join ".DbConstant::HOSXP_DBNAME.".an_stat on an_stat.an=ipt.an
                     left outer join ".DbConstant::HOSXP_DBNAME.".patient on patient.hn=ipt.hn
@@ -152,6 +152,9 @@ $query_parameters_REQUEST = ['an'=>$an];
             $pname_row_ipt = htmlspecialchars($row_ipt['pname']);
             $fname_row_ipt = htmlspecialchars($row_ipt['fname']);
             $lname_row_ipt = htmlspecialchars($row_ipt['lname']);
+            $regdate_row_ipt = htmlspecialchars($row_ipt['regdate']);
+            $dchdate_row_ipt = htmlspecialchars($row_ipt['dchdate']);
+            $wardname_row_ipt = htmlspecialchars($row_ipt['wardname']);
         }
 // $mpdf->SetFooter(' (พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' )');
 // $mpdf->WriteHTML('');
@@ -178,9 +181,12 @@ $head =
             line-height: 150%;
         }
     </style>
+    
     <h3 style="text-align:center;">เอกสารใบปะหน้า</h3>
+   
     <p>
-        HN : '.$hn_row_ipt.' AN : '.$an.' ชื่อ - สกุล : '.$pname_row_ipt.' '.$fname_row_ipt.' '.$lname_row_ipt.'
+        วันที่รับไว้ : '.$regdate_row_ipt.'
+        HN : '.$hn_row_ipt.' AN : '.$an.'&nbsp;&nbsp;WARD : '.$wardname_row_ipt.'<br> ชื่อ - สกุล : '.$pname_row_ipt.' '.$fname_row_ipt.' '.$lname_row_ipt.'<br> วันที่จำหน่าย : '.$dchdate_row_ipt.'
     </p>
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
         <tr style="border:1px solid #000;margin: 45px;">
@@ -402,6 +408,7 @@ $head =
         </tr>
     </table>
     <p style="text-align:right;">(พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' ) </p>
+
 ';
 $mpdf->WriteHTML($head);
 $mpdf->Output();
