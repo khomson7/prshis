@@ -535,7 +535,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_IO").attr("class","text-success fas fa-check-circle");
             $("#show_text_IO_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
             if(IPD_DOCUMENT_PRINT){
-                $("#IO_pdf").attr({"class":"badge badge-secondary","href":"ipd-vital-sign-io-pdf.php?an_io_pdf="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+                $("#IO_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-vital-sign-io-pdf.php?an_io_pdf="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
             }
         }else{
             $("#check_countRowData_IO").attr("class","text-secondary fas fa-circle");
