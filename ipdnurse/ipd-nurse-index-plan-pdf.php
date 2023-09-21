@@ -26,6 +26,12 @@ $start_plan_date = empty($_REQUEST['start_plan_date']) ? null : $_REQUEST['start
 $end_plan_date = empty($_REQUEST['end_plan_date']) ? null : $_REQUEST['end_plan_date'];
 $plan_sch_type = empty($_REQUEST['plan_sch_type']) ? null : $_REQUEST['plan_sch_type'];
 
+Session::insertSystemAccessLog(json_encode(array(
+    'report'=>'IPD-NURSE-INDEX-PLAN-PDF',
+   // 'action'=>'PRINT',
+    'an'=>$an,
+),JSON_UNESCAPED_UNICODE));
+
 try {
     $sql = "SELECT
                 index_action.action_id,

@@ -18,6 +18,13 @@
             'margin-top' => 8,
             'margin-bottom' => 5,
         ]);
+
+        Session::insertSystemAccessLog(json_encode(array(
+            'report'=>'IPD-NURSE-ADMISSION-NOTE-PDF',
+           // 'action'=>'PRINT',
+            'an'=>$an,
+        ),JSON_UNESCAPED_UNICODE));
+
         //----------------------select ข้อมูล จากฐานข้อมูลเพื่อค้นหา ชื่อ - สกุล
         $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
         $image_check = "<img src='../include/images/check-adm-1.png' width='1.6%' class='check_img'>";

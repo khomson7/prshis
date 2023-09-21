@@ -7,6 +7,8 @@ require_once '../include/KphisQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
+
+
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4']);
 $mpdf->AddPageByArray([
         'margin-left' => 12,
@@ -49,6 +51,11 @@ $head = '
         $search_enddate = $_REQUEST['search_enddate'];//รับค่า วันที่่เริ่มต้นปัญหา ช่องที่ 2
         $search_status = $_REQUEST['search_status'];//รับค่า สถานะ
 
+        Session::insertSystemAccessLog(json_encode(array(
+                'report'=>'IPD-NURSE-FOCUS-LIST-PDF',
+               // 'action'=>'PRINT',
+                'an'=>$an_REQUEST,
+            ),JSON_UNESCAPED_UNICODE));
         //----------------------รับค่า an และ select ข้อมูล จากฐานข้อมูลเพื่อค้นหา hn
 
         $hn_REQUEST = KphisQueryUtils::getHnByAn($an_REQUEST);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา

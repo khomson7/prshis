@@ -12,6 +12,8 @@ require_once '../include/KphisQueryUtils.php';
 date_default_timezone_set('asia/bangkok');
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 
+
+
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4']);
 $mpdf->AddPageByArray([
     'margin-left' => 10,
@@ -53,6 +55,12 @@ $head = '
 
         $an_REQUEST = $_REQUEST['an_fcnote_pdf'];//รับค่า an
        // $an_REQUEST = '11';
+
+       Session::insertSystemAccessLog(json_encode(array(
+        'report'=>'IPD-NURSE-FOCUS-NOTE-PDF',
+       // 'action'=>'PRINT',
+        'an'=>$an_REQUEST,
+    ),JSON_UNESCAPED_UNICODE));
 
         $hn_REQUEST = KphisQueryUtils::getHnByAn($an_REQUEST);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
         $search_startdate = $_REQUEST['search_startdate'];//รับค่า วันที่่เริ่มต้นปัญหา ช่องที่ 1
