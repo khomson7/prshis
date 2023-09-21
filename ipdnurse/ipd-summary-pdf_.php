@@ -31,12 +31,6 @@ $an_REQUEST = $_REQUEST['an'];//รับค่า an
 $hn_REQUEST = KphisQueryUtils::getHnByAn($an_REQUEST);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $query_parameters_REQUEST = ['an'=>$an_REQUEST,];
 
-Session::insertSystemAccessLog(json_encode(array(
-    'report'=>'IPD-SUMMARY-PDF',
-   // 'action'=>'PRINT',
-    'an'=>$an_REQUEST,
-),JSON_UNESCAPED_UNICODE));
-
 $name_session = $_SESSION['name'];
 $sql_ipt = "SELECT ipt.an, ipt.hn as ipt_hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,
     patient.cid,patient.birthday,
@@ -164,6 +158,7 @@ $sql_ipt = "SELECT ipt.an, ipt.hn as ipt_hn,patient.pname,patient.fname,patient.
         $external_cause = $row_ipt['external_cause'];
         $operating_room = $row_ipt['operating_room'];
 
+     
         $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 
         $tracheostomy = $row_ipt['tracheostomy'];
@@ -369,7 +364,7 @@ $head = '
     <td style="border-right:0.5px solid #000;padding:4px;" colspan="1"><B>'.htmlspecialchars($dchtime_row_ipt).'</B></td>
     </tr>
     <tr style="border:1px solid #000;margin: 45px;">
-    <td style="border-right:0.5px solid #000;padding:4px; width:10; position:relative; text-rotate:90;" colspan="1" rowspan="5">22 DIAGNOSIS</td>
+    <td style="border-right:0.5px solid #000;padding:4px; width:10; position:relative; text-rotate:90;" colspan="1" rowspan="7">22 DIAGNOSIS</td>
     <td style="border-right:0.5px solid #000;padding:4px;" colspan="8" valign="top">&nbsp;(1) PRINCIPAL DIAGNOSIS บันทึกได้เพียงโรคเดียวเท่านั้น<br><div style="font-size:8pt;"><B>&nbsp;&nbsp;&nbsp;&nbsp;'.nl2br(htmlspecialchars($principal_diagnosis)).'</B></div></td>
     <td style="border-right:0.5px solid #000;padding:4px;" colspan="1" valign="top">&nbsp;Main<br><br><br></td>
     </tr>
@@ -391,6 +386,14 @@ $head = '
     <tr style="border:1px solid #000;margin: 45px;">
     <td style="border-right:0.5px solid #000;padding:4px;" colspan="8" valign="top">&nbsp;(5) EXTERNAL CAUSE (S) OF INJURY<br><div style="font-size:7pt;"><B>&nbsp;&nbsp;&nbsp;&nbsp;'.nl2br(htmlspecialchars($external_cause)).'</B></div></td>
     <td style="border-right:0.5px solid #000;padding:4px;" colspan="1" valign="top">&nbsp;E-Code<br><br><br><br></td>
+    </tr>
+    <tr style="border:1px solid #000;margin: 45px;">
+    <td style="border-right:0.5px solid #000;padding:4px;" colspan="8" valign="top">&nbsp;(6) Additional Code<br><div style="font-size:7pt;"><B>&nbsp;&nbsp;&nbsp;&nbsp;'.nl2br(htmlspecialchars($external_cause)).'</B></div></td>
+    <td style="border-right:0.5px solid #000;padding:4px;" colspan="1" valign="top">&nbsp;Add-Code<br><br><br><br></td>
+    </tr>
+    <tr style="border:1px solid #000;margin: 45px;">
+    <td style="border-right:0.5px solid #000;padding:4px;" colspan="8" valign="top">&nbsp;(7) Morphology Code<br><div style="font-size:7pt;"><B>&nbsp;&nbsp;&nbsp;&nbsp;'.nl2br(htmlspecialchars($external_cause)).'</B></div></td>
+    <td style="border-right:0.5px solid #000;padding:4px;" colspan="1" valign="top">&nbsp;Mor-Code<br><br><br><br></td>
     </tr>
     <tr style="border:1px solid #000;margin: 45px;">
     <td style="border-right:0.5px solid #000;padding:4px;" colspan="1" valign="top">&nbsp;23</td>
@@ -450,16 +453,16 @@ $head = '
 $mpdf->setFooter('
 <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:6pt;margin-top:8px;">
 <tr style="border:0px solid #000;margin: 45px;">
-<td style="border-right:0px solid #000;padding:4px;" colspan="7" valign="bottom">ATTENDING</td>
-<td style="border-right:0px solid #000;padding:4px;" colspan="3" valign="bottom">APPROVED</td>
+<td style="border-right:0px solid #000;padding:4px;" colspan="9" valign="bottom">ATTENDING</td>
+<td style="border-right:0px solid #000;padding:4px;" colspan="5" valign="bottom">APPROVED</td>
 </tr>
 <tr style="border:0px solid #000;margin: 45px;">
 <td style="border-right:0px solid #000;padding:4px;" colspan="7" valign="bottom">PHYSICIAN...................'.$user_create_user.'....'.$licenseno.'....</td>
 <td style="border-right:0px solid #000;padding:4px;" colspan="3" valign="bottom">BY................'.$user_create_user.'....'.$licenseno.'.................</td>
 </tr>
 <tr style="border:0px solid #000;margin: 45px;">
-<td style="border-right:0px solid #000;padding:4px; text-align:center;" colspan="7" valign="bottom">Signature</td>
-<td style="border-right:0px solid #000;padding:4px; text-align:center;" colspan="3" valign="bottom">Signature</td>
+<td style="border-right:0px solid #000;padding:4px; text-align:center;" colspan="9" valign="bottom">Signature</td>
+<td style="border-right:0px solid #000;padding:4px; text-align:center;" colspan="5" valign="bottom">Signature</td>
 </tr>
 </table>
 หมายเหตุ : งดคำย่อ คำกำกวม '.' '.'( Page {PAGENO} of {nb} )

@@ -1,19 +1,20 @@
 <?php
-       require_once '../include/DbUtils.php';
-       require_once '../include/KphisQueryUtils.php';
-       require_once '../include/Session.php';
+    require_once '../include/DbUtils.php';
+    require_once '../include/KphisQueryUtils.php';
+    require_once '../include/Session.php';
 
      $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
-     Session::checkLoginSessionAndShowMessage(); //เช็ค session
-    if(!(
+    // SessionManager::checkLoginSessionAndShowMessage(); //เช็ค session
+    /*if(!(
         // && SessionManager::checkPermission('IPD_NURSE_MAIN_PROGRAM','ACCESS')
         // && SessionManager::checkPermission('IPD_DISCHARGE_SUMMARY','ADD')
         // && SessionManager::checkPermission('IPD_DISCHARGE_SUMMARY','EDIT')
-        Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW')
+        SessionManager::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW')
         // && SessionManager::checkPermission('IPD_DISCHARGE_SUMMARY','REMOVE')
         )){
         return;
-    }
+    }*/
+
     $an = $_REQUEST['an'];
     $summary_id = $_REQUEST['summary_id'];
     $query_parameters = [
@@ -52,7 +53,24 @@
         $discharge_status = $row['discharge_status'];
         $discharge_type = $row['discharge_type'];
         $hospital_refer = $row['hospital_refer'];
-
+        $additional_code= $row['additional_code'];
+        $morphology_code= $row['morphology_code'];
+        $cause_of_death_a= $row['cause_of_death_a'];
+        $cause_of_death_b= $row['cause_of_death_b'];
+        $cause_of_death_c= $row['cause_of_death_c'];
+        $onset_and_death= $row['onset_and_death'];
+        $was_born_live_date =$row['was_born_live_date'];
+        $was_born_live_hours =$row['was_born_live_hours'];
+        $died_on_date =$row['died_on_date'];
+        $died_on_hours =$row['died_on_hours'];
+        $was_stilborn_date =$row['was_stilborn_date'];
+        $was_stilborn_hours =$row['was_stilborn_hours'];
+        $child_was_born_live =$row['child_was_born_live'];
+        $child_was_stilborn =$row['child_was_stilborn'];
+        $died_before_labour=$row['died_before_labour'];
+        $during_labour=$row['during_labour'];
+        $not_know=$row['not_know'];
+            
         $version = $row['version'];
 ?>
 <script>
@@ -63,13 +81,53 @@
 
         $("input[name=summary_plan_date]").val(<?=json_encode($summary_plan_date )?>);
         $("input[name=summary_plan_time]").val(<?=json_encode($summary_plan_time )?>);
+        $("input[name=was_born_live_date]").val(<?=json_encode($was_born_live_date )?>);
+        $("input[name=was_born_live_hours]").val(<?=json_encode($was_born_live_hours )?>);
+        $("input[name=died_on_date]").val(<?=json_encode($died_on_date )?>);
+        $("input[name=died_on_hours]").val(<?=json_encode($died_on_hours )?>);
+        $("input[name=was_stilborn_date]").val(<?=json_encode($was_stilborn_date )?>);
+        $("input[name=was_stilborn_hours]").val(<?=json_encode($was_stilborn_hours )?>);
 
+        var child_was_born_live = <?=json_encode($child_was_born_live)?>;
+        if(child_was_born_live == "Y"){
+            $("#child_was_born_live").attr('checked',true);
+        }
+
+        var child_was_stilborn = <?=json_encode($child_was_stilborn)?>;
+        if(child_was_stilborn == "Y"){
+            $("#child_was_stilborn").attr('checked',true);
+        }
+
+        var died_before_labour = <?=json_encode($died_before_labour)?>;
+        if(died_before_labour == "Y"){
+            $("#died_before_labour").attr('checked',true);
+        }
+
+        var during_labour = <?=json_encode($during_labour)?>;
+        if(during_labour == "Y"){
+            $("#during_labour").attr('checked',true);
+        }
+
+        var not_know = <?=json_encode($not_know)?>;
+        if(not_know == "Y"){
+            $("#not_know").attr('checked',true);
+        }
+        
+        
         $("textarea#principal_diagnosis").val(<?=json_encode($principal_diagnosis)?>);
         $("textarea#pre_admission_comorbidity").val(<?=json_encode($pre_admission_comorbidity)?>);
         $("textarea#post_admission_comorbidity").val(<?=json_encode($post_admission_comorbidity)?>);
         $("textarea#other_diagnosis").val(<?=json_encode($other_diagnosis)?>);
         $("textarea#external_cause").val(<?=json_encode($external_cause)?>);
         $("textarea#operating_room").val(<?=json_encode($operating_room)?>);
+        $("textarea#additional_code").val(<?=json_encode($additional_code)?>);
+        $("textarea#morphology_code").val(<?=json_encode($morphology_code)?>);
+
+
+        $("input[name=cause_of_death_a]").val(<?=json_encode($cause_of_death_a)?>);
+        $("input[name=cause_of_death_b]").val(<?=json_encode($cause_of_death_b)?>);
+        $("input[name=cause_of_death_c").val(<?=json_encode($cause_of_death_c)?>);
+        $("input[name=onset_and_death").val(<?=json_encode($onset_and_death)?>);
 
         var tracheostomy = <?=json_encode($tracheostomy)?>;
         if(tracheostomy == "Y"){

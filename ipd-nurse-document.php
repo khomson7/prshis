@@ -9,12 +9,15 @@
         $hn = KphisQueryUtils::getHnByAn($an);
         $loginname = $_SESSION['loginname'];
 
+        if($loginname && $an != null) {
+            Session::insertSystemAccessLog(json_encode(array(
+                'programe'=>'IPD-NURSE-DOCUMENT',
+                'action'=>'VIEW',
+                'an'=>$an,
+            ),JSON_UNESCAPED_UNICODE));
+        }
 
-        Session::insertSystemAccessLog(json_encode(array(
-            'programe'=>'IPD-NURSE-DOCUMENT',
-            'action'=>'VIEW',
-            'an'=>$an,
-        ),JSON_UNESCAPED_UNICODE));
+       
        
 
 ?>

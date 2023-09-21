@@ -1,96 +1,77 @@
-<?php  // require_once './project/function/Session.php';
-       // Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
-       require_once '../include/Session.php';
-//ตรวจสอบว่า session login ตรงกันหรือไม่
-       $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-        $loginname = $_SESSION['loginname'];
-        $values =['loginname'=>$loginname];
-
-        //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-        if($login != $loginname){
-            session_start();
-            session_destroy();
+<?php   
+  // Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
+  require_once '../include/Session.php';
+  //ตรวจสอบว่า session login ตรงกันหรือไม่
+         $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+          $loginname = $_SESSION['loginname'];
+          $values =['loginname'=>$loginname];
+  
+          //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+          if($login != $loginname){
+              session_start();
+              session_destroy();
+              
+                  
+            }
             
-				
-          }
-          
-
-     
-//ส่วนหัวหน้า
-        require_once '../mains/main-report.php';
-//check session and permission  
-//Session::checkLoginSessionAndShowMessage(); //เช็ค session  
-Session::checkLoginSessionAndShowMessage(); //เช็ค session    
-Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
-
-
-      
+  
        
-        require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
-        require_once '../mains/ipd-show-patient-sticky.php';
-        require_once '../include/DbUtils.php';
-        require_once '../include/KphisQueryUtils.php';
-
-        Session::insertSystemAccessLog(json_encode(array(
-            'form'=>'IPD-SUMMARY',
-            'an'=>$an,
-        ),JSON_UNESCAPED_UNICODE));
-
-        $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
-        $an = $_REQUEST['an'];//รับค่า an
-        $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
-        //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
+  //ส่วนหัวหน้า
+          require_once '../mains/main-report.php';
+  //check session and permission  
+  //Session::checkLoginSessionAndShowMessage(); //เช็ค session  
+  Session::checkLoginSessionAndShowMessage(); //เช็ค session    
+  Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
+  
+  
         
-
+         
+          require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+          require_once '../mains/ipd-show-patient-sticky.php';
+          require_once '../include/DbUtils.php';
+          require_once '../include/KphisQueryUtils.php';
+  
+          Session::insertSystemAccessLog(json_encode(array(
+              'form'=>'IPD-SUMMARY',
+              'an'=>$an,
+          ),JSON_UNESCAPED_UNICODE));
+  
+          $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
+          $an = $_REQUEST['an'];//รับค่า an
+          $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
+          //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
           
-          
-        $sql = "SELECT count(*) AS count_row, summary_id,create_user FROM ".DbConstant::KPHIS_DBNAME.".ipd_summary WHERE an = :an ";
+        $sql = "SELECT count(*) AS count_row, summary_id FROM ".DbConstant::KPHIS_DBNAME.".ipd_summary WHERE an = :an ";
         $summary_id  = null;
-        $create_  = null;
         $parameters['an'] = $an;
         $stmt = $conn->prepare($sql);
         $stmt->execute($parameters);
         $row = $stmt->fetch();
         if($row['count_row'] > 0){
             $summary_id = $row['summary_id'];
-            $create_ = $row['create_user'];
         }
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
         date_default_timezone_set('asia/bangkok');
-
-       
 ?>
-
 <form id="ipd_summary_form">
     <div class="container-fluid">
         <div class="row">
             <div class="col-auto">
-                <button type="button" class="btn btn-danger btn-block" onclick="self.close()"><i class="fa fa-window-close"></i> ปิด</button> 
+                <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
             </div>
             <div class="col-auto p-1 font-weight-bold">
-                IN-PATIENT-SUMMARY&nbsp;&nbsp;
+                IN-PATIENT-SUMMARY
             </div>
-
-            <?php
-                if((Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW') && $summary_id)){?>
-
-<a href="ipd_summary_ordit.php?an=<?php echo $an;?>&loginname=<?php echo $loginname;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Audit <U>เอกสาร</U></a>
-       
-
-                <?php } ?>
-
-        </div>
-        <link rel="stylesheet" href="../include/css/accordion.css">
-        <hr>
+        </div><hr>
         <div class="row mb-2">
             <label class="col-auto text-right font-weight-bold">Discharge วันที่</label>
             <div class="col-auto">
-                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="">
+                <input type="date" class="form-control form-control-sm CheckPer_1" id="summary_plan_date" name="summary_plan_date" value="<?php echo date('Y-m-d');?>">
             </div>
             <label class="col-auto text-right font-weight-bold">เวลา</label>
             <div class="col-auto">
-                <input type="time" class="form-control form-control-sm CheckPer_1" id="summary_plan_time" name="summary_plan_time" value="">
+                <input type="time" class="form-control form-control-sm CheckPer_1" id="summary_plan_time" name="summary_plan_time" value="<?php echo date('H:i');?>">
             </div>
         </div>
         <div class="row mb-2">
@@ -143,15 +124,9 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 </div>
             </div>
         </div>
-  
-
-
         <div class="row mb-2">
             <div class="col-md-12">
-                <div class="card-group">
-                    <div class="card">
-                        <div class="card-body">
-                        <div class="row">
+                <div class="row">
                     <label class="col-sm-12 font-weight-bold">(4) OTHER DIAGNOSIS</label>
                 </div>
                 <div class="row">
@@ -159,7 +134,10 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <textarea class="form-control CheckPer_1" name="other_diagnosis" id="other_diagnosis" rows="2"></textarea>
                     </div>
                 </div>
-              
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-12">
                 <div class="row">
                     <label class="col-sm-12 font-weight-bold">(5) EXTERNAL CAUSE (S) OF INJURY</label>
                 </div>
@@ -168,41 +146,8 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                         <textarea class="form-control CheckPer_2" name="external_cause" id="external_cause" rows="2"></textarea>
                     </div>
                 </div>
-
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                          
-                        <div class="row">
-                    <label class="col-sm-12 font-weight-bold">(6) Additional Code</label>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <textarea class="form-control CheckPer_1" name="additional_code" id="additional_code" rows="2"></textarea>
-                    </div>
-                </div>
-              
-                <div class="row">
-                    <label class="col-sm-12 font-weight-bold">(7) Morphology Code</label>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <textarea class="form-control CheckPer_2" name="morphology_code" id="morphology_code" rows="2"></textarea>
-                    </div>
-                </div>
-                            
-                            
-                            
-                            
-                        </div>
-                    </div>
-                </div>
             </div>
-        </div>
-        
-        
-        <hr>
+        </div><hr>
         <div class="row mb-2">
             <div class="col-md-12">
                 <label class="font-weight-bold">OPERATING ROOM PROCEDURES</label>
@@ -215,7 +160,6 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 <textarea class="form-control CheckPer_1" name="operating_room" id="operating_room" rows="4"></textarea>
             </div>
         </div><hr>
-        
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="row">
@@ -301,8 +245,6 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 </div>
             </div>
         </div>
-
-
         <div class="row mb-2">
             <div class="col-md-12">
                 <div class="card-group">
@@ -369,7 +311,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                             <div class="row">
                                 <label class="col-sm-4 offset-md-1">ชื่อสถานพยาบาลที่ส่งต่อ</label>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" id="hospital_refer" name="hospital_refer"  placeholder="ไม่เกิน 50 ตัวอักษร">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" id="hospital_refer" name="hospital_refer">
                                 </div>
                             </div>
                             <div class="custom-control custom-radio col-sm-11 offset-md-1">
@@ -389,510 +331,6 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 </div>
             </div>
         </div>
-
-
-        <div class="accordion">
-
-        <div class="accordion-item">
-            <div class="accordion-header"> <label class="col-sm-12 font-weight-bold">CERTIFICATION OF CAUSE OF DEATH</label></div>
-            <div class="accordion-content">
-
-            <!-- Content for Section begin -->
-            <div class="card">
-                        <div class="card-body">
-            <div class="row">
-                    <label class="col-sm-12">CAUSE OF DEATH</label>
-    </div>
-
-                <div class="row">
-                        <label>(a)</label>
-                <div class="col-md-8">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="cause_of_death_a" id="cause_of_death_a">
-                    </div>
-                    </div>
-
-                    <br>
-
-                    <div class="row">
-                        <label>(b)</label>
-                <div class="col-md-8">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="cause_of_death_b" id="cause_of_death_b">
-                    </div>
-                    </div>
-<br>
-                    <div class="row">
-                        <label>(c)</label>
-                <div class="col-md-8">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="cause_of_death_c" id="cause_of_death_c">
-                    </div>
-                    </div>
-                    <br>
-                    <label class="col-sm-12">Interval between onset and death</label>
-                    <div class="row">
-                <div class="col-md-10">
-                       <input type="text" class="form-control form-control-sm CheckPer_2" name="onset_and_death" id="onset_and_death">
-               </div>
-    </div>
-    </div>
-
-                <!-- Content for Section end -->
-            </div>
-        </div>
-    </div>
-
-        <div class="accordion-item">
-            <div class="accordion-header"> <label class="col-sm-12 font-weight-bold">CERTIFICATION OF CAUSE OF PERINATAL DEATH</label></div>
-            <div class="accordion-content">
-                <!-- Content for Section begin -->
-
-                <label style ="font-size:20px;">สำหรับทารกตายคลอด (STILLBIRTHS) และทารกที่ตายในระยะ 1 สัปดาห์หลังคลอด</label>
-                
-
-                <div class="d-flex">
-
-                <div class="p-1 flex">
-
-                <label class="col-sm-12" style ="font-size:20px;"><B>Identifying particulars</B></label>
-
-      
-    
-    </div>
-    </div>
-
-
-    <div class="row">
-
-    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="child_was_born_live" id="child_was_born_live" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="child_was_born_live">this child was born live on </label>
-                    </div>
-                                <div class="col-sm-1"></div>
-                                
-                                <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="was_born_live_date" name="was_born_live_date" value="">
-                                </div>
-                                <label>at</label>
-                                <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="was_born_live_hours" name="was_born_live_hours" min = "1">
-                                </div>
-                                <label>hours</label>
-
-                                
-
-    </div>
-    <br>
-
-    <div class="row">
-
-    <div class="offset-md-1">
-  
-    
-                    </div>
-                    
-                                <div class="col-sm-1"></div>
-                                <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and died on</label>
-                                <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="died_on_date" name="died_on_date" value="">
-                                </div>
-                                <label>at</label>
-                                <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="died_on_hours" name="died_on_hours" min = "1">
-                                </div>
-                                <label>hours</label>                    
-
-    </div>
-    <br>
-    <div class="row">
-    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="child_was_stilborn" id="child_was_stilborn" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="child_was_stilborn">this child was stilborn on</label>
-                    </div>
-                                <div class="col-sm-1"></div>
-                                
-                                <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="was_stilborn_date" name="was_stilborn_date" value="">
-                                </div>
-                                <label>at</label>
-                                <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="was_stilborn_hours" name="was_stilborn_hours" min = "1">
-                                </div>
-                                <label>hours</label>
-
-                                
-
-    </div>
-
-    <br>
-    <div class="row">
-    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="died_before_labour" id="died_before_labour" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="died_before_labour">and died before labour</label>
-                    </div>
-                    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="during_labour" id="during_labour" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="during_labour">during labour</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="not_know" id="not_know" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="not_know">not know</label>
-                    </div>
-                                
-                                
-
-    </div>
-
-                <!-- Content for Section end -->
-
-            </div>
-        </div>
-
-
-
-        <div class="accordion-item">
-            <div class="accordion-header"> <label class="col-sm-12 font-weight-bold">Mother</label></div>
-            <div class="accordion-content">
-
-            <!-- Content for Section begin -->
-            <div class="card">
-                        <div class="card-body">
-                            
-
-                       <div class = "row">     
-                       <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and died on</label>
-                       <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-
-                                <div class="row">
-                                <label class="col-sm-12">or, if unknow, age(year)</label>
-                            </div>
-                            <div class="col-auto">
-                                    <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
-                                    <div style="color:red !important;">*only number</div>
-                                </div>
-                           
-                                
-                           </div>
-
-                           <div class="row">
-                           <div class="row">
-                                <label class="col-sm-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st day of last menstrual period </label>
-                            </div>
-
-                            <div class="col-auto">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-                           <label class="offset-md-1">or,if unknow, estimated duration of pregnacy</label>
-                           <div class="col-sm-1">
-                           <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
-                                    <div style="color:red !important;">*only number</div>
-    </div>
-                            </div>
-
-                            <div class="row">
-
-                            <div class="col-sm-3">
-                                <label class="col-sm-12">number of previous pregnancies :</label>
-                            </div> 
-                            
-
-                            <div class="col-sm-6">
-                            <label class="col-sm-12">Antenatal care, two or more visits:</label>
-                            <div class="row">
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="antenatal_care" id="antenatal_care1" value="01">
-                                <label class="custom-control-label" for="antenatal_care1">Yes</label>
-                            </div>
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="antenatal_care" id="antenatal_care2" value="02">
-                                <label class="custom-control-label" for="antenatal_care2">No</label>
-                            </div>
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="antenatal_care" id="antenatal_care3" value="03">
-                                <label class="custom-control-label" for="antenatal_care3">Not khow</label>
-                            </div>
-
-   <!-- <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Yes</label>
-                    </div> -->
-                          
-                    
-    </div>
-                            </div>  
-
-
-                            </div> 
-                            
-       <div class ="row">    
-       <div>
-     <label class="col-sm-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Live Births </label>
-      </div>
-       <div class="col-sm-1">
-                           <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
-                                    <div style="color:red !important;">*only number</div>
-                            </div> 
-        
-    </div>
-
-    <div class ="row">    
-       <div>
-     <label class="col-sm-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stillbirths </label>
-      </div>
-       <div class="col-sm-1">
-                           <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
-                                    <div style="color:red !important;">*only number</div>
-                            </div> 
-        
-    </div>
-
-    <div class ="row">    
-       <div>
-     <label class="col-sm-12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abortions </label>
-      </div>
-       <div class="col-sm-1">
-                           <input type="number" class="form-control form-control-sm" id="labor_time" name="labor_time" min = "1">
-                                    <div style="color:red !important;">*only number</div>
-                            </div> 
-        
-    </div>
-<br>
-    <div class="row">
-
-    <div class="col-sm-6">
-                            <label class="col-sm-12">Outcome of last previous pregnancy</label>
-                            <div class="row">
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="outcome_last_preg" id="outcome_last_preg1" value="01">
-                                <label class="custom-control-label" for="outcome_last_preg1">Live Births</label>
-                            </div>
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="outcome_last_preg" id="outcome_last_preg2" value="02">
-                                <label class="custom-control-label" for="outcome_last_preg2">Stillbirths</label>
-                            </div>
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="outcome_last_preg" id="outcome_last_preg3" value="03">
-                                <label class="custom-control-label" for="outcome_last_preg3">Abortions</label>
-                            </div>
-           
-
-    </div>
-         <br>
-    <div class="col-sm-3">
-                                <input type="date" class="form-control form-control-sm CheckPer_1" id="outcome_last_preg_date" name="outcome_last_preg_date" value="">
-                                </div>
-
-    </div>
-
-
-    <div class="col-sm-6">
-                            <label class="col-sm-12">Delivery:</label>
-                            <div class="row">
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="delivery" id="delivery1" value="01">
-                                <label class="custom-control-label" for="delivery1">Normal spontaneous vertex</label>
-                            </div>
-
-                            <div class="custom-control custom-radio  offset-md-1">
-                                <input type="radio" class="custom-control-input CheckPer_2" name="delivery" id="delivery2" value="02">
-                                <label class="custom-control-label" for="delivery2">Other (specify)</label>
-                            </div>
-
-                   
-    </div>
-         <br>
-    <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="delivery_text" name="delivery_text" value="">
-                                </div>
-
-    </div>
-    </div>
-    </div>
-
-                <!-- Content for Section end -->
-            </div>
-        </div>
-    </div>
-
-     <div class="accordion-item">
-            <div class="accordion-header"> <label class="col-sm-12 font-weight-bold">Child</label></div>
-            <div class="accordion-content">
-
-            <!-- Content for Section begin -->
-            <div class="card">
-                        <div class="card-body">
-                            
-                        <div class = "row"> 
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Birthweight</label>
-                        <div class="col-sm-2">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-
-                                <label class="text-left">&nbsp;grams</label>
-                                <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp; Sex:&nbsp;&nbsp;&nbsp;</label>
-                                <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Boy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    </div>
-
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Girl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    </div>
-
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Indeterminate</label>
-                    </div>
-    </div>
-
-<br>
-    <div class="row">
-    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Single birth</label>
-                    </div>
-                    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">First twin</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Second twin</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Other multiple</label>
-                    </div>
-
-    </div>
-<br>
-    <label class="text-left">&nbsp;&nbsp;Attendant at birth</label>
-    <div class="row">
-    
-
-    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Single birth</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">พยาบาลและผดุงครรภ์</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">อื่นๆ โปรดระบุ</label>
-                    </div>
-
-                    <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-    </div>
-    </div>   
-                <!-- Content for Section end -->
-            </div>
-        </div>
-
-    </div>
-
-        <div class="accordion-item">
-            <div class="accordion-header"> <label class="col-sm-12 font-weight-bold">Causes of death</label></div>
-            <div class="accordion-content">
-            <div class="card">
-                        <div class="card-body">
-                            
-                        <div class = "row"> 
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a. Main disease or condition in fetus or infant</label>
-                        </div>
-                         <div class = "row">
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคหรือภาวะหลักเพียงภาวะเดียวของลูกในท้องหรือทารก)</label>
-                        </div>
-                        <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-
-                                <div class = "row"> 
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b.Other diseases or conditions in fetus or infant</label>
-                        </div>
-                         <div class = "row">
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคหรือภาวะอื่นๆ ของลูกในท้องหรือทารก)</label>
-                        </div>
-                        <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-
-                                <div class = "row"> 
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c. Main maternal diseases or condition aftecting fetus or infant</label>
-                        </div>
-                         <div class = "row">
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคหรือภาวะหลักเพียงภาวะเดียวของมารดาที่มีผลต่อลูกในท้องหรือทารก)</label>
-                        </div>
-                        <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-
-                                <div class = "row"> 
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d. Other meternal disease or coditions affecting fetus or infant</label>
-                        </div>
-                         <div class = "row">
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคภาวะอื่นๆ ของมารดาที่มีผลต่อลูกในท้องหรือทารก)</label>
-                        </div>
-                        <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-
-                                <div class = "row"> 
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e. Other relevant circumtances</label>
-                        </div>
-                         <div class = "row">
-                        <label class="text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(โรคภาวะอื่นๆ ของมารดาที่มีผลต่อลูกในท้องหรือทารก)</label>
-                        </div>
-                        <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-sm CheckPer_1" id="" name="" value="">
-                                </div>
-                            
-                                <hr>
-
-                                <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">The certified cause of death has been confirmed by autopsy</label>
-                    </div>
-                    <div class="custom-control custom-checkbox  offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Autopsy information may be available laters</label>
-                    </div>
-                    <div class="custom-control custom-checkbox offset-md-1">
-                        <input type="checkbox" class="custom-control-input CheckPer_2" name="computer_tomography" id="computer_tomography" value="Y">
-                        <label class="custom-control-label" style ="font-size:15px;" for="computer_tomography">Autopsy not being held</label>
-                    </div>
-                    
-
-    
-    </div>
-
-
-    </div>
-    </div>
-    </div>
-        
-
-        <!-- Add more sections as needed -->
-    </div>
-              
-    
-
-    <br>
-
-
-   
-           
-    
         <!-- <div class="row">
             <label class="col-sm-1 text-right font-weight-bold">ATTENDING</label>
             <div class="col-sm-3">
@@ -909,16 +347,10 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
                 <div id="data_summary_edit"></div>
                 <div id="data_summary_update"></div>
             </div>
-
-       
-
-
             <div class="col-md-12 text-right">
                 <?php
-                if((Session::checkPermission('IPD_DISCHARGE_SUMMARY','VIEW') && !$summary_id) || $create_ == $loginname){?>
-
+                if((Session::checkPermission('IPD_DISCHARGE_SUMMARY','ADD') && ($summary_id == null)) || (Session::checkPermission('IPD_DISCHARGE_SUMMARY','EDIT')&& ($summary_id != null))){?>
                     <button type="button" class="btn btn-primary" id="btn_summary" onclick="summary_save()"><i class="fas fa-save"></i> บันทึก</button>
-
                 <?php } ?>
                 <a href="ipd-summary-pdf.php?an=<?php echo $an;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
             </div>
@@ -961,8 +393,6 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
     function summary_save(){
         var summary_plan_date = $("#summary_plan_date").val();
         var summary_plan_time = $("#summary_plan_time").val();
-        var was_born_live_date = $("#was_born_live_date").val();
-       // var summary_plan_time = $("#summary_plan_time").val();
         //var principal_diagnosis = $("#principal_diagnosis").val();
         var summary_id = $("#summary_id").val();
 
@@ -980,9 +410,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
             if(summary_id == ""){
                 $.post(url_save,$("#ipd_summary_form").serialize(),function(data_save){
                     $("#data_summary_save").html(data_save);
-                   // window.location.reload(true);
-                   alert("บันทึกข้อมูลสำเร็จ");
-                    self.close();
+                    window.location.reload(true);
                 })
                 .fail(function(){
                     alert("บันทึกข้อมูลไม่สำเร็จ");
@@ -991,9 +419,7 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
             }else{
                 $.post(url_update,$("#ipd_summary_form").serialize(),function(data_update){
                     $("#data_summary_update").html(data_update);
-                   // window.location.reload(true);
-                   alert("ปรับปรุงข้อมูลสำเร็จ");
-                    self.close();
+                    window.location.reload(true);
                 })
                 .fail(function(){
                     alert("บันทึกข้อมูลไม่สำเร็จ");
@@ -1018,6 +444,3 @@ Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
         });
     }
 </script>
-
-<script src="../include/js/accordion.js"></script>
-
