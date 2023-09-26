@@ -2219,6 +2219,7 @@ $regdatetime = $row_ipt["regdatetime"];
     <div id="show_check_save"></div>
     <input type="hidden" id="an" name="an" value="<?=htmlspecialchars($an)?>">
     <input type="hidden" id="hn" name="hn" value="<?=htmlspecialchars($hn)?>">
+    <input type="hidden" id="c_form_type" name="c_form_type" value="2">
     <input type="hidden" id="version" name="version" value="<?=htmlspecialchars($row['version'])?>">
     <input type="hidden" id="admission_note_id" name="admission_note_id" value="<?=htmlspecialchars($row['admission_note_id'])?>">
     <input type="hidden" id="create_user" name="create_user" value="<?=htmlspecialchars($_SESSION['name'])?>">
