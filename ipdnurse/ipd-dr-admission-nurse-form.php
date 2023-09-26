@@ -221,7 +221,7 @@
         display: block;
     }
 </style>
-
+<!--
 <form id ="button1" method="post">
 <div class="container-fluid">
         <div class="row">
@@ -232,7 +232,7 @@
 </div>
 </div>
     </form>
-    
+-->
     <br>
 
 <form id="admit_firsth" action=""  method="post"  enctype="multipart/form-data">

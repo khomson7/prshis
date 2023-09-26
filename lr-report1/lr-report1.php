@@ -258,7 +258,7 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="cc" name="cc" rows="2"></textarea>
+                                    <textarea class="form-control" id="cc" name="cc" rows="6"><?= (isset($row_opdscreen['cc']) && $id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['cc'])) ?></textarea>
                                 </div>
                             </div>
 
