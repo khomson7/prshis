@@ -56,6 +56,25 @@
         $anus =  $row['anus'];
         $body =  $row['body'];
         $cry =  $row['cry'];
+        $movement =  $row['movement'];
+        $head =  $row['head'];
+        $eyes =  $row['eyes'];
+        $nose =  $row['nose'];
+        $mouth =  $row['mouth'];
+        $neck =  $row['neck'];
+        $abdomen =  $row['abdomen'];
+        $navel =  $row['navel'];
+        $spine =  $row['spine'];
+        $limbs =  $row['limbs'];
+        $genitalia =  $row['genitalia'];
+        $anuss =  $row['anuss'];
+        $skin_color =  $row['skin_color'];
+        $behavior =  $row['behavior'];
+        $expression =  $row['expression'];
+      
+
+        $first_symptom = $row['first_symptom'];
+        $check_value = $row['check_value'];
 
         
         $update_datetime = $row['update_datetime'];
@@ -100,6 +119,17 @@ $("input[name=anus]").val(<?=json_encode($anus)?>);
 
 
 
+var check_value = <?=json_encode($check_value)?>;
+        if(receive_from == "ปกติ"){
+           $("#v1").attr('checked',true);
+          //  $("#receive_from2").attr('disabled', 'disabled');
+        } else if(check_value != "ปกติ"){
+           $("#v2").attr('checked',true);
+           $('#v3').attr("disabled",false).val(<?=json_encode($check_value)?>);
+          //  $("#receive_from2").attr('disabled', 'disabled');
+        }
+
+
         var receive_from = <?=json_encode($receive_from)?>;
         if(receive_from == "คลอดในโรงพยาบาล"){
            $("#receive_from1").attr('checked',true);
@@ -131,42 +161,239 @@ $("input[name=anus]").val(<?=json_encode($anus)?>);
             $("#sex2").attr('checked',true);
         }
 
+
+          //ประจำเดือน
+          var period = <?=json_encode($period)?>;
+        if(period == "ยังไม่มี"){
+            $("#period1").attr('checked',true);
+            $("input[name='period_normal']").prop("checked", false).attr("disabled", true);
+            $('#period_disorders').attr("disabled", true);
+            $('#period_lmp').attr("disabled", true);
+        }else if(period == "มี"){
+            $("#period2").attr('checked',true);
+            $('#period_disorders').removeAttr("disabled");
+            $('#period_lmp').removeAttr("disabled");
+        }else if(period == "หมดประจำเดือน"){
+            $("input[name='period_normal']").prop("checked", false).attr("disabled", true);
+            $("#period3").attr('checked',true);
+            $('#period_disorders').attr("disabled", true);
+            $('#period_lmp').attr("disabled", true);
+        }
+
+        
+
         //body 
         var body = <?=json_encode($body)?>;
 
         if(body == "ปกติ"){
-            $('#body_text').attr("disabled",true).val('');
             $("#body1").attr('checked',true);
-        }else if(body != "ปกติ" && body != null ){
+        }else if(!(body == "ปกติ") && body != null ){
             $("#body2").attr('checked',true);
-            $('#body_text').attr("disabled",false).val('');
-            $("input[name=body]").val(<?=json_encode($body)?>);
+            $('#body_text').attr("disabled",false).val(<?=json_encode($body)?>);
         }
 
-        //body 
+        //cry 
         var cry = <?=json_encode($cry)?>;
-
         if(cry == "ไม่ร้อง"){
-            $('#cry_text').attr("disabled",true).val('');
             $('#cry1').attr('checked',true);
         }else if(cry == "ร้องเสียงดัง"  ){
-            $('#cry_text').attr("disabled",true).val('');
             $('#cry2').attr('checked',true);
         }
-        else if((cry != "ร้องเสียงดัง" || cry != "ไม่ร้อง") && cry != null){
-            $('#cry_text').attr("disabled",false).val('');
-            $('#cry1').attr('checked',true);
-            $("input[name=cry]").val(<?=json_encode($cry)?>);
+        else if(!(cry == "ร้องเสียงดัง" || cry == "ไม่ร้อง") && cry != null){
+            $('#cry3').attr('checked',true);
+            $('#cry_text').attr("disabled",false).val(<?=json_encode($cry)?>);
             
         }
 
+        //movement 
+        var movement = <?=json_encode($movement)?>;
+        if(movement == "ขยับได้"){
+            $('#movement1').attr('checked',true);
+        }else if(movement == "อ่อนปวกเปียก"  ){
+            $('#movement2').attr('checked',true);
+        }else if(movement == "ชักเกร็ง"  ){
+            $('#movement3').attr('checked',true);
+        }
+        else if(!(movement == "ขยับได้" || movement == "อ่อนปวกเปียก" || movement == "ชักเกร็ง") && movement != null){
+            $('#movement4').attr('checked',true);
+           // $('#movement4').attr("disabled",false).val('');
+            $('#movement_text').attr("disabled",false).val(<?=json_encode($movement)?>);
+            
+        }
 
+  //head 
+  var head = <?=json_encode($head)?>;
+if(head == "ปกติ"){
+    $("#head1").attr('checked',true);
+}else if(!(head == "ปกติ") && head != null ){
+    $("#head2").attr('checked',true);
+    $('#head_text').attr("disabled",false).val(<?=json_encode($head)?>);
+}
+
+  //eyes 
+  var eyes = <?=json_encode($eyes)?>;
+if(eyes == "ปกติ"){
+    $("#eyes1").attr('checked',true);
+}else if(!(eyes == "ปกติ") && eyes != null ){
+    $("#eyes2").attr('checked',true);
+    $('#eyes_text').attr("disabled",false).val(<?=json_encode($eyes)?>);
+}
+
+//nose 
+var nose = <?=json_encode($nose)?>;
+
+if(nose == "มีรูจมูก 2 ข้าง"){
+    $('#nose1').attr('checked',true);
+}else if(nose == "รูจมูกตัน"  ){
+    $('#nose2').attr('checked',true);
+}
+else if(!(nose == "มีรูจมูก 2 ข้าง" || nose == "รูจมูกตัน") && nose != null){
+    $('#nose3').attr('checked',true);
+    $('#nose_text').attr("disabled",false).val(<?=json_encode($nose)?>);
+  
+}
+
+  //mouth
+  var mouth = <?=json_encode($mouth)?>;
+if(mouth == "ปกติ"){
+    $('#mouth1').attr('checked',true);
+}else if(mouth == "ปากแหว่ง"  ){
+    $('#mouth2').attr('checked',true);
+}else if(mouth == "เพดานโหว่"  ){
+    $('#mouth3').attr('checked',true);
+}
+else if(!(mouth == "ปกติ" || mouth == "ปากแหว่ง" || mouth == "เพดานโหว่") && mouth != null){
+    $('#mouth4').attr('checked',true);
+    $('#mouth_text').attr("disabled",false).val(<?=json_encode($mouth)?>);
+    
+}
+
+  //neck 
+  var neck = <?=json_encode($neck)?>;
+
+if(neck == "ปกติ"){
+    $("#neck1").attr('checked',true);
+}else if(!(neck == "ปกติ") && neck != null ){
+    $("#neck2").attr('checked',true);
+    $('#neck_text').attr("disabled",false).val(<?=json_encode($neck)?>);
+}
+
+    //abdomen 
+    var abdomen = <?=json_encode($abdomen)?>;
+        if(abdomen == "ปกติ"){
+            $('#abdomen1').attr('checked',true);
+        }else if(abdomen == "ท้องอืด"  ){
+            $('#abdomen2').attr('checked',true);
+        }
+        else if(!(abdomen == "ปกติ" || abdomen == "ท้องอืด") && abdomen != null){
+            $('#abdomen3').attr('checked',true);
+            $('#abdomen_text').attr("disabled",false).val(<?=json_encode($abdomen)?>);
+            
+        }
+
+         //navel 
+  var navel = <?=json_encode($navel)?>;
+if(navel == "ปกติ"){
+    $('#navel1').attr('checked',true);
+}else if(navel == "Omphalocele"  ){
+    $('#navel2').attr('checked',true);
+}else if(navel == "Gastroschisis"  ){
+    $('#navel3').attr('checked',true);
+}
+else if(!(navel == "ปกติ" || navel == "Omphalocele" || navel == "Gastroschisis") && navel != null){
+    $('#navel4').attr('checked',true);
+    $('#navel_text').attr("disabled",false).val(<?=json_encode($navel)?>);
+    
+}
+
+  //spine 
+  var spine = <?=json_encode($spine)?>;
+
+if(spine == "ปกติ"){
+    $("#spine1").attr('checked',true);
+}else if(!(spine == "ปกติ") && spine != null ){
+    $("#spine2").attr('checked',true);
+    $('#spine_text').attr("disabled",false).val(<?=json_encode($spine)?>);
+}
+
+  //limbs 
+  var limbs = <?=json_encode($limbs)?>;
+
+if(limbs == "ปกติ"){
+    $("#limbs1").attr('checked',true);
+}else if(!(limbs == "ปกติ") && limbs != null ){
+    $("#limbs2").attr('checked',true);
+    $('#limbs_text').attr("disabled",false).val(<?=json_encode($limbs)?>);
+}
+
+  //genitalia 
+  var genitalia = <?=json_encode($genitalia)?>;
+
+if(genitalia == "ปกติ"){
+    $("#genitalia1").attr('checked',true);
+}else if(!(genitalia == "ปกติ") && genitalia != null ){
+    $("#genitalia2").attr('checked',true);
+    $('#genitalia_text').attr("disabled",false).val(<?=json_encode($genitalia)?>);
+}
+
+ //anuss
+ var anuss = <?=json_encode($anuss)?>;
+if(anuss == "ปกติ"){
+    $("#anuss1").attr('checked',true);
+}else if(anuss == "ไม่มีรูก้น"){
+    $("#anuss2").attr('checked',true);
+}
+
+         //skin_color 
+         var skin_color = <?=json_encode($skin_color)?>;
+
+if(skin_color == "แดง"){
+    $('#skin_color1').attr('checked',true);
+}else if(skin_color == "ซีด"  ){
+    $('#skin_color2').attr('checked',true);
+}else if(skin_color == "เขียว"  ){
+    $('#skin_color3').attr('checked',true);
+}
+else if(!(skin_color == "แดง" || skin_color == "ซีด" || skin_color == "เขียว") && skin_color != null){
+    $('#skin_color4').attr('checked',true);
+    $('#skin_color_text').attr("disabled",false).val(<?=json_encode($skin_color)?>);
+    
+}
+
+//behavior 
+var behavior = <?=json_encode($behavior)?>;
+
+if(behavior == "เฉย"){
+    $('#behavior1').attr('checked',true);
+}else if(behavior == "ร้องไห้"  ){
+    $('#behavior2').attr('checked',true);
+}
+else if(!(behavior == "เฉย" || behavior == "ร้องไห้") && behavior != null){
+    $('#behavior3').attr('checked',true);
+    $('#behavior_text').attr("disabled",false).val(<?=json_encode($behavior)?>);
+    
+}
+
+//expression 
+var expression = <?=json_encode($expression)?>;
+
+if(expression == "ประเมินไม่ได้"){
+    $('#expression1').attr('checked',true);
+}else if(expression == "ร้องโกรธ"  ){
+    $('#expression2').attr('checked',true);
+}
+else if(!(expression == "ประเมินไม่ได้" || expression == "ร้องโกรธ") && expression != null){
+    $('#expression3').attr('checked',true);
+    $('#expression_text').attr("disabled",false).val(<?=json_encode($expression)?>);
+    
+}
 
 
         //ดึงข้อมูลที่บันทึกมาแสดง
         $("textarea#cc").val(<?=json_encode($cc)?>);
         $("textarea#abnormal").val(<?=json_encode($abnormal)?>);
         $("textarea#family").val(<?=json_encode($family)?>);
+        $("textarea#first_symptom").val(<?=json_encode($first_symptom)?>);
 
         });
 

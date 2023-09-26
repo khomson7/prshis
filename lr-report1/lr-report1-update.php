@@ -25,6 +25,7 @@
         $labor_date = empty($_REQUEST['labor_date']) ? null : $_REQUEST['labor_date'];
         $labor_time= empty($_REQUEST['labor_time']) ? null : $_REQUEST['labor_time'];
         $sex = empty($_REQUEST['sex']) ? null : $_REQUEST['sex'];
+//$sex = '1';
         $weight =  empty($_REQUEST['weight']) ? null : $_REQUEST['weight'];
         $apgar_score_1 =  empty($_REQUEST['apgar_score_1']) ? null : $_REQUEST['apgar_score_1'];
         $subtract_1 =  empty($_REQUEST['subtract_1']) ? null : $_REQUEST['subtract_1'];
@@ -49,6 +50,7 @@
         $cord =  empty($_REQUEST['cord']) ? null : $_REQUEST['cord'];
         $anus =  empty($_REQUEST['anus']) ? null : $_REQUEST['anus'];
         $body =  empty($_REQUEST['body']) ? null : $_REQUEST['body'];
+      // $body = 'ปกติ';
         $cry =  empty($_REQUEST['cry']) ? null : $_REQUEST['cry'];
         $movement =  empty($_REQUEST['movement']) ? null : $_REQUEST['movement'];
         $head =  empty($_REQUEST['head']) ? null : $_REQUEST['head'];
@@ -61,22 +63,21 @@
         $spine =  empty($_REQUEST['spine']) ? null : $_REQUEST['spine'];
         $limbs =  empty($_REQUEST['limbs']) ? null : $_REQUEST['limbs'];
         $genitalia =  empty($_REQUEST['genitalia']) ? null : $_REQUEST['genitalia'];
-        $anuss=  empty($_REQUEST['anuss']) ? null : $_REQUEST['anuss'];
+        $anuss =  empty($_REQUEST['anuss']) ? null : $_REQUEST['anuss'];
         $skin_color =  empty($_REQUEST['skin_color']) ? null : $_REQUEST['skin_color'];
         $behavior =  empty($_REQUEST['behavior']) ? null : $_REQUEST['behavior'];
-        $expression=  empty($_REQUEST['expression']) ? null : $_REQUEST['expression'];
+        $expression=  $_REQUEST['expression'];
         $first_symptom=  empty($_REQUEST['first_symptom']) ? null : $_REQUEST['first_symptom'];
         $hn =  empty($_REQUEST['hn']) ? null : $_REQUEST['hn'];
-        $anuss=  empty($_REQUEST['anuss']) ? null : $_REQUEST['anuss'];
-        $skin_color =  empty($_REQUEST['skin_color']) ? null : $_REQUEST['skin_color'];
+        
 
         //$family_history = 'aaa';
         
         
         $update_datetime= date('Y-m-d H:i:s');
         $update_user = $_SESSION['loginname'];
-        $version = $_REQUEST['version'];
-        $version = $version + 1;
+        $version0 = $_REQUEST['version'];
+        $version = $version0 + 1;
 
         try {
           //เรียกใช้งาน sql update
@@ -84,17 +85,28 @@
           ,transport=:transport,cc=:cc,ga=:ga,labor=:labor,indication=:indication,labor_date=:labor_date,labor_time=:labor_time,sex=:sex,weight=:weight
           ,apgar_score_1=:apgar_score_1,subtract_1=:subtract_1,apgar_score_5=:apgar_score_5,subtract_5=:subtract_5,apgar_score_10=:apgar_score_10,subtract_10=:subtract_10
           ,abnormal=:abnormal,g=:g,p=:p,serology=:serology,antepartum=:antepartum,dt_vaccine=:dt_vaccine,family=:family,bt=:bt,hr=:hr,rr=:rr,ofs=:ofs,om=:om
-          ,chest=:chest,body_long=:body_long,cord=:cord,anus=:anus,body=:body
-          ,update_user=:update_user,version=:version,update_datetime=:update_datetime
+          ,chest=:chest,body_long=:body_long,cord=:cord,anus=:anus,body=:body,cry=:cry,expression=:expression,movement=:movement,head=:head,eyes=:eyes,nose=:nose
+          ,mouth=:mouth,neck=:neck,abdomen=:abdomen,navel=:navel,spine=:spine,limbs=:limbs,genitalia=:genitalia,anuss=:anuss
+          ,skin_color=:skin_color,behavior=:behavior
+          ,update_user=:update_user,version=:version,update_datetime=:update_datetime,check_value=:check_value
           WHERE id=:id");
           //execute array
           $stmt->execute(array('id'=>$id,'an'=>$an,'receive_date'=>$receive_date, 'receive_time'=>$receive_time,'receive_from'=>$receive_from
           ,'transport'=>$transport,'cc'=>$cc,'ga'=>$ga,'labor'=>$labor,'indication'=>$indication,'labor_date'=>$labor_date,'labor_time'=>$labor_time,'sex'=>$sex,'weight'=>$weight
           ,'apgar_score_1'=>$apgar_score_1,'subtract_1'=>$subtract_1,'apgar_score_5'=>$apgar_score_5,'subtract_5'=>$subtract_5,'apgar_score_10'=>$apgar_score_10,'subtract_10'=>$subtract_10
           ,'abnormal'=>$abnormal,'g'=>$g,'p'=>$p,'serology'=>$serology,'antepartum'=>$antepartum,'dt_vaccine'=>$dt_vaccine,'family'=>$family,'bt'=>$bt,'hr'=>$hr,'rr'=>$rr
-          ,'ofs'=>$ofs,'om'=>$om,'chest'=>$chest,'body_long'=>$body_long,'cord'=>$cord,'anus'=>$anus,'body'=>$body
-          ,'update_user'=>$update_user,'version'=>$version,'update_datetime' => $update_datetime
+          ,'ofs'=>$ofs,'om'=>$om,'chest'=>$chest,'body_long'=>$body_long,'cord'=>$cord,'anus'=>$anus,'body'=>$body,'cry'=>$cry,'expression'=>$expression,'movement'=>$movement
+          ,'head'=>$head,'eyes'=>$eyes,'nose'=>$nose,'mouth'=>$mouth,'neck'=>$neck,'abdomen'=>$abdomen,'navel'=>$navel,'spine'=>$spine,'limbs'=>$limbs,'genitalia'=>$genitalia,'anuss'=>$anuss
+          ,'skin_color'=>$skin_color,'behavior'=>$behavior
+          ,'update_user'=>$update_user,'version'=>$version,'update_datetime' => $update_datetime,'check_value'=>$check_value
           ));
+
+          Session::insertSystemAccessLog(json_encode(array(
+            'form'=>'LR-REPORT1-FORM',
+            'action'=>'UPDATE',
+            'version'=>$version,
+            'an'=>$an,
+        ),JSON_UNESCAPED_UNICODE));
 
             //เมื่อ update สำเร็จ
           $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
