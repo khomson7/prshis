@@ -25,6 +25,14 @@
             'an'=>$an,
         ),JSON_UNESCAPED_UNICODE));
 
+    $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+    $loginname = $_SESSION['loginname'];
+    $values = ['loginname' => $loginname];
+    if ($login != $loginname) {
+        session_start();
+        session_destroy();
+    }
+
         //----------------------select ข้อมูล จากฐานข้อมูลเพื่อค้นหา ชื่อ - สกุล
         $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
         $image_check = "<img src='../include/images/check-adm-1.png' width='1.6%' class='check_img'>";
@@ -435,6 +443,8 @@
         //ชื่อ-สกุล ตำแหน่งผู้บันทึกข้อมูล
         $name_full        =  $row['name_full'];
         $entryposition        =  $row['entryposition'];
+
+       
 
         //----------------------ipd_nurse_admission_note
         $head = '

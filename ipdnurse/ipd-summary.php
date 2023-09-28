@@ -352,7 +352,7 @@
                 if((Session::checkPermission('IPD_DISCHARGE_SUMMARY','ADD') && ($summary_id == null)) || (Session::checkPermission('IPD_DISCHARGE_SUMMARY','EDIT')&& ($summary_id != null))){?>
                     <button type="button" class="btn btn-primary" id="btn_summary" onclick="summary_save()"><i class="fas fa-save"></i> บันทึก</button>
                 <?php } ?>
-                <a href="ipd-summary-pdf.php?an=<?php echo $an;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                <a href="ipd-summary-pdf.php?an=<?php echo $an;?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
             </div>
         </div><br>
     </div>

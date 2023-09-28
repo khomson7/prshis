@@ -56,6 +56,15 @@ $head = '
                // 'action'=>'PRINT',
                 'an'=>$an_REQUEST,
             ),JSON_UNESCAPED_UNICODE));
+
+        
+        $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+        $loginname = $_SESSION['loginname'];
+        $values = ['loginname' => $loginname];
+        if ($login != $loginname) {
+            session_start();
+            session_destroy();
+        }
         //----------------------รับค่า an และ select ข้อมูล จากฐานข้อมูลเพื่อค้นหา hn
 
         $hn_REQUEST = KphisQueryUtils::getHnByAn($an_REQUEST);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา

@@ -49,7 +49,7 @@ if ($id == null || $id != null) {
                                     round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
                                     round((opdscreen.bw)*1000,0) as bw2,
                                     round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
-                                    opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
+                                    opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.fh,
                                     opdscreen.pmh,opdscreen.fh,opdscreen.pe,
                                     opdscreen.pe_heart_text, opdscreen.pe_lung_text,
                                     opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
@@ -181,11 +181,11 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="col-sm-1"></div>
                                 <label>รับใหม่วันที่</label>
                                 <div class="col-sm-2">
-                                    <input type="date" class="form-control form-control-sm" id="receive_date" name="receive_date" value="<?= (isset($row['receive_date']) ? htmlspecialchars($row['receive_date']) : '') ?>">
+                                    <input type="date" class="form-control form-control-sm" id="receive_date" name="receive_date" value="<?= (isset($row_ipt['regdate']) && $id == null ? htmlspecialchars($row_ipt['regdate']) : htmlspecialchars($row['receive_date'])) ?>">
                                 </div>
                                 <label>เวลา</label>
                                 <div class="col-sm-2">
-                                    <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row['receive_time']) ? htmlspecialchars($row['receive_time']) : '') ?>">
+                                    <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-5">
@@ -258,7 +258,16 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="cc" name="cc" rows="6"><?= (isset($row_opdscreen['cc']) && $id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['cc'])) ?></textarea>
+                                    <textarea class="form-control" id="cc" name="cc" rows="4"><?= (isset($row_opdscreen['cc']) && $id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['cc'])) ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B> HPI </B></label>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" id="hpi" name="hpi" rows="4"><?= (isset($row_opdscreen['hpi']) && $id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['hpi'])) ?></textarea>
                                 </div>
                             </div>
 
@@ -384,7 +393,7 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="family" placeholder=" xxxxxxxxxxxxxxxx" name="family" rows="2"></textarea>
+                                <textarea class="form-control" id="family" name="family" rows="3"><?= (isset($row_opdscreen['fh']) && $id == null ? htmlspecialchars($row_opdscreen['fh']) : htmlspecialchars($row['family'])) ?></textarea>            
                                 </div>
                             </div>
 
@@ -1101,7 +1110,7 @@ date_default_timezone_set('asia/bangkok');
                                 if ((($id == null)) || (($id != null))) { ?>
                                     <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="lr_report1_save()"><i class="fas fa-save"></i> บันทึก</button>
                                 <?php } ?>
-                                <a href="or-complication-pdf.php?an=<?php echo $an; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                                <a href="lr-report1-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                             </div>
                         </div>
                     </div>

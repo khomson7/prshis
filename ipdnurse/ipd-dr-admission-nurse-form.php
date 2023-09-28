@@ -2132,7 +2132,7 @@
                 <label class="text-right"> <?=(isset($row['nurse_pos']) ? htmlspecialchars($row['nurse_pos']) : '')?></label>
             </div> -->
             <div class="col-sm-12 text-right">
-                <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an;?>&admission_note_id=<?php echo $admission_note_id;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an;?>&admission_note_id=<?php echo $admission_note_id;?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                 <?php
                 //รอแก้ไข
                // $a = 1;
@@ -2462,7 +2462,8 @@
                 $.post(url_save,admit_firsth,function(data){
                     $("#show_check_save").html(data);
                     alert("บันทึกข้อมูลสำเร็จ");
-                    self.close();
+                   // self.close();
+                   window.location.reload(true);
                 })
                 .fail(function(){
                     alert("บันทึกข้อมูลไม่สำเร็จ"+error);
@@ -2471,7 +2472,8 @@
                 $.post(url_update,admit_firsth,function(data){
                     $("#show_check_save").html(data);
                     alert("บันทึกข้อมูลสำเร็จ");
-                    self.close();
+                   // self.close();
+                   window.location.reload(true);
                 })
                 .fail(function(){
                     alert("บันทึกข้อมูลไม่สำเร็จ"+error);

@@ -19,6 +19,7 @@
         $receive_from = empty($_REQUEST['receive_from']) ? null : $_REQUEST['receive_from'];
         $transport = empty($_REQUEST['transport']) ? null : $_REQUEST['transport'];
         $cc = empty($_REQUEST['cc']) ? null : $_REQUEST['cc'];
+        $hpi = empty($_REQUEST['hpi']) ? null : $_REQUEST['hpi'];
         $ga = empty($_REQUEST['ga']) ? null : $_REQUEST['ga'];
         $labor = empty($_REQUEST['labor']) ? null : $_REQUEST['labor'];
         $indication = empty($_REQUEST['indication']) ? null : $_REQUEST['indication'];
@@ -82,7 +83,7 @@
         try {
           //เรียกใช้งาน sql update
           $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_labor_report1 SET an=:an,receive_date=:receive_date,receive_time=:receive_time,receive_from=:receive_from
-          ,transport=:transport,cc=:cc,ga=:ga,labor=:labor,indication=:indication,labor_date=:labor_date,labor_time=:labor_time,sex=:sex,weight=:weight
+          ,transport=:transport,cc=:cc,hpi=:hpi,ga=:ga,labor=:labor,indication=:indication,labor_date=:labor_date,labor_time=:labor_time,sex=:sex,weight=:weight
           ,apgar_score_1=:apgar_score_1,subtract_1=:subtract_1,apgar_score_5=:apgar_score_5,subtract_5=:subtract_5,apgar_score_10=:apgar_score_10,subtract_10=:subtract_10
           ,abnormal=:abnormal,g=:g,p=:p,serology=:serology,antepartum=:antepartum,dt_vaccine=:dt_vaccine,family=:family,bt=:bt,hr=:hr,rr=:rr,ofs=:ofs,om=:om
           ,chest=:chest,body_long=:body_long,cord=:cord,anus=:anus,body=:body,cry=:cry,expression=:expression,movement=:movement,head=:head,eyes=:eyes,nose=:nose
@@ -92,7 +93,7 @@
           WHERE id=:id");
           //execute array
           $stmt->execute(array('id'=>$id,'an'=>$an,'receive_date'=>$receive_date, 'receive_time'=>$receive_time,'receive_from'=>$receive_from
-          ,'transport'=>$transport,'cc'=>$cc,'ga'=>$ga,'labor'=>$labor,'indication'=>$indication,'labor_date'=>$labor_date,'labor_time'=>$labor_time,'sex'=>$sex,'weight'=>$weight
+          ,'transport'=>$transport,'cc'=>$cc,'hpi'=>$hpi,'ga'=>$ga,'labor'=>$labor,'indication'=>$indication,'labor_date'=>$labor_date,'labor_time'=>$labor_time,'sex'=>$sex,'weight'=>$weight
           ,'apgar_score_1'=>$apgar_score_1,'subtract_1'=>$subtract_1,'apgar_score_5'=>$apgar_score_5,'subtract_5'=>$subtract_5,'apgar_score_10'=>$apgar_score_10,'subtract_10'=>$subtract_10
           ,'abnormal'=>$abnormal,'g'=>$g,'p'=>$p,'serology'=>$serology,'antepartum'=>$antepartum,'dt_vaccine'=>$dt_vaccine,'family'=>$family,'bt'=>$bt,'hr'=>$hr,'rr'=>$rr
           ,'ofs'=>$ofs,'om'=>$om,'chest'=>$chest,'body_long'=>$body_long,'cord'=>$cord,'anus'=>$anus,'body'=>$body,'cry'=>$cry,'expression'=>$expression,'movement'=>$movement

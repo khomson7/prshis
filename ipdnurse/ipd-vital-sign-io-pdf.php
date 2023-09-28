@@ -24,6 +24,22 @@ $io_date_end = $_REQUEST['io_date_end'];//รับค่า วันที่�
 $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $name_session = $_SESSION['name'];
 
+
+Session::insertSystemAccessLog(json_encode(array(
+        'report'=>'IPD-VITAL-SIGN-IO-PDF',
+       // 'action'=>'PRINT',
+        'an'=>$an_REQUEST,
+    ),JSON_UNESCAPED_UNICODE));
+
+
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values = ['loginname' => $loginname];
+if ($login != $loginname) {
+    session_start();
+    session_destroy();
+}
+
 //----------------------select ข้อมูล จากฐานข้อมูลเพื่อค้นหา ชื่อ - สกุล
 $query_parameters_REQUEST = ['an'=>$an];
 $sql_ipt = "select patient.hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,

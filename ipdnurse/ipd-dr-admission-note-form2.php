@@ -2712,7 +2712,7 @@ $row_period  = $stmt_period->fetch();
                         <?php
                         }
                         ?>
-                        <a href="ipd-dr-newborn-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                        <a href="ipd-dr-newborn-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                     </div>
                 </div>
                 <!-- card -->
@@ -3128,7 +3128,8 @@ $row_period  = $stmt_period->fetch();
                 $.post(url_save, admit_firsth, function(data) {
                         $("#show_check_save").html(data);
                         alert("บันทึกข้อมูลสำเร็จ");
-                        self.close();
+                       // self.close();
+                       window.location.reload(true);
                     })
                     .fail(function() {
                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);
@@ -3137,7 +3138,8 @@ $row_period  = $stmt_period->fetch();
                 $.post(url_update, admit_firsth, function(data) {
                         $("#show_check_save").html(data);
                         alert("บันทึกข้อมูลสำเร็จ");
-                        self.close();
+                       // self.close();
+                       window.location.reload(true);
                     })
                     .fail(function() {
                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);

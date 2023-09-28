@@ -43,6 +43,15 @@ Session::insertSystemAccessLog(json_encode(array(
     'an'=>$an,
 ),JSON_UNESCAPED_UNICODE));
 
+
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values = ['loginname' => $loginname];
+if ($login != $loginname) {
+session_start();
+session_destroy();
+}
+
 //-------------------------Doctor admission note
 $sql = "SELECT *
         FROM `ipd_dr_admission_note`

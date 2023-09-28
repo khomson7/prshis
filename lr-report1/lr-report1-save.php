@@ -26,6 +26,7 @@
     $receive_from = /*empty($_REQUEST['receive_from']) ? null :*/ $_REQUEST['receive_from'];
     $transport = /*empty($_REQUEST['transport']) ? null :*/ $_REQUEST['transport'];
     $cc = /*empty($_REQUEST['cc']) ? null :*/ $_REQUEST['cc'];
+    $hpi = /*empty($_REQUEST['cc']) ? null :*/ $_REQUEST['hpi'];
     $ga = $_REQUEST['ga'];
     $labor = $_REQUEST['labor'];
     $indication= $_REQUEST['indication'];
@@ -87,20 +88,20 @@
     try {
 //บันทึกรายการ
         $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_labor_report1(receive_date,receive_time,receive_from
-       ,transport,cc,ga,labor,indication,labor_date,labor_time,sex,weight,apgar_score_1,subtract_1
+       ,transport,cc,hpi,ga,labor,indication,labor_date,labor_time,sex,weight,apgar_score_1,subtract_1
        ,apgar_score_5,subtract_5,apgar_score_10,subtract_10,abnormal,g,p,serology,antepartum,dt_vaccine,family
        ,bt,hr,rr,ofs,om,chest,body_long,cord,anus,body,cry,movement,head,eyes,nose,mouth,neck,abdomen,navel,spine,limbs 
        ,genitalia,anuss,skin_color,behavior,expression,first_symptom
         ,an,create_user,update_user,version,create_datetime,update_datetime)
         VALUES(:receive_date,:receive_time,:receive_from
-        ,:transport,:cc,:ga,:labor,:indication,:labor_date,:labor_time,:sex,:weight,:apgar_score_1,:subtract_1
+        ,:transport,:cc,:hpi,:ga,:labor,:indication,:labor_date,:labor_time,:sex,:weight,:apgar_score_1,:subtract_1
         ,:apgar_score_5,:subtract_5,:apgar_score_10,:subtract_10,:abnormal,:g,:p,:serology,:antepartum,:dt_vaccine,:family
         ,:bt,:hr,:rr,:ofs,:om,:chest,:body_long,:cord,:anus,:body,:cry,:movement,:head,:eyes,:nose,:mouth,:neck,:abdomen,:navel,:spine,:limbs
         ,:genitalia,:anuss,:skin_color,:behavior,:expression,:first_symptom
         ,:an,:create_user,:update_user,:version,:create_datetime,:update_datetime)");
 
         $stmt->execute(array('receive_date'=>$receive_date,'receive_time'=>$receive_time,'receive_from'=>$receive_from
-        ,'transport'=>$transport,'cc'=>$cc,'ga'=>$ga,'labor'=>$labor,'indication'=>$indication,'labor_date'=>$labor_date,'labor_time'=>$labor_time
+        ,'transport'=>$transport,'cc'=>$cc,'hpi'=>$hpi,'ga'=>$ga,'labor'=>$labor,'indication'=>$indication,'labor_date'=>$labor_date,'labor_time'=>$labor_time
         ,'sex'=>$sex,'weight'=>$weight,'apgar_score_1'=>$apgar_score_1,'subtract_1'=>$subtract_1,'apgar_score_5'=>$apgar_score_5,'subtract_5'=>$subtract_5,'apgar_score_10'=>$apgar_score_10,'subtract_10'=>$subtract_10
       ,'abnormal'=>$abnormal,'g'=>$g,'p'=>$p,'serology'=>$serology,'antepartum'=>$antepartum,'dt_vaccine'=>$dt_vaccine,'family'=>$family
       ,'bt'=>$bt,'hr'=>$hr,'rr'=>$rr,'ofs'=>$ofs,'om'=>$om,'chest'=>$chest,'body_long'=>$body_long,'cord'=>$cord,'anus'=>$anus,'body'=>$body,'cry'=>$cry,'movement'=>$movement

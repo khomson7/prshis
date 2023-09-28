@@ -37,6 +37,15 @@ Session::insertSystemAccessLog(json_encode(array(
     'an'=>$an_REQUEST,
 ),JSON_UNESCAPED_UNICODE));
 
+
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values = ['loginname' => $loginname];
+if ($login != $loginname) {
+    session_start();
+    session_destroy();
+}
+
 $name_session = $_SESSION['name'];
 $sql_ipt = "SELECT ipt.an, ipt.hn as ipt_hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,
     patient.cid,patient.birthday,

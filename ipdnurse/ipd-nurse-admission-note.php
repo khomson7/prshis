@@ -1124,7 +1124,7 @@
                                 <?php if( (($nurse_admission_note_id == null)) || ( ($nurse_admission_note_id != null)) ){?>
                                         <button type="button" class="btn btn-primary" onclick="onclick_save_nurse_admission_note()" ><i class="fas fa-save"></i> บันทึก</button>
                                 <?php }?>
-                                <a href="ipd-nurse-admission-note-pdf.php?an=<?php echo $an;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                                <a href="ipd-nurse-admission-note-pdf.php?an=<?php echo $an;?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                             </div>
                         </div>
                     </div>

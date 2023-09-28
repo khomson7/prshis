@@ -25,6 +25,7 @@
         $receive_from = $row['receive_from'];
         $transport = $row['transport'];
         $cc = $row['cc'];
+        $hpi = $row['hpi'];
         $ga = $row['ga'];
         $labor = $row['labor'];
         $indication = $row['indication'];
@@ -391,6 +392,7 @@ else if(!(expression == "ประเมินไม่ได้" || expression 
 
         //ดึงข้อมูลที่บันทึกมาแสดง
         $("textarea#cc").val(<?=json_encode($cc)?>);
+        $("textarea#hpi").val(<?=json_encode($hpi)?>);
         $("textarea#abnormal").val(<?=json_encode($abnormal)?>);
         $("textarea#family").val(<?=json_encode($family)?>);
         $("textarea#first_symptom").val(<?=json_encode($first_symptom)?>);
