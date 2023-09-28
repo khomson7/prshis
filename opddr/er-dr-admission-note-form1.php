@@ -58,7 +58,7 @@ if ($row  = $stmt->fetch()) {
     $admission_note_id = null;
 }
 
-//  echo $admission_note_id;
+ // echo $vn;
 
 /*
         $sql_item ="SELECT dr_adm_item.admission_note_item_id,

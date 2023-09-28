@@ -10,11 +10,12 @@ require_once '../mains/pre-opd-show-patient-main.php'; //เป็นส่ว�
 require_once '../mains/pre-opd-show-patient-main-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $hn = empty($_REQUEST['hn']) ? null : $_REQUEST['hn'];
 $vn = empty($_REQUEST['vn']) ? null : $_REQUEST['vn'];
-$vstdate = empty($_REQUEST['vstdate']) ? null : $_REQUEST['vstdate'];
+$vstdate = empty($_REQUEST['order_for_date']) ? null : $_REQUEST['order_for_date'];
 // $vn= '111';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 //  $hn = '000000001';
@@ -26,12 +27,13 @@ $an_parameters = ['vn' => $vn];
 $hn_parameters = ['hn' => $hn];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
+//$orderdate = '2023-09-28';
+$order_for_date = ReportQueryUtils::getpreOrderDate($hn);
 
+$vn = ReportQueryUtils::getpreOrderVn($hn,$order_for_date);
 
-//echo $vn;
+//echo $order_for_date ;
 //  echo  $loginname;
-
-
 
 if ($login != $loginname) {
     session_start();
