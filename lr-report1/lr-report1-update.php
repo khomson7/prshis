@@ -88,7 +88,7 @@
           ,abnormal=:abnormal,g=:g,p=:p,serology=:serology,antepartum=:antepartum,dt_vaccine=:dt_vaccine,family=:family,bt=:bt,hr=:hr,rr=:rr,ofs=:ofs,om=:om
           ,chest=:chest,body_long=:body_long,cord=:cord,anus=:anus,body=:body,cry=:cry,expression=:expression,movement=:movement,head=:head,eyes=:eyes,nose=:nose
           ,mouth=:mouth,neck=:neck,abdomen=:abdomen,navel=:navel,spine=:spine,limbs=:limbs,genitalia=:genitalia,anuss=:anuss
-          ,skin_color=:skin_color,behavior=:behavior
+          ,skin_color=:skin_color,behavior=:behavior,first_symptom=:first_symptom
           ,update_user=:update_user,version=:version,update_datetime=:update_datetime,check_value=:check_value
           WHERE id=:id");
           //execute array
@@ -98,7 +98,7 @@
           ,'abnormal'=>$abnormal,'g'=>$g,'p'=>$p,'serology'=>$serology,'antepartum'=>$antepartum,'dt_vaccine'=>$dt_vaccine,'family'=>$family,'bt'=>$bt,'hr'=>$hr,'rr'=>$rr
           ,'ofs'=>$ofs,'om'=>$om,'chest'=>$chest,'body_long'=>$body_long,'cord'=>$cord,'anus'=>$anus,'body'=>$body,'cry'=>$cry,'expression'=>$expression,'movement'=>$movement
           ,'head'=>$head,'eyes'=>$eyes,'nose'=>$nose,'mouth'=>$mouth,'neck'=>$neck,'abdomen'=>$abdomen,'navel'=>$navel,'spine'=>$spine,'limbs'=>$limbs,'genitalia'=>$genitalia,'anuss'=>$anuss
-          ,'skin_color'=>$skin_color,'behavior'=>$behavior
+          ,'skin_color'=>$skin_color,'behavior'=>$behavior,'first_symptom'=>$first_symptom
           ,'update_user'=>$update_user,'version'=>$version,'update_datetime' => $update_datetime,'check_value'=>$check_value
           ));
 

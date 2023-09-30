@@ -2138,7 +2138,7 @@
                // $a = 1;
                 if(Session::checkPermission('ADMISSION_NOTE','EDIT') ){
                 ?>
-                    <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
+                  <!--  <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button> -->
                 <?php
                 }
                 ?>
