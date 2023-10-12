@@ -147,9 +147,120 @@ $row  = $stmt->fetch();
  if ($row['neck'] != 'ปกติ' && $row['neck'] != null) {$neck_2 = '('.$image_check.')';
     $neck =  htmlspecialchars($row['neck']);
  }
+
+ $mouth_1 = '( )';
+ if ($row['mouth'] == 'ปกติ') {$mouth_1 = '('.$image_check.')';
+ }
+ $mouth_2 = '( )';
+ if ($row['mouth'] == 'ปากแหว่ง') {$mouth_2 = '('.$image_check.')';
+ }
+ $mouth_3 = '( )';
+ if ($row['mouth'] == 'เพดานโหว่') {$mouth_3 = '('.$image_check.')';
+ }
+ $mouth_4 = '( )';
+ if (!($row['mouth'] == 'ปกติ' || $row['mouth'] == 'ปากแหว่ง' || $row['mouth'] == 'เพดานโหว่') && $row['mouth'] != null) {$mouth_4 = '('.$image_check.')';
+    $mouth  =  htmlspecialchars($row['mouth']);
+ }
  
 
+ $abdomen_1 = '( )';
+ if ($row['abdomen'] == 'ปกติ') {$abdomen_1 = '('.$image_check.')';
+ }
+ $abdomen_2 = '( )';
+ if ($row['abdomen'] == 'ท้องอืด') {$abdomen_2 = '('.$image_check.')';
+ }
+ $abdomen_3 = '( )';
+ if (!($row['abdomen'] == 'ปกติ' || $row['abdomen'] == 'ท้องอืด') && $row['abdomen'] != null) {$abdomen_3 = '('.$image_check.')';
+    $abdomen  =  htmlspecialchars($row['abdomen']);
+ }
 
+ $navel_1 = '( )';
+ if ($row['navel'] == 'ปกติ') {$navel_1 = '('.$image_check.')';
+ }
+ $navel_2 = '( )';
+ if ($row['navel'] == 'Omphalocele') {$navel_2 = '('.$image_check.')';
+ }
+ $navel_3 = '( )';
+ if ($row['navel'] == 'Gastroschisis') {$navel_3 = '('.$image_check.')';
+ }
+ $navel_4 = '( )';
+ if (!($row['navel'] == 'ปกติ' || $row['navel'] == 'Omphalocele' || $row['navel'] == 'Gastroschisis') && $row['navel'] != null) {$navel_4 = '('.$image_check.')';
+    $navel  =  htmlspecialchars($row['navel']);
+ }
+
+ $spine_1 = '( )';
+ if ($row['spine'] == 'ปกติ') {$spine_1 = '('.$image_check.')';
+ }
+
+ $spine_2 = '( )';
+ if ($row['spine'] != 'ปกติ' && $row['spine'] != null) {$spine_2 = '('.$image_check.')';
+    $spine =  htmlspecialchars($row['spine']);
+ }
+
+ $limbs_1 = '( )';
+ if ($row['limbs'] == 'ปกติ') {$limbs_1 = '('.$image_check.')';
+ }
+
+ $limbs_2 = '( )';
+ if ($row['limbs'] != 'ปกติ' && $row['limbs'] != null) {$limbs_2 = '('.$image_check.')';
+    $limbs =  htmlspecialchars($row['limbs']);
+ }
+
+ $genitalia_1 = '( )';
+ if ($row['genitalia'] == 'ปกติ') {$genitalia_1 = '('.$image_check.')';
+ }
+
+ $genitalia_2 = '( )';
+ if ($row['genitalia'] != 'ปกติ' && $row['genitalia'] != null) {$genitalia_2 = '('.$image_check.')';
+    $genitalia =  htmlspecialchars($row['genitalia']);
+ }
+
+ $anuss_1 = '( )';
+ if ($row['anuss'] == 'ปกติ') {$anuss_1 = '('.$image_check.')';
+ }
+
+ $anuss_2 = '( )';
+ if ($row['anuss'] != 'ปกติ' && $row['anuss'] != null) {$anuss_2 = '('.$image_check.')';
+   /* $anuss =  htmlspecialchars($row['anuss']);*/
+ }
+
+
+
+ $skin_color_1 = '( )';
+ if ($row['skin_color'] == 'แดง') {$skin_color_1 = '('.$image_check.')';
+ }
+ $skin_color_2 = '( )';
+ if ($row['skin_color'] == 'ซีด') {$skin_color_2 = '('.$image_check.')';
+ }
+ $skin_color_3 = '( )';
+ if ($row['skin_color'] == 'เขียว') {$skin_color_3 = '('.$image_check.')';
+ }
+ $skin_color_4 = '( )';
+ if (!($row['skin_color'] == 'แดง' || $row['skin_color'] == 'ซีด' || $row['skin_color'] == 'เขียว') && $row['skin_color'] != null) {$skin_color_4 = '('.$image_check.')';
+    $skin_color  =  htmlspecialchars($row['skin_color']);
+ }
+
+ $behavior_1 = '( )';
+ if ($row['behavior'] == 'เฉย') {$behavior_1 = '('.$image_check.')';
+ }
+ $behavior_2 = '( )';
+ if ($row['behavior'] == 'ร้องไห้') {$behavior_2 = '('.$image_check.')';
+ }
+ $behavior_3 = '( )';
+ if (!($row['behavior'] == 'เฉย' || $row['behavior'] == 'ร้องไห้') && $row['behavior'] != null) {$behavior_3 = '('.$image_check.')';
+    $behavior  =  htmlspecialchars($row['behavior']);
+ }
+
+ $expression_1 = '( )';
+ if ($row['expression'] == 'ประเมินไม่ได้') {$expression_1 = '('.$image_check.')';
+ }
+ $expression_2 = '( )';
+ if ($row['expression'] == 'ร้องโกรธ') {$expression_2 = '('.$image_check.')';
+ }
+ $expression_3 = '( )';
+ if (!($row['expression'] == 'ประเมินไม่ได้' || $row['expression'] == 'ร้องโกรธ') && $row['expression'] != null) {$expression_3 = '('.$image_check.')';
+    $expression  =  htmlspecialchars($row['expression']);
+ }
 
 
 //-------------------------Doctor admission note
@@ -258,29 +369,29 @@ $eyes_1.'&nbsp;ปกติ&nbsp;'.$eyes_2.'&nbsp;ผิดปกติ&nbsp;ร
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;จมูก&nbsp;'.
 $nose_1.'&nbsp;มีรูจมูก2ข้าง&nbsp;'.$nose_2.'&nbsp;รูจมูกตัน&nbsp;'.$nose_3.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$nose
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ปาก ลิ้น&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;ปากแหว่ง&nbsp;'.$receive_from_2.'&nbsp;เพดานโหว่&nbsp;'.$receive_from_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$receive_from
+$mouth_1.'&nbsp;ปกติ&nbsp;'.$mouth_2.'&nbsp;ปากแหว่ง&nbsp;'.$mouth_3.'&nbsp;เพดานโหว่&nbsp;'.$mouth_4.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$mouth
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;คอ&nbsp;'.
 $neck_1.'&nbsp;ปกติ&nbsp;'.$neck_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$neck
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ท้อง&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;ท้องอืด&nbsp;'.$receive_from_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$receive_from
+$abdomen_1.'&nbsp;ปกติ&nbsp;'.$abdomen_2.'&nbsp;ท้องอืด&nbsp;'.$abdomen_3.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$abdomen
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สะดือ&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;Omphalocele&nbsp;'.$receive_from_2.'&nbsp;Gastroschisis&nbsp;'.$receive_from_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$receive_from
+$navel_1.'&nbsp;ปกติ&nbsp;'.$navel_2.'&nbsp;Omphalocele&nbsp;'.$navel_3.'&nbsp;Gastroschisis&nbsp;'.$navel_4.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$navel
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กระดูกสันหลัง&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$receive_from
+$spine_1.'&nbsp;ปกติ&nbsp;'.$spine_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$spine
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;แขนขา&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$receive_from
+$limbs_1.'&nbsp;ปกติ&nbsp;'.$limbs_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$limbs
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;อวัยวะเพศ&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$receive_from
+$genitalia_1.'&nbsp;ปกติ&nbsp;'.$genitalia_2.'&nbsp;ผิดปกติ&nbsp;ระบุ&nbsp;'.$genitalia
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทวารหนัก&nbsp;'.
-$receive_from_1.'&nbsp;ปกติ&nbsp;'.$receive_from_2.'&nbsp;ไม่มีรูก้น'
+$anuss_1.'&nbsp;ปกติ&nbsp;'.$anuss_2.'&nbsp;ไม่มีรูก้น'
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สีผิว&nbsp;'.
-$receive_from_1.'&nbsp;แดง&nbsp;'.$receive_from_2.'&nbsp;ซีด&nbsp;'.$receive_from_2.'&nbsp;เขียว&nbsp;'.$receive_from_2.'&nbsp;อื่นๆ&nbsp;ระบุ&nbsp;&nbsp;'.$receive_from
+$skin_color_1.'&nbsp;แดง&nbsp;'.$skin_color_2.'&nbsp;ซีด&nbsp;'.$skin_color_3.'&nbsp;เขียว&nbsp;'.$skin_color_4.'&nbsp;อื่นๆ&nbsp;ระบุ&nbsp;&nbsp;'.$skin_color
 .'<br><B>สภาพจิตใจทารกเมื่อแรกรับ</B>'
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การแสดงออกด้านพฤติกรรม&nbsp;'.
-$receive_from_1.'&nbsp;เฉย&nbsp;'.$receive_from_2.'&nbsp;ร้องไห้&nbsp;'.$receive_from_2.'&nbsp;อื่นๆ&nbsp;ระบุ&nbsp;'.$receive_from
+$behavior_1.'&nbsp;เฉย&nbsp;'.$behavior_2.'&nbsp;ร้องไห้&nbsp;'.$behavior_3.'&nbsp;อื่นๆ&nbsp;ระบุ&nbsp;'.$behavior
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การแสดงออกด้านอารมณ์&nbsp;'.
-$receive_from_1.'&nbsp;ประเมินไม่ได้&nbsp;'.$receive_from_2.'&nbsp;ร้องโกรธ&nbsp;'.$receive_from_2.'&nbsp;อื่นๆ&nbsp;'.$receive_from
-.'<br><B>อาการแรกรับ</B>&nbsp;'.nl2br(htmlspecialchars($row['family']))
+$expression_1.'&nbsp;ประเมินไม่ได้&nbsp;'.$expression_2.'&nbsp;ร้องโกรธ&nbsp;'.$expression_2.'&nbsp;อื่นๆ&nbsp;'.$expression
+.'<br><B>อาการแรกรับ</B>&nbsp;'.nl2br(htmlspecialchars($row['first_symptom']))
 .'</div>
 
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
