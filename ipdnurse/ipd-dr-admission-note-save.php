@@ -144,6 +144,11 @@
         $pe_text = $_REQUEST['pe_text'];
         $pe_trunk_spine = $_REQUEST['pe_trunk_spine'];
         $svg_tag = $_REQUEST['svg_tag'];
+        $svg_tag1 = $_REQUEST['svg_tag1'];
+        $svg_tag2 = $_REQUEST['svg_tag2'];
+        $svg_tag3 = $_REQUEST['svg_tag3'];
+        $svg_tag4 = $_REQUEST['svg_tag4'];
+        $svg_tag5 = $_REQUEST['svg_tag5'];
         $impression = $_REQUEST['impression'];
         $diff_dx = $_REQUEST['diff_dx'];
         $plan_management = $_REQUEST['plan_management'];
@@ -212,7 +217,7 @@
                 supplementary_feeding_start_age_month,disease_operation_allergy,inpatient_history,
                 inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,
                 pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_cvs,pe_cns,pe_abdomen,pe_rectalgenitalia,pe_extremities,
-                pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,impression,diff_dx,plan_management,problem_list,
+                pe_neurological,pe_ob_gynexam,pe_other,pe_text,svg_tag,svg_tag1,svg_tag2,svg_tag3,svg_tag4,svg_tag5,impression,diff_dx,plan_management,problem_list,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version
                 ,c_born_date,c_born_time,c_born_type_in,c_labor_type,c_indication,c_intrapartum
                 ,c_labor_normal,c_drug_allergy,c_g,c_tp,c_pre,c_a,c_l,c_serology,c_anterpartum
@@ -237,7 +242,7 @@
                 :supplementary_feeding,:supplementary_feeding_start_age_month,:disease_operation_allergy,
                 :inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,
                 :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_cvs,:pe_cns,:pe_abdomen,:pe_rectalgenitalia,
-                :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:svg_tag,:impression,:diff_dx,
+                :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:svg_tag,:svg_tag1,:svg_tag2,:svg_tag3,:svg_tag4,:svg_tag5,:impression,:diff_dx,
                 :plan_management,:problem_list,:create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version
                 ,:c_born_date,:c_born_time,:c_born_type_in,:c_labor_type,:c_indication,:c_intrapartum
                 ,:c_labor_normal,:c_drug_allergy,:c_g,:c_tp,:c_pre,:c_a,:c_l,:c_serology,:c_anterpartum
@@ -280,7 +285,7 @@
                 'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns,'pe_abdomen'=>$pe_abdomen,
                 'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities,
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
-                'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression, 'diff_dx'=>$diff_dx,
+                'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'svg_tag1'=>$svg_tag1,'svg_tag2'=>$svg_tag2,'svg_tag3'=>$svg_tag3,'svg_tag4'=>$svg_tag4,'svg_tag5'=>$svg_tag5,'impression'=>$impression, 'diff_dx'=>$diff_dx,
                 'plan_management'=>$plan_management,'problem_list'=>$problem_list, 'create_user'=>$create_user,
                 'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version
                 ,'c_born_date'=>$c_born_date,'c_born_time'=>$c_born_time,'c_born_type_in'=>$c_born_type_in

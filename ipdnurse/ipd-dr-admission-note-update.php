@@ -144,6 +144,11 @@
         $pe_text = $_REQUEST['pe_text'];
         $pe_trunk_spine = $_REQUEST['pe_trunk_spine'];
         $svg_tag = $_REQUEST['svg_tag'];
+        $svg_tag1 = $_REQUEST['svg_tag1'];
+        $svg_tag2 = $_REQUEST['svg_tag2'];
+        $svg_tag3 = $_REQUEST['svg_tag3'];
+        $svg_tag4 = $_REQUEST['svg_tag4'];
+        $svg_tag5 = $_REQUEST['svg_tag5'];
         $impression = $_REQUEST['impression'];
         $diff_dx = $_REQUEST['diff_dx'];
         $plan_management = $_REQUEST['plan_management'];
@@ -225,7 +230,7 @@
             pe_general=:pe_general, pe_skin=:pe_skin,pe_head=:pe_head,pe_heent=:pe_heent, pe_neck=:pe_neck,pe_breastthorax=:pe_breastthorax,
             pe_heart=:pe_heart, pe_lungs=:pe_lungs, pe_cvs=:pe_cvs,pe_cns=:pe_cns,  pe_abdomen=:pe_abdomen, pe_rectalgenitalia=:pe_rectalgenitalia,
             pe_extremities=:pe_extremities, pe_neurological=:pe_neurological, pe_ob_gynexam=:pe_ob_gynexam, pe_other=:pe_other, pe_text=:pe_text,
-            svg_tag=:svg_tag,impression=:impression,diff_dx=:diff_dx, plan_management=:plan_management,problem_list=:problem_list, 
+            svg_tag=:svg_tag,svg_tag1=:svg_tag1,svg_tag2=:svg_tag2,svg_tag3=:svg_tag3,svg_tag4=:svg_tag4,svg_tag5=:svg_tag5,impression=:impression,diff_dx=:diff_dx, plan_management=:plan_management,problem_list=:problem_list, 
             nurse_name=:nurse_name,nurse_pos=:nurse_pos,
             update_user=:update_user,update_datetime = NOW(),version=:version
             ,c_born_date=:c_born_date,c_born_time=:c_born_time,c_born_type_in=:c_born_type_in
@@ -266,7 +271,7 @@
             'inpatient_because'=>$inpatient_because, 'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin, 'pe_head'=>$pe_head,'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,
             'pe_breastthorax'=>$pe_breastthorax, 'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs,'pe_cvs'=>$pe_cvs,'pe_cns'=>$pe_cns, 'pe_abdomen'=>$pe_abdomen,
             'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities, 'pe_neurological'=>$pe_neurological,
-            'pe_ob_gynexam'=>$pe_ob_gynexam, 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'impression'=>$impression,
+            'pe_ob_gynexam'=>$pe_ob_gynexam, 'pe_other'=>$pe_other, 'pe_text'=>$pe_text, 'svg_tag'=>$svg_tag,'svg_tag1'=>$svg_tag1,'svg_tag2'=>$svg_tag2,'svg_tag3'=>$svg_tag3,'svg_tag4'=>$svg_tag4,'svg_tag5'=>$svg_tag5,'impression'=>$impression,
             'diff_dx'=>$diff_dx, 'plan_management'=>$plan_management,'problem_list'=>$problem_list, 
             'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,
             'update_user'=>$update_user,'version'=>$version
