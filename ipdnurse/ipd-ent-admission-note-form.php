@@ -305,7 +305,7 @@ $regdatetime = $row_ipt["regdatetime"];
         display: block;
     }
 </style>
-<!--
+
 <form id ="button1" method="post">
 <div class="container-fluid">
         <div class="row">
@@ -316,7 +316,7 @@ $regdatetime = $row_ipt["regdatetime"];
 </div>
 </div>
     </form>
--->
+
     <br>
 
 <form id="admit_firsth" action=""  method="post"  enctype="multipart/form-data">
@@ -2161,8 +2161,8 @@ $regdatetime = $row_ipt["regdatetime"];
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw()"><i class='fas fa-edit'></i> วาด</button>
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo1();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo1();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear1()"><i class='fas fa-edit'></i> Clear</button>
@@ -2198,8 +2198,8 @@ $regdatetime = $row_ipt["regdatetime"];
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw2()"><i class='fas fa-edit'></i> วาด</button>
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext2()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw2()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext2()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo2();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo2();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear2()"><i class='fas fa-edit'></i> Clear</button>
@@ -2235,8 +2235,8 @@ $regdatetime = $row_ipt["regdatetime"];
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw3()"><i class='fas fa-edit'></i> วาด</button>
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext3()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw3()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext3()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo3();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo3();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear3()"><i class='fas fa-edit'></i> Clear</button>
@@ -2272,8 +2272,8 @@ $regdatetime = $row_ipt["regdatetime"];
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw4()"><i class='fas fa-edit'></i> วาด</button>
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext4()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw4()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext4()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo4();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo4();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear4()"><i class='fas fa-edit'></i> Clear</button>
@@ -2309,8 +2309,8 @@ $regdatetime = $row_ipt["regdatetime"];
                         </div> 
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw5()"><i class='fas fa-edit'></i> วาด</button>
-                            <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext5()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw5()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext5()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo5();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo5();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear5()"><i class='fas fa-edit'></i> Clear</button>

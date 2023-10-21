@@ -147,6 +147,11 @@
         $pe_cvs = $_REQUEST['pe_cvs'];
         $pe_cns = $_REQUEST['pe_cns'];
         $svg_tag = $_REQUEST['svg_tag'];
+        $svg_tag1 = $_REQUEST['svg_tag1'];
+        $svg_tag2 = $_REQUEST['svg_tag2'];
+        $svg_tag3 = $_REQUEST['svg_tag3'];
+        $svg_tag4 = $_REQUEST['svg_tag4'];
+        $svg_tag5 = $_REQUEST['svg_tag5'];
         $impression = $_REQUEST['impression'];
         $problem_list = $_REQUEST['problem_list'];
         $diff_dx = $_REQUEST['diff_dx'];
@@ -177,7 +182,7 @@
                 pe_rectalgenitalia=:pe_rectalgenitalia,pe_extremities=:pe_extremities,
                 pe_neurological=:pe_neurological, pe_ob_gynexam=:pe_ob_gynexam,
                 pe_other=:pe_other,pe_text=:pe_text,pe_cvs=:pe_cvs, pe_cns=:pe_cns,
-                svg_tag=:svg_tag,impression=:impression,diff_dx=:diff_dx,problem_list=:problem_list,plan_management=:plan_management,
+                svg_tag=:svg_tag,svg_tag1=:svg_tag1,svg_tag2=:svg_tag2,svg_tag3=:svg_tag3,svg_tag4=:svg_tag4,svg_tag5=:svg_tag5,impression=:impression,diff_dx=:diff_dx,problem_list=:problem_list,plan_management=:plan_management,
                 update_user=:update_user,version=:version
                 WHERE admission_note_id=:admission_note_id");
                 $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
@@ -195,7 +200,7 @@
                 'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities,
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns,
-                'svg_tag'=>$svg_tag,'impression'=>$impression,'diff_dx'=>$diff_dx,'problem_list'=>$problem_list,'plan_management'=>$plan_management,
+                'svg_tag'=>$svg_tag,'svg_tag1'=>$svg_tag1,'svg_tag2'=>$svg_tag2,'svg_tag3'=>$svg_tag3,'svg_tag4'=>$svg_tag4,'svg_tag5'=>$svg_tag5,'impression'=>$impression,'diff_dx'=>$diff_dx,'problem_list'=>$problem_list,'plan_management'=>$plan_management,
                 'update_user'=>$update_user,'version'=>$version));
 
              if(!empty($_REQUEST['admission_note_doctor'])){

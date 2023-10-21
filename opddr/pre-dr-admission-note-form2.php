@@ -929,7 +929,9 @@ $row_period  = $stmt_period->fetch();
         <h3>ENT Examination</h3>
         
         </div>
-   
+
+
+
         <!--Ear and Hearing< -->
         <div class="form-group row">
             <div class="col-sm-12">
@@ -942,13 +944,16 @@ $row_period  = $stmt_period->fetch();
                         <!-- <div class="text-right">
                             <button type="button" class="btn btn-outline-success" onclick="onclick_img_button()"><i class='fas fa-edit'></i> แก้ไขรูปภาพ</button>
                         </div> -->
+                     
                         <div class="col-sm-8 offset-sm-3 mb-3">
                             <div id="show_img_select1"  class="text-center">
-                                <canvas id="c1" width="700" height="200"></canvas>
+                                <canvas id="c1" width="700" height="190"></canvas>
                             </div>
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo1();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo1();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear1()"><i class='fas fa-edit'></i> Clear</button>
@@ -979,11 +984,13 @@ $row_period  = $stmt_period->fetch();
                         </div> -->
                         <div class="col-sm-8 offset-sm-3 mb-3">
                             <div id="show_img_select2"  class="text-center">
-                                <canvas id="c2" width="700" height="200"></canvas>
+                                <canvas id="c2" width="700" height="180"></canvas>
                             </div>
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw2()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext2()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo2();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo2();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear2()"><i class='fas fa-edit'></i> Clear</button>
@@ -1014,11 +1021,13 @@ $row_period  = $stmt_period->fetch();
                         </div> -->
                         <div class="col-sm-8 offset-sm-3 mb-3">
                             <div id="show_img_select3"  class="text-center">
-                                <canvas id="c3" width="700" height="200"></canvas>
+                                <canvas id="c3" width="700" height="180"></canvas>
                             </div>
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw3()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext3()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo3();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo3();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear3()"><i class='fas fa-edit'></i> Clear</button>
@@ -1049,11 +1058,13 @@ $row_period  = $stmt_period->fetch();
                         </div> -->
                         <div class="col-sm-8 offset-sm-3 mb-3">
                             <div id="show_img_select4"  class="text-center">
-                                <canvas id="c4" width="700" height="200"></canvas>
+                                <canvas id="c4" width="700" height="180"></canvas>
                             </div>
                         </div>
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw4()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext4()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo4();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo4();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear4()"><i class='fas fa-edit'></i> Clear</button>
@@ -1084,11 +1095,13 @@ $row_period  = $stmt_period->fetch();
                         </div> -->
                         <div class="col-sm-8 offset-sm-3 mb-3">
                             <div id="show_img_select5"  class="text-center">
-                                <canvas id="c5" width="700" height="200"></canvas>
+                                <canvas id="c5" width="700" height="180"></canvas>
                             </div>
                         </div> 
                         <div class="col-sm-11 offset-sm-1" style="display: inline-block;">
                             <div class="text-center">
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Draw5()"><i class='fas fa-edit'></i> วาด</button>
+                            <button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="Addtext5()"><i class='fas fa-edit'></i> เพิ่มข้อความ</button>
                                 <a href="javascript:undo5();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn"><i class="far fa-arrow-alt-circle-left"></i> Undo</button></a>
                                 <a href="javascript:redo5();"><button id="" type="button" class="btn btn-outline-danger PhysicalExaminationBtn">Redo <i class="far fa-arrow-alt-circle-right"></i></button></a>
                                 <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear5()"><i class='fas fa-edit'></i> Clear</button>
@@ -1340,6 +1353,28 @@ $row_period  = $stmt_period->fetch();
         canvas1.renderAll();
     });
 
+        // Add text
+function Addtext() {
+  var text = new fabric.IText("Tap & type", {
+    fontSize: 15,
+    top: 10,
+    left: 10,
+    width: 200,
+    height: 200,
+    textAlign: "center"
+  });
+  canvas1.add(text);
+  canvas1.setActiveObject(text);
+  text.enterEditing();
+  text.selectAll();
+  text.renderCursorOrSelection();  // or canvas.renderAll();
+  canvas1.isDrawingMode = false;
+}
+
+function Draw() {
+  canvas1.isDrawingMode = true;
+}
+
     canvas1.isDrawingMode = true;
    // canvas1.freeDrawingBrush.width = 25;
     canvas1.freeDrawingBrush.color = "rgb(255, 0, 0)";
@@ -1379,6 +1414,29 @@ $row_period  = $stmt_period->fetch();
         canvas2.renderAll();
     });
 
+            // Add text
+            function Addtext2() {
+  var text = new fabric.IText("Tap & type", {
+    fontSize: 15,
+    top: 10,
+    left: 10,
+    width: 200,
+    height: 200,
+    textAlign: "center"
+  });
+  canvas2.add(text);
+  canvas2.setActiveObject(text);
+  text.enterEditing();
+  text.selectAll();
+  text.renderCursorOrSelection();  // or canvas.renderAll();
+  canvas2.isDrawingMode = false;
+}
+
+function Draw2() {
+  canvas2.isDrawingMode = true;
+}
+
+
     canvas2.isDrawingMode = true;
     canvas2.freeDrawingBrush.color = "rgb(255, 0, 0)";
     canvas2.on('object:added',function(){
@@ -1416,6 +1474,28 @@ $row_period  = $stmt_period->fetch();
         canvas3.add(loadedObjects);
         canvas3.renderAll();
     });
+            // Add text
+            function Addtext3() {
+  var text = new fabric.IText("Tap & type", {
+    fontSize: 15,
+    top: 10,
+    left: 10,
+    width: 200,
+    height: 200,
+    textAlign: "center"
+  });
+  canvas3.add(text);
+  canvas3.setActiveObject(text);
+  text.enterEditing();
+  text.selectAll();
+  text.renderCursorOrSelection();  // or canvas.renderAll();
+  canvas3.isDrawingMode = false;
+}
+
+function Draw3() {
+  canvas3.isDrawingMode = true;
+}
+
 
     canvas3.isDrawingMode = true;
     canvas3.freeDrawingBrush.color = "rgb(255, 0, 0)";
@@ -1455,6 +1535,28 @@ $row_period  = $stmt_period->fetch();
         canvas4.renderAll();
     });
 
+                // Add text
+function Addtext4() {
+  var text = new fabric.IText("Tap & type", {
+    fontSize: 15,
+    top: 10,
+    left: 10,
+    width: 200,
+    height: 200,
+    textAlign: "center"
+  });
+  canvas4.add(text);
+  canvas4.setActiveObject(text);
+  text.enterEditing();
+  text.selectAll();
+  text.renderCursorOrSelection();  // or canvas.renderAll();
+  canvas4.isDrawingMode = false;
+}
+
+function Draw4() {
+  canvas4.isDrawingMode = true;
+}
+
     canvas4.isDrawingMode = true;
     canvas4.freeDrawingBrush.color = "rgb(255, 0, 0)";
     canvas4.on('object:added',function(){
@@ -1492,6 +1594,28 @@ $row_period  = $stmt_period->fetch();
         canvas5.add(loadedObjects);
         canvas5.renderAll();
     });
+
+                // Add text
+function Addtext5() {
+  var text = new fabric.IText("Tap & type", {
+    fontSize: 15,
+    top: 10,
+    left: 10,
+    width: 200,
+    height: 200,
+    textAlign: "center"
+  });
+  canvas5.add(text);
+  canvas5.setActiveObject(text);
+  text.enterEditing();
+  text.selectAll();
+  text.renderCursorOrSelection();  // or canvas.renderAll();
+  canvas5.isDrawingMode = false;
+}
+
+function Draw5() {
+  canvas5.isDrawingMode = true;
+}
 
     canvas5.isDrawingMode = true;
     canvas5.freeDrawingBrush.color = "rgb(255, 0, 0)";
@@ -1863,7 +1987,8 @@ $row_period  = $stmt_period->fetch();
                 $.post(url_save, admit_firsth, function(data) {
                         $("#show_check_save").html(data);
                         alert("บันทึกข้อมูลสำเร็จ");
-                        self.close();
+                      //  self.close();
+                      window.location.reload(true);
                     })
                     .fail(function() {
                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);
@@ -1872,7 +1997,8 @@ $row_period  = $stmt_period->fetch();
                 $.post(url_update, admit_firsth, function(data) {
                         $("#show_check_save").html(data);
                         alert("บันทึกข้อมูลสำเร็จ");
-                        self.close();
+                        //self.close();
+                        window.location.reload(true);
                     })
                     .fail(function() {
                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);

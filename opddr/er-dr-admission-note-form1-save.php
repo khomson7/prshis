@@ -92,6 +92,11 @@
         $pe_cvs = $_REQUEST['pe_cvs'];
         $pe_cns = $_REQUEST['pe_cns'];
         $svg_tag = $_REQUEST['svg_tag'];
+        $svg_tag1 = $_REQUEST['svg_tag1'];
+        $svg_tag2 = $_REQUEST['svg_tag2'];
+        $svg_tag3 = $_REQUEST['svg_tag3'];
+        $svg_tag4 = $_REQUEST['svg_tag4'];
+        $svg_tag5 = $_REQUEST['svg_tag5'];
         $impression = $_REQUEST['impression'];
         $diff_dx = $_REQUEST['diff_dx'];
         $plan_management = $_REQUEST['plan_management'];
@@ -115,7 +120,7 @@
                 inpatient_history,inpatient_last_date,inpatient_location,inpatient_because,
                 pmh,fh,gd,fdh,lmp,bp,t,pr,rr,pe_general,pe_skin,pe_heent,
                 pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_abdomen,pe_rectalgenitalia,pe_extremities,
-                pe_neurological,pe_ob_gynexam,pe_other,pe_text,pe_cvs,pe_cns,svg_tag,plan_management,problem_list,
+                pe_neurological,pe_ob_gynexam,pe_other,pe_text,pe_cvs,pe_cns,svg_tag,svg_tag1,svg_tag2,svg_tag3,svg_tag4,svg_tag5,plan_management,problem_list,
                 impression,diff_dx,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version)
                 VALUES (:hn,:an,:chief_complaints,:medical_history,:req_hospital
@@ -124,7 +129,7 @@
                 :inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,
                 :pmh,:fh,:gd,:fdh,:lmp,:bp,:t,:pr,:rr,:pe_general,
                 :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_abdomen,:pe_rectalgenitalia,
-                :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:pe_cvs,:pe_cns,:svg_tag,:plan_management,:problem_list,
+                :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:pe_cvs,:pe_cns,:svg_tag,:svg_tag1,:svg_tag2,:svg_tag3,:svg_tag4,:svg_tag5,:plan_management,:problem_list,
                 :impression,:diff_dx,
                 :create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version)");
                 $stmt->execute(array('hn'=>$hn,'an'=>$an ,'chief_complaints'=>$chief_complaints,
@@ -139,7 +144,7 @@
                 'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs, 'pe_abdomen'=>$pe_abdomen,
                 'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities,
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
-                'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns, 'svg_tag'=>$svg_tag,'plan_management'=>$plan_management,'problem_list'=>$problem_list,
+                'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns, 'svg_tag'=>$svg_tag,'svg_tag1'=>$svg_tag1,'svg_tag2'=>$svg_tag2,'svg_tag3'=>$svg_tag3,'svg_tag4'=>$svg_tag4,'svg_tag5'=>$svg_tag5,'plan_management'=>$plan_management,'problem_list'=>$problem_list,
                 'impression'=>$impression,'diff_dx'=>$diff_dx,
                 'create_user'=>$create_user,'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version));
 
