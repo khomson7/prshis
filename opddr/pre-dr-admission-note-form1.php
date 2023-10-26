@@ -900,6 +900,13 @@ $row_period  = $stmt_period->fetch();
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['pe_other']) ? htmlspecialchars($row['pe_other']) : '') ?>" id="" name="pe_other">
                                         </div>
+                                        <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_NormalAll('pe_general','Good consciousness','pe_skin','no rash, not pale, no jaundice'
+                                ,'pe_heent','not pale conjunctiva, no icteric sclera','pe_lungs','equal breath sounds both lung, clear, no wheezing'
+                                ,'pe_cvs','Regular rhythm Normal s1 s2 no murmur Normal PMI','pe_abdomen','soft, not tender,  no mass palpation'
+                                ,'pe_rectalgenitalia','PR no mass , Good sphincter tone , normal genital appearance','pe_extremities','No deformity No edema'
+                                ,'pe_ob_gynexam','no mass , no discharge','pe_cns','E4V5N6 Pupil 3 mm RTLBE Motor and Sensory grossly intact')"><i class="fas fa-user-plus"></i> NormalAll</button>
+                            </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="text-right col-sm-3">PE Text</label>
@@ -1514,5 +1521,18 @@ $row_period  = $stmt_period->fetch();
 
     function onclick_Normal2(id, value) {
         $('#' + id).val(value);
+    }
+
+    function onclick_NormalAll(id,value,id2,value2,id3,value3,id4,value4,id5,value5,id6,value6,id7,value7,id8,value8,id9,value9,id10,value10) {
+        $('#'+id).val(value);
+        $('#'+id2).val(value2);
+        $('#'+id3).val(value3);
+        $('#'+id4).val(value4);
+        $('#'+id5).val(value5);
+        $('#'+id6).val(value6);
+        $('#'+id7).val(value7);
+        $('#'+id8).val(value8);
+        $('#'+id9).val(value9);
+        $('#'+id10).val(value10);
     }
 </script>
