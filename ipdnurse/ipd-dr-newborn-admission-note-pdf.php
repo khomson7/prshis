@@ -1,16 +1,22 @@
 <?php
-/*require_once './project/function/SessionManager.php';
-SessionManager::checkLoginSessionAndShowMessage(); //เช็ค session
-if(!(
-    SessionManager::checkPermission('ADMISSION_NOTE','VIEW')
-    )){
-    return;
-}
-require_once __DIR__ . '/vendor/autoload.php';
-require_once './project/function/DbUtils.php';
-require_once './project/function/KphisQueryUtils.php';
-*/
 
+require_once '../include/Session.php';
+   //ตรวจสอบว่า session login ตรงกันหรือไม่
+        
+             
+   $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+   $loginname = $_SESSION['loginname'];
+   $values =['loginname'=>$loginname];
+   
+   //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+   if($login != $loginname){
+       session_start();
+       session_destroy();              
+           
+     } 
+
+ Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
 
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
@@ -36,6 +42,13 @@ $admission_note_id = $_REQUEST['admission_note_id'];
 $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
 $hn = KphisQueryUtils::getHnByAn($an);
 $query_parameters = ['an' => $an];
+
+Session::insertSystemAccessLog(json_encode(array(
+    'report'=>'IPD-DR-NEWBORN-ADMISSION-NOTE-PDF',
+   // 'action'=>'PRINT',
+    'an'=>$an,
+),JSON_UNESCAPED_UNICODE));
+
 
 //-------------------------Doctor admission note
 $sql = "SELECT *,case 

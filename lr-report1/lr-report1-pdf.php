@@ -1,5 +1,21 @@
 <?php
 
+require_once '../include/Session.php';
+ 
+                 
+   $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+   $loginname = $_SESSION['loginname'];
+   $values =['loginname'=>$loginname];
+   
+   //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+   if($login != $loginname){
+       session_start();
+       session_destroy();              
+           
+     } 
+
+ Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 //require_once __DIR__ . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
@@ -30,7 +46,7 @@ Session::insertSystemAccessLog(json_encode(array(
     'an'=>$an,
 ),JSON_UNESCAPED_UNICODE));
 
-
+/*
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
@@ -38,7 +54,7 @@ if ($login != $loginname) {
     session_start();
     session_destroy();
 }
-
+*/
 $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 //-------------------------Doctor admission note
@@ -403,7 +419,7 @@ $expression_1.'&nbsp;ประเมินไม่ได้&nbsp;'.$expression_
             <label>อายุ : '.htmlspecialchars($row_ipt['age_y']." ปี ".$row_ipt['age_m']." เดือน ".$row_ipt['age_d']." วัน ").' | </label>
             <label>ตึก : '.htmlspecialchars($row_ipt['name']).' | </label>
             <label>เตียง : '.htmlspecialchars($row_ipt['bedno']).' | </label>
-            <label>สิทธิ : ('.htmlspecialchars($row_ipt['pttype']).') '.htmlspecialchars($row_ipt['pttype_name']).'</label>
+            <label>สิทธิ : ('.htmlspecialchars($row_ipt['pttype']).') '.htmlspecialchars($row_ipt['pttype_name']).$loginname.'</label>
             </td>
         </tr>
     </table>

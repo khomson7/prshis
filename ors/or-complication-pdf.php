@@ -3,13 +3,31 @@
        // if(!(Session::checkPermission('IPD_NURSE_ADDMISSION_NOTE','VIEW'))){
          //   return;
        // }
+       $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values = ['loginname' => $loginname];
+if ($login != $loginname) {
+session_start();
+session_destroy();
+}
+
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
+
+Session::insertSystemAccessLog(json_encode(array(
+    'report'=>'IPD-DR-ADMISSION-NOTE-PDF',
+   // 'action'=>'PRINT',
+    'an'=>$an,
+),JSON_UNESCAPED_UNICODE));
+
        include('../mains/datethai.php');
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = $_REQUEST['an'];
         $hn = KphisQueryUtils::getHnByAn($an);   // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
-       require_once __DIR__ . '../../vendor/autoload.php';
+      // require_once __DIR__ . '../../vendor/autoload.php';
+      require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
       // require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
         date_default_timezone_set('asia/bangkok');
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4']);

@@ -1,6 +1,20 @@
 <?php
 require_once '../include/Session.php';
 
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values =['loginname'=>$loginname];
+
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if($login != $loginname){
+    session_start();
+    session_destroy();              
+        
+  } 
+
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
@@ -58,13 +72,7 @@ $head = '
             ),JSON_UNESCAPED_UNICODE));
 
         
-        $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-        $loginname = $_SESSION['loginname'];
-        $values = ['loginname' => $loginname];
-        if ($login != $loginname) {
-            session_start();
-            session_destroy();
-        }
+   
         //----------------------รับค่า an และ select ข้อมูล จากฐานข้อมูลเพื่อค้นหา hn
 
         $hn_REQUEST = KphisQueryUtils::getHnByAn($an_REQUEST);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา

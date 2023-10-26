@@ -5,6 +5,21 @@ ini_set("pcre.backtrack_limit", "10000000");
 set_time_limit(300);
 require_once '../include/Session.php';
 
+
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values =['loginname'=>$loginname];
+
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if($login != $loginname){
+    session_start();
+    session_destroy();              
+        
+  } 
+
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';

@@ -1,5 +1,22 @@
 <?php
 //require_once __DIR__ . '\vendor\autoload.php';
+
+require_once '../include/Session.php';
+
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values =['loginname'=>$loginname];
+
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if($login != $loginname){
+    session_start();
+    session_destroy();              
+        
+  } 
+
+  Session::checkLoginSessionAndShowMessage(); //เช็ค session    
+  Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
+  
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
@@ -38,13 +55,6 @@ Session::insertSystemAccessLog(json_encode(array(
 ),JSON_UNESCAPED_UNICODE));
 
 
-$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-$loginname = $_SESSION['loginname'];
-$values = ['loginname' => $loginname];
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
-}
 
 $name_session = $_SESSION['name'];
 $sql_ipt = "SELECT ipt.an, ipt.hn as ipt_hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,

@@ -1,24 +1,40 @@
 <?php  // require_once './project/function/Session.php';
        // Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
        require_once '../include/Session.php';
+       //ตรวจสอบว่า session login ตรงกันหรือไม่
+              $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+               $loginname = $_SESSION['loginname'];
+               $values =['loginname'=>$loginname];
+       
+               //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+               if($login != $loginname){
+                   session_start();
+                   session_destroy();
+                   
+                       
+                 }
        // Session::checkLoginSessionAndShowMessage(); //เช็ค session
        // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
-        require_once '../mains/main-report.php';
+       require_once '../mains/main-report.php';
+       //check session and permission  
+        Session::checkLoginSessionAndShowMessage(); //เช็ค session
+        Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
         require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+        require_once '../mains/ipd-show-patient-sticky.php';
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
+
+        Session::insertSystemAccessLog(json_encode(array(
+            'form'=>'OR-COMPLICALTION',
+            'an'=>$an,
+        ),JSON_UNESCAPED_UNICODE));
+
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = $_REQUEST['an'];//รับค่า an
 
         $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 
-        $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-        $loginname = $_SESSION['loginname'];
-        $values =['loginname'=>$loginname];
-        if($login != $loginname){
-            session_start();
-            session_destroy();
-          }
+      
         //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
         $sql = "SELECT count(*) AS count_row, id FROM ".DbConstant::KPHIS_DBNAME.".prs_or_complication WHERE an = :an ";
         $id  = null;
@@ -1420,7 +1436,7 @@
                 if((($id == null)) || (($id != null))){?>
                     <button type="button" class="btn btn-primary" id="btn_or_complication" onclick="or_complication_save()"><i class="fas fa-save"></i> บันทึก</button>
                 <?php } ?>
-                <a href="or-complication-pdf.php?an=<?php echo $an;?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                <a href="or-complication-pdf.php?an=<?php echo $an;?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
             </div>
         </div><br>
     </div>
