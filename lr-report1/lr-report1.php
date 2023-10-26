@@ -1,8 +1,17 @@
 <?php  // require_once './project/function/Session.php';
-// Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
-require_once '../include/Session.php';
-// Session::checkLoginSessionAndShowMessage(); //เช็ค session
-// Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
+   require_once '../include/Session.php';
+   //ตรวจสอบว่า session login ตรงกันหรือไม่
+          $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+           $loginname = $_SESSION['loginname'];
+           $values =['loginname'=>$loginname];
+   
+           //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+           if($login != $loginname){
+               session_start();
+               session_destroy();
+               
+                   
+             }
 require_once '../mains/main-report.php';
 
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -22,13 +31,13 @@ Session::insertSystemAccessLog(json_encode(array(
     'an'=>$an,
 ),JSON_UNESCAPED_UNICODE));
 
-$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+/*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+}*/
 
 // echo $an;
 
