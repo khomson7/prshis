@@ -24,7 +24,7 @@ $nutrition = NutritionTracker::get_nutrition1($an,$vn);
 
 /*
 $sMessage = 'ทดสอบแจ้ง ขอใช้งาน ';
-$sToken ='PaxKnAdzWtMOY2zs9gUkIEGeAY58gTdEyuLOzbR4YoP';
+$sToken ='ss';
  //$sMessage = 'แจ้งหมดอายุ:';
 
    $chOne = curl_init(); 
