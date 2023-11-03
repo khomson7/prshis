@@ -21,7 +21,6 @@ $vn = KphisQueryUtils::getVnByAn($an); */
 $nutrition = NutritionTracker::get_nutrition1($an,$vn);
 
 
-
 /*
 $sMessage = 'ทดสอบแจ้ง ขอใช้งาน ';
 $sToken ='ss';

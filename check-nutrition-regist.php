@@ -7,6 +7,7 @@ require_once './include/Session.php';
 require_once './include/KphisQueryUtils.php';
 require_once './include/NutritionTracker.php';
 
+
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
 $fname = $_REQUEST['fname'];
