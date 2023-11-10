@@ -18,6 +18,9 @@ $vn = empty($_REQUEST['vn']) ? null : $_REQUEST['vn'];
 $vstdate = empty($_REQUEST['order_for_date']) ? null : $_REQUEST['order_for_date'];
 // $vn= '111';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$pre_order_master_id = $_REQUEST['pre_order_master_id'];
+
+
 //  $hn = '000000001';
 // $hn = KphisQueryUtils::getHnByAn($an);
 // $vn = KphisQueryUtils::getVnByAn($an);
@@ -32,6 +35,12 @@ $order_for_date = ReportQueryUtils::getpreOrderDate($hn);
 
 $vn = ReportQueryUtils::getpreOrderVn($hn,$order_for_date);
 
+//$pre_order_master_id = 27;
+
+$pre_order_type = ReportQueryUtils::getPreOrderType($pre_order_master_id);
+
+echo $pre_order_type;
+
 //echo $order_for_date ;
 //  echo  $loginname;
 
@@ -39,6 +48,9 @@ if ($login != $loginname) {
     session_start();
     session_destroy();
 }
+
+
+
 
 Session::insertSystemAccessLog(json_encode(array(
     'form'=>'PRE-DR-ADMISSION-NOTE-FORM',
@@ -59,7 +71,14 @@ if ($row  = $stmt->fetch()) {
     $admission_note_id = null;
 }
 
-//  echo $admission_note_id;
+
+
+
+   
+
+//echo $pre_order_type;
+
+ 
 
 /*
         $sql_item ="SELECT dr_adm_item.admission_note_item_id,
@@ -253,6 +272,14 @@ $row_period  = $stmt_period->fetch();
         display: block;
     }
 </style>
+
+<script>
+// JavaScript code to close the window
+<?php if ($pre_order_type != 'opd') { ?>
+   window.close();
+<?php } ?>
+</script>
+
 <form id="admit_firsth" action="" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">
