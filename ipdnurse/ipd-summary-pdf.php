@@ -8,12 +8,11 @@ $loginname = $_SESSION['loginname'];
 $values =['loginname'=>$loginname];
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-if($login != $loginname){
+if(!$loginname){
     session_start();
     session_destroy();              
         
   } 
-
   Session::checkLoginSessionAndShowMessage(); //เช็ค session    
   Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
   

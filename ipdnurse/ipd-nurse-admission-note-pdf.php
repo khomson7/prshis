@@ -9,11 +9,11 @@ require_once '../include/Session.php';
    $values =['loginname'=>$loginname];
    
    //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-   if($login != $loginname){
-       session_start();
-       session_destroy();              
-           
-     } 
+   if(!$loginname){
+    session_start();
+    session_destroy();              
+        
+  } 
 
  Session::checkLoginSessionAndShowMessage(); //เช็ค session
 Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');

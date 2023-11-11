@@ -9,14 +9,21 @@ require_once '../include/Session.php';
    $values =['loginname'=>$loginname];
    
    //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-   if($login != $loginname){
+   if(!$loginname){
        session_start();
        session_destroy();              
            
      } 
 
- Session::checkLoginSessionAndShowMessage(); //เช็ค session
-Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
+     Session::checkLoginSessionAndShowMessage(); //เช็ค session
+
+     if(!(
+        Session::checkPermission('ADMISSION_NOTE','VIEW')
+        )){
+        return;
+    }
+ 
+//Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
 
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';

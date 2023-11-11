@@ -1,4 +1,13 @@
 <?php
+require_once '../include/Session.php';
+
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values = ['loginname' => $loginname];
+if (!$loginname) {
+    session_start();
+    session_destroy();
+}
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
@@ -32,13 +41,7 @@ Session::insertSystemAccessLog(json_encode(array(
     ),JSON_UNESCAPED_UNICODE));
 
 
-$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-$loginname = $_SESSION['loginname'];
-$values = ['loginname' => $loginname];
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
-}
+
 
 //----------------------select ข้อมูล จากฐานข้อมูลเพื่อค้นหา ชื่อ - สกุล
 $query_parameters_REQUEST = ['an'=>$an];

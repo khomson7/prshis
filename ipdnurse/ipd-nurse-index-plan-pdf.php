@@ -6,12 +6,11 @@ $loginname = $_SESSION['loginname'];
 $values =['loginname'=>$loginname];
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-if($login != $loginname){
+if(!$loginname){
     session_start();
     session_destroy();              
         
   } 
-
 Session::checkLoginSessionAndShowMessage();
 // Session::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_DOCTOR_ORDER_PROGRAM');
 // Session::checkPermissionAndShowMessage('IPD_ORDER','VIEW');
