@@ -39,8 +39,6 @@ Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
 
 
 
-
-
 <div class="container-fluid"><br>
     <div class="row">
         <div class="col-sm-7">
