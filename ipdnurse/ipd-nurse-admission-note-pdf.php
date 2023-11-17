@@ -15,16 +15,16 @@ require_once '../include/Session.php';
         
   } 
 
- Session::checkLoginSessionAndShowMessage(); //เช็ค session
-Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
+  Session::checkLoginSessionAndShowMessage(); //เช็ค session
+  Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
 
-        require_once '../include/DbUtils.php';
-        require_once '../include/KphisQueryUtils.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+  require_once '../include/DbUtils.php';
+  require_once '../include/KphisQueryUtils.php';
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = $_REQUEST['an'];
         $hn = KphisQueryUtils::getHnByAn($an);   // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
        // require_once __DIR__ . '../vendor/autoload.php';
-       require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
         date_default_timezone_set('asia/bangkok');
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4']);
         $mpdf->AddPageByArray([
