@@ -37,18 +37,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
    // echo $getsess;
 
-   use Endroid\QrCode\QrCode;
+  // use Endroid\QrCode\QrCode;
 
 // Data to be encoded in the QR code
 //$data = $an; // Replace this with your data
 
-$data = $an;
+//$data = $an;
 
 // Create a QR code instance
-$qrCode = new QrCode($data);
+//$qrCode = new QrCode($data);
 
 // Save the QR code as a file (optional)
-$qrCode->writeFile('./include/images/an_qr/'.$data.'.png');
+//$qrCode->writeFile('./include/images/an_qr/'.$data.'.png');
 
 
 ?>
