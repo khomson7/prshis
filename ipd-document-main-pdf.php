@@ -158,6 +158,9 @@ $query_parameters_REQUEST = ['an'=>$an];
         }
 // $mpdf->SetFooter(' (พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' )');
 // $mpdf->WriteHTML('');
+
+$image_check_an = "<img src='../include/images/an_qr/".$an.".png' width='65'>";
+
 $head =
 '   <style>
         body{
@@ -180,14 +183,53 @@ $head =
             height:30pt;
             line-height: 150%;
         }
+
+      
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  
+  height: 0px; /* Should be removed. Only for demonstration */
+}
+.column0 {
+    float: left;
+
+  
+    height: 0px; /* Should be removed. Only for demonstration */
+  }
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
     </style>
-    
-    <h3 style="text-align:center;">เอกสารใบปะหน้า</h3>
+  
+    <div class="row">
+    <div class="column"><strong><span style="text-align:right;">'.$image_check_an.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    เอกสารใบปะหน้า</strong></div>
+   
+  </div>
    
     <p>
         วันที่รับไว้ : '.$regdate_row_ipt.'
-        HN : '.$hn_row_ipt.' AN : '.$an.'&nbsp;&nbsp;WARD : '.$wardname_row_ipt.'<br> ชื่อ - สกุล : '.$pname_row_ipt.' '.$fname_row_ipt.' '.$lname_row_ipt.'<br> วันที่จำหน่าย : '.$dchdate_row_ipt.'
+        HN : '.$hn_row_ipt.' AN : '.$an.'&nbsp;&nbsp;WARD : '.$wardname_row_ipt.'<br> ชื่อ - สกุล : '.$pname_row_ipt.' '.$fname_row_ipt.' '.$lname_row_ipt.' วันที่จำหน่าย : '.$dchdate_row_ipt.'
     </p>
+
+   
+
+    <div class="qr-code" style="display: none;"></div>
+
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="8%">&nbsp;ในแฟ้ม</td>
@@ -409,6 +451,8 @@ $head =
     </table>
     <p style="text-align:right;">(พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' ) </p>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"> </script>
+    <script src="./include/js/script.js"> </script>
 ';
 $mpdf->WriteHTML($head);
 $mpdf->Output();

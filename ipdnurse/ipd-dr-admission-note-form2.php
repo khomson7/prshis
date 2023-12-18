@@ -311,11 +311,11 @@ $row_period  = $stmt_period->fetch();
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="form-group row">
+                                  <!--  <div class="form-group row">
                                         <label class="col-sm-12"><B> มาถึงหอผู้ปวยโดย</B></label>
                                     </div>
                                     <div class="form-group row">
-                                        <!-- <input type="hidden" id="arrive_hidden" name="arrive_hidden" value=""> -->
+                                        
                                         <div class="col-sm-1"></div>
                                         <div class="custom-control custom-radio col-sm-2">
                                             <input type="radio" <?php if (
@@ -375,7 +375,7 @@ $row_period  = $stmt_period->fetch();
                                                                                                                                             } ?>>
                                         </div>
                                     </div>
-                                    <hr>
+                                    <hr> -->
                                     <div class="form-group row">
                                         <label class="col-sm-12"><B> อาการสำคัญ</B></label>
                                     </div>
@@ -455,7 +455,7 @@ $row_period  = $stmt_period->fetch();
 
                                     </div>
                                     <hr>
-                                    <div class="form-group row">
+                             <!--       <div class="form-group row">
                                         <label class="col-sm-12"><B> นำส่งผู้ป่วยโดย</B></label>
                                     </div>
                                     <div class="form-group row">
@@ -495,7 +495,7 @@ $row_period  = $stmt_period->fetch();
                                                                                                                                             } ?>>
                                         </div>
                                     </div>
-                                    <hr>
+                                    <hr> -->
                                     <div class="form-group row">
                                         <label class="col-sm-12"><B>ประวัติการเจ็บป่วยปัจจุบัน</B></label>
                                     </div>

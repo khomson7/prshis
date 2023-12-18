@@ -744,17 +744,7 @@ $head =
             </td>
         </tr>
 
-        <tr style="border:1px solid #000;margin: 35px;">
-            <td  width="25%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;">&nbsp;
-                <B>มาถึงหอผู้ป่วยโดย</B>&nbsp;
-                <B style="text-decoration: underline;"> '.htmlspecialchars($row['arrive_by']).' </B>&nbsp;</td>
-            <td  width="25%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;">&nbsp;
-                <B>นำส่งผู้ป่วยโดย</B>&nbsp;
-                <B style="text-decoration: underline;"> '.$taken_by_text.' </B>&nbsp;</td>
-            <td  width="50%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;">&nbsp;
-                <B>ผู้ให้ข้อมูล</B>&nbsp;
-                <B style="text-decoration: underline;"> '.$textbox_informant.' </B>&nbsp;</td>
-        </tr>
+   
 
         <tr style="border:1px solid #000;margin: 35px;">
             <td colspan="3" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;">&nbsp;

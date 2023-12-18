@@ -292,11 +292,11 @@ $regdatetime = $row_ipt["regdatetime"];
                                 <input type="time" class="form-control form-control-sm" id="receiver_medication_time" name="receiver_medication_time" value="<?= (isset($row_ipt['regtime']) && $admission_note_id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receiver_medication_time'])) ?>">
                                 </div>
                             </div><hr>
-                            <div class="form-group row">
+                         <!--   <div class="form-group row">
                                 <label class="col-sm-12"><B> มาถึงหอผู้ปวยโดย</B></label>
                             </div>
                             <div class="form-group row">
-                                <!-- <input type="hidden" id="arrive_hidden" name="arrive_hidden" value=""> -->
+                                
                                 <div class="col-sm-1"></div>
                                 <div class="custom-control custom-radio col-sm-2">
                                     <input type="radio" <?php   if ($row['arrive_by'] == 'เดินมา'
@@ -344,7 +344,7 @@ $regdatetime = $row_ipt["regdatetime"];
                                                         &&$row['arrive_by'] != NULL)) {echo 'disabled';}?>
                                     >
                                 </div>
-                            </div><hr>
+                            </div><hr> -->
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> อาการสำคัญ</B></label>
                             </div>
@@ -421,7 +421,7 @@ $regdatetime = $row_ipt["regdatetime"];
                                     </div>
 
                            <hr>
-                            <div class="form-group row">
+                         <!--   <div class="form-group row">
                                 <label class="col-sm-12"><B> นำส่งผู้ป่วยโดย</B></label>
                             </div>
                             <div class="form-group row">
@@ -454,7 +454,7 @@ $regdatetime = $row_ipt["regdatetime"];
                                             value="<?php if ($row['taken_by_etc'] == 'Y') {echo htmlspecialchars($row['taken_by']);}?>"
                                             <?php if (!($row['taken_by_etc'] == 'Y')) {echo 'disabled';} ?>>
                                 </div>
-                            </div><hr>
+                            </div><hr> -->
                             <div class="form-group row">
                                 <label class="col-sm-12"><B>ประวัติการเจ็บป่วยปัจจุบัน</B></label>
                             </div>

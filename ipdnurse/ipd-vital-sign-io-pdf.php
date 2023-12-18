@@ -4,10 +4,12 @@ require_once '../include/Session.php';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
+
 if (!$loginname) {
     session_start();
     session_destroy();
 }
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
@@ -15,6 +17,7 @@ require_once '../include/KphisQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
+
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
 if(!(
         // && Session::checkPermission('IPD_NURSE_MAIN_PROGRAM','ACCESS')
@@ -25,6 +28,7 @@ if(!(
         )){
         return;
 }
+
 $an = $_REQUEST['an_io_pdf'];//รับค่า an
 $io_date_start = null;
 $io_date_end = null;

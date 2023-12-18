@@ -18,6 +18,7 @@
 
     Session::checkLoginSessionAndShowMessage(); //เช็ค session
 Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
     require_once './header.php';
     require_once './include/DbUtils.php';
     require_once './include/KphisQueryUtils.php';
@@ -35,18 +36,38 @@ Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
    // $getsess = json_encode(KphisQueryUtils::getDocumentSummary($an));
 
    // echo $getsess;
+
+   use Endroid\QrCode\QrCode;
+
+// Data to be encoded in the QR code
+//$data = $an; // Replace this with your data
+
+$data = $an;
+
+// Create a QR code instance
+$qrCode = new QrCode($data);
+
+// Save the QR code as a file (optional)
+$qrCode->writeFile('./include/images/an_qr/'.$data.'.png');
+
+
 ?>
 
 
 
 <div class="container-fluid"><br>
     <div class="row">
+    <div class="col-md-2 text-left">
+            <a href="/allpdfprint/ipd-all-pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารรวม</a>
+        </div>
         <div class="col-sm-7">
             <h4><p class="text-right"><B><i class="fas fa-file-alt"></i> เอกสารที่อยู่ในระบบคอมพิวเตอร์</B></p></h4>
         </div>
         <div class="col-md-2 text-right">
             <a href="ipd-document-main-pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารใบปะหน้า</a>
         </div>
+
+         
     </div>
     <div class="row">
         <div class="col-md-6 offset-md-3">
