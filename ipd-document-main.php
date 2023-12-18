@@ -57,9 +57,9 @@ $qrCode->writeFile('./include/images/an_qr/'.$data.'.png');
 
 <div class="container-fluid"><br>
     <div class="row">
-    <div class="col-md-2 text-left">
+   <!-- <div class="col-md-2 text-left">
             <a href="/allpdfprint/ipd-all-pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารรวม</a>
-        </div>
+        </div> -->
         <div class="col-sm-7">
             <h4><p class="text-right"><B><i class="fas fa-file-alt"></i> เอกสารที่อยู่ในระบบคอมพิวเตอร์</B></p></h4>
         </div>
