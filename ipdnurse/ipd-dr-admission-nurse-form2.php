@@ -33,9 +33,9 @@ $an_parameters = ['an' => $an];
 $hn_parameters = ['hn' => $hn];
 
 Session::insertSystemAccessLog(json_encode(array(
-    'form'=>'IPD-DR-ADMISSION-NOTE-FORM',
-    'an'=>$an,
-),JSON_UNESCAPED_UNICODE));
+    'form' => 'IPD-DR-ADMISSION-NOTE-FORM',
+    'an' => $an,
+), JSON_UNESCAPED_UNICODE));
 
 //-------------------------Doctor admission note
 $sql = "SELECT *
@@ -221,7 +221,7 @@ $row_period  = $stmt_period->fetch();
 
 //ipd_nurse_addmission_note เรื่อง "ประจำเดือน","อาชีพ","สารเสพติด"
 $form_type =  "SELECT c_form_type FROM " . DbConstant::KPHIS_DBNAME . ".ipd_dr_admission_note where  an=:an";
-$stmt_formtype= $conn->prepare($form_type);
+$stmt_formtype = $conn->prepare($form_type);
 $stmt_formtype->execute(['an' => $an]);
 $row_formtype  = $stmt_formtype->fetch();
 
@@ -276,7 +276,7 @@ if ( $aa == 1) {
 
 
 <form name="add" method="post" id="myForm" action="<?php echo $_SERVER['PHP_SELF']; ?>?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" onsubmit="changeActionURL()">
-  <!--  <input name="id" type="hidden" />
+    <!--  <input name="id" type="hidden" />
     <input name="aa" type="hidden" />
     กรอกเลขที่คลอด(LN): <input name="laborid" id="laborid" type="text" />
     <input type="submit" name="submit" value="Submit" /> -->
@@ -298,7 +298,7 @@ if ( $aa == 1) {
 -->
 
 <body onload="myFunction()">
-<h1>Hello World!</h1>
+    <h1>Hello World!</h1>
 </body>
 
 <br>
@@ -311,7 +311,7 @@ if ( $aa == 1) {
             <div class="col-md-11">
                 <h4>History - Physical Examination Of Newborn <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?></h4>
             </div>
-           <!-- <div class="custom-control custom-radio col-sm-2">
+            <!-- <div class="custom-control custom-radio col-sm-2">
                 <input type="radio" checked="checked" class="custom-control-input" id="c_form_type" name="c_form_type" value="1" ">
                                             <label class=" custom-control-label" for="c_form_type">NewBorn</label>
             </div>  -->
@@ -639,7 +639,7 @@ if ( $aa == 1) {
 
                     </div>
 
-                 
+
 
                     <div class="row">
                         <div class="col-md-12">
@@ -923,7 +923,7 @@ if ( $aa == 1) {
                         }
                     </script>
 
-                 
+
 
 
                     <div style="<?php if ($row_ipt['age_y'] >  14) {
@@ -931,7 +931,7 @@ if ( $aa == 1) {
                                 } ?>">
 
                         <div class="input-group input-group-sm sm-1">
-                            
+
                             <font color="red"><B>ข้อมูลแม่:</B></font> &nbsp;<input type="text" style="color: red;" class="form-control" id="c_mother_his" name="c_mother_his" value="<?= (isset($row_labor['mother_'])  ? htmlspecialchars($row_labor['mother_']) : htmlspecialchars($row['c_mother_his'])) ?>" aria-describedby="inputGroup-sizing-sm" readonly>
                         </div>
 
@@ -949,9 +949,9 @@ if ( $aa == 1) {
                                 <input type="text" class="form-control form-control-sm" value="<?= (isset($row_labor['p'])  ? htmlspecialchars($row_labor['p']) : htmlspecialchars($row['p'])) ?>" id="" name="p">
                             </div>
                         </div>
-                        
-                      
-                      
+
+
+
                         <!-- display:none -->
                     </div>
 
@@ -1010,15 +1010,16 @@ if ( $aa == 1) {
                         <div class="col-md-12">
                             <div class="form-group row">
                                 <label class="col-sm-2"><B></B></label>
-                                
-                            
-                                <B>ได้ TT</B> <div class="col-sm-2">
-                                <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['tt']) ? htmlspecialchars($row['tt']) : '') ?>" id="tt" name="tt">
-                               
+
+
+                                <B>ได้ TT</B>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['tt']) ? htmlspecialchars($row['tt']) : '') ?>" id="tt" name="tt">
+
                                 </div>&nbsp; เข็ม &nbsp;&nbsp;<B>Newborn vaccination</B> &nbsp;&nbsp;&nbsp;&nbsp;
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['c_hbv'] == 'Y' || $row['c_hbv'] == null)   {
+                                    <input type="checkbox" <?php if ($row['c_hbv'] == 'Y' || $row['c_hbv'] == null) {
                                                                 echo 'checked="checked"';
                                                             } ?> class="custom-control-input" id="c_hbv" value="Y" name="c_hbv" onchange="custom_check('off_taken');">
                                     <label class="custom-control-label" for="c_hbv">HBV</label>
@@ -1886,7 +1887,7 @@ if ( $aa == 1) {
                                             ) {
                                                 echo 'display:none;';
                                             } ?>">
-<!--
+                                    <!--
                                     <div class="form-group row">
                                         <label class="col-sm-12">วิธีคลอด</label>
                                     </div>
@@ -1932,73 +1933,73 @@ if ( $aa == 1) {
                                              
                                 -->
 
-                                <div style="<?php if (($row_ipt['age_y'] >  15 && $row_ipt['age_m'] >= 0 && $row_ipt['age_d'] >= 0)
-                                    || ($row_ipt['age_y'] == 15 && $row_ipt['age_m'] >  0 && $row_ipt['age_d'] >  0)
-                                ) {
-                                    echo 'display:none;';
-                                } ?>">
-                        <div class="form-group row">
-                            <label class="col-sm-12">ประวัติการได้รับภูมิคุ้มกัน (เฉพาะเด็ก)</label>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row['receives_immunisation_history_kid'] == 'ครบตามวัย') {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="o1" name="receives_immunisation_history_kid" value="ครบตามวัย" onchange="custom_check('off_immunisation');">
-                                <label class="custom-control-label" for="o1">ครบตามวัย</label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if (
-                                                        $row['receives_immunisation_history_kid'] != 'ครบตามวัย'
-                                                        && $row['receives_immunisation_history_kid'] != null
-                                                        && $row['receives_immunisation_history_kid'] != ''
-                                                    ) {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="o2" name="receives_immunisation_history_kid" onchange="custom_check('on_immunisation');" value="ไม่ครบตามวัย">
-                                <label class="custom-control-label" for="o2">ไม่ครบ (ระบุ)</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-sm" id="o3" value="<?php if (!($row['receives_immunisation_history_kid'] == 'ครบตามวัย')) {
-                                                                                                            echo htmlspecialchars($row['receives_immunisation_history_kid']);
-                                                                                                        } ?>" name="receives_immunisation_history_kid_text">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-12">การพัฒนาการ (เฉพาะเด็ก)</label>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row['developmentally_kid'] == 'ปกติ') {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="p1" name="developmentally_kid" value="ปกติ" onchange="custom_check('off_developmentally');">
-                                <label class="custom-control-label" for="p1">ปกติ</label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-1"></div>
-                            <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if (
-                                                        $row['developmentally_kid'] != 'ปกติ'
-                                                        && $row['developmentally_kid'] != NULL
-                                                        && $row['developmentally_kid'] != ''
-                                                    ) {
-                                                        echo 'checked="checked"';
-                                                    } ?> class="custom-control-input" id="p2" name="developmentally_kid" value="ผิดปกติ" onchange="custom_check('on_developmentally');">
-                                <label class="custom-control-label" for="p2">ผิดปกติ (ระบุ)</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-sm" id="p3" value="<?php if (!($row['developmentally_kid'] == 'ปกติ')) {
-                                                                                                            echo htmlspecialchars($row['developmentally_kid']);
-                                                                                                        } ?>" name="developmentally_kid_text">
-                            </div>
-                        </div>
-                        <!-- display:none -->
-                    </div>
+                                    <div style="<?php if (($row_ipt['age_y'] >  15 && $row_ipt['age_m'] >= 0 && $row_ipt['age_d'] >= 0)
+                                                    || ($row_ipt['age_y'] == 15 && $row_ipt['age_m'] >  0 && $row_ipt['age_d'] >  0)
+                                                ) {
+                                                    echo 'display:none;';
+                                                } ?>">
+                                        <div class="form-group row">
+                                            <label class="col-sm-12">ประวัติการได้รับภูมิคุ้มกัน (เฉพาะเด็ก)</label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="custom-control custom-radio col-sm-2">
+                                                <input type="radio" <?php if ($row['receives_immunisation_history_kid'] == 'ครบตามวัย') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?> class="custom-control-input" id="o1" name="receives_immunisation_history_kid" value="ครบตามวัย" onchange="custom_check('off_immunisation');">
+                                                <label class="custom-control-label" for="o1">ครบตามวัย</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="custom-control custom-radio col-sm-2">
+                                                <input type="radio" <?php if (
+                                                                        $row['receives_immunisation_history_kid'] != 'ครบตามวัย'
+                                                                        && $row['receives_immunisation_history_kid'] != null
+                                                                        && $row['receives_immunisation_history_kid'] != ''
+                                                                    ) {
+                                                                        echo 'checked="checked"';
+                                                                    } ?> class="custom-control-input" id="o2" name="receives_immunisation_history_kid" onchange="custom_check('on_immunisation');" value="ไม่ครบตามวัย">
+                                                <label class="custom-control-label" for="o2">ไม่ครบ (ระบุ)</label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control form-control-sm" id="o3" value="<?php if (!($row['receives_immunisation_history_kid'] == 'ครบตามวัย')) {
+                                                                                                                            echo htmlspecialchars($row['receives_immunisation_history_kid']);
+                                                                                                                        } ?>" name="receives_immunisation_history_kid_text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-12">การพัฒนาการ (เฉพาะเด็ก)</label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="custom-control custom-radio col-sm-2">
+                                                <input type="radio" <?php if ($row['developmentally_kid'] == 'ปกติ') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?> class="custom-control-input" id="p1" name="developmentally_kid" value="ปกติ" onchange="custom_check('off_developmentally');">
+                                                <label class="custom-control-label" for="p1">ปกติ</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1"></div>
+                                            <div class="custom-control custom-radio col-sm-2">
+                                                <input type="radio" <?php if (
+                                                                        $row['developmentally_kid'] != 'ปกติ'
+                                                                        && $row['developmentally_kid'] != NULL
+                                                                        && $row['developmentally_kid'] != ''
+                                                                    ) {
+                                                                        echo 'checked="checked"';
+                                                                    } ?> class="custom-control-input" id="p2" name="developmentally_kid" value="ผิดปกติ" onchange="custom_check('on_developmentally');">
+                                                <label class="custom-control-label" for="p2">ผิดปกติ (ระบุ)</label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control form-control-sm" id="p3" value="<?php if (!($row['developmentally_kid'] == 'ปกติ')) {
+                                                                                                                            echo htmlspecialchars($row['developmentally_kid']);
+                                                                                                                        } ?>" name="developmentally_kid_text">
+                                            </div>
+                                        </div>
+                                        <!-- display:none -->
+                                    </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-12">การเลี้ยงทารก</label>
@@ -2128,6 +2129,49 @@ if ( $aa == 1) {
                                         <input type="text" class="form-control form-control-sm" id="h5" name="inpatient_because" value="<?= (isset($row['inpatient_because']) ? htmlspecialchars($row['inpatient_because']) : '') ?>">
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-12">Review Of System</label>
+                                </div>
+
+
+
+                                <div class="form-group row">
+                                    <!-- <input type="hidden" id="arrive_hidden" name="arrive_hidden" value=""> -->
+                                    <div class="col-sm-1"></div>
+                                    <div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?php if (
+                                                                $row['review_of_system'] == 'ปกติ'
+                                                                ||  $row['review_of_system'] == NULL
+                                                            ) {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="ros1" name="review_of_system" value="ปกติ" onchange="ros_check('off_check');">
+                                        <label class="custom-control-label" for="ros1">ปกติ</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?php if (
+                                                                $row['review_of_system'] != 'ปกติ'
+                                                                && $row['review_of_system'] != NULL
+                                                            ) {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="ros2" onchange="ros_check('on_check');">
+                                        <label class="custom-control-label" for="ros2">ผิดปกติ</label>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control form-control-sm" id="ros_text" name="review_of_system" value="<?php if ($row['review_of_system'] != 'ปกติ') {
+                                                                                                                                                    echo htmlspecialchars($row['review_of_system']);
+                                                                                                                                                } ?>" <?php if (!($row['review_of_system'] != 'ปกติ'
+                                                                                                                                                                                                                                                    && $row['review_of_system'] != NULL)) {
+                                                                                                                                                                                                                                                    echo 'disabled';
+                                                                                                                                                                                                                                                } ?>>
+                                    </div>
+                                </div>
+
                                 <!-- display:none -->
                             </div>
                         </div>
@@ -2154,13 +2198,13 @@ if ( $aa == 1) {
 
                                 <div class="form-group row">
                                     <label class="col-sm-2"><B></B></label>
-                                    
-                        <B>อายุครรภ์</B>
+
+                                    <B>อายุครรภ์</B>
                                     <div class="col-sm-1">
-                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_labor['ga_1'])  ? htmlspecialchars($row_labor['ga_1']) : htmlspecialchars($row['gestational_age'])) ?>" id="" name="gestational_age">
-                                    
-                                    
-                                </div> &nbsp;Wks.&nbsp;&nbsp;
+                                        <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row_labor['ga_1'])  ? htmlspecialchars($row_labor['ga_1']) : htmlspecialchars($row['gestational_age'])) ?>" id="" name="gestational_age">
+
+
+                                    </div> &nbsp;Wks.&nbsp;&nbsp;
                                     <B>Apgar score นาทีที่ 1</B>
                                     <div class="col-sm-1">
                                         <input type="number" placeholder="" class="form-control form-control-sm" value="<?= (isset($row_labor['apgar_score_min1'])  ? htmlspecialchars($row_labor['apgar_score_min1']) : htmlspecialchars($row['c_apgar1'])) ?>" id="c_apgar1" name="c_apgar1" min="0">
@@ -2593,15 +2637,15 @@ if ( $aa == 1) {
                     </div>
                 </div>
 
-              <!--  <div class="form-group row">
+                <!--  <div class="form-group row">
                     <div class="col-sm-12">
                         <div class="card border-success">
                             <div class="card-body">
                                 <h5 class="card-title"></h5> -->
-                                <!-- <div class="text-right">
+                <!-- <div class="text-right">
                             <button type="button" class="btn btn-outline-success" onclick="onclick_img_button()"><i class='fas fa-edit'></i> แก้ไขรูปภาพ</button>
                         </div> -->
-                              <!--  <div class="col-sm-8 offset-sm-3 mb-3">
+                <!--  <div class="col-sm-8 offset-sm-3 mb-3">
                                     <div id="show_img_select" class="text-center">
                                         <canvas id="c" width="700" height="500"></canvas>
                                     </div>
@@ -2613,7 +2657,7 @@ if ( $aa == 1) {
                                         <button id="clear-canvas" type="button" class="btn btn-outline-danger PhysicalExaminationBtn" onclick="onclick_clear()"><i class='fas fa-edit'></i> Clear</button>
                                     </div>
                                 </div> -->
-                        <!--        <div>
+                <!--        <div>
                                     <div class="form-group">
                                         <label for=""></label>
                                         <textarea style="display:none;" class="form-control" name="svg_tag" id="svg_tag" rows="10"><?= (isset($row['svg_tag']) ? htmlspecialchars($row['svg_tag']) : '') ?></textarea>
@@ -2710,17 +2754,17 @@ if ( $aa == 1) {
                     </div>
 
                     <div class="col-md-4">
-                <div class="form-group">
-                    <label class="mb-3" for="action-person-nurse">ลงชื่อพยาบาล</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control form-control" id="nurse_name"  name="nurse_name"  value="<?=htmlspecialchars($row['nurse_name'])?>" readonly>
-                        <input type="text" class="form-control form-control" id="nurse_pos"   name="nurse_pos"   value="<?=htmlspecialchars($row['nurse_pos'])?>" readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" onclick="PersonAsCurrentUser_1()">ลงชื่อ</button>
+                        <div class="form-group">
+                            <label class="mb-3" for="action-person-nurse">ลงชื่อพยาบาล</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control" id="nurse_name" name="nurse_name" value="<?= htmlspecialchars($row['nurse_name']) ?>" readonly>
+                                <input type="text" class="form-control form-control" id="nurse_pos" name="nurse_pos" value="<?= htmlspecialchars($row['nurse_pos']) ?>" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary" onclick="PersonAsCurrentUser_1()">ลงชื่อ</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
                 </div>
 
@@ -2741,7 +2785,7 @@ if ( $aa == 1) {
 
                         if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
                         ?>
-                           <!-- <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button> -->
+                            <!-- <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button> -->
                         <?php
                         }
                         ?>
@@ -3161,8 +3205,8 @@ if ( $aa == 1) {
                 $.post(url_save, admit_firsth, function(data) {
                         $("#show_check_save").html(data);
                         alert("บันทึกข้อมูลสำเร็จ");
-                       // self.close();
-                       window.location.reload(true);
+                        // self.close();
+                        window.location.reload(true);
                     })
                     .fail(function() {
                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);
@@ -3171,8 +3215,8 @@ if ( $aa == 1) {
                 $.post(url_update, admit_firsth, function(data) {
                         $("#show_check_save").html(data);
                         alert("บันทึกข้อมูลสำเร็จ");
-                       // self.close();
-                       window.location.reload(true);
+                        // self.close();
+                        window.location.reload(true);
                     })
                     .fail(function() {
                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);
@@ -3183,6 +3227,19 @@ if ( $aa == 1) {
 
     function onclick_Normal(id, value) {
         $('#' + id).val(value);
+    }
+
+    function ros_check(value) {
+
+        if (value == "off_check") {
+            $('#ros_text').attr("disabled", true).val('');
+            $('#ros2').prop("checked", false);
+            // $("#check_1").attr("class","text-success fas fa-check-square");
+        } else if (value == "on_check") {
+            $('#ros_text').attr("disabled", false).val('');
+            $('#ros1').prop("checked", false);
+            //  $('#entered_by2').prop("checked", false);
+        }
     }
 </script>
 
