@@ -268,7 +268,15 @@ $row_period  = $stmt_period->fetch();
                 <h4>แบบบันทึกการรับใหม่ผู้ป่วยใน <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?></h4>
             </div>
         </div>
-        <p></p>
+        <p>  <div class="form-group row">
+                                <div class="col-sm-1"></div>
+                                <div class="custom-control custom-checkbox col-sm-2">
+                                    <input type="checkbox" <?php if ($row['special_room'] == '1') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="sp1" value="1" name="special_room">
+                                    <label class="custom-control-label" for="sp1">Admit ห้องพิเศษได้</label>
+                                </div>
+                            </div></p>
         <div class="card-group pb-3 ">
             <div class="card">
                 <div class="card-body" style=" overflow-y: auto;">

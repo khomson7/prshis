@@ -283,7 +283,15 @@ $row_period  = $stmt_period->fetch();
                                             <label class=" custom-control-label" for="c_form_type">NewBorn</label>
             </div>  -->
         </div>
-        <p></p>
+        <p>  <div class="form-group row">
+                                <div class="col-sm-1"></div>
+                                <div class="custom-control custom-checkbox col-sm-2">
+                                    <input type="checkbox" <?php if ($row['special_room'] == '1') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="sp1" value="1" name="special_room">
+                                    <label class="custom-control-label" for="sp1">Admit ห้องพิเศษได้</label>
+                                </div>
+                            </div></p>
 
         <link rel="stylesheet" href="../include/css/accordion.css">
 

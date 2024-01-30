@@ -199,6 +199,7 @@
              $c_form_type = empty($_REQUEST['c_form_type']) ? null : $_REQUEST['c_form_type'];
              $c_mother_his = $_REQUEST['c_mother_his']; 
              $review_of_system = empty($_REQUEST['review_of_system']) ? null : $_REQUEST['review_of_system'];
+             $special_room = empty($_REQUEST['special_room']) ? null : $_REQUEST['special_room'];
             //$c_mother_his = 'abc';
 
         try {
@@ -241,7 +242,7 @@
             ,c_inform_mother=:c_inform_mother,c_inform_etc=:c_inform_etc,c_inform_etc_text=:c_inform_etc_text
             ,c_ga=:c_ga,c_apgar1=:c_apgar1,c_apgar5=:c_apgar5,c_apgar10=:c_apgar10,c_sex=:c_sex,c_bw=:c_bw,c_hc=:c_hc,c_length=:c_length
             ,pe_face=:pe_face,pe_ears=:pe_ears,pe_eyes=:pe_eyes,pe_nose=:pe_nose,pe_mouth=:pe_mouth,pe_chest=:pe_chest,pe_genitalia=:pe_genitalia
-            ,pe_anus=:pe_anus,pe_trunk_spine=:pe_trunk_spine,pe_nervose=:pe_nervose,c_form_type=:c_form_type,c_mother_his=:c_mother_his,review_of_system=:review_of_system
+            ,pe_anus=:pe_anus,pe_trunk_spine=:pe_trunk_spine,pe_nervose=:pe_nervose,c_form_type=:c_form_type,c_mother_his=:c_mother_his,review_of_system=:review_of_system,special_room=:special_room
             WHERE admission_note_id=:admission_note_id");
             $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
             'receiver_medication_date'=>$receiver_medication_date, 'receiver_medication_time'=>$receiver_medication_time,
@@ -283,7 +284,7 @@
             ,'c_inform_mother'=>$c_inform_mother,'c_inform_etc'=>$c_inform_etc,'c_inform_etc_text'=>$c_inform_etc_text
             ,'c_ga'=>$c_ga,'c_apgar1'=>$c_apgar1,'c_apgar5'=>$c_apgar5,'c_apgar10'=>$c_apgar10,'c_sex'=>$c_sex,'c_bw'=>$c_bw,'c_hc'=>$c_hc,'c_length'=>$c_length
             ,'pe_face'=>$pe_face,'pe_ears'=>$pe_ears,'pe_eyes'=>$pe_eyes,'pe_nose'=>$pe_nose,'pe_mouth'=>$pe_mouth,'pe_chest'=>$pe_chest,'pe_genitalia'=>$pe_genitalia
-            ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose,'c_form_type'=>$c_form_type,'c_mother_his'=>$c_mother_his,'review_of_system' =>$review_of_system
+            ,'pe_anus'=>$pe_anus,'pe_trunk_spine'=>$pe_trunk_spine,'pe_nervose'=>$pe_nervose,'c_form_type'=>$c_form_type,'c_mother_his'=>$c_mother_his,'review_of_system' =>$review_of_system,'special_room' => $special_room
         ));
 
             if(!empty($_REQUEST['admission_note_doctor'])){
