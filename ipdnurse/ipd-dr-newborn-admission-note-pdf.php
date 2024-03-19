@@ -1084,7 +1084,7 @@ $head =
             
 
             <br><br>
-                ประวัติแพ้ &nbsp;&ensp;
+            ประวัติการแพ้ยาและการแพ้อื่นๆ &nbsp;&ensp;
                 <label>' . $checkbox_allergy_1 . ' ไม่มี</label>
                 <label>' . $checkbox_allergy_2 . ' มี (ระบุ)</label>
                 &nbsp;&nbsp;&ensp;&nbsp;<font color="red">' . $row['allergy_drug_history_hosxp'] . '</font>

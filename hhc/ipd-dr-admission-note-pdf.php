@@ -731,8 +731,8 @@ $head =
         }
     </style>
 
-    <h2 style="text-align:right;font-size:8pt;">KPH-N1.1-Adm</h2>
-    <h2 style="text-align:center;font-size:11pt;">แบบบันทึกการรับใหม่ผู้ป่วยใน '.htmlspecialchars(DbConstant::HOSPITAL_NAME).'</h2>
+    <h2 style="text-align:right;font-size:8pt;">FM-CNP-001-00</h2>
+    <h2 style="text-align:center;font-size:11pt;">แบบบันทึกการปรึกษาผู้ป่วยเพื่อการดูแลต่อเนื่องในชุมชน'.'</h2>
 
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
         <tr style="border:1px solid #000;margin: 45px;">
@@ -795,7 +795,7 @@ $head =
                 &nbsp;&nbsp;&ensp;&nbsp;&nbsp;&ensp;&nbsp;&nbsp;&ensp;
                 &nbsp;&nbsp;&ensp;&nbsp;&nbsp;'.nl2br($textbox_operation_history).'
                 <br>
-                ประวัติการแพ้ยาและการแพ้อื่นๆ &nbsp;&ensp;
+                ประวัติแพ้ &nbsp;&ensp;
                 <label>'.$checkbox_allergy_1.' ไม่มี</label>
                 <label>'.$checkbox_allergy_2.' มี (ระบุ)</label>
                 &nbsp;&nbsp;&ensp;&nbsp;<font color="red">'.$row['allergy_drug_history_hosxp'].'</font>

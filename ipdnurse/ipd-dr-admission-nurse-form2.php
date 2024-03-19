@@ -688,7 +688,7 @@ if ( $aa == 1) {
                     }
                     ?>
                     <div class="form-group row">
-                        <label class="col-sm-12">ประวัติแพ้</label>
+                        <label class="col-sm-12">ประวัติการแพ้ยาและการแพ้อื่นๆ</label>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-1"></div>
