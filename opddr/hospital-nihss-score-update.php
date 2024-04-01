@@ -9,18 +9,49 @@
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 
         $id = $_REQUEST['id'];
- 
-        $an = $_REQUEST['an'];
-        $hn = $_REQUEST['hn'];
+
+        $vn = $_REQUEST['vn'];
         $rxdate = $_REQUEST['rxdate'];
-        $ward = $_REQUEST['ward'];
-        $problem_summary= $_REQUEST['problem_summary'];
-        $plan_management = $_REQUEST['plan_management'];
-        $care_plan = $_REQUEST['care_plan'];
-        $underlying_disease = $_REQUEST['underlying_disease'];
-        $consultation_for1 = $_REQUEST['consultation_for1'];
-        $caregiver = $_REQUEST['caregiver'];
-        $consultation_etc = $_REQUEST['consultation_etc'];
+        $rxtime = $_REQUEST['rxtime'];
+        $onset_h = $_REQUEST['onset_h'];
+        $onset_m = $_REQUEST['onset_m'];
+        $no1a = $_REQUEST['no1a'];
+        $no1a_2 = $_REQUEST['no1a_2'];
+        $no1b = $_REQUEST['no1b'];
+        $no1b_2 = $_REQUEST['no1b_2'];
+        $no1c = $_REQUEST['no1c'];
+        $no1c_2 = $_REQUEST['no1c_2'];
+        $no2 = $_REQUEST['no2'];
+        $no2_2 = $_REQUEST['no2_2'];
+        $no3 = $_REQUEST['no3'];
+        $no3_2 = $_REQUEST['no3_2'];
+        $no4 = $_REQUEST['no4'];
+        $no4_2 = $_REQUEST['no4_2'];
+        $no5r = $_REQUEST['no5r'];
+        $no5r_2 = $_REQUEST['no5r_2'];
+        $no5l = $_REQUEST['no5l'];
+        $no5l_2 = $_REQUEST['no5l_2'];
+        $no6r = $_REQUEST['no6r'];
+        $no6r_2 = $_REQUEST['no6r_2'];
+        $no6l = $_REQUEST['no6l'];
+        $no6l_2 = $_REQUEST['no6l_2'];
+        $no7r = $_REQUEST['no7r'];
+        $no7r_2 = $_REQUEST['no7r_2'];
+        $no7l = $_REQUEST['no7l'];
+        $no7l_2 = $_REQUEST['no7l_2'];
+        $no8r = $_REQUEST['no8r'];
+        $no8r_2 = $_REQUEST['no8r_2'];
+        $no8l = $_REQUEST['no8l'];
+        $no8l_2 = $_REQUEST['no8l_2'];
+        $no9 = $_REQUEST['no9'];
+        $no9_2 = $_REQUEST['no9_2'];
+        $no10 = $_REQUEST['no10'];
+        $no10_2 = $_REQUEST['no10_2'];
+        $no11 = $_REQUEST['no11'];
+        $no11_2 = $_REQUEST['no11_2'];
+        $sum_all = $_REQUEST['sum_all'];
+        $sumall_2 = $_REQUEST['sumall_2'];
+  
 
 
 
@@ -36,14 +67,13 @@
              
 
         try {
-            $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".ipd_consultation_summary SET hn=:hn, an=:an,
-            rxdate=:rxdate, ward=:ward,problem_summary=:problem_summary,plan_management=:plan_management
-            ,care_plan=:care_plan,underlying_disease=:underlying_disease,consultation_for1=:consultation_for1,caregiver=:caregiver,consultation_etc=:consultation_etc
+            $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_nihss_score SET  vn=:vn,rxdate=:rxdate,rxtime=:rxtime,onset_h=:onset_h,onset_m=:onset_m
+            ,no1a=:no1a,no1a_2=:no1a_2
+            ,nurse_name=:nurse_name,nurse_pos=:nurse_pos,update_user=:update_user,update_datetime = NOW(),version=:version
             WHERE id=:id");
-            $stmt->execute(array('id'=>$id, 'hn'=>$hn, 'an'=>$an,
-            'rxdate'=>$rxdate, 'ward'=>$ward,
-            'problem_summary'=>$problem_summary,'plan_management'=>$plan_management
-            ,'care_plan'=>$care_plan,'underlying_disease'=>$underlying_disease,'consultation_for1'=>$consultation_for1,'caregiver'=>$caregiver,'consultation_etc'=>$consultation_etc
+            $stmt->execute(array('id'=>$id, 'vn'=>$vn,'rxdate'=>$rxdate,'rxtime'=>$rxtime,'onset_h'=>$onset_h,'onset_m'=>$onset_m
+            ,'no1a'=>$no1a,'no1a_2'=>$no1a_2
+            ,'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version
         ));
 
       /*      if(!empty($_REQUEST['admission_note_doctor'])){

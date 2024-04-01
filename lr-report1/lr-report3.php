@@ -1,8 +1,15 @@
 <?php  // require_once './project/function/Session.php';
-// Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 require_once '../include/Session.php';
-// Session::checkLoginSessionAndShowMessage(); //เช็ค session
-// Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
+//ตรวจสอบว่า session login ตรงกันหรือไม่
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+$values = ['loginname' => $loginname];
+
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if ($login != $loginname) {
+    session_start();
+    session_destroy();
+}
 require_once '../mains/main-report.php';
 
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -17,23 +24,26 @@ $an = $_REQUEST['an']; //รับค่า an
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $vn = KphisQueryUtils::getVnByAn($an);
 
+/*
 Session::insertSystemAccessLog(json_encode(array(
     'form' => 'LR-REPORT1-FORM',
     'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
-$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+*/
+
+/*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+}*/
 
 // echo $an;
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
-$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report3 WHERE an = :an ";
+$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report1 WHERE an = :an ";
 $id  = null;
 $parameters['an'] = $an;
 $stmt = $conn->prepare($sql);
@@ -160,9 +170,9 @@ date_default_timezone_set('asia/bangkok');
                 <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
             </div>
             <div class="col-auto p-1 font-weight-bold">
-                ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ (เฉพาะผู้มาคลอด) <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
+                <h5><B>ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?></B></h5>
             </div>
-            <!-- <label class="col-sm-7 text-right">FM-OBS-004 แก้ไขครั้งที่ 01 ประกาศใช้ 15 กรกฎาคม 2562</label> -->
+
         </div>
 
 
@@ -176,8 +186,6 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <div class="row">
 
-
-
                                 <div class="col-sm-1"></div>
                                 <label>รับใหม่วันที่</label>
                                 <div class="col-sm-2">
@@ -188,25 +196,102 @@ date_default_timezone_set('asia/bangkok');
                                     <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
                                 </div>
 
-                                <div class="custom-control custom-radio col-sm-2">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['spine'] != 'ปกติ' && $row['spine'] != NULL) {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="spine2" onchange="spine_check('on_checked');">
-                                    <label class="custom-control-label" for="spine2">กรณี admit จากผู้ป่วยนอก ถึงห้องคลอด เวลา</label>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?php if (
+                                                                $row['take_medication_by'] == 'มาเอง'
+                                                                || $row['take_medication_by'] == NULL
+                                                            ) {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="entered_by1" name="take_medication_by" value="มาเอง" onchange="custom_check('off_entered');">
+                                        <label class="custom-control-label" for="entered_by1">OPD</label>
+                                    </div>
+                                    <div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?php if ($row['take_medication_by'] == 'แพทย์นัด') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="entered_by2" name="take_medication_by" value="แพทย์นัด" onchange="custom_check('off_entered');">
+                                        <label class="custom-control-label" for="entered_by2">ER</label>
+                                    </div>
+                                    <div class="custom-control custom-radio col-sm-2">
+                                        <input type="radio" <?php if (
+                                                                $row['take_medication_by'] != 'มาเอง'
+                                                                && $row['take_medication_by'] != 'แพทย์นัด'
+                                                                && $row['take_medication_by'] != NULL
+                                                            ) {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="entered_by3" onchange="custom_check('on_entered');">
+                                        <label class="custom-control-label" for="entered_by3">อื่นๆ</label>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control form-control-sm" id="entered_hos" name="take_medication_by" value="<?php if (
+                                                                                                                                                        $row['take_medication_by'] != 'มาเอง'
+                                                                                                                                                        && $row['take_medication_by'] != 'แพทย์นัด'
+                                                                                                                                                    ) {
+                                                                                                                                                        echo htmlspecialchars($row['take_medication_by']);
+                                                                                                                                                    } ?>" <?php if (!($row['take_medication_by'] != 'มาเอง'
+                                                                                                                                                            && $row['take_medication_by'] != 'แพทย์นัด'
+                                                                                                                                                            && $row['take_medication_by'] != NULL)) {
+                                                                                                                                                            echo 'disabled';
+                                                                                                                                                        } ?>>
+                                    </div>
                                 </div>
 
-                                <div class="col-sm-1">
-                                    <input type="time" class="form-control form-control-sm" id="spine_text" name="spine" value="<?php if ($row['spine'] != 'ปกติ' && $row['spine'] != NULL) {
-                                                                                                                                    echo htmlspecialchars($row['spine']);
-                                                                                                                                } ?>" <?php if (!($row['spine'] != 'ปกติ' && $row['spine'] != NULL)) {
-                                                                                                                                            echo 'disabled';
-                                                                                                                                        } ?>>
-                                </div>
 
+
+                                &nbsp;&nbsp; <label>กรณีส่งต่อ ส่งต่อจาก</label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
+                                </div>
 
                             </div>
 
                             <br>
+
+                            <div class="row">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>รับไว้ในโรงพยาบาลโดย</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                    <label class="custom-control-label" for="body1">เดินมา</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                    <label class="custom-control-label" for="body1">รถนั่ง</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                    <label class="custom-control-label" for="body1">รถนอน</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                    <label class="custom-control-label" for="body2">อื่นๆ</label>
+                                </div>
+
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                                                                    echo htmlspecialchars($row['body']);
+                                                                                                                                } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
+                                                                                                            echo 'disabled';
+                                                                                                        } ?>>
+                                </div>
+
+
+                            </div>
+                            <br>
+
 
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> อาการสำคัญที่นำมาโรงพยาบาล</B></label>
@@ -226,10 +311,19 @@ date_default_timezone_set('asia/bangkok');
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <label class="col-sm-2 text-left"><B>ประวัติการเจ็บป่วยในอดีต</B></label>
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยปัจจุบัน </B></label>
                             </div>
-                            <br>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" id="hpi" name="hpi" rows="4"><?= (isset($row_opdscreen['hpi']) && $id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['hpi'])) ?></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยในอดีต </B></label>
+                            </div>
 
                             <div class="row">
 
@@ -262,7 +356,7 @@ date_default_timezone_set('asia/bangkok');
 
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>เคยรับการรักษาในโรงพยาบาล ( ภายใน 1 ปี )</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>เคยรับการรักษาในโรงพยาบาล ภายใน 1 ปี</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
                                                                                     echo 'checked="checked"';
@@ -320,7 +414,7 @@ date_default_timezone_set('asia/bangkok');
 
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการแพ้ยา (ยา/อาหาร/สารเคมี/เลือด)</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการแพ้ยาหรือการแพ้อื่นๆ</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
                                                                                     echo 'checked="checked"';
@@ -376,204 +470,22 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <br>
 
-                            <div class="form-group row">
-                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยของสมาชิกในครอบครัว</B></label>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12">
-                                    <textarea class="form-control" id="family" name="family" rows="3"><?= (isset($row_opdscreen['fh']) && $id == null ? htmlspecialchars($row_opdscreen['fh']) : htmlspecialchars($row['family'])) ?></textarea>
-                                </div>
-                            </div>
-
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการตั้งครรภ์&nbsp; G&nbsp;</label>
-                                <div>
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="G" name="g" id="g">
-                                </div>&nbsp; P&nbsp;<div>
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p">
-                                </div> &nbsp; <label>GA</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
-                                </div> &nbsp;<label>wks</label> &nbsp;&nbsp;<label>คลอดวิธี</label>
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
-                                </div>
-                                &nbsp; <label>ฝากครรภ์ครั้งแรก</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
-                                </div> &nbsp;<label>wks</label> &nbsp;&nbsp;<label>ฝากครรภ์</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>&nbsp;<label>ครั้ง</label>
-                            </div>
-                            <br>
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ค 5 =</label>
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="antepartum" id="antepartum">
-                                </div> &nbsp;
-                                &nbsp;&nbsp;<label>ที่</label>
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="antepartum" id="antepartum">
-                                </div>&nbsp;<label>dt</label>
-                                <div class="col-md-1"><input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="dt_vaccine" id="dt_vaccine" min="0"> </div><label> เข็ม</label>
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Lab ANC1 Anti HIV&nbsp;</label>
-                                <div>
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="G" name="g" id="g">
-                                </div>&nbsp;RPR/VDRL&nbsp;<div>
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p">
-                                </div> &nbsp; <label>HBsAg</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
-                                </div> &nbsp;<label></label> &nbsp;&nbsp;<label>Hct</label>
-                                <div class="col-md-1">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
-                                </div>
-                                &nbsp; <label>% Hb</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
-                                </div> &nbsp;<label></label> &nbsp;&nbsp;<label>Bl.gr</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>&nbsp;<label>Rh</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>&nbsp;<label>DCIP</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>
-
-                            </div>
-                            <br>
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>MCV</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>
-
-                                &nbsp;<label>Hb typing</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Lab ANC2 Anti HIV&nbsp;</label>
-                                <div>
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="G" name="g" id="g">
-                                </div>&nbsp;RPR/VDRL&nbsp;<div>
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p">
-                                </div> &nbsp; <label>Hct</label>
-                                <div class="col-md-1">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
-                                </div>
-                                &nbsp; <label>% Hb</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
-                                </div> &nbsp;<label></label> &nbsp;&nbsp;<label>Lab สามี Anti HIV</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>&nbsp;<label>DCIP</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>&nbsp;<label>Hb typing</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>โรงเรียนพ่อแม่</label>
-                                <div class="col-md-1">
-                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
-                                </div>
-                                &nbsp;<label>ครั้ง</label>
-
-                            </div>
-                            <br>
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>สัญญาณชีพ BT</label>
-                                <div class="col-md-1">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0.0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="bt" id="bt">
-                                </div> &nbsp;<label>C &nbsp;PR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="hr" id="hr"> </div><label>bpm &nbsp;RR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="rr" id="rr"> </div>
-                                &nbsp;<label>/min&nbsp;&nbsp;BP</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="rr" id="rr"> </div>mmHg
-
-                            </div>
-
-                            <br>
-                            <div class="form-group row">
-                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยของสมาชิกในครอบครัว</B></label>
-                            </div>
-
-                            <div class="row">
-                                <label class="col-sm-1 text-left">ระดับความรู้สึกตัว</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">รู้สึกตัวดี</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">สับสน</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ซึม</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ไม่รู้สึกตัว</label>
-                                </div>
-
-
-                            </div>
-                            <br>
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>การหายใจ</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการเจ็บป่วยในครอบครัว</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
                                                                                     echo 'checked="checked"';
                                                                                 } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
-                                    <label class="custom-control-label" for="body1">หายใจหอบ</label>
+                                    <label class="custom-control-label" for="body1">ปฏิเสธ</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
                                                                                     echo 'checked="checked"';
                                                                                 } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
-                                    <label class="custom-control-label" for="body2">หายใจลำบาก</label>
+                                    <label class="custom-control-label" for="body2">มี ระบุ</label>
                                 </div>
-
-                                <div class="custom-control custom-radio col-sm-1">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
-                                    <label class="custom-control-label" for="body2">ไม่หายใจ</label>
-                                </div>
-
-                                <div class="custom-control custom-radio col-sm-1">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
-                                    <label class="custom-control-label" for="body2">อื่นๆ</label>
-                                </div>
-
 
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
@@ -587,170 +499,370 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <br>
 
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยของสมาชิกในครอบครัว</B></label>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" id="family" name="family" rows="3"><?= (isset($row_opdscreen['fh']) && $id == null ? htmlspecialchars($row_opdscreen['fh']) : htmlspecialchars($row['family'])) ?></textarea>
+                                </div>
+                            </div>
+
+
+
                             <div class="row">
-                                <label class="col-sm-1 text-left">การไหลเวียนโลหิต สีผิว</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">ปกติ</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ซีด</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ปลายมือปลายเท้าเขียว</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">รอบปากเขียว</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">เขียวทั้งตัว</label>
-                                </div>
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>สัญญาณชีพแรกรับ&nbsp; BT&nbsp;</label>
+                                <div>
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xx" name="g" id="g">
+                                </div>C&nbsp; PR&nbsp;<div>
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xx" name="p" id="p">
+                                </div> /min&nbsp;<label>RR</label>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="serology" id="serology"> </div>
+                                <label>/min&nbsp;BP</label>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxx" name="p" id="p"></div>
+                                <label>mmHg</label>
+                                
 
                             </div>
                             <br>
 
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B>สภาพร่างกายผู้ป่วยแรกรับ</B></label>
+                            </div>
+                            
+
+                            <div class="row">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label></label>
+                            <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
+                                    <label class="custom-control-label" for="sex1">รู้สึกตัวดี</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">สับสน</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ซึม</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ไม่รู้สึกตัว</label>
+                                </div>
 
 
+                            </div>
+                            <br>
 
                             <div class="row">
 
-                            &nbsp;&nbsp;&nbsp;&nbsp;<label>อาการบวม</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
-                                    <label class="custom-control-label" for="body1">ไม่มี</label>
-                                </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>การหายใจ</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">ปกติ</label>
+                            </div>
 
                             <div class="custom-control custom-radio col-sm-1">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
-                                    <label class="custom-control-label" for="body2">บวมบริเวณ</label>
-                                </div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">หายใจหอบ</label>
+                            </div>
 
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">หายใจลำบาก</label>
+                            </div>
 
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
-                                                                                                                                    echo htmlspecialchars($row['body']);
-                                                                                                                                } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
-                                                                                                            echo 'disabled';
-                                                                                                        } ?>>
-                                </div>
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">ไม่หายใจ</label>
+                            </div>
+
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                <label class="custom-control-label" for="body2">อื่นๆ</label>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                                                                echo htmlspecialchars($row['body']);
+                                                                                                                            } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
+                                                                                                                                        echo 'disabled';
+                                                                                                                                    } ?>>
+                            </div>
 
 
                             </div>
                             <br>
-
 
                             <div class="row">
-                                <label class="col-sm-1 text-left">ผิวหนัง</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>การไหลเวียนโลหิต สีผิว</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
+                                    <label class="custom-control-label" for="sex1">ปกติ</label>
+                                </div>
+
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">ปกติ</label>
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ซีด</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ปลายมือปลายเท้าเขียว</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">หนังแตก</label>
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">รอบปากเขียว</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">เขียวช้ำ</label>
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">เขียวทั่วตัว</label>
                                 </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ผื่นแดง</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ผื่นคัน</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">เหลือง</label>
-                                </div>
+
 
                             </div>
-
-<br>
-
-<div class="row">
-                                <label class="col-sm-1 text-left">การติดต่อสื่อสาร&nbsp;&nbsp;&nbsp;&nbsp;หู</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">ได้ยินชัดเจน</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ได้ยินไม่ชัดเจน</label>
-                                </div>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label class="col-sm-1 text-left">ใช้อุปกรณ์</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">มี</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">ไม่มี</label>
-                                </div>
-
-                            </div>
-
-<br>
-
-<div class="row">
-                                <label class="col-sm-1 text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ตา</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">มองเห็นชัดเจน</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">มองเห็นไม่ชัดเจน</label>
-                                </div>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label class="col-sm-1 text-left">: สวมแว่นตา</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
-                                    <label class="custom-control-label" for="anuss1">ไม่สวม</label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
-                                    <label class="custom-control-label" for="anuss2">สวม</label>
-                                </div>
-
-                            </div>
-
                             <br>
 
-                           
+                            <div class="row">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label></label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>อาการบวม</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">ไม่มี</label>
+                            </div>
+
+                            
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                <label class="custom-control-label" for="body2">บวมบริเวณ</label>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                                                                echo htmlspecialchars($row['body']);
+                                                                                                                            } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
+                                                                                                                                        echo 'disabled';
+                                                                                                                                    } ?>>
+                            </div>
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ผิวหนัง</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
+                                    <label class="custom-control-label" for="sex1">ปกติ</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">หนังแตก</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">เขียวช้ำ</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ผื่นแดง</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ผื่นคัน</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">เหลือง</label>
+                                </div>
+
+
+                            </div>
+                            <br>
+                            <div class="row">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>การติดต่อสื่อสาร หู</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
+                                    <label class="custom-control-label" for="sex1">ได้ยินชัดเจน</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ได้ยินไม่ชัดเจน : ใช้อุปกรณ์ช่วยฟัง</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">มี</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ไม่มี</label>
+                                </div>
+                                
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ตา</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
+                                    <label class="custom-control-label" for="sex1">เห็นชัดเจน</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">เห็นไม่ชัดเจน : สวมแว่นตา</label>
+
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">สวม</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
+                                    <label class="custom-control-label" for="sex2">ไม่สวม</label>
+                                </div>
+                                
+
+
+                            </div>
+                            <br>
+
+                            <div class="row">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label></label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>การพูด</label>
+                            <div class="custom-control custom-radio col-sm-1">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">ชัดเจน</label>
+                            </div>
+                            <div class="custom-control custom-radio col-sm-1">
+                                <input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">พูดติดอ่าง</label>
+                            </div>
+
+                            <div class="custom-control custom-radio col-sm-1">
+                                <input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                <label class="custom-control-label" for="body1">เป็นใบ้</label>
+                            </div>
+
+                            
+                            <div class="custom-control custom-radio col-sm-1">
+                                <input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                <label class="custom-control-label" for="body2">อื่นๆ</label>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                                                                echo htmlspecialchars($row['body']);
+                                                                                                                            } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
+                                                                                                                                        echo 'disabled';
+                                                                                                                                    } ?>>
+                            </div>
+
+
+                            </div>
+                            <br>
+
                             <div class="form-group row">
-                                <label class="col-sm-12"><B> สภาจิตใจแรกรับ (การแสดงออกทางพฤติกรรมม การแสดงออกทางอารมณ์ม สิ่งที่วิตกกังวล)</B></label>
+                                <label class="col-sm-12">สภาพจิตใจแรกรับ (การแสดงออกทางพฤติกรรม, การแสดงออกทางอารมณ์, สิ่งที่วิตกกังวล)</label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="first_symptom" placeholder=" xxxxxxxxxxxxxxxx" name="first_symptom" rows="2"></textarea>
+                                    <textarea class="form-control" id="family" name="family" rows="2"><?= (isset($row_opdscreen['fh']) && $id == null ? htmlspecialchars($row_opdscreen['fh']) : htmlspecialchars($row['family'])) ?></textarea>
                                 </div>
                             </div>
-
-<br>
-
-                           
+                              
+                              
                             <div class="form-group row">
-                                <label class="col-sm-12"><B> อาการแรกรับ</B></label>
+                                <label class="col-sm-12">อาการแรกรับ</label>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="first_symptom" placeholder=" xxxxxxxxxxxxxxxx" name="first_symptom" rows="2"></textarea>
+                                    <textarea class="form-control" id="family" name="family" rows="3"><?= (isset($row_opdscreen['fh']) && $id == null ? htmlspecialchars($row_opdscreen['fh']) : htmlspecialchars($row['family'])) ?></textarea>
                                 </div>
                             </div>
-
-
-
+                                                                                                                            
 
                             <hr>
 

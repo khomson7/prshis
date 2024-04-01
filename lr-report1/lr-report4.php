@@ -1,15 +1,8 @@
 <?php  // require_once './project/function/Session.php';
+// Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 require_once '../include/Session.php';
-//ตรวจสอบว่า session login ตรงกันหรือไม่
-$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-$loginname = $_SESSION['loginname'];
-$values = ['loginname' => $loginname];
-
-//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
-}
+// Session::checkLoginSessionAndShowMessage(); //เช็ค session
+// Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
 require_once '../mains/main-report.php';
 
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -24,26 +17,23 @@ $an = $_REQUEST['an']; //รับค่า an
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $vn = KphisQueryUtils::getVnByAn($an);
 
-/*
 Session::insertSystemAccessLog(json_encode(array(
     'form' => 'LR-REPORT1-FORM',
     'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
-*/
-
-/*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 if ($login != $loginname) {
     session_start();
     session_destroy();
-}*/
+}
 
 // echo $an;
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
-$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report1 WHERE an = :an ";
+$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report3 WHERE an = :an ";
 $id  = null;
 $parameters['an'] = $an;
 $stmt = $conn->prepare($sql);
@@ -172,7 +162,7 @@ date_default_timezone_set('asia/bangkok');
             <div class="col-auto p-1 font-weight-bold">
                 ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ (เฉพาะผู้มาคลอด) <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
             </div>
-
+            <!-- <label class="col-sm-7 text-right">FM-OBS-004 แก้ไขครั้งที่ 01 ประกาศใช้ 15 กรกฎาคม 2562</label> -->
         </div>
 
 
@@ -198,10 +188,21 @@ date_default_timezone_set('asia/bangkok');
                                     <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
                                 </div>
 
-                                <label>กรณี admit จากผู้ป่วยนอก ถึงห้องคลอดเวลา</label>
-                                <div class="col-sm-2">
-                                    <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
+                                <div class="custom-control custom-radio col-sm-2">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['spine'] != 'ปกติ' && $row['spine'] != NULL) {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="spine2" onchange="spine_check('on_checked');">
+                                    <label class="custom-control-label" for="spine2">กรณี admit จากผู้ป่วยนอก ถึงห้องคลอด เวลา</label>
                                 </div>
+
+                                <div class="col-sm-1">
+                                    <input type="time" class="form-control form-control-sm" id="spine_text" name="spine" value="<?php if ($row['spine'] != 'ปกติ' && $row['spine'] != NULL) {
+                                                                                                                                    echo htmlspecialchars($row['spine']);
+                                                                                                                                } ?>" <?php if (!($row['spine'] != 'ปกติ' && $row['spine'] != NULL)) {
+                                                                                                                                            echo 'disabled';
+                                                                                                                                        } ?>>
+                                </div>
+
 
                             </div>
 
@@ -225,19 +226,10 @@ date_default_timezone_set('asia/bangkok');
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยปัจจุบัน </B></label>
+                            <div class="row">
+                                <label class="col-sm-2 text-left"><B>ประวัติการเจ็บป่วยในอดีต</B></label>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-sm-12">
-                                    <textarea class="form-control" id="hpi" name="hpi" rows="4"><?= (isset($row_opdscreen['hpi']) && $id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['hpi'])) ?></textarea>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยในอดีต </B></label>
-                            </div>
+                            <br>
 
                             <div class="row">
 
@@ -270,7 +262,7 @@ date_default_timezone_set('asia/bangkok');
 
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>เคยรับการรักษาในโรงพยาบาล ภายใน 1 ปี</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>เคยรับการรักษาในโรงพยาบาล ( ภายใน 1 ปี )</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
                                                                                     echo 'checked="checked"';
@@ -328,7 +320,7 @@ date_default_timezone_set('asia/bangkok');
 
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการแพ้ยาหรือการแพ้อื่นๆ</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการแพ้ยา (ยา/อาหาร/สารเคมี/เลือด)</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
                                                                                     echo 'checked="checked"';
@@ -384,35 +376,6 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <br>
 
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการเจ็บป่วยในครอบครัว</label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
-                                    <label class="custom-control-label" for="body1">ปฏิเสธ</label>
-                                </div>
-
-                                <div class="custom-control custom-radio col-sm-1">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
-                                                                                    echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
-                                    <label class="custom-control-label" for="body2">มี ระบุ</label>
-                                </div>
-
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
-                                                                                                                                    echo htmlspecialchars($row['body']);
-                                                                                                                                } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
-                                                                                                                                            echo 'disabled';
-                                                                                                                                        } ?>>
-                                </div>
-
-
-                            </div>
-                            <br>
-
                             <div class="form-group row">
                                 <label class="col-sm-12"><B> ประวัติการเจ็บป่วยของสมาชิกในครอบครัว</B></label>
                             </div>
@@ -422,7 +385,6 @@ date_default_timezone_set('asia/bangkok');
                                 </div>
                             </div>
 
-
                             <div class="row">
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการตั้งครรภ์&nbsp; G&nbsp;</label>
@@ -430,392 +392,188 @@ date_default_timezone_set('asia/bangkok');
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="G" name="g" id="g">
                                 </div>&nbsp; P&nbsp;<div>
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p">
-                                </div> &nbsp;<label>GA</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="serology" id="serology"> </div>
-                                <label>wks by&nbsp;</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxx" name="p" id="p"></div>
-                                <label>ฝากครรภ์ครั้งแรก</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="p" id="p"></div>
-                                <label>wks&nbsp;ฝากครรภ์</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="p" id="p"></div>
-                                <label>ครั้ง</label>
+                                </div> &nbsp; <label>GA</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
+                                </div> &nbsp;<label>wks</label> &nbsp;&nbsp;<label>คลอดวิธี</label>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
+                                </div>
+                                &nbsp; <label>ฝากครรภ์ครั้งแรก</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
+                                </div> &nbsp;<label>wks</label> &nbsp;&nbsp;<label>ฝากครรภ์</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>&nbsp;<label>ครั้ง</label>
+                            </div>
+                            <br>
+                            <div class="row">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ค 5 =</label>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="antepartum" id="antepartum">
+                                </div> &nbsp;
+                                &nbsp;&nbsp;<label>ที่</label>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="antepartum" id="antepartum">
+                                </div>&nbsp;<label>dt</label>
+                                <div class="col-md-1"><input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="dt_vaccine" id="dt_vaccine" min="0"> </div><label> เข็ม</label>
+                            </div>
+                            <br>
+
+                            <div class="row">
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Lab ANC1 Anti HIV&nbsp;</label>
+                                <div>
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="G" name="g" id="g">
+                                </div>&nbsp;RPR/VDRL&nbsp;<div>
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p">
+                                </div> &nbsp; <label>HBsAg</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
+                                </div> &nbsp;<label></label> &nbsp;&nbsp;<label>Hct</label>
+                                <div class="col-md-1">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
+                                </div>
+                                &nbsp; <label>% Hb</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
+                                </div> &nbsp;<label></label> &nbsp;&nbsp;<label>Bl.gr</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>&nbsp;<label>Rh</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>&nbsp;<label>DCIP</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>MCV</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>
+
+                                &nbsp;<label>Hb typing</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>
 
                             </div>
                             <br>
 
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Lab ANC2 Anti HIV&nbsp;</label>
                                 <div>
-
-                                </div> &nbsp;<label>ค 8</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>( ขาด&nbsp;</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxx" name="p" id="p"></div>
-                                <label>) ที่</label>
-                                <div class="col-md-4"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxxxxxxx" name="p" id="p"></div>
-                                <label>dt</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>เข็ม</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-
-                            </div>
-                            <br>
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>Lab ANC ครั้งที่1 Anti HIV</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>RPR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>HBsAg</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Hct</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>% Hb</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Bl.gr</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Rh</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-
-                            </div>
-                            <br>
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>DCIP</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>MCV</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Hb typing</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                            </div>
-                            <br>
-
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>Lab ANC ครั้งที่2 Anti HIV</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>RPR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Hct</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>% Hb สามี Anti HIV</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>RPR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>DCIP</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Hb typing</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="G" name="g" id="g">
+                                </div>&nbsp;RPR/VDRL&nbsp;<div>
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p">
+                                </div> &nbsp; <label>Hct</label>
+                                <div class="col-md-1">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
+                                </div>
+                                &nbsp; <label>% Hb</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" min="0">
+                                </div> &nbsp;<label></label> &nbsp;&nbsp;<label>Lab สามี Anti HIV</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>&nbsp;<label>DCIP</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>&nbsp;<label>Hb typing</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>
 
                             </div>
                             <br>
 
                             <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>โรงเรียนพ่อแม่</label>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control form-control-sm CheckPer_2" placeholder="0" name="labor" id="labor" min="0">
+                                </div>
+                                &nbsp;<label>ครั้ง</label>
 
-                                </div> &nbsp;<label>โรงเรียนพ่อแม่</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>ครั้ง Quad test</label>
-                                <div class="col-md-2"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Lab อื่นๆ</label>
-                                <div class="col-md-2"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
                             </div>
                             <br>
+                            <div class="row">
 
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>สัญญาณชีพ BT</label>
+                                <div class="col-md-1">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0.0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="bt" id="bt">
+                                </div> &nbsp;<label>C &nbsp;PR</label>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="hr" id="hr"> </div><label>bpm &nbsp;RR</label>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="rr" id="rr"> </div>
+                                &nbsp;<label>/min&nbsp;&nbsp;BP</label>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="rr" id="rr"> </div>mmHg
+
+                            </div>
+
+                            <br>
                             <div class="form-group row">
-                                <label class="col-sm-12"><B> ประวัติการคลอด</B></label>
+                                <label class="col-sm-12"><B> ประวัติการเจ็บป่วยของสมาชิกในครอบครัว</B></label>
                             </div>
-
-
-
-                            <div class="form-group row">
-                                <div class="col-sm-0"></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add()'>
-                                            <i class="fas fa-plus-square"></i></a> ครรภ์ที่</label>
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">วดป คลอด/แท้ง</label></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">GA</label></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">วิธีคลอด/แท้ง</label></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">น้ำหนักทารก</label></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">เพศ</label></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">สถานที่คลอด</label></div>
-                                <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">ภาวะแทรกซ้อน</label></div>
-                                <div class="custom-control custom-checkbox col-sm-2"><label class="text-right">ประวัติการคลอดติดไหล่/คลอดไหล่ยาก</label></div>
-
-                            </div>
-                            <div class="form-group row"><?php $disease_pos = explode(" ", $row['disease_detail']); ?>
-                                <div class="col-sm-0"></div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[0]) : '') ?>" id="disease_name1" name="disease_name1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[1]) : '') ?>" id="disease_year1" name="disease_year1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[2]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[3]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[4]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[5]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[6]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[7]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[8]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
-                                </div>
-                                <div class="col-sm-1">
-                                    <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
-                                    <label> </label>
-                                </div>
-                            </div>
-
-                            <?php $y = 3;
-                            $z = 2;
-                            for ($x = 1; $x < (count($disease_pos) - 1) / 3; $x++) {
-                                echo "<div id='disease_row" . $z . "' name='disease_row" . $z . "' class='form-group row'>
-                                        <div class='col-sm-0'></div>
-                                        <div class='custom-control custom-checkbox col-sm-1'>
-                                        <input type='text' class='form-control form-control-sm'
-                                                id='disease_name" . $z . "' name='disease_name" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='custom-control custom-checkbox col-sm-1'>
-                                        <input type='text' class='form-control form-control-sm'
-                                                id='disease_year" . $z . "' name='disease_year" . $z . "'value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='custom-control custom-checkbox col-sm-1'>
-                                            <input type='text' class='form-control form-control-sm'
-                                                id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                                        </div>
-                                        <div class='custom-control custom-checkbox col-sm-1'>
-                                        <input type='text' class='form-control form-control-sm'
-                                            id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                                    </div>
-                                    <div class='custom-control custom-checkbox col-sm-1'>
-                                    <input type='text' class='form-control form-control-sm'
-                                        id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                                    </div>
-                                   <div class='custom-control custom-checkbox col-sm-1'>
-                                   <input type='text' class='form-control form-control-sm'
-                                    id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                                 </div>
-                                <div class='custom-control custom-checkbox col-sm-1'>
-                                <input type='text' class='form-control form-control-sm'
-                                id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
-                              </div>
-                                        <div class='col-sm-1'>
-                                            <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
-                                            <label> </label>
-                                        </div>
-                                    </div>";
-                                $z++;
-                            }
-                            ?>
-                            <script>
-                                function add() {
-                                    var new_chq_no = parseInt($('#total_chq').val()) + 1;
-                                    var new_input = "<div id='disease_row" + new_chq_no + "'class='form-group row'> <div class='col-sm-0'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_name" +
-                                        new_chq_no + "'name='disease_name" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_year" +
-                                        new_chq_no + "'name='disease_year" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-2'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +
-                                        new_chq_no + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos(" +
-                                        new_chq_no + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
-                                    $('#new_chq').append(new_input);
-                                    $('#total_chq').val(new_chq_no);
-                                }
-
-                                function remove_pos(last_chq_no) {
-                                    $('#disease_row' + last_chq_no).remove();
-                                    $('#disease_name' + last_chq_no).remove();
-                                    $('#disease_year' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                    $('#disease_hospital' + last_chq_no).remove();
-                                }
-
-                                function remove() {
-                                    $('#disease_name1').val('');
-                                    $('#disease_year1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                                    $('#disease_hospital1').val('');
-                               
-                                }
-                            </script>
-                            <!--   ADD -->
-                            <div id="new_chq"></div>
-                            <input type="hidden" id="total_chq" value="<?php if ($row['disease_detail'] == null) {
-                                                                            echo 1;
-                                                                        } else {
-                                                                            echo (count($disease_pos) - 1) / 3;
-                                                                        } ?>">
-                            <div class="form-group row"><textarea style="display:none;" name="disease_detail" id="disease_detail" cols="30" rows="10"></textarea></div>
-                            <!--   ADD -->
-
 
                             <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>สัญญาณชีพ&nbsp;&nbsp;BT</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>C, PR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>bpm, RR</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>BP</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>mmHg</label>
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>นอนวันละ</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>ชม. ปวดบริเวณ</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>Pain score</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>/10 คะแนน</label>
-                                
-
-                            </div>
-                            <br>
-
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>ระดับการศึกษา</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>อาชีพ</label>
-                                <div class="col-md-2"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>รายได้</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>บาท/เดือน</label>&nbsp;&nbsp;&nbsp;
-
+                                <label class="col-sm-1 text-left">ระดับความรู้สึกตัว</label>
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
-                                    <label class="custom-control-label" for="sex1">เพียงพอ</label>
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">รู้สึกตัวดี</label>
                                 </div>
-
                                 <div class="custom-control custom-radio col-sm-1">
-                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
-                                    <label class="custom-control-label" for="sex2">ไม่เพียงพอ</label>
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">สับสน</label>
                                 </div>
-                                
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ซึม</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ไม่รู้สึกตัว</label>
+                                </div>
 
-                            </div>
-                            <br>
-
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-
-                                </div> &nbsp;<label>ผู้ดูแล</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>อาชีพ</label>
-                                <div class="col-md-2"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>รายได้</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>บาท/เดือน</label>&nbsp;&nbsp;&nbsp;
 
                             </div>
                             <br>
                             <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
-                                </div> &nbsp;<label>อาการแรกรับ</label>
-                                <div class="col-md-7"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                            </div>
-                            <br>
-                           
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ข้อมูลเพิ่มเติมตามแบบแผนสุขภาพ (นอกเหนือจากระบบ KPHIS)</label>
-                            </div>
-                           
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ภาวะโภชนาการและเมตาบอลิซึม</label>
-                            </div>
-                            <br>
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div>
 
-                                </div> &nbsp;<label>BW</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
-                                <label>kgs. Hight</label>
-                                <div class="col-md-2"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>cms. BW ก่อนการตั้งครรภ์</label>
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>kgs. BMI ก่อนตั้งครรภ์</label>&nbsp;&nbsp;&nbsp;
-                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
-                                <label>kg/m<sup>2</sup></label>&nbsp;&nbsp;&nbsp;
-
-                            </div>
-
-                            <br>
-                            <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>เพศสัมพันธ์และการเจริญพันธ์</label>
-                            </div>
-                            <div class="row">
-
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติตกขาว คันช่องคลอด</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>การหายใจ</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
                                                                                     echo 'checked="checked"';
                                                                                 } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
-                                    <label class="custom-control-label" for="body1">ปฏิเสธ</label>
+                                    <label class="custom-control-label" for="body1">หายใจหอบ</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
                                                                                     echo 'checked="checked"';
                                                                                 } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
-                                    <label class="custom-control-label" for="body2">มี ระบุ</label>
+                                    <label class="custom-control-label" for="body2">หายใจลำบาก</label>
                                 </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                    <label class="custom-control-label" for="body2">ไม่หายใจ</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                    <label class="custom-control-label" for="body2">อื่นๆ</label>
+                                </div>
+
 
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
@@ -828,54 +586,168 @@ date_default_timezone_set('asia/bangkok');
 
                             </div>
                             <br>
+
                             <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติพฤติกรรมเสี่ยงต่อการติดเชื้อโรคติด (เฉพาะอายุ 14-49ปี)</label>
+                                <label class="col-sm-1 text-left">การไหลเวียนโลหิต สีผิว</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">ปกติ</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ซีด</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ปลายมือปลายเท้าเขียว</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">รอบปากเขียว</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">เขียวทั้งตัว</label>
+                                </div>
+
+                            </div>
+                            <br>
+
+
+
+
+                            <div class="row">
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;<label>อาการบวม</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] == 'ปกติ') {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body1" name="body" value="ปกติ" onchange="body_check('off_entered');">
+                                    <label class="custom-control-label" for="body1">ไม่มี</label>
+                                </div>
+
+                            <div class="custom-control custom-radio col-sm-1">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                    echo 'checked="checked"';
+                                                                                } ?> class="custom-control-input" id="body2" onchange="body_check('on_entered');">
+                                    <label class="custom-control-label" for="body2">บวมบริเวณ</label>
+                                </div>
+
+
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control form-control-sm" id="body_text" name="body" value="<?php if ($row['body'] != 'ปกติ' && $row['body'] != NULL) {
+                                                                                                                                    echo htmlspecialchars($row['body']);
+                                                                                                                                } ?>" <?php if (!($row['body'] != 'ปกติ' && $row['body'] != NULL)) {
+                                                                                                            echo 'disabled';
+                                                                                                        } ?>>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+
+                            <div class="row">
+                                <label class="col-sm-1 text-left">ผิวหนัง</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">ปกติ</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">หนังแตก</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">เขียวช้ำ</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ผื่นแดง</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ผื่นคัน</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">เหลือง</label>
+                                </div>
+
                             </div>
 
-                            <div class="row">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio col-sm-3">
-                            <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
-                                    <label class="custom-control-label" for="sex1">คู่เพศสัมพันธ์เป็โรคติดต่อทางเพศสัมพันธ์</label>
-                                
-                                </div>
-
-                                <div class="custom-control custom-radio col-sm-3">
-                                <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
-                                    <label class="custom-control-label" for="sex2">มีเพศสัมพันธ์ชายกับชาย/หญิงให้บริการไม่ใช้ถุงยาง</label>
-                                </div>
-
-                                                    </div>
 <br>
-                                                    <div class="row">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio col-sm-2">
-                            <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
-                                    <label class="custom-control-label" for="sex1">มีเพศสัมพันธ์มากกว่า 1 คน</label>
-                                
+
+<div class="row">
+                                <label class="col-sm-1 text-left">การติดต่อสื่อสาร&nbsp;&nbsp;&nbsp;&nbsp;หู</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">ได้ยินชัดเจน</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ได้ยินไม่ชัดเจน</label>
+                                </div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label class="col-sm-1 text-left">ใช้อุปกรณ์</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">มี</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">ไม่มี</label>
                                 </div>
 
-                                <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
-                                    <label class="custom-control-label" for="sex2">มีเพศสัมพันธ์กับคนใหม่</label>
+                            </div>
+
+<br>
+
+<div class="row">
+                                <label class="col-sm-1 text-left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ตา</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">มองเห็นชัดเจน</label>
                                 </div>
-                                <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
-                                                            echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
-                                    <label class="custom-control-label" for="sex2">ไม่ใช้ถุงยางอนามัยหรือแตก รั่ว หลุด</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">มองเห็นไม่ชัดเจน</label>
+                                </div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label class="col-sm-1 text-left">: สวมแว่นตา</label>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss1" value="ปกติ" name="anuss">
+                                    <label class="custom-control-label" for="anuss1">ไม่สวม</label>
+                                </div>
+                                <div class="custom-control custom-radio col-sm-1">
+                                    <input type="radio" class="custom-control-input" id="anuss2" value="ไม่มีรูก้น" name="anuss">
+                                    <label class="custom-control-label" for="anuss2">สวม</label>
                                 </div>
 
-                                                    </div>
+                            </div>
+
+                            <br>
+
+                           
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B> สภาจิตใจแรกรับ (การแสดงออกทางพฤติกรรมม การแสดงออกทางอารมณ์ม สิ่งที่วิตกกังวล)</B></label>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" id="first_symptom" placeholder=" xxxxxxxxxxxxxxxx" name="first_symptom" rows="2"></textarea>
+                                </div>
+                            </div>
+
 <br>
 
                            
+                            <div class="form-group row">
+                                <label class="col-sm-12"><B> อาการแรกรับ</B></label>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" id="first_symptom" placeholder=" xxxxxxxxxxxxxxxx" name="first_symptom" rows="2"></textarea>
+                                </div>
+                            </div>
 
 
 

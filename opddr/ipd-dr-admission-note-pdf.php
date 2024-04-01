@@ -50,6 +50,12 @@ $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
 $hn = KphisQueryUtils::getHnByAn($an);
 $query_parameters = ['an' => $an];
 
+Session::insertSystemAccessLog(json_encode(array(
+    'report'=>'IPD-DR-ADMISSION-NOTE-PDF',
+   // 'action'=>'PRINT',
+    'an'=>$an,
+),JSON_UNESCAPED_UNICODE));
+
 
 
 //-------------------------Doctor admission note

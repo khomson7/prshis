@@ -2763,6 +2763,7 @@ $row_period  = $stmt_period->fetch();
             alert("กรุณากรอกข้อมูล อาการระหว่างตั้งครรภ์ ให้ครบถ้วน");
             $('[name="condition_pregnant_text"]').focus();
         } else {
+            
             var url_update = "ipd-dr-admission-note-update.php";
             var url_save = "ipd-dr-admission-note-save.php";
             var admission_note_id = $("#admission_note_id").val();

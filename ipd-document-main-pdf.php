@@ -2,6 +2,8 @@
 //require_once './project/function/Session.php';
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
 //require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+require_once './include/Session.php';
+
 require_once './include/DbUtils.php';
 require_once './include/KphisQueryUtils.php';
 require_once './include/ReportQueryUtils.php';
@@ -214,7 +216,7 @@ $head =
     </style>
   
     <div class="row">
-    <div class="column"><strong><span style="text-align:right;">'.$image_check_an.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="column"><strong><span style="text-align:right;">'.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     เอกสารใบปะหน้า</strong></div>

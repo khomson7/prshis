@@ -22,7 +22,7 @@ require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 
 Session::insertSystemAccessLog(json_encode(array(
-    'form' => 'IPD-DR-ADMISSION-NOTE-FORM',
+    'form' => 'IPD-CONSULATION-SUMMARY',
     'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
@@ -44,10 +44,14 @@ $sql = "SELECT *
 $stmt = $conn->prepare($sql);
 $stmt->execute($an_parameters);
 if ($row  = $stmt->fetch()) {
-    $id = $row['id'];
+    $admission_note_id  = $row['id'];
 } else {
-    $id = null;
+    $admission_note_id  = null;
 }
+
+
+
+
 
 $sql_item = "SELECT dr_adm_item.id,
                     dr_adm_item.doctor,
@@ -68,7 +72,7 @@ while ($row_item = $stmt_item->fetch()) {
 }
 //------------------------Doctor admission note
 
-
+echo $admission_note_id;
 
 $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
         (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
@@ -205,11 +209,11 @@ $regdatetime = $row_ipt["regdatetime"];
 
             <div class="custom-control custom-radio col-sm-1">
                 <input type="radio" <?php if (
-                                        $row['disease'] == 'YES'
-                                        && $row['disease'] != NULL
+                                        $row['underlying_disease'] == 'YES'
+                                        && $row['underlying_disease'] != NULL
                                     ) {
                                         echo 'checked="checked"';
-                                    } ?> class="custom-control-input" id="disease2" name="underlying_disease" value="YES" onchange="custom_check('on_disease');">
+                                    } ?> class="custom-control-input" id="disease2"  onchange="custom_check('on_disease');">
                 <label class="custom-control-label" for="disease2">Yes (ระบุ)</label>
             </div>
             <div class="col-sm-9">
@@ -219,7 +223,6 @@ $regdatetime = $row_ipt["regdatetime"];
                                                                                                                                                 ) {
                                                                                                                                                     echo htmlspecialchars($row['underlying_disease']);
                                                                                                                                                 } ?>" <?php if (!($row['underlying_disease'] != 'NO'
-                                                                                                                                                                  
                                                                                                                                                                     && $row['underlying_disease'] != NULL)) {
                                                                                                                                                                     echo 'disabled';
                                                                                                                                                                 } ?>>
@@ -288,13 +291,13 @@ $regdatetime = $row_ipt["regdatetime"];
         <div class="form-group row">
             <div class="col-sm-1"></div>
             <div class="custom-control custom-checkbox col-sm-1">
-                <input type="checkbox" <?php if ($row['consulation_etc'] != null) {
+                <input type="checkbox" <?php if ($row['consultation_etc'] != null) {
                                             echo 'checked="checked"';
-                                        } ?> class="custom-control-input" id="e4" onchange="custom_check('on_consulation_etc');">
+                                        } ?> class="custom-control-input" id="e4" onchange="custom_check('on_consultation_etc');">
                 <label class="custom-control-label" for="e4">อื่นๆ</label>
             </div>
             <div class="col-sm-5">
-                <input type="text" class="form-control form-control-sm" id="consulation_etc" name="consulation_etc" value="<?= (isset($row['consulation_etc']) ? htmlspecialchars($row['consulation_etc']) : '') ?>" <?php if ($row['consulation_etc'] == null) {
+                <input type="text" class="form-control form-control-sm" id="consultation_etc" name="consultation_etc" value="<?= (isset($row['consultation_etc']) ? htmlspecialchars($row['consultation_etc']) : '') ?>" <?php if ($row['consultation_etc'] == null) {
                                                                                                                                                                                                                 echo 'disabled';
                                                                                                                                                                                                             } ?>>
             </div>
@@ -396,10 +399,10 @@ function AddDoctorSignature() {
             $('#dr-admission-group-input-div').append(clone_template_dr_admission_input_div);
             $('[name="admission_note_doctor[]"].last-focus-input').removeClass('last-focus-input');
             $('[name="doc_name[]"].last-focus-input').removeClass('last-focus-input');
-            // $('[name="doc_pos[]"].last-focus-input').removeClass('last-focus-input');
+            
             $('[name="admission_note_doctor[]"]').last().addClass('last-focus-input').val(doctorcode);
             $('[name="doc_name[]"]').last().addClass('last-focus-input').val(doc_name);
-            // $('[name="doc_pos[]"]').last().addClass('last-focus-input').val(doc_entryposition);
+           
         }
     }
 
@@ -465,11 +468,11 @@ function AddDoctorSignature() {
             } else {
                 $('#consultation_for1').attr("disabled", false).val('');
             }
-        } else if (value == "on_consulation_etc") {
+        } else if (value == "on_consultation_etc") {
             if (!($('#e4').is(':checked'))) {
-                $('#consulation_etc').attr("disabled", true).val('');
+                $('#consultation_etc').attr("disabled", true).val('');
             } else {
-                $('#consulation_etc').attr("disabled", false).val('');
+                $('#consultation_etc').attr("disabled", false).val('');
             }
 
     }
@@ -478,8 +481,10 @@ function AddDoctorSignature() {
             $('#underlying_disease_text').attr("disabled", true).val('');
             $('#disease2').prop("checked", false);
         } else if (value == "on_disease") {
+          //$('#disease2').prop("checked", true);
            $('#underlying_disease_text').attr("disabled", false).val('');
            $('#disease1').prop("checked", false);
+           
            // $('#entered_by1').prop("checked", false);
           //  $('#entered_by2').prop("checked", false);
         }

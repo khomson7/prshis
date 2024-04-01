@@ -22,6 +22,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
     require_once './header.php';
     require_once './include/DbUtils.php';
     require_once './include/KphisQueryUtils.php';
+    require_once './include/ReportQueryUtils.php';
     require_once './include/ExternalDocumentTracker.php';
     $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
     //
@@ -29,7 +30,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
     $an = $_REQUEST['an'];//รับค่า an
     $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
     $vn = KphisQueryUtils::getVnByAn($an);
+
     $getDocumentSummary = KphisQueryUtils::getDocumentSummary($an);
+
+   // $an2 = "'".$an."'";
+
+   //$getDocumentNihssScore = ReportQueryUtils::getDocumentPrsER($vn);
+
+   //echo $getDocumentNihssScore;
 
     $loginname = $_SESSION['loginname'];
    
@@ -72,6 +80,49 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <ul class="list-group">
+
+           
+            <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-1 text-right">
+                            <h5><div id="check_countRowData_ER"></div></h5>
+                        </div>
+                        <div class="col-md-11">
+                            <label><b>เอกสารแรกรับ(ER/OPD)</b></label>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-2 text-right">
+                            <h5><div id="check_countRowData_NihssScore"></div></h5>
+                        </div>
+                        <div class="col-md-10">
+                            <label>HOSPITAL NIHSS SCORE SHEET</label>
+                            <span id="show_text_NihssScore_prhis"></span> 
+                            <a id="NihssScore_pdf"></a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-2 text-right">
+                            <h5><div id="check_countRowData_AdmEr"></div></h5>
+                        </div>
+                        <div class="col-md-10">
+                            <label>แบบบันทึกประวัติและตรวจร่างกายผู้ป่วยแรกรับ(ER Form)</label>
+                            <span id="show_text_AdmEr_prhis"></span> 
+                            <a id="AdmEr_pdf"></a>
+                        </div>
+                    </div>
+                </li>
+
+              
+
+    <hr>
+
+
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-md-1 text-right">
@@ -416,6 +467,21 @@ function check_document_countRowData(){
     let an = <?=json_encode($an)?>;
      const IPD_DOCUMENT_PRINT = <?=json_encode(Session::checkPermission('IPD_DOCUMENT', 'PRINT'))?>;
 
+
+     const getDocumentPrsER = <?=json_encode(ReportQueryUtils::getDocumentPrsER($vn))?>;
+
+if((getDocumentPrsER)){
+    $("#check_countRowData_AdmEr").attr("class","text-success fas fa-check-circle");
+    $("#show_text_AdmEr_prhis").attr("class","text-light font-weight-bold badge badge-primary").text(" PRHIS ");
+    if(IPD_DOCUMENT_PRINT){
+      //  $("#AdmEr_pdf").attr({"class":"badge badge-secondary","href":"opddr/hospital-nihss-score-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+    }
+}else{
+    $("#check_countRowData_AdmEr").attr("class","text-secondary fas fa-circle");
+}
+
+
+
 const getDocumentSummary = <?=json_encode(KphisQueryUtils::getDocumentSummary($an))?>;
 
 
@@ -520,6 +586,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_PathologyLabXray").attr("class","text-secondary fas fa-square");
         }
 
+
         const getDocumentFocusList = <?=json_encode(KphisQueryUtils::getDocumentFocusList($an))?>;
         if((getDocumentFocusList)){
             $("#check_countRowData_FocusList").attr("class","text-success fas fa-check-circle");
@@ -530,6 +597,22 @@ if((getDocumentSummary==true)){
         }else{
             $("#check_countRowData_FocusList").attr("class","text-secondary fas fa-circle");
         }
+
+
+
+        const getDocumentNihssScore = <?=json_encode(ReportQueryUtils::getDocumentNihssScore($an))?>;
+
+        if((getDocumentNihssScore)){
+            $("#check_countRowData_NihssScore").attr("class","text-success fas fa-check-circle");
+            $("#show_text_NihssScore_prhis").attr("class","text-light font-weight-bold badge badge-primary").text(" PRHIS ");
+            if(IPD_DOCUMENT_PRINT){
+                $("#NihssScore_pdf").attr({"class":"badge badge-secondary","href":"opddr/hospital-nihss-score-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+            }
+        }else{
+            $("#check_countRowData_NihssScore").attr("class","text-secondary fas fa-circle");
+        }
+
+
         const getDocumentFocusNote = <?=json_encode(KphisQueryUtils::getDocumentFocusNote($an))?>;
         if((getDocumentFocusNote)){
             $("#check_countRowData_FocusNote").attr("class","text-success fas fa-check-circle");
