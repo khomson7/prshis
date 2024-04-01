@@ -34,9 +34,7 @@ require_once './include/Session.php';
         </nav>
     </div>
    
-    <div class="col-md-2 text-right">
-            <a href="ipd-document-main-pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารใบปะหน้า</a>
-        </div>
+    
 
 </div><br>
 <div class="row">
