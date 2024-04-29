@@ -72,7 +72,7 @@ while ($row_item = $stmt_item->fetch()) {
 }
 //------------------------Doctor admission note
 
-echo $admission_note_id;
+//echo $admission_note_id;
 
 $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
         (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name

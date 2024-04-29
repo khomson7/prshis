@@ -203,6 +203,9 @@
 
 
         try {
+
+
+
                 $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note
                 (hn,an,receiver_medication_date,receiver_medication_time,take_medication_by,
                 arrive_by,taken_by_relative,taken_by_nurse,taken_by_crib,taken_by_etc,taken_by,informant_patient,informant_relatives,informant_deliverer,
@@ -307,7 +310,10 @@
            
 
                 $admission_note_id = $conn->lastInsertId();
-                if(!empty($_REQUEST['admission_note_doctor'])){
+//echo $admission_note_id;
+
+
+              if(!empty($_REQUEST['admission_note_doctor'])){
                     foreach($_REQUEST['admission_note_doctor'] as $admission_note_doctor){
                         $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note_item (admission_note_id,an,admission_note_doctor,create_user,create_datetime,update_user,update_datetime,version)
                         VALUES (:admission_note_id,:an,:admission_note_doctor,:create_user,now(),:update_user,now(),:version)");
@@ -315,9 +321,10 @@
                         'admission_note_doctor'=>$admission_note_doctor,
                         'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version));
                     }
+                    
                 }
 
-                $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
+                $output_error =  '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
             } catch (PDOException  $e) {
                 echo $e->getMessage();

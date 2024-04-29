@@ -171,6 +171,7 @@ date_default_timezone_set('asia/bangkok');
             </div>
             <div class="col-auto p-1 font-weight-bold">
                 ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ (เฉพาะผู้มาคลอด) <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
+                    <B><font color="red"> (รอคุยรายละเอียดเพื่อออกแบบการเก็บข้อมูล) </font></B>
             </div>
 
         </div>

@@ -49,7 +49,7 @@ if (isset($_POST['button1'])) {
 }
 
 
-
+echo $_SESSION['name']; 
 
 //-------------------------Doctor admission note
 $sql = "SELECT *
