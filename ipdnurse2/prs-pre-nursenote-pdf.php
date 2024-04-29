@@ -8,14 +8,23 @@ require_once '../include/Session.php';
    $values =['loginname'=>$loginname];
    
    //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-   if($login != $loginname){
-       session_start();
-       session_destroy();              
-           
-     } 
+   if(!$loginname){
+    session_start();
+    session_destroy();              
+        
+  }
 
- Session::checkLoginSessionAndShowMessage(); //เช็ค session
+  Session::checkLoginSessionAndShowMessage(); //เช็ค session
+
+  if(!(
+     Session::checkPermission('DOCUMENT', 'PRINT')
+     )){
+     return;
+ }
+
+ /*Session::checkLoginSessionAndShowMessage(); //เช็ค session
 Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
+*/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 //require_once __DIR__ . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';

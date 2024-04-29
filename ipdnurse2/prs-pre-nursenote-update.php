@@ -59,9 +59,9 @@
 
         try {
           //เรียกใช้งาน sql update
-if ( $rxdate != '' && $rxtime !='' && $hospital_by !='' && $h_allergy !='' && $c_chronic !='' && $vaccine_history !=''  && $child_devilopment !='' && $pmh_2 !='' 
+if ( $rxdate != '' && $rxtime !='' && $hospital_by !='' && $h_allergy !='' && $c_chronic !=''  && $pmh_2 !='' 
 && $history_of_drug != '' && $bt != '' && $pr != '' && $rr != '' && $bps != '' && $bpd != '' && $breathing != '' && $blood_circulation != '' && $swelling != ''
-&& $skin != '' && $communication_ears != '' && $communication_eyes != '' && $communication_speak != ''
+&& $skin != '' && $communication_ears != '' && $communication_eyes != '' && $communication_speak != '' && $state_of_mind != ''
 ) {
         $output_error = '<script>
         NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");     
@@ -126,14 +126,7 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_pre_nursenote SE
             }
 
 
-} if ( $communication_eyes == 'เห็นไม่ชัดเจน' && $glasses == ''
-) {
-  
-        echo   '<script>
-        alert("กรุณากรอกข้อมูลให้ครบถ้วน", "error");     
-        </script>'; 
-
-}else {
+} else {
 
        echo   '<script>
         alert("กรุณากรอกข้อมูลให้ครบถ้วน", "error");     

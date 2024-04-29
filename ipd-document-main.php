@@ -176,6 +176,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
                             <label>ใบการประเมินสภาพผู้ป่วยแรกรับและแผนสุขภาพ</label>
                             <span id="show_text_AddmissionNurse_kphis"></span>
                             <a id="AddmissionNurse_pdf"></a>
+                            <a id="AddmissionNurse_pdf1"></a>
+                            <a id="AddmissionNurse_pdf2"></a>
+                            
                         </div>
                     </div>
                 </li>
@@ -514,11 +517,34 @@ if((getDocumentSummary==true)){
         }
 
         const getDocumentAddmissionNurse = <?=json_encode(KphisQueryUtils::getDocumentAddmissionNurse($an))?>;
+
+        const getDocumentAddmissionNurse1 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse1($an))?>;
+
+        const getDocumentAddmissionNurse2 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse2($an))?>;
+
+        //console.log(getDocumentAddmissionNurse1);
+        
         if((getDocumentAddmissionNurse==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
             $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
+
             if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse==true){
-                $("#AddmissionNurse_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+                $("#AddmissionNurse_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(1 ปี ขึ้นไป)").css({"cursor":"pointer"});
+            } 
+            
+        }else{
+            $("#check_countRowData_AddmissionNurse").attr("class","text-secondary fas fa-square");
+        }
+
+        if((getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true)){
+            $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
+            $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
+
+           if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse1==true){
+                $("#AddmissionNurse_pdf1").attr({"class":"badge badge-secondary","href":"lr-report1/lr-report1-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(แรกเกิด)").css({"cursor":"pointer"});
+            }
+            if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse2==true){
+                $("#AddmissionNurse_pdf2").attr({"class":"badge badge-secondary","href":"ipdnurse2/prs-pre-nursenote-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(ทั่วไป)").css({"cursor":"pointer"});
             }
             
         }else{
@@ -531,7 +557,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_Order_ProgressNote").attr("class","text-success fas fa-check-square");
             $("#show_text_Order_ProgressNote_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
             if(IPD_DOCUMENT_PRINT){
-                $("#AddmissionNurse_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
+               // $("#AddmissionNurse_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
                 $("#Consult_pdf1").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-dr-consult-pdf.php?an_consult="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"});
                // $("#Order_ProgressNote_pdf").attr({"class":"badge badge-secondary","onclick":"onclickOrder_ProgressNote_pdf()"}).html("<i class='fas fa-print'></i> PDF").css({"cursor":"pointer"}).tab('show');
             }
@@ -701,14 +727,14 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_Anesthetic").attr("class","text-secondary fas fa-square");
         }
         
-        const get_document_neodms_anes = <?=json_encode(ExternalDocumentTracker::get_document_neodms_anes(null,$an))?>;
+    /*    const get_document_neodms_anes = <?=json_encode(ExternalDocumentTracker::get_document_neodms_anes(null,$an))?>;
         if((get_document_neodms_anes)){
             $("#check_countRowData_Anesthetic").attr("class","text-success fas fa-check-square");
             $("#show_text_Scan_kphis").attr("class","text-dark font-weight-bold badge badge-info").text(" SCAN ");
         }else{
             $("#check_countRowData_Anesthetic").attr("class","text-secondary fas fa-square");
         }
-       
+       */
         const getDocumentOperative = <?=json_encode(KphisQueryUtils::getDocumentOperative($an))?>;
         const get_document_neodms_operative = <?=json_encode(ExternalDocumentTracker::get_document_neodms_operative($an))?>;
         if((getDocumentOperative) || (get_document_neodms_operative)){

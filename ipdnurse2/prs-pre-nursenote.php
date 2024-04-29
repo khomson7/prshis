@@ -1026,11 +1026,11 @@ date_default_timezone_set('asia/bangkok');
                                                                                                                                                             ) {
                                                                                                                                                                 echo htmlspecialchars($row['breathing']);
                                                                                                                                                             } ?>" <?php if (!($row['communication_speak'] != 'ชัดเจน'
-                                                                                                                                                    && $row['communication_speak'] != 'พูดติดอ่าง'
-                                                                                                                                                    && $row['communication_speak'] != 'เป็นใบ้'
-                                                                                                                                                    && $row['communication_speak'] != NULL)) {
-                                                                                                                                                    echo 'disabled';
-                                                                                                                                                } ?>>
+                                                                                                                                                                        && $row['communication_speak'] != 'พูดติดอ่าง'
+                                                                                                                                                                        && $row['communication_speak'] != 'เป็นใบ้'
+                                                                                                                                                                        && $row['communication_speak'] != NULL)) {
+                                                                                                                                                                        echo 'disabled';
+                                                                                                                                                                    } ?>>
                                 </div>
 
 
@@ -1187,13 +1187,15 @@ date_default_timezone_set('asia/bangkok');
                             var rxtime = $.trim($('[name="rxtime"]').val());
                             var depart = $('input[name="depart"]:checked').val();
                             var hospital_by = $('input[name="hospital_by"]:checked').val();
+                            var cc = $.trim($('[name="cc"]').val());
+                            var current_illness = $.trim($('[name="current_illness"]').val());
                             var c_chronic = $('input[name="c_chronic"]:checked').val();
                             var hos_history = $('input[name="hos_history"]:checked').val();
                             var h_sergery = $('input[name="h_sergery"]:checked').val();
                             var h_allergy = $('input[name="h_allergy"]:checked').val();
                             var child_devilopment = $('input[name="child_devilopment"]:checked').val();
                             var history_of_drug = $('input[name="history_of_drug"]:checked').val();
-                            var pmh_2 = $('input[name="pmh2"]:checked').val();
+                            var pmh2 = $('input[name="pmh2"]:checked').val();
                             var bt = $.trim($('[name="bt"]').val());
                             var pr = $.trim($('[name="pr"]').val());
                             var rr = $.trim($('[name="rr"]').val());
@@ -1208,46 +1210,67 @@ date_default_timezone_set('asia/bangkok');
                             var communication_eyes = $('input[name="communication_eyes"]:checked').val();
                             var glasses = $('input[name="glasses"]:checked').val();
                             var communication_speak = $('input[name="communication_speak"]:checked').val();
+                            var state_of_mind = $.trim($('[name="state_of_mind"]').val());
+                            var first_symptoms = $.trim($('[name="first_symptoms"]').val());
+                            var level_of_con = $('input[name="level_of_con"]:checked').val();
+
 
                             // var depart = $('input[type=radio][name=depart]:checked').val();
 
                             if (rxdate == "") {
 
                                 $('[name="rxdate"]').focus();
+                                alert('เลือกวันที่');
                             } else if (rxtime == "") {
 
                                 $('[name="rxtime"]').focus();
-                            } else if (hospital_by == undefined) {
-
-                                $('[name="hospital_by"]').focus();
-                            } else if (h_allergy == undefined) {
-
-                                $('[name="h_allergy"]').focus();
-                                // console.log(h_sergery);
+                                alert('เลือกเวลา');
                             } else if (depart == undefined) {
 
                                 $('[name="depart"]').focus();
+                                alert('หน่วยงาน');
+                            } else if (hospital_by == undefined) {
+
+                                $('[name="hospital_by"]').focus();
+                                alert('รับไว้ในโรงพยาบาลโดย');
+                            } else if (current_illness == "") {
+
+                                $('[name="current_illness"]').focus();
+                                alert('บันทึกประวัติเจ็บป่วยปัจจุบัน');
+                                // console.log(h_sergery);
                             } else if (c_chronic == undefined) {
 
                                 $('[name="c_chronic"]').focus();
+                                alert('โรคประจำตัว');
                             } else if (hos_history == undefined) {
 
                                 $('[name="hos_history"]').focus();
+                                alert('เคยรับการรักษาในโรงพยาบาล');
                             } else if (h_sergery == undefined) {
 
                                 $('[name="h_sergery"]').focus();
+                                alert('ประวัติการผ่าตัด');
                                 // console.log(h_sergery);
-                            } else if (child_devilopment == undefined) {
+                            } else if (h_allergy == undefined) {
 
-                                $('[name="child_devilopment"]').focus();
+                                $('[name="h_allergy"]').focus();
+                                alert('ประวัติการแพ้');
                                 // console.log(h_sergery);
-                            } else if (history_of_drug == undefined) {
+                            }
+                            /*else if (child_devilopment == undefined) {
+
+                                                           $('[name="child_devilopment"]').focus();
+                                                           // console.log(h_sergery);
+                                                       } */
+                            else if (history_of_drug == undefined) {
 
                                 $('[name="history_of_drug"]').focus();
+                                alert('ประวัติการใช้ยาและผลิตภัณฑ์สุขภาพ');
                                 // console.log(h_sergery);
-                            } else if (pmh_2 == undefined) {
+                            } else if (pmh2 == undefined) {
 
                                 $('[name="pmh2"]').focus();
+                                alert('ประวัติการเจ็บป่วยในครอบครัว');
                                 // console.log(h_sergery);
                             } else if (bt == '') {
 
@@ -1265,26 +1288,35 @@ date_default_timezone_set('asia/bangkok');
 
                                 $('[name="bps"]').focus();
                                 alert('กรุณากรอกสัญญาณชีพ BPS/BPD');
+                            } else if (level_of_con == undefined) {
+
+                                $('[name="level_of_con"]').focus();
+                                alert('เลือกระดับความรู้สึกตัว');
+                                // console.log(h_sergery);
                             } else if (breathing == undefined) {
 
                                 $('[name="breathing"]').focus();
+                                alert('การหายใจ');
                                 // console.log(h_sergery);
                             } else if (blood_circulation == undefined) {
 
                                 $('[name="blood_circulation"]').focus();
+                                alert('การไหลเวียนโลหิต');
                                 // console.log(h_sergery);
                             } else if (swelling == undefined) {
 
                                 $('[name="swelling"]').focus();
+                                alert('อาการบวม');
                                 // console.log(h_sergery);
                             } else if (skin == undefined) {
 
                                 $('[name="skin"]').focus();
+                                alert('ผิวหนัง');
                                 // console.log(h_sergery);
                             } else if (communication_ears == undefined) {
 
                                 $('[name="communication_ears"]').focus();
-
+                                alert('การติดต่อสื่อสาร หู');
                                 // console.log(h_sergery);
                             } else if (communication_ears == 'ได้ยินไม่ชัดเจน' && hearing_aid == undefined) {
 
@@ -1294,19 +1326,29 @@ date_default_timezone_set('asia/bangkok');
 
                                 $('[name="communication_eyes"]').focus();
 
+                                alert('การติดต่อสื่อสาร ตา');
+
                                 // console.log(h_sergery);
                             } else if (communication_eyes == 'เห็นไม่ชัดเจน' && glasses == undefined) {
 
                                 $('[name="glasses"]').focus();
                                 alert('การสวมแว่นตา');
-                            } else if (communication_speak  == undefined) {
+                            } else if (communication_speak == undefined) {
 
                                 $('[name="communication_speak"]').focus();
                                 alert('การพูด');
+                            } else if (state_of_mind == '') {
+
+                                $('[name="state_of_mind"]').focus();
+                                alert('สภาพจิตใจแรกรับ');
+                            } else if (first_symptoms == '') {
+
+                                $('[name="first_symptoms"]').focus();
+                                alert('อาการแรกรับ');
                             }
 
 
-                            
+
 
                             var url_update = "prs-pre-nursenote-update.php";
                             var url_save = "prs-pre-nursenote-save.php";
@@ -1457,7 +1499,7 @@ date_default_timezone_set('asia/bangkok');
                                 $('#swelling1').prop("checked", false);
                             }
 
-                            
+
                             if (value == "off_communication_speak") {
                                 $('#communication_speak_text').attr("disabled", true).val('');
                                 $('#communication_speak4').prop("checked", false);
@@ -1466,7 +1508,7 @@ date_default_timezone_set('asia/bangkok');
                                 $('#communication_speak1').prop("checked", false);
                                 $('#communication_speak2').prop("checked", false);
                                 $('#communication_speak3').prop("checked", false);
-                                
+
                             }
 
 
