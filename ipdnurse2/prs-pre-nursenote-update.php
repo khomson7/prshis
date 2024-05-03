@@ -125,6 +125,13 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_pre_nursenote SE
                 
             }
 
+            Session::insertSystemAccessLog(json_encode(array(
+                'form'=>'PRE-NURSENOTE-FORM',
+                'action'=>'UPDATE',
+                'version'=>$version,
+                'an'=>$an,
+            ),JSON_UNESCAPED_UNICODE));
+
 
 } else {
 

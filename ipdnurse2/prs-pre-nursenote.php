@@ -29,13 +29,13 @@ $vn = KphisQueryUtils::getVnByAn($an);
 $an_parameters = ['an' => $an];
 $hn_parameters = ['hn' => $hn];
 
-/*
+
 Session::insertSystemAccessLog(json_encode(array(
-    'form' => 'LR-REPORT1-FORM',
+    'form' => 'PRE-NURSENOTE-FORM',
     'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
-*/
+
 
 /*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
@@ -1371,6 +1371,8 @@ date_default_timezone_set('asia/bangkok');
                             } else {
                                 $.post(url_update, my_form, function(data) {
                                         $("#show_check_save").html(data);
+
+                  
                                     })
                                     .fail(function() {
                                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);
