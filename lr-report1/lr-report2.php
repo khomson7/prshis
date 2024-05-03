@@ -43,7 +43,20 @@ if ($login != $loginname) {
 // echo $an;
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
-$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report1 WHERE an = :an ";
+$sql = "SELECT *
+                FROM `prs_lr_report2`
+                WHERE an = :an";
+                $id  = null;
+                $parameters['an'] = $an;
+$stmt = $conn->prepare($sql);
+$stmt->execute($parameters);
+if ($row  = $stmt->fetch()) {
+    $id = $row['id'];
+} else {
+    $id = null;
+}
+
+/*$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_lr_report2 WHERE an = :an ";
 $id  = null;
 $parameters['an'] = $an;
 $stmt = $conn->prepare($sql);
@@ -52,7 +65,19 @@ $row = $stmt->fetch();
 if ($row['count_row'] > 0) {
     $id = $row['id'];
 }
-
+*/
+/*
+$sql = "SELECT *
+                FROM `prs_lr_report2`
+                WHERE an = :an";
+$stmt = $conn->prepare($sql);
+$stmt->execute($parameters);
+if ($row  = $stmt->fetch()) {
+    $id = $row['id'];
+} else {
+    $id = null;
+}
+*/
 if ($id == null || $id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
                                     pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
@@ -163,7 +188,7 @@ date_default_timezone_set('asia/bangkok');
 
 
 
-<form id="lr_report1_form">
+<form id="my_form">
     <div class="container-fluid">
         <div class="row">
             <div class="col-auto">
@@ -171,7 +196,9 @@ date_default_timezone_set('asia/bangkok');
             </div>
             <div class="col-auto p-1 font-weight-bold">
                 ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ (เฉพาะผู้มาคลอด) <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
-                    <B><font color="red"> (รอคุยรายละเอียดเพื่อออกแบบการเก็บข้อมูล) </font></B>
+                <B>
+                    <font color="red"> (รอคุยรายละเอียดเพื่อออกแบบการเก็บข้อมูล) </font>
+                </B>
             </div>
 
         </div>
@@ -192,16 +219,16 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="col-sm-1"></div>
                                 <label>รับใหม่วันที่</label>
                                 <div class="col-sm-2">
-                                    <input type="date" class="form-control form-control-sm" id="receive_date" name="receive_date" value="<?= (isset($row_ipt['regdate']) && $id == null ? htmlspecialchars($row_ipt['regdate']) : htmlspecialchars($row['receive_date'])) ?>">
+                                    <input type="date" class="form-control form-control-sm" id="rxdate" name="rxdate" value="<?= (isset($row['rxdate']) ? htmlspecialchars($row['rxdate']) : '') ?>">
                                 </div>
                                 <label>เวลา</label>
                                 <div class="col-sm-2">
-                                    <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
+                                    <input type="time" class="form-control form-control-sm" id="rxtime" name="rxtime" value="<?= (isset($row['rxtime']) ? htmlspecialchars($row['rxtime']) : '') ?>">
                                 </div>
 
                                 <label>กรณี admit จากผู้ป่วยนอก ถึงห้องคลอดเวลา</label>
                                 <div class="col-sm-2">
-                                    <input type="time" class="form-control form-control-sm" id="receive_time" name="receive_time" value="<?= (isset($row_ipt['regtime']) && $id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['receive_time'])) ?>">
+                                    <input type="time" class="form-control form-control-sm" id="intime" name="intime" value="<?= (isset($row['intime']) ? htmlspecialchars($row['intime']) : '') ?>">
                                 </div>
 
                             </div>
@@ -537,12 +564,48 @@ date_default_timezone_set('asia/bangkok');
                                 <label class="col-sm-12"><B> ประวัติการคลอด</B></label>
                             </div>
 
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <div class="form-groupt">
+
+                                        <button type="button" class="btn btn-secondary btn-sm mb-2" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ครรภ์ที่</button>
+                                        <div id="dr-admission-group-input-div">
+                                            <template id="template_dr_admission_input_div">
+                                                <div class="dr_admission_input_div">
+                                                    <div class="input-group mb-2">
+                                                        <input type="hidden" class="form-control form-control" name="doctor[]">
+                                                        <input type="text" class="form-control form-control" name="doc_name[]">
+
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <?php $start_count = 0;
+                                            while ($start_count < $pre_note_count) { ?>
+                                                <div class="dr_admission_input_div">
+                                                    <div class="input-group mb-2">
+                                                        <input type="hidden" class="form-control form-control" name="doctor[]" value="<?= $doctor[$start_count] ?>">
+                                                        <input type="text" class="form-control form-control" name="doc_name[]" value="<?= $admission_note_doctorname[$start_count] ?>">
+
+                                                    </div>
+                                                </div>
+                                            <?php $start_count++;
+                                            } ?>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
 
 
                             <div class="form-group row">
                                 <div class="col-sm-0"></div>
                                 <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add()'>
+                                        <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='add_labor()'>
                                             <i class="fas fa-plus-square"></i></a> ครรภ์ที่</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1"><label class="text-right">วดป คลอด/แท้ง</label></div>
@@ -555,34 +618,34 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="custom-control custom-checkbox col-sm-2"><label class="text-right">ประวัติการคลอดติดไหล่/คลอดไหล่ยาก</label></div>
 
                             </div>
-                            <div class="form-group row"><?php $disease_pos = explode(" ", $row['disease_detail']); ?>
+                            <div class="form-group row"><?php $labor_history_pos = explode(" ", $row['labor_history']); ?>
                                 <div class="col-sm-0"></div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[0]) : '') ?>" id="disease_name1" name="disease_name1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[0]) : '') ?>" id="preg_num1" name="preg_num1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[1]) : '') ?>" id="disease_year1" name="disease_year1">
+                                    <input type="date" placeholder="ว/ด/ป" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[1]) : '') ?>" id="labor_date1" name="labor_date1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[2]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[2]) : '') ?>" id="ga1" name="ga1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[3]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[3]) : '') ?>" id="labor_by1" name="labor_by1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[4]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[4]) : '') ?>" id="labor_weight1" name="labor_weight1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[5]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[5]) : '') ?>" id="sex1" name="sex1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[6]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[6]) : '') ?>" id="location1" name="location1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[7]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[7]) : '') ?>" id="complications1" name="complications1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['disease_detail']) ? htmlspecialchars($disease_pos[8]) : '') ?>" id="disease_hospital1" name="disease_hospital1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[8]) : '') ?>" id="history1" name="history1">
                                 </div>
                                 <div class="col-sm-1">
                                     <a href="#" data-toggle="modal" data-target="#myModal" class="signup-button gray-btn pl-pr-36" data-role="disabled" onclick='remove()'><i class="fas fa-trash-alt" style="color: Tomato;"></i></a>
@@ -590,38 +653,46 @@ date_default_timezone_set('asia/bangkok');
                                 </div>
                             </div>
 
-                            <?php $y = 3;
+                            <?php $y = 9;
                             $z = 2;
-                            for ($x = 1; $x < (count($disease_pos) - 1) / 3; $x++) {
-                                echo "<div id='disease_row" . $z . "' name='disease_row" . $z . "' class='form-group row'>
+                            for ($x = 1; $x < (count($labor_history_pos) - 1) / 9; $x++) {
+                                echo "<div id='labor_row" . $z . "' name='labor_row" . $z . "' class='form-group row'>
                                         <div class='col-sm-0'></div>
                                         <div class='custom-control custom-checkbox col-sm-1'>
                                         <input type='text' class='form-control form-control-sm'
-                                                id='disease_name" . $z . "' name='disease_name" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                                id='preg_num" . $z . "' name='preg_num" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                         </div>
                                         <div class='custom-control custom-checkbox col-sm-1'>
-                                        <input type='text' class='form-control form-control-sm'
-                                                id='disease_year" . $z . "' name='disease_year" . $z . "'value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                        <input type='date' class='form-control form-control-sm'
+                                                id='labor_date" . $z . "' name='labor_date" . $z . "'value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                         </div>
                                         <div class='custom-control custom-checkbox col-sm-1'>
                                             <input type='text' class='form-control form-control-sm'
-                                                id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                                id='ga" . $z . "' name='ga" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                         </div>
                                         <div class='custom-control custom-checkbox col-sm-1'>
                                         <input type='text' class='form-control form-control-sm'
-                                            id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                            id='labor_by" . $z . "' name='labor_by" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                     </div>
                                     <div class='custom-control custom-checkbox col-sm-1'>
                                     <input type='text' class='form-control form-control-sm'
-                                        id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                        id='labor_weight" . $z . "' name='labor_weight" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                     </div>
                                    <div class='custom-control custom-checkbox col-sm-1'>
                                    <input type='text' class='form-control form-control-sm'
-                                    id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                    id='sex" . $z . "' name='sex" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                  </div>
                                 <div class='custom-control custom-checkbox col-sm-1'>
                                 <input type='text' class='form-control form-control-sm'
-                                id='disease_hospital" . $z . "' name='disease_hospital" . $z . "' value='" . htmlspecialchars($disease_pos[$y++]) . "'>
+                                id='location" . $z . "' name='location" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
+                              </div>
+                              <div class='custom-control custom-checkbox col-sm-1'>
+                                <input type='text' class='form-control form-control-sm'
+                                id='complications" . $z . "' name='complications" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
+                              </div>
+                              <div class='custom-control custom-checkbox col-sm-1'>
+                                <input type='text' class='form-control form-control-sm'
+                                id='history" . $z . "' name='history" . $z . "' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                               </div>
                                         <div class='col-sm-1'>
                                             <a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos(" . $z . ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a>
@@ -632,18 +703,18 @@ date_default_timezone_set('asia/bangkok');
                             }
                             ?>
                             <script>
-                                function add() {
+                                function add_labor() {
                                     var new_chq_no = parseInt($('#total_chq').val()) + 1;
-                                    var new_input = "<div id='disease_row" + new_chq_no + "'class='form-group row'> <div class='col-sm-0'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_name" +
-                                        new_chq_no + "'name='disease_name" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_year" +
-                                        new_chq_no + "'name='disease_year" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +new_chq_no + "'></div><div class='custom-control col-sm-2'><input type='text' class='form-control form-control-sm' id='disease_hospital" +
-                                        new_chq_no + "'name='disease_hospital" +
+                                    var new_input = "<div id='labor_row" + new_chq_no + "'class='form-group row'> <div class='col-sm-0'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='preg_num" +
+                                        new_chq_no + "'name='preg_num" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='labor_date" +
+                                        new_chq_no + "'name='labor_date" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='ga" +
+                                        new_chq_no + "'name='ga" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='labor_by" +
+                                        new_chq_no + "'name='labor_by" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='labor_weight" +
+                                        new_chq_no + "'name='labor_weight" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='sex" +
+                                        new_chq_no + "'name='sex" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='location" +
+                                        new_chq_no + "'name='location" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='complications" +
+                                        new_chq_no + "'name='complications" + new_chq_no + "'></div><div class='custom-control col-sm-2'><input type='text' class='form-control form-control-sm' id='history" +
+                                        new_chq_no + "'name='history" +
                                         new_chq_no + "'></div><div class='col-sm-1'><a href='#'  data-toggle='modal' data-target='#myModal' class='signup-button gray-btn pl-pr-36' data-role='disabled' onclick='remove_pos(" +
                                         new_chq_no + ")'><i class='fas fa-trash-alt' style='color: Tomato;'></i></a><label> </label></div></div>";
                                     $('#new_chq').append(new_input);
@@ -651,7 +722,7 @@ date_default_timezone_set('asia/bangkok');
                                 }
 
                                 function remove_pos(last_chq_no) {
-                                    $('#disease_row' + last_chq_no).remove();
+                                    $('#labor_row' + last_chq_no).remove();
                                     $('#disease_name' + last_chq_no).remove();
                                     $('#disease_year' + last_chq_no).remove();
                                     $('#disease_hospital' + last_chq_no).remove();
@@ -674,17 +745,17 @@ date_default_timezone_set('asia/bangkok');
                                     $('#disease_hospital1').val('');
                                     $('#disease_hospital1').val('');
                                     $('#disease_hospital1').val('');
-                               
+
                                 }
                             </script>
                             <!--   ADD -->
                             <div id="new_chq"></div>
-                            <input type="hidden" id="total_chq" value="<?php if ($row['disease_detail'] == null) {
+                            <input type="hidden" id="total_chq" value="<?php if ($row['labor_history'] == null) {
                                                                             echo 1;
                                                                         } else {
-                                                                            echo (count($disease_pos) - 1) / 3;
+                                                                            echo (count($labor_history_pos) - 1) / 3;
                                                                         } ?>">
-                            <div class="form-group row"><textarea style="display:none;" name="disease_detail" id="disease_detail" cols="30" rows="10"></textarea></div>
+                            <div class="form-group row"><textarea style="display:none;" name="labor_history" id="labor_history" cols="30" rows="10"></textarea></div>
                             <!--   ADD -->
 
 
@@ -716,7 +787,7 @@ date_default_timezone_set('asia/bangkok');
                                 <label>Pain score</label>
                                 <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="p" id="p"></div>
                                 <label>/10 คะแนน</label>
-                                
+
 
                             </div>
                             <br>
@@ -746,7 +817,7 @@ date_default_timezone_set('asia/bangkok');
                                                         } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
                                     <label class="custom-control-label" for="sex2">ไม่เพียงพอ</label>
                                 </div>
-                                
+
 
                             </div>
                             <br>
@@ -772,11 +843,11 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="col-md-7"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxx" name="serology" id="serology"> </div>
                             </div>
                             <br>
-                           
+
                             <div class="row">
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ข้อมูลเพิ่มเติมตามแบบแผนสุขภาพ (นอกเหนือจากระบบ KPHIS)</label>
                             </div>
-                           
+
                             <div class="row">
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>ภาวะโภชนาการและเมตาบอลิซึม</label>
                             </div>
@@ -834,49 +905,49 @@ date_default_timezone_set('asia/bangkok');
                             </div>
 
                             <div class="row">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio col-sm-3">
-                            <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio col-sm-3">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
                                     <label class="custom-control-label" for="sex1">คู่เพศสัมพันธ์เป็โรคติดต่อทางเพศสัมพันธ์</label>
-                                
+
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-3">
-                                <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
                                     <label class="custom-control-label" for="sex2">มีเพศสัมพันธ์ชายกับชาย/หญิงให้บริการไม่ใช้ถุงยาง</label>
                                 </div>
 
-                                                    </div>
-<br>
-                                                    <div class="row">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio col-sm-2">
-                            <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
+                            </div>
+                            <br>
+                            <div class="row">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '1' || $row['sex'] == '1') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="sex1" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('off_checked');">
                                     <label class="custom-control-label" for="sex1">มีเพศสัมพันธ์มากกว่า 1 คน</label>
-                                
+
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
                                     <label class="custom-control-label" for="sex2">มีเพศสัมพันธ์กับคนใหม่</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-2">
-                                <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
+                                    <input type="radio" <?php if ($row_ipt['sex'] == '2' || $row['sex'] == '2') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="sex2" name="sex" value="<?= (isset($row_opdscreen['sex'])  ? htmlspecialchars($row_opdscreen['sex']) : htmlspecialchars($row['sex'])) ?>" onchange="sex_check('on_checked');">
                                     <label class="custom-control-label" for="sex2">ไม่ใช้ถุงยางอนามัยหรือแตก รั่ว หลุด</label>
                                 </div>
 
-                                                    </div>
-<br>
+                            </div>
+                            <br>
 
-                           
+
 
 
 
@@ -887,358 +958,416 @@ date_default_timezone_set('asia/bangkok');
 
                         </div>
 
+                        <div class="form-group text-center">
+                            <div id="show_check_save"></div>
+                            <input type="hidden" id="an" name="an" value="<?= htmlspecialchars($an) ?>">
+                            <input type="hidden" id="hn" name="hn" value="<?= htmlspecialchars($hn) ?>">
+                            <input type="hidden" id="version" name="version" value="<?= htmlspecialchars($row['version']) ?>">
+                            <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($row['id']) ?>">
+                            <input type="hidden" id="create_user" name="create_user" value="<?= htmlspecialchars($_SESSION['name']) ?>">
+
+                        </div>
 
                         <div class="row">
-                            <input type="hidden" id="an" name="an" value="<?= $an ?>"><!-- ฟิลด์ hidden  "an"  -->
-                            <input type="hidden" id="id" name="id" value="<?= $id ?>"><!-- ฟิลด์ hidden "id"  -->
-                            <input type="hidden" id="version" name="version" value="<?= $row['version'] ?>"><!-- ฟิลด์ hidden "id"  -->
-                            <div class="col-md-9">
-                                <div id="data_lr_report1_save"></div><!-- แสดงข้อความการบันมึก >> บันทึกข้อมูลสำเร็จ, EORROR -->
 
-                                <div id="data_lr_report1_edit"></div>
-                                <div id="data_lr_report1_update"></div>
-
-                            </div>
                             <div class="col-md-12 text-right">
                                 <?php
                                 if ((($id == null)) || (($id != null))) { ?>
-                                    <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="lr_report1_save()"><i class="fas fa-save"></i> บันทึก</button>
+                                    <button type="button" class="btn btn-primary" id="btn_save_report" onclick="lr_report2_save()"><i class="fas fa-save"></i> บันทึก</button>
                                 <?php } ?>
-                                <a href="lr-report1-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                                <a href="lr-report2-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <br>
+                <br>
 
+                <script src="../include/my_function.js"></script>
 
-                    <script>
-                        //ควบคุมปุ่ม
-                        function custom_check(value) {
+                <script type="text/javascript">
+                    function sendPost() {
+                        var value = $('input[name="ans"]:checked').val();
 
-                            if (value == "off_entered") {
-                                $('#from_text').attr("disabled", true).val('');
-                                $('#receive_from2').prop("checked", false);
-                                // $("#check_1").attr("class","text-success fas fa-check-square");
-                            } else if (value == "on_entered") {
-                                $('#from_text').attr("disabled", false).val('');
-                                $('#receive_from1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
+                        if (value == undefined) {
+                            console.log('no_value');
+                        } else {
+                            console.log(value);
+                        }
+                        //window.location.href = "sendpost.php?ans="+value;
+                    };
+                </script>
 
-                            if (value == "off_value") {
-                                $('#v3').attr("disabled", true).val('');
-                                $('#v2').prop("checked", false);
-                            } else if (value == "on_value") {
-                                $('#v3').attr("disabled", false).val('');
-                                $('#v1').prop("checked", false);
-                                //$('#entered_by2').prop("checked", false);
-                            }
+                <script>
+                    function AddDoctorSignature() {
+                        const doc_name = <?= json_encode($_SESSION['name']) ?>;
+                        const doctorcode = <?= json_encode($_SESSION['doctorcode']) ?>;
+                        const clone_template_dr_admission_input_div = document.querySelector('#template_dr_admission_input_div').content.cloneNode(true);
+                        if (CheckDoctorSignature()) {
+                            $('#dr-admission-group-input-div').append(clone_template_dr_admission_input_div);
+                            $('[name="doctor[]"].last-focus-input').removeClass('last-focus-input');
+                            $('[name="doc_name[]"].last-focus-input').removeClass('last-focus-input');
 
-                            if (value == "off_cry") {
-                                $('#cry_text').attr("disabled", true).val('');
-                                $('#cry3').prop("checked", false);
-                            } else if (value == "on_cry") {
-                                $('#cry_text').attr("disabled", false).val('');
-                                $('#cry1').prop("checked", false);
-                                $('#cry2').prop("checked", false);
-                            }
+                            $('[name="doctor[]"]').last().addClass('last-focus-input').val(doctorcode);
+                            $('[name="doc_name[]"]').last().addClass('last-focus-input').val(doc_name);
 
                         }
+                    }
 
-                        function body_check(value) {
-
-                            if (value == "off_entered") {
-                                $('#body_text').attr("disabled", true).val('');
-                                $('#body2').prop("checked", false);
-                            } else if (value == "on_entered") {
-                                $('#body_text').attr("disabled", false).val('');
-                                $('#body1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
+                    function CheckDoctorSignature() {
+                        const doctorcode_check = <?= json_encode($_SESSION['doctorcode']) ?>;
+                        let return_checkdoctorSignature = true;
+                        $.each($("input:hidden[name='doctor[]']"), function(index, value) {
+                            //console.log({index,value})
+                            if (doctorcode_check == $(this).val()) {
+                                alert("คุณได้ลงชื่อบันทึกข้อมูลไว้แล้ว");
+                                return_checkdoctorSignature = false;
+                                return false;
                             }
-
-                        }
-
-
-
-
-
-
-
-                        function movement_check(value) {
-                            if (value == "off_checked") {
-                                $('#movement_text').attr("disabled", true).val('');
-                                $('#movement4').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#movement_text').attr("disabled", false).val('');
-                                $('#movement1').prop("checked", false);
-                                $('#movement2').prop("checked", false);
-                                $('#movement3').prop("checked", false);
-                            }
-                        }
-
-                        function head_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#head_text').attr("disabled", true).val('');
-                                $('#head2').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#head_text').attr("disabled", false).val('');
-                                $('#head1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function eyes_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#eyes_text').attr("disabled", true).val('');
-                                $('#eyes2').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#eyes_text').attr("disabled", false).val('');
-                                $('#eyes1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function nose_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#nose_text').attr("disabled", true).val('');
-                                $('#nose3').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#nose_text').attr("disabled", false).val('');
-                                $('#nose1').prop("checked", false);
-                                $('#nose2').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function mouth_check(value) {
-                            if (value == "off_checked") {
-                                $('#mouth_text').attr("disabled", true).val('');
-                                $('#mouth4').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#mouth_text').attr("disabled", false).val('');
-                                $('#mouth1').prop("checked", false);
-                                $('#mouth2').prop("checked", false);
-                                $('#mouth3').prop("checked", false);
-                            }
-                        }
-
-
-                        function neck_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#neck_text').attr("disabled", true).val('');
-                                $('#neck2').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#neck_text').attr("disabled", false).val('');
-                                $('#neck1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function abdomen_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#abdomen_text').attr("disabled", true).val('');
-                                $('#abdomen3').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#abdomen_text').attr("disabled", false).val('');
-                                $('#abdomen1').prop("checked", false);
-                                $('#abdomen2').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function navel_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#navel_text').attr("disabled", true).val('');
-                                $('#navel4').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#navel_text').attr("disabled", false).val('');
-                                $('#navel1').prop("checked", false);
-                                $('#navel2').prop("checked", false);
-                                $('#navel3').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function spine_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#spine_text').attr("disabled", true).val('');
-                                $('#spine2').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#spine_text').attr("disabled", false).val('');
-                                $('#spine1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-
-                        function limbs_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#limbs_text').attr("disabled", true).val('');
-                                $('#limbs2').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#limbs_text').attr("disabled", false).val('');
-                                $('#limbs1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function genitalia_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#genitalia_text').attr("disabled", true).val('');
-                                $('#genitalia2').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#genitalia_text').attr("disabled", false).val('');
-                                $('#genitalia1').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function skin_color_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#skin_color_text').attr("disabled", true).val('');
-                                $('#skin_color4').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#skin_color_text').attr("disabled", false).val('');
-                                $('#skin_color1').prop("checked", false);
-                                $('#skin_color2').prop("checked", false);
-                                $('#skin_color3').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function behavior_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#behavior_text').attr("disabled", true).val('');
-                                $('#behavior3').prop("checked", false);
-                            } else if (value == "on_checked") {
-                                $('#behavior_text').attr("disabled", false).val('');
-                                $('#behavior1').prop("checked", false);
-                                $('#behavior2').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                        }
-
-                        function expression_check(value) {
-
-                            if (value == "off_checked") {
-                                $('#expression_text').attr("disabled", true).val('');
-                                $('#expression3').prop("checked", false);
-
-                            } else if (value == "on_checked") {
-                                $('#expression_text').attr("disabled", false).val('');
-                                $('#expression1').prop("checked", false);
-                                $('#expression2').prop("checked", false);
-                                //  $('#entered_by2').prop("checked", false);
-                            } else if (value == "on_aa") {
-                                $('#expression_text').attr("disabled", false).val('');
-                                $('#expression1').prop("checked", true);
-                                //  $('#entered_by2').prop("checked", false);
-                            }
-
-                            function sex_check(value) {
-                                if (value == "off_checked") {
-                                    // $('#ros_text').attr("disabled",true).val('');
-                                    $('#sex2').prop("checked", false);
-                                } else if (value == "on_checked") {
-                                    // $('#ros_text').attr("disabled",false).val('');
-                                    $('#sex1').prop("checked", false);
-                                }
-                            }
-
-                        }
-
-
-
-
-                        $(document).ready(function() {
-                            var id = <?= json_encode($id) ?>;
-                            if (id != null && id != "") {
-                                lr_report1_edit(<?= json_encode($id) ?>, <?= json_encode($an) ?>);
-                            } else {
-                                // import_DataOR_Hosxp(<?= json_encode($an) ?>);
-                            }
-                            //summary_CheckPer();
                         });
+                        return return_checkdoctorSignature;
+                    }
 
-                        function lr_report1_edit(id, an) {
-                            var url = "lr-report1-edit.php";
-                            $.post(url, {
-                                id,
-                                an
-                            }, function(data_edit) {
-                                $("#data_lr_report1_edit").html(data_edit);
-                                //console.log(data_edit);
-                            });
+                    //ควบคุมปุ่ม
+                    function custom_check(value) {
+
+                        if (value == "off_entered") {
+                            $('#from_text').attr("disabled", true).val('');
+                            $('#receive_from2').prop("checked", false);
+                            // $("#check_1").attr("class","text-success fas fa-check-square");
+                        } else if (value == "on_entered") {
+                            $('#from_text').attr("disabled", false).val('');
+                            $('#receive_from1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
                         }
 
-                        function lr_report1_save() {
+                        if (value == "off_value") {
+                            $('#v3').attr("disabled", true).val('');
+                            $('#v2').prop("checked", false);
+                        } else if (value == "on_value") {
+                            $('#v3').attr("disabled", false).val('');
+                            $('#v1').prop("checked", false);
+                            //$('#entered_by2').prop("checked", false);
+                        }
 
-                            var id = $("#id").val();
-                            //บันทึก / แก้ไข PHP File
-                            var url_save = 'lr-report1-save.php';
-                            var url_update = 'lr-report1-update.php';
+                        if (value == "off_cry") {
+                            $('#cry_text').attr("disabled", true).val('');
+                            $('#cry3').prop("checked", false);
+                        } else if (value == "on_cry") {
+                            $('#cry_text').attr("disabled", false).val('');
+                            $('#cry1').prop("checked", false);
+                            $('#cry2').prop("checked", false);
+                        }
 
-                            $("#btn_lr_report1").attr('disabled', 'disabled');
+                    }
 
-                            if (id == "") {
-                                $.post(url_save, $("#lr_report1_form").serialize(), function(data_save) {
-                                        $("#data_lr_report1_save").html(data_save);
-                                        window.location.reload(true);
-                                    })
-                                    .fail(function() {
-                                        alert("บันทึกข้อมูลไม่สำเร็จ");
-                                        $("#btn_lr_report1").removeAttr("disabled");
-                                    });
-                            } else
-                            //เมื่อมีการแก้ไขเรียกใช้งาน update
-                            {
-                                $.post(url_update, $("#lr_report1_form").serialize(), function(data_update) {
-                                        $("#data_lr_report1_update").html(data_update);
-                                        window.location.reload(true);
-                                    })
-                                    .fail(function() {
-                                        alert("บันทึกข้อมูลไม่สำเร็จ");
-                                        $("#btn_lr_report1").removeAttr("disabled");
-                                    });
+                    function body_check(value) {
+
+                        if (value == "off_entered") {
+                            $('#body_text').attr("disabled", true).val('');
+                            $('#body2').prop("checked", false);
+                        } else if (value == "on_entered") {
+                            $('#body_text').attr("disabled", false).val('');
+                            $('#body1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+
+
+
+
+
+
+                    function movement_check(value) {
+                        if (value == "off_checked") {
+                            $('#movement_text').attr("disabled", true).val('');
+                            $('#movement4').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#movement_text').attr("disabled", false).val('');
+                            $('#movement1').prop("checked", false);
+                            $('#movement2').prop("checked", false);
+                            $('#movement3').prop("checked", false);
+                        }
+                    }
+
+                    function head_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#head_text').attr("disabled", true).val('');
+                            $('#head2').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#head_text').attr("disabled", false).val('');
+                            $('#head1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function eyes_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#eyes_text').attr("disabled", true).val('');
+                            $('#eyes2').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#eyes_text').attr("disabled", false).val('');
+                            $('#eyes1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function nose_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#nose_text').attr("disabled", true).val('');
+                            $('#nose3').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#nose_text').attr("disabled", false).val('');
+                            $('#nose1').prop("checked", false);
+                            $('#nose2').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function mouth_check(value) {
+                        if (value == "off_checked") {
+                            $('#mouth_text').attr("disabled", true).val('');
+                            $('#mouth4').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#mouth_text').attr("disabled", false).val('');
+                            $('#mouth1').prop("checked", false);
+                            $('#mouth2').prop("checked", false);
+                            $('#mouth3').prop("checked", false);
+                        }
+                    }
+
+
+                    function neck_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#neck_text').attr("disabled", true).val('');
+                            $('#neck2').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#neck_text').attr("disabled", false).val('');
+                            $('#neck1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function abdomen_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#abdomen_text').attr("disabled", true).val('');
+                            $('#abdomen3').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#abdomen_text').attr("disabled", false).val('');
+                            $('#abdomen1').prop("checked", false);
+                            $('#abdomen2').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function navel_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#navel_text').attr("disabled", true).val('');
+                            $('#navel4').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#navel_text').attr("disabled", false).val('');
+                            $('#navel1').prop("checked", false);
+                            $('#navel2').prop("checked", false);
+                            $('#navel3').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function spine_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#spine_text').attr("disabled", true).val('');
+                            $('#spine2').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#spine_text').attr("disabled", false).val('');
+                            $('#spine1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+
+                    function limbs_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#limbs_text').attr("disabled", true).val('');
+                            $('#limbs2').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#limbs_text').attr("disabled", false).val('');
+                            $('#limbs1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function genitalia_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#genitalia_text').attr("disabled", true).val('');
+                            $('#genitalia2').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#genitalia_text').attr("disabled", false).val('');
+                            $('#genitalia1').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function skin_color_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#skin_color_text').attr("disabled", true).val('');
+                            $('#skin_color4').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#skin_color_text').attr("disabled", false).val('');
+                            $('#skin_color1').prop("checked", false);
+                            $('#skin_color2').prop("checked", false);
+                            $('#skin_color3').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function behavior_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#behavior_text').attr("disabled", true).val('');
+                            $('#behavior3').prop("checked", false);
+                        } else if (value == "on_checked") {
+                            $('#behavior_text').attr("disabled", false).val('');
+                            $('#behavior1').prop("checked", false);
+                            $('#behavior2').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                    }
+
+                    function expression_check(value) {
+
+                        if (value == "off_checked") {
+                            $('#expression_text').attr("disabled", true).val('');
+                            $('#expression3').prop("checked", false);
+
+                        } else if (value == "on_checked") {
+                            $('#expression_text').attr("disabled", false).val('');
+                            $('#expression1').prop("checked", false);
+                            $('#expression2').prop("checked", false);
+                            //  $('#entered_by2').prop("checked", false);
+                        } else if (value == "on_aa") {
+                            $('#expression_text').attr("disabled", false).val('');
+                            $('#expression1').prop("checked", true);
+                            //  $('#entered_by2').prop("checked", false);
+                        }
+
+                        function sex_check(value) {
+                            if (value == "off_checked") {
+                                // $('#ros_text').attr("disabled",true).val('');
+                                $('#sex2').prop("checked", false);
+                            } else if (value == "on_checked") {
+                                // $('#ros_text').attr("disabled",false).val('');
+                                $('#sex1').prop("checked", false);
                             }
-
                         }
 
-                        /*
-                        window.onscroll = function() {myFunction()};
+                    }
 
-                        var header = document.getElementById("myHeader");
-                        var sticky = header.offsetTop;
 
-                        function myFunction() {
-                          if (window.pageYOffset > sticky) {
-                            header.classList.add("sticky");
-                          } else {
-                            header.classList.remove("sticky");
-                          }
+
+
+                    function lr_report2_save() {
+
+                        var labor_history_all = "";
+                        var total = $('#total_chq').val();
+                        for (i = 1; i <= total; i++) {
+                            if (typeof $('#preg_num' + i).val() === 'undefined') {
+                                labor_history_all += "";
+                            } else {
+                                labor_history_all += ($('#preg_num' + i).val()) + ' ' + ($('#labor_date' + i).val()) + ' ' + ($('#ga' + i).val()) + ' ' +
+                                    ($('#labor_by' + i).val()) + ' ' + ($('#labor_weight' + i).val()) + ' ' + ($('#sex' + i).val()) + ' ' + ($('#location' + i).val()) + ' ' +
+                                    ($('#complications' + i).val()) + ' ' + ($('#history' + i).val()) + ' ';
+                            }
                         }
-                        */
-                    </script>
+                        if (labor_history_all != "   ") {
+                            $('#labor_history').val(labor_history_all);
+                        }
+
+                        var rxdate = $.trim($('[name="rxdate"]').val());
+                        var rxtime = $.trim($('[name="rxtime"]').val());
+
+                        var labor_history = $.trim($('[name="labor_history"]').val());
+
+                        if (rxdate == "") {
+
+                            $('[name="rxdate"]').focus();
+                            alert('เลือกวันที่');
+                        } else if (rxtime == "") {
+
+                            $('[name="rxtime"]').focus();
+                            alert('เลือกเวลา');
+                        } else if (labor_history == "") {
+
+                            $('[name="labor_history"]').focus();
+                            alert('บันทึกประวัติคลอด');
+                        }
+
+
+                        var url_update = "lr-report2-update.php";
+                        var url_save = "lr-report2-save.php";
+                        var id = $("#id").val();
+                        var my_form = $("#my_form").serialize();
+
+                        if (id == "") {
+                            $.post(url_save, my_form, function(data) {
+                                    $("#show_check_save").html(data);
+
+                                    //  alert("บันทึกข้อมูลสำเร็จ");
+                                    // self.close();
+                                    // window.location.reload(true);
+                                })
+                                .fail(function() {
+                                    alert("บันทึกข้อมูลไม่สำเร็จ" + error);
+                                });
+                        } else {
+                            $.post(url_update, my_form, function(data) {
+                                    $("#show_check_save").html(data);
+                                })
+                                .fail(function() {
+                                    alert("บันทึกข้อมูลไม่สำเร็จ" + error);
+                                    //NotificationMessage('บันทึกข้อมูลไม่สำเร็จ', 'danger');
+                                });
+                        }
+
+                    }
+
+                    /*
+                    window.onscroll = function() {myFunction()};
+
+                    var header = document.getElementById("myHeader");
+                    var sticky = header.offsetTop;
+
+                    function myFunction() {
+                      if (window.pageYOffset > sticky) {
+                        header.classList.add("sticky");
+                      } else {
+                        header.classList.remove("sticky");
+                      }
+                    }
+                    */
+                </script>
+
+                <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+                <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">

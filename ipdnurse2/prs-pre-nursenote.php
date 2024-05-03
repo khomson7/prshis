@@ -242,7 +242,7 @@ date_default_timezone_set('asia/bangkok');
                                                                 && $row['depart'] != NULL
                                                             ) {
                                                                 echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="depart3" onchange="custom_check('on_depart');">
+                                                            } ?> class="custom-control-input" id="depart3"  name="depart" value="อื่นๆ" onchange="custom_check('on_depart');">
                                         <label class="custom-control-label" for="depart3">อื่นๆ</label>
                                     </div>
                                     <div class="col-sm-5">
@@ -385,7 +385,7 @@ date_default_timezone_set('asia/bangkok');
                                                                                     && $row['c_chronic'] != NULL
                                                                                 ) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="c_chronic2" onchange="custom_check('on_c_chronic');">
+                                                                                } ?> class="custom-control-input" id="c_chronic2" name="c_chronic" value="มี" onchange="custom_check('on_c_chronic');">
                                     <label class="custom-control-label" for="c_chronic2">มี ระบุ</label>
                                 </div>
 
@@ -420,7 +420,7 @@ date_default_timezone_set('asia/bangkok');
                                                                                     && $row['hos_history'] != NULL
                                                                                 ) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="hos_history2" onchange="custom_check('on_hos_history');">
+                                                                                } ?> class="custom-control-input" id="hos_history2" name="hos_history" value="เคย" onchange="custom_check('on_hos_history');">
                                     <label class="custom-control-label" for="hos_history2">เคย ระบุ</label>
                                 </div>
 
@@ -452,7 +452,7 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['h_sergery'] != 'ปฏิเสธ' && $row['h_sergery'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="h_sergery2" onchange="custom_check('on_h_sergery');">
+                                                                                } ?> class="custom-control-input" id="h_sergery2" name="h_sergery" value="เคย" onchange="custom_check('on_h_sergery');">
                                     <label class="custom-control-label" for="h_sergery2">เคย ระบุ</label>
                                 </div>
 
@@ -484,7 +484,7 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['h_allergy'] != 'ปฏิเสธ' && $row['h_allergy'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="h_allergy2" onchange="custom_check('on_h_allergy');">
+                                                                                } ?> class="custom-control-input" id="h_allergy2" name="h_allergy" value="มี" onchange="custom_check('on_h_allergy');">
                                     <label class="custom-control-label" for="h_allergy2">มี ระบุ</label>
                                 </div>
 
@@ -516,7 +516,7 @@ date_default_timezone_set('asia/bangkok');
                                         <div class="custom-control custom-radio col-sm-2">
                                             &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['vaccine_history'] != 'ปฏิเสธ' && $row['vaccine_history'] != NULL) {
                                                                                             echo 'checked="checked"';
-                                                                                        } ?> class="custom-control-input" id="vaccine_history2" onchange="custom_check('on_vaccine_history');">
+                                                                                        } ?> class="custom-control-input" id="vaccine_history2" name="vaccine_history" value="ไม่ครบตามเกณฑ์" onchange="custom_check('on_vaccine_history');">
                                             <label class="custom-control-label" for="vaccine_history2">ไม่ครบตามเกณฑ์ ระบุ</label>
                                         </div>
 
@@ -549,7 +549,7 @@ date_default_timezone_set('asia/bangkok');
                                         <div class="custom-control custom-radio col-sm-1">
                                             &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['child_devilopment'] != 'สมวัย' && $row['child_devilopment'] != NULL) {
                                                                                             echo 'checked="checked"';
-                                                                                        } ?> class="custom-control-input" id="child_devilopment2" onchange="custom_check('on_child_devilopment');">
+                                                                                        } ?> class="custom-control-input" id="child_devilopment2" name="child_devilopment" value="ไม่สมวัย" onchange="custom_check('on_child_devilopment');">
                                             <label class="custom-control-label" for="child_devilopment2">ไม่สมวัย ระบุ</label>
                                         </div>
 
@@ -582,7 +582,7 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['history_of_drug'] != 'ปฏิเสธ' && $row['history_of_drug'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="history_of_drug2" onchange="custom_check('on_history_of_drug');">
+                                                                                } ?> class="custom-control-input" id="history_of_drug2" name="history_of_drug" value="มี" onchange="custom_check('on_history_of_drug');">
                                     <label class="custom-control-label" for="history_of_drug2">มี ระบุ</label>
                                 </div>
 
@@ -614,7 +614,7 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['pmh2'] != 'ปฏิเสธ' && $row['pmh2'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="pmh22" onchange="custom_check('on_pmh2');">
+                                                                                } ?> class="custom-control-input" id="pmh22" name="pmh2" value="มี" onchange="custom_check('on_pmh2');">
                                     <label class="custom-control-label" for="pmh22">มี ระบุ</label>
                                 </div>
 
@@ -749,7 +749,7 @@ date_default_timezone_set('asia/bangkok');
                                                                                     && $row['breathing'] != NULL
                                                                                 ) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="breathing5" onchange="custom_check('on_breathing');">
+                                                                                } ?> class="custom-control-input" id="breathing5" name="breathing" value="อื่น" onchange="custom_check('on_breathing');">
                                     <label class="custom-control-label" for="breathing5">อื่นๆ</label>
                                 </div>
 
@@ -841,7 +841,7 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['swelling'] != 'ไม่มี' && $row['swelling'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="swelling2" onchange="custom_check('on_swelling');">
+                                                                                } ?> class="custom-control-input" id="swelling2" name="swelling" value="บวมบริเวณ" onchange="custom_check('on_swelling');">
                                     <label class="custom-control-label" for="swelling2">บวมบริเวณ</label>
                                 </div>
 
@@ -1013,7 +1013,7 @@ date_default_timezone_set('asia/bangkok');
                                                                                     && $row['communication_speak'] != NULL
                                                                                 ) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="communication_speak4" onchange="custom_check('on_communication_speak');">
+                                                                                } ?> class="custom-control-input" id="communication_speak4" name="communication_speak" value="อื่นๆ" onchange="custom_check('on_communication_speak');">
                                     <label class="custom-control-label" for="communication_speak4">อื่นๆ</label>
                                 </div>
 
@@ -1216,6 +1216,7 @@ date_default_timezone_set('asia/bangkok');
 
 
                             // var depart = $('input[type=radio][name=depart]:checked').val();
+                            console.log(depart)
 
                             if (rxdate == "") {
 
@@ -1228,6 +1229,7 @@ date_default_timezone_set('asia/bangkok');
                             } else if (depart == undefined) {
 
                                 $('[name="depart"]').focus();
+                                //alert(depart)
                                 alert('หน่วยงาน');
                             } else if (hospital_by == undefined) {
 
