@@ -169,8 +169,9 @@ $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.ln
   
         $receive_date        =  $row['receive_date'];
         $receive_time        =  $row['receive_time'];
-
-
+        $intime        =  $row['intime'];
+        
+        
       /*  $labor_history_top =  '<label> <b>ครรภ์ที่</b></label>
 
 
@@ -443,7 +444,7 @@ $head =
             height:180px;
         }
     </style>
-    <h2 style="text-align:right;font-size:8pt;">FM-CLT-001</h2>
+    <h2 style="text-align:right;font-size:8pt;">&nbsp;</h2>
     
     <h2 style="text-align:center;font-size:11pt;">ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ(เฉพาะผู้มาคลอด)&nbsp;<br>'.htmlspecialchars(DbConstant::HOSPITAL_NAME).'</h2>
     
@@ -451,10 +452,7 @@ $head =
     <div class="form-group row">
                                 <label class="col-sm-12">ข้อมูลทั่วไป</label>
                             </div>
-<div class="f15"> รับใหม่วันที่ '.LongDateThai2($strDate).'<b> เวลา </b>'.htmlspecialchars($rxtime).'&nbsp;น.&nbsp;จาก&nbsp;'.
-$depart_1.'&nbsp;OPD&nbsp;'.$depart_2.'&nbsp;ER&nbsp;'.$depart_3.'&nbsp;อื่นๆ&nbsp;'.$depart.'&nbsp;กรณีส่งต่อ ส่งต่อจาก&nbsp;'.$depart.'<br>'
-.'รับไว้ในโรงพยาบาลโดย '.
-$hospital_by_1.'&nbsp;เดินมา&nbsp;'.$hospital_by_2.'&nbsp;รถนั่ง&nbsp;'.$hospital_by_3.'&nbsp;รถนอน&nbsp;'.$hospital_by_4.'&nbsp;อื่นๆ&nbsp;'.$hospital_by.'<br>'
+<div class="f15"> รับใหม่วันที่ '.LongDateThai2($strDate).'<b> เวลา </b>'.htmlspecialchars($rxtime).'&nbsp;น. กรณี Admit จากผู้ป่วยนอก ถึงห้องคลอดเวลา&nbsp;'.htmlspecialchars($intime).'&nbsp;น.'.'<br>'
 .'<B>อาการสำคัญที่นำมาโรงพยาบาล</B>&nbsp;'.nl2br(htmlspecialchars($row['cc']))
 .'<br><B>ประวัติการเจ็บป่วยปัจจุบัน</B>&nbsp;'.nl2br(htmlspecialchars($row['current_illness']))
 .'<br><B>ประวัติเจ็บป่วยในอดีต</B>'

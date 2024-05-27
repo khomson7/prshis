@@ -181,13 +181,13 @@ try {
 
 
 
-        /*     Session::insertSystemAccessLog(json_encode(array(
-            'form'=>'LR-REPORT1-FORM',
+           Session::insertSystemAccessLog(json_encode(array(
+            'form'=>'LR-REPORT2-FORM',
             'action'=>'UPDATE',
             'version'=>$version,
             'an'=>$an,
         ),JSON_UNESCAPED_UNICODE));
-*/
+
         //เมื่อ update สำเร็จ
         // $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 

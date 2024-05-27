@@ -24,13 +24,13 @@ $an = $_REQUEST['an']; //รับค่า an
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $vn = KphisQueryUtils::getVnByAn($an);
 
-/*
+
 Session::insertSystemAccessLog(json_encode(array(
-    'form' => 'LR-REPORT1-FORM',
+    'form' => 'LR-REPORT2-FORM',
     'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
-*/
+
 
 /*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
