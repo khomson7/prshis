@@ -42,7 +42,21 @@ if ($login != $loginname) {
 // echo $an;
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
-$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report1 WHERE an = :an ";
+
+$sql = "SELECT *
+                FROM `prs_labor_report1`
+                WHERE an = :an";
+$id  = null;
+$parameters['an'] = $an;
+$stmt = $conn->prepare($sql);
+$stmt->execute($parameters);
+if ($row  = $stmt->fetch()) {
+    $id = $row['id'];
+} else {
+    $id = null;
+}
+
+/*$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_labor_report1 WHERE an = :an ";
 $id  = null;
 $parameters['an'] = $an;
 $stmt = $conn->prepare($sql);
@@ -51,6 +65,8 @@ $row = $stmt->fetch();
 if ($row['count_row'] > 0) {
     $id = $row['id'];
 }
+
+*/
 
 if ($id == null || $id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
@@ -285,13 +301,13 @@ date_default_timezone_set('asia/bangkok');
 
                                 <label>GA</label>
                                 <div class="col-md-1">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="0" name="ga" id="ga" value="<?= (isset($row['ga']) ? htmlspecialchars($row['ga']) : '') ?>">
                                 </div> &nbsp;<label>wks</label> &nbsp;&nbsp;<label>คลอดวิธี</label>
                                 <div class="col-md-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="labor" id="labor" value="<?= (isset($row['labor']) ? htmlspecialchars($row['labor']) : '') ?>">
                                 </div>&nbsp;&nbsp;<label>indication</label>
                                 <div class="col-md-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="indication" id="indication">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxxxxxxx" name="indication" id="indication" value="<?= (isset($row['indication']) ? htmlspecialchars($row['indication']) : '') ?>">
                                 </div>
 
 
@@ -356,7 +372,7 @@ date_default_timezone_set('asia/bangkok');
                                 </div> &nbsp;<label> ( </label>
                                 <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="หักคะแนน" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" name="subtract_5" id="subtract_5"> </div><label>)</label>
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Apgar score นาทีที่15</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Apgar score นาทีที่10</label>
                                 <div class="col-md-1">
                                     <input type="text" style="width: 100%;
   box-sizing: border-box;

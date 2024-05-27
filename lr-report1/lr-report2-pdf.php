@@ -179,53 +179,192 @@ $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.ln
         &emsp;<label> <b>GA</b></label>
         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;<label> สถานพยาบาลที่รักษา</label>';
         */
+        $labor_history_top1 = '<style> 
+        #example1 {
+          box-sizing: content-box;  
+          width: 300px;
+          height: 100px;
+          padding: 30px;  
+          border: 10px solid blue;
+        }
+        
+        #example2 {
+          box-sizing: border-box;
+          width: 20px;
+          height: 10px;
+          padding: 30px;  
+          
+        }
+        #example3 {
+            box-sizing: border-box;
+            width: 80px;
+            height: 10px;
+            padding: 30px; 
+            border-right:0.5px solid #000;
+            
+            padding:4px;
+            vertical-align:text-top; 
+            
+          }
+        </style>
+        <label> <b>ครรภ์ที่ |</b></label>&nbsp;<label> <b>วดป&nbsp;&nbsp; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;คลอด/แท้ง</b></label>
+        &nbsp;&nbsp;<label> <b>GA</b></label>
+        &nbsp;&nbsp;<label> <b>วิธีคลอด/แท้ง</b></label>
+        &nbsp;&nbsp;<label> <b>น้ำหนักทารก</b></label>
+        &nbsp;&nbsp;<label> <b>เพศ</b></label>
+        &nbsp;&nbsp;<label> <b>สถานที่คลอด</b></label>
+        &nbsp;<label> <b>ภาวะแทรกซ้อน</b></label>
+        &nbsp;<label> <b>ประวัติการคลอดติดไหล่</b></label>
+        ';
 
+        $labor_history_top =  '<style> 
+        #example1 {
+          box-sizing: content-box;  
+          width: 300px;
+          height: 100px;
+          padding: 30px;  
+          border: 10px solid blue;
+        }
+        
+        #example2 {
+          box-sizing: border-box;
+          width: 20px;
+          height: 10px;
+          padding: 30px;  
+          
+        }
+        #example3 {
+            box-sizing: border-box;
+            width: 80px;
+            height: 10px;
+            padding: 30px; 
+            border-right:0.5px solid #000;
+            
+            padding:4px;
+            vertical-align:text-top; 
+            
+          }
+        </style>
 
-        $labor_history_top =  '<table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
+        <table style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
    
         <tr style="border:1px solid #000;margin: 35px;"> /* ชื่อ-สกุล */
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
+            <td style="box-sizing: border-box; width: 20px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;">
             <label> <b>ครรภ์ที่</b></label>
             </td>
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
-            <label> <b>วดป คลอด/แท้ง</b></label>
+            <td style="box-sizing: border-box; width: 90px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> <b>วดป&nbsp;&nbsp; คลอด/แท้ง</b></label>
             </td>
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
+            <td style="box-sizing: border-box; width: 20px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;">
             <label> <b>GA</b></label>
             </td>
             <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
             <label> <b>วิธีคลอด / แท้ง</b></label>
             </td>
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
+            <td style="border-right:0.5px solid #000;margin: 20px;padding:4px;vertical-align:text-top;">
             <label> <b>น้ำหนักทารก</b></label>
             </td>
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
+            <td style="border-right:0.5px solid #000;margin: 40px;padding:4px;vertical-align:text-top;">
             <label> <b>เพศ</b></label>
             </td>
-            <td  style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
-            <label> <b>สถานที่คลอด</b></label>
+            <td style="border-right:0.5px solid #000;margin: 40px;padding:4px;vertical-align:text-top;">
+            <label> <b>&nbsp;&nbsp;&nbsp;&nbsp;สถานที่คลอด&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></label>
             </td>
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
-            <label> <b>ภาวะแทรกซ้อน</b></label>
+            <td style="border-right:0.5px solid #000;margin: 40px;padding:4px;vertical-align:text-top;">
+            <label> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ภาวะแทรกซ้อน&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></label>
             </td>
-            <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
+            <td style="border-right:0.5px solid #000;margin: 40px;padding:4px;vertical-align:text-top;">
             <label> <b>ประวัติการคลอดติดไหล่/คลอดยาก</b></label>
             </td>
+            
+
+        </tr> 
+        </table>   
+
 ';
 
 $labor_history_pos = explode(" ",$row['labor_history']);
 $labor_history =  "";
-$preg_num = "";
-$labor_date ="";
-$ga ="";
+//$preg_num = "";
+//$labor_date ="";
+//$ga ="";
+//$labor_by ="";
 $y = 0;
 for ($x = 1; $x < (count($labor_history_pos))/9; $x++) {
     $preg_num = htmlspecialchars($labor_history_pos[$y++]);
     $labor_date = htmlspecialchars($labor_history_pos[$y++]);
     $ga = htmlspecialchars($labor_history_pos[$y++]);
+    $labor_by = htmlspecialchars($labor_history_pos[$y++]);
+   $labor_weight = htmlspecialchars($labor_history_pos[$y++]);
+   $sex = htmlspecialchars($labor_history_pos[$y++]);
+   $location = htmlspecialchars($labor_history_pos[$y++]);
+  $complications = htmlspecialchars($labor_history_pos[$y++]);
+   $l_history = htmlspecialchars($labor_history_pos[$y++]);
+
     $labor_history .= '
+
    
-    <tr style="border:1px solid #000;margin: 35px;"> /* ชื่อ-สกุล */
+    <table style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
+   
+        <tr style="border:1px solid #000;margin: 35px;">
+    <td style="box-sizing: border-box; width: 30px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;">
+            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$preg_num.'&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            </td>
+            <td style="box-sizing: border-box; width: 90px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$labor_date.'</label>
+            </td>
+            <td  style="box-sizing: border-box; width: 20px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$ga.'</label>
+            </td>
+            <td style="box-sizing: border-box; width: 84px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$labor_by.'</label>
+            </td>
+            <td style="box-sizing: border-box; width: 70px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;">
+            <label> '.$labor_weight.'</label>
+            </td>
+            <td style="box-sizing: border-box; width: 28px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$sex.'</label>
+            </td>
+            <td style="box-sizing: border-box; width: 90px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$location.'</label>
+            </td>
+            <td style="box-sizing: border-box; width: 100px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$complications.'</label>
+            </td>
+            <td style="box-sizing: border-box; width: 180px; border-right:0.5px solid #000;margin: 10px;padding:1px;vertical-align:text-top;" >
+            <label> '.$l_history.'</label>
+            </td>
+          
+
+            </tr>
+   
+    </table>';
+    $labor_history11 .= '
+    <br>
+                        <label > '.$preg_num.'</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label> '.$labor_date.'</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label> '.$ga.'</label> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        '.wordwrap($labor_by, 5, "<br />\n").'
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label> '. $labor_weight.'</label> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label> '. $sex.'</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label> '. $location.'</label>  
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label> '. $complications.'</label>  
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label> '. $history.'</label> 
+                        '
+                        
+                        ;
+            
+    $labor_history0 .= '
+    <table  width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
+    <tr style="border:1px solid #000;margin: 35px;"> 
         <td style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
         <label>'.$preg_num.'</label>
         </td>
@@ -308,7 +447,7 @@ $head =
     
     <h2 style="text-align:center;font-size:11pt;">ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ(เฉพาะผู้มาคลอด)&nbsp;<br>'.htmlspecialchars(DbConstant::HOSPITAL_NAME).'</h2>
     
-    <label class="col-sm-12"><font color="red"> <b>รอปรับรายงานให้ถูกต้อง </b></font></label>
+   
     <div class="form-group row">
                                 <label class="col-sm-12">ข้อมูลทั่วไป</label>
                             </div>
@@ -341,9 +480,8 @@ $hospital_by_1.'&nbsp;ปฏิเสธ&nbsp;'.$hospital_by_2.'&nbsp;มีร�
 .'&emsp;BP&emsp;'.round(($row['bps']),2).' / '.round(($row['bpd']),2).'&emsp;mmHg'
 .'<br><B>ประวัติการคลอด</B><br>'
 .$labor_history_top.'
- '.$labor_history
-
-.'<br><B>สภาพร่างกายผู้ป่วยแรกรับ</B>'
+ '.$labor_history.'
+ <br><B>สภาพร่างกายผู้ป่วยแรกรับ</B>'
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ระดับความรู้สึกตัว&nbsp;'.
 $hospital_by_1.'&nbsp;รู้สึกตัวดี&nbsp;'.$hospital_by_2.'&nbsp;สับสน&nbsp;'.$hospital_by_3.'&nbsp;ซึม&nbsp;'.$hospital_by_4.'&nbsp;ไม่รู้สึกตัว&nbsp;'
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การหายใจ&nbsp;'.
@@ -387,5 +525,6 @@ $hospital_by_1.'&nbsp;เห็นชัดเจน&nbsp;'.$hospital_by_2.'&nbs
     </table>
     <footter> <h2 style="text-align:right;font-size:8pt;">ประกาศใช้ 8 มีนาคม 2562 งานเอกสารคุณภาพ ศูนย์คุณภาพ</h2> </footer>
 ';
+
 $mpdf->WriteHTML($head);
 $mpdf->Output();

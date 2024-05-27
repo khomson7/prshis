@@ -89,7 +89,8 @@
                                 <input type="radio" class="custom-control-input" id="concious4" value="ไม่รู้สึกตัว" name="concious">
                                 <label class="custom-control-label" for="concious4">ไม่รู้สึกตัว</label>
                             </div>
-                        </div><hr>
+                        </div>
+                        <hr>
                         <div class="row">
                             <label class="col-sm-2 text-right"><B>ลักษณะการหายใจ</B></label>
                             <div class="custom-control custom-checkbox col-sm-1">
