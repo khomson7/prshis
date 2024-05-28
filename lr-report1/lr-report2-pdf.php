@@ -487,6 +487,86 @@ if ($row['communication_speak'] != 'ชัดเจน' && $row['communication_s
   $communication_speak  =  htmlspecialchars($row['communication_speak']);
 }
 
+$education = '';
+if ($row['education'] == '1') {
+  $education = 'ก่อนประถมศึกษา';
+}
+if ($row['education'] == '2') {
+  $education = 'ประถมศึกษา';
+}
+if ($row['education'] == '3') {
+  $education = 'มัธยมศึกษาตอนต้น';
+}
+if ($row['education'] == '4') {
+  $education = 'มัธยมศึกษาตอนปลาย หรือ ปวช.';
+}
+if ($row['education'] == '5') {
+  $education = 'อนุปริญญา';
+}
+if ($row['education'] == '6') {
+  $education = 'ระดับปริญญาตรี';
+}
+if ($row['education'] == '7') {
+  $education = 'ปริญญาโท';
+}
+if ($row['education'] == '8') {
+  $education = 'ปริญญาเอก';
+}
+if ($row['education'] == '9') {
+  $education = 'ไม่ทราบ';
+}
+if ($row['education'] == '99') {
+  $education = 'ไม่ได้รับการศึกษา';
+}
+
+$income_enough_1 = '( )';
+if ($row['income_enough'] == '1') {
+  $income_enough_1 = '(' . $image_check . ')';
+}
+
+$income_enough_2 = '( )';
+if ($row['income_enough'] == '2') {
+  $income_enough_2 = '(' . $image_check . ')';
+}
+
+$leukorrhea_history_1 = '( )';
+if ($row['leukorrhea_history'] == 'ปฏิเสธ') {
+  $leukorrhea_history_1 = '(' . $image_check . ')';
+}
+
+$leukorrhea_history_2 = '( )';
+if ($row['leukorrhea_history'] != 'ปฏิเสธ' && $row['leukorrhea_history'] != null) {
+  $leukorrhea_history_2 = '(' . $image_check . ')';
+  $leukorrhea_history  =  htmlspecialchars($row['leukorrhea_history']);
+}
+
+$behaviors_risk_sexually_1 = '( )';
+if ($row['behaviors_risk_sexually'] == '1') {
+  $behaviors_risk_sexually_1 = '(' . $image_check . ')';
+}
+
+$behaviors_risk_sexually_2 = '( )';
+if ($row['behaviors_risk_sexually'] == '2') {
+  $behaviors_risk_sexually_2 = '(' . $image_check . ')';
+}
+
+$behaviors_risk_sexually_3 = '( )';
+if ($row['behaviors_risk_sexually'] == '3') {
+  $behaviors_risk_sexually_3 = '(' . $image_check . ')';
+}
+
+$behaviors_risk_sexually_4 = '( )';
+if ($row['behaviors_risk_sexually'] == '4') {
+  $behaviors_risk_sexually_4 = '(' . $image_check . ')';
+}
+
+
+$behaviors_risk_sexually_5 = '( )';
+if ($row['behaviors_risk_sexually'] == '5') {
+  $behaviors_risk_sexually_5 = '(' . $image_check . ')';
+}
+
+
 
 
 /*  $labor_history_top =  '<label> <b>ครรภ์ที่</b></label>
@@ -811,54 +891,65 @@ $head =
   '</u> Rh&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_blgr_rh'])) .
   '</u> DCIP&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_dcip1'])) .
   '</u> MCV&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_mvc1'])) .
-  '</u> Hb typing&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_hb_typing1'])).'</ul>'
+  '</u> Hb typing&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_hb_typing1'])) . '</ul>'
 
   . 'Lab ANC ครั้งที่2 Anti HIV&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_hiv2'])) .
   '</u>&nbsp;RPR&nbsp;
                                                                                            <u>' . nl2br(htmlspecialchars($row['anc_lab_rpr2'])) .
-   '</u>&nbsp;Hct&nbsp;
+  '</u>&nbsp;Hct&nbsp;
                                                                                            <u>' . nl2br(htmlspecialchars($row['anc_lab_hct2'])) . '</u> % ' .
   '&nbsp;Hb&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_hb2'])) .
-  '</u> Bl.gr&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_blgr'])) .
-  '</u> Rh&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_blgr_rh'])) .
-  '</u> DCIP&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_dcip1'])) .
-  '</u> MCV&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_mvc1'])) .
-  '</u> Hb typing&nbsp;<u>' . nl2br(htmlspecialchars($row['anc_lab_hb_typing1'])).'</ul>'
+  '</u> Lab สามี Anti HIV&nbsp;<u>' . nl2br(htmlspecialchars($row['hus_lab_hiv'])) .
+  '</u> RPR&nbsp;<u>' . nl2br(htmlspecialchars($row['lab_rpr2'])) .
+  '</u> DCIP&nbsp;<u>' . nl2br(htmlspecialchars($row['lab_dcip2'])) .
+  '</u> Hb typing&nbsp;<u>' . nl2br(htmlspecialchars($row['lab_hb_typing2'])) . '</ul>'
+  . 'โรงเรียนพ่อแม่&nbsp;<u>' . nl2br(htmlspecialchars($row['ma_fa_school'])) .
+  '</u>&nbsp;ครั้ง Quad test&nbsp;<u>' . nl2br(htmlspecialchars($row['quad_test'])) .
+  '</u>&nbsp;Lab อื่นๆ&nbsp;<u>' . nl2br(htmlspecialchars($row['other_lab'])) . '</u>'
 
-  . '<B>สัญญาณชีพแรกรับ</B>&emsp;BT&emsp;' . round(($row['bt']), 2)
-  . '&emsp;°C&emsp;PR&emsp;' . round(($row['hr']), 2)
-  . '&emsp;/min&emsp;RR&emsp;' . round(($row['rr']), 2) . '&emsp;/min'
-  . '&emsp;BP&emsp;' . round(($row['bps']), 2) . ' / ' . round(($row['bpd']), 2) . '&emsp;mmHg'
   . '<br><B>ประวัติการคลอด</B><br>'
   . $labor_history_top . '
- ' . $labor_history . '
- <br><B>สภาพร่างกายผู้ป่วยแรกรับ</B>'
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ระดับความรู้สึกตัว&nbsp;' .
-  $hospital_by_1 . '&nbsp;รู้สึกตัวดี&nbsp;' . $hospital_by_2 . '&nbsp;สับสน&nbsp;' . $hospital_by_3 . '&nbsp;ซึม&nbsp;' . $hospital_by_4 . '&nbsp;ไม่รู้สึกตัว&nbsp;'
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การหายใจ&nbsp;' .
-  $hospital_by_1 . '&nbsp;ปกติ&nbsp;' . $hospital_by_2 . '&nbsp;หายใจหอบ&nbsp;' . $hospital_by_3 . '&nbsp;หายใจลำบาก&nbsp;' . $hospital_by_4 . '&nbsp;ไม่หายใจ&nbsp;'
-  . $hospital_by_4 . '&nbsp;อื่นๆ&nbsp;' . $hospital_by
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การไหลเวียนโลหิต สีผิว&nbsp;' .
-  $hospital_by_1 . '&nbsp;ปกติ&nbsp;' . $hospital_by_2 . '&nbsp;ซีด&nbsp;' . $hospital_by_3 . '&nbsp;ปลายมือปลายเท้าเขียว&nbsp;' . $hospital_by_4 . '&nbsp;รอบปากเขียว&nbsp;'
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;อาการบวม&nbsp;' . $hospital_by_1 . '&nbsp;ไม่มี&nbsp;'
-  . $hospital_by_4 . '&nbsp;บวมบริวณ&nbsp;' . $hospital_by
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ผิวหนัง&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
-  $hospital_by_1 . '&nbsp;ปกติ&nbsp;' . $hospital_by_2 . '&nbsp;หนังแตก&nbsp;' . $hospital_by_3 . '&nbsp;เขียวช้ำ&nbsp;' . $hospital_by_4 . '&nbsp;ผื่นแดง&nbsp;'
-  . $hospital_by_3 . '&nbsp;ผื่นคัน&nbsp;' . $hospital_by_4 . '&nbsp;เหลือง&nbsp;'
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การติดต่อสื่อสาร หู&nbsp;' .
-  $hospital_by_1 . '&nbsp;ได้ยินชัดเจน&nbsp;' . $hospital_by_2 . '&nbsp;ได้ยินไม่ชัดเจน : ใช้อุปกรณ์ช่วยฟัง&nbsp;' . $hospital_by_3 . '&nbsp;มี&nbsp;' . $hospital_by_4 . '&nbsp;ไม่มี&nbsp;'
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ตา&nbsp;' .
-  $hospital_by_1 . '&nbsp;เห็นชัดเจน&nbsp;' . $hospital_by_2 . '&nbsp;เห็นไม่ชัดเจน : สวมแว่นตา&nbsp;' . $hospital_by_3 . '&nbsp;สวม&nbsp;' . $hospital_by_4 . '&nbsp;ไม่สวม&nbsp;'
-  . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การพูด&nbsp;' .
-  $hospital_by_1 . '&nbsp;เห็นชัดเจน&nbsp;' . $hospital_by_2 . '&nbsp;พูดติดอ่าง&nbsp;' . $hospital_by_3 . '&nbsp;เป็นใบ้&nbsp;' . $hospital_by_4 . '&nbsp;อื่นๆ&nbsp;' . $hospital_by
-  . '<br><b>สภาพจิตใจแรกรับ (การแสดงออกทางพฤติกรรม, การแสดงออกทางอารมณ์, สิ่งที่กังวล)</b>&nbsp;' . nl2br(htmlspecialchars($row['state_of_mind']))
-  . '<br><B>อาการแรกรับ</B>&nbsp;' . nl2br(htmlspecialchars($row['first_symptoms']))
-  . '</div>
+ ' . $labor_history
+  . '<B>สัญญาณชีพ</B>&emsp;BT&emsp;<u>' . round(($row['bt']), 2)
+  . '</u>&emsp;°C&emsp;PR&emsp;<u>' . round(($row['pr']), 2)
+  . '</u>&emsp;bpm,&emsp;RR&emsp;<u>' . round(($row['rr']), 2)
+  . '</u>&emsp;bpm,&emsp;BP&emsp;<u>' . round(($row['bps']), 2) . ' / ' . round(($row['bpd']), 2) . '</u>&emsp;mmHg'
 
-    <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
+  . '<br>นอนวันละ&nbsp;<u>' . nl2br(htmlspecialchars($row['sleep_hour'])) .
+  '</u>&nbsp;ชม. ปวดบริเวณ&nbsp;
+                                                              <u>' . nl2br(htmlspecialchars($row['pain_area'])) .
+  '</u>&nbsp;Pain score&nbsp;<u>' . nl2br(htmlspecialchars($row['pain_score'])) . '   
+                                                              </u>&nbsp;/10 คะแนน&nbsp;' 
+
+  . '<br>ระดับการศึกษา&nbsp;<u>' . $education .
+  '</u>&nbsp;อาชีพ&nbsp;
+                                                              <u>' . nl2br(htmlspecialchars($row['ocupation'])) .
+  '</u>&nbsp;รายได้&nbsp;<u>' . nl2br(htmlspecialchars($row['income'])) . '   
+                                                              </u>&nbsp;บาท/เดือน&nbsp;' 
+                                                              .$income_enough_1.'&nbsp;เพียงพอ&nbsp;'.$income_enough_2.'&nbsp;ไม่เพียงพอ&nbsp;'
+  . '<br>ผู้ดูแล&nbsp;<u>' . nl2br(htmlspecialchars($row['caretaker'])) .
+  '</u>&nbsp;อาชีพ&nbsp;
+                                                              <u>' . nl2br(htmlspecialchars($row['caretaker_ocupation'])) .
+  '</u>&nbsp;รายได้&nbsp;<u>' . nl2br(htmlspecialchars($row['caretaker_income'])) . '   
+                                                              </u>&nbsp;บาท/เดือน&nbsp;' 
+
+  . '<br><B>อาการแรกรับ</B>&nbsp;<u>' . nl2br(htmlspecialchars($row['first_symptoms']))
+  . '</ul>'
+  .'ข้อมูลเพิ่มเติมตามแบบแผนสุขภาพ ( นอกเหนือจากในระบบ KPHIS )&nbsp;'
+  .'<br>ภาวะโภชนาการและเมตาบอลิซึม&nbsp;'
+  . '<br>BW&emsp;<u>' . round(($row['bw']), 2)
+  . '</u>&emsp;kgs.&emsp;Hight&emsp;<u>' . round(($row['hight']), 2)
+  . '</u>&emsp;cms.,&emsp;BW ก่อนการตั้งครรภ์&emsp;<u>' . round(($row['bw_befor_prenatal']), 2)
+  . '</u>&emsp;kgs.,&emsp;BMI ก่อนการตั้งครรภ์&emsp;<u>' . round(($row['bmi_befor_prenatal']), 2) . '</u>&emsp;kg/m<sup>2</sup>'
+  . '<br>ประวัติตกขาว คันช่องคลอด&emsp;' .
+  $leukorrhea_history_1 . '&nbsp;ปฏิเสธ&nbsp;' . $leukorrhea_history_2 . '&nbsp;มี ระบุ&nbsp;<u>' . $leukorrhea_history
+  .'</u>'
+  .'<br>ประวัติพฤติกรรมเสี่ยงต่อการติดเชื้อโรคติดต่อ (เฉพาะอายุ 14-49ปี)&nbsp;<br>'
+  .$behaviors_risk_sexually_1.'&nbsp;คู่เพศสัมพันธ์เป็โรคติดต่อทางเพศสัมพันธ์&nbsp;'.$behaviors_risk_sexually_2.'&nbsp;มีเพศสัมพันธ์ชายกับชาย/หญิงให้บริการไม่ใช้ถุงยาง&nbsp;<br>'
+  .$behaviors_risk_sexually_3.'&nbsp;มีเพศสัมพันธ์มากกว่า 1 คน&nbsp;'.$behaviors_risk_sexually_4.'&nbsp;มีเพศสัมพันธ์กับคนใหม่&nbsp;'.$behaviors_risk_sexually_5.'&nbsp;ไม่ใช้ถุงยางอนามัยหรือแตก รั่ว หลุด&nbsp;'
+  .'</div>'
+
+   .'<table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
    
         <tr style="border:1px solid #000;margin: 35px;"> /* ชื่อ-สกุล */
             <td  colspan="3" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
@@ -869,9 +960,7 @@ $head =
             <label>เตียง : ' . htmlspecialchars($row_ipt['bedno']) . ' | </label>
             <label>สิทธิ : (' . htmlspecialchars($row_ipt['pttype']) . ') ' . htmlspecialchars($row_ipt['pttype_name']) . '</label>
             </td>
-            <td  colspan="3" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top; text-align: center;">
-            <label>Attending physician : <br><br>' . htmlspecialchars($row['doctor_name']) . '</label>
-            </td>
+            
         </tr>
     </table>
     <footter> <h2 style="text-align:right;font-size:8pt;">ประกาศใช้ 8 มีนาคม 2562 งานเอกสารคุณภาพ ศูนย์คุณภาพ</h2> </footer>

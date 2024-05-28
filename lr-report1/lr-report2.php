@@ -1042,7 +1042,7 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
 
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><i class="fas fa-plus"></i> ประวัติพฤติกรรมเสี่ยงต่อการติดเชื้อโรคติด (เฉพาะอายุ 14-49ปี) </a>
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><i class="fas fa-plus"></i> ประวัติพฤติกรรมเสี่ยงต่อการติดเชื้อโรคติดต่อ (เฉพาะอายุ 14-49ปี) </a>
 
                                     </div>
                                     <div id="collapse1" class="panel-collapse collapse in">
@@ -1053,7 +1053,7 @@ date_default_timezone_set('asia/bangkok');
                                                     <input type="radio" <?php if ($row['behaviors_risk_sexually'] == '1') {
                                                                             echo 'checked="checked"';
                                                                         } ?> class="custom-control-input" id="behaviors_risk_sexually1" name="behaviors_risk_sexually" value="1">
-                                                    <label class="custom-control-label" for="behaviors_risk_sexually1">คู่เพศสัมพันธ์เป็โรคติดต่อทางเพศสัมพันธ์</label>
+                                                    <label class="custom-control-label" for="behaviors_risk_sexually1">คู่เพศสัมพันธ์เป็นโรคติดต่อทางเพศสัมพันธ์</label>
 
                                                 </div>
 
