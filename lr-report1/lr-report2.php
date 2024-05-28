@@ -630,7 +630,9 @@ date_default_timezone_set('asia/bangkok');
                                 <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxx" name="anc_lab_rpr2" id="anc_lab_rpr2" value="<?= (isset($row['anc_lab_rpr2']) ? htmlspecialchars($row['anc_lab_rpr2']) : '') ?>"></div>
                                 <label>Hct</label>
                                 <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxx" name="anc_lab_hct2" id="anc_lab_hct2" value="<?= (isset($row['anc_lab_hct2']) ? htmlspecialchars($row['anc_lab_hct2']) : '') ?>"></div>
-                                <label>% Hb สามี Anti HIV</label>
+                                <label>% Hb</label>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxx" name="anc_lab_hb2" id="anc_lab_hb2" value="<?= (isset($row['anc_lab_hb2']) ? htmlspecialchars($row['anc_lab_hb2']) : '') ?>"></div>
+                                <label>Lab สามี Anti HIV</label>
                                 <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxx" name="hus_lab_hiv" id="hus_lab_hiv" value="<?= (isset($row['hus_lab_hiv']) ? htmlspecialchars($row['hus_lab_hiv']) : '') ?>"></div>
                                 <label>RPR</label>
                                 <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="xxxxxx" name="lab_rpr2" id="lab_rpr2" value="<?= (isset($row['lab_rpr2']) ? htmlspecialchars($row['lab_rpr2']) : '') ?>"></div>

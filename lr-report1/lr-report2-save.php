@@ -48,7 +48,7 @@ $anc_lab_hb_typing1 = $_REQUEST['anc_lab_hb_typing1'];
 $anc_lab_hiv2 = $_REQUEST['anc_lab_hiv2'];
 $anc_lab_rpr2 = $_REQUEST['anc_lab_rpr2'];
 $anc_lab_hct2 = $_REQUEST['anc_lab_hct2'];
-
+$anc_lab_hb2 = $_REQUEST['anc_lab_hb2'];
 $hus_lab_hiv = $_REQUEST['hus_lab_hiv'];
 $lab_rpr2 = $_REQUEST['lab_rpr2'];
 $lab_dcip2 = $_REQUEST['lab_dcip2'];
@@ -112,19 +112,19 @@ $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null
             $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_lr_report2(an,rxdate,rxtime,labor_history,intime,cc,current_illness,c_chronic,hos_history,h_sergery
             ,h_allergy,history_of_drug,pmh2,g,p,l_ga,l_ga_by,prenatal_wks,prenatral_count,k8,k8_less,at_,dt
             ,dt_needle,anc_lab_hiv1 ,anc_lab_rpr1,anc_lab_hbsag1,anc_lab_hct1,anc_lab_hb1,anc_lab_blgr,anc_lab_blgr_rh
-            ,anc_lab_dcip1,anc_lab_mvc1,anc_lab_hb_typing1,anc_lab_hiv2,anc_lab_rpr2,anc_lab_hct2,hus_lab_hiv,lab_rpr2,lab_dcip2,lab_hb_typing2
+            ,anc_lab_dcip1,anc_lab_mvc1,anc_lab_hb_typing1,anc_lab_hiv2,anc_lab_rpr2,anc_lab_hct2,anc_lab_hb2,hus_lab_hiv,lab_rpr2,lab_dcip2,lab_hb_typing2
             ,ma_fa_school,quad_test,other_lab,bt,pr,rr,bps,bpd,sleep_hour,pain_area,pain_score,education,ocupation
             ,income,income_enough,caretaker,caretaker_ocupation,caretaker_income,first_symptoms
             ,bw,hight,bw_befor_prenatal,bmi_befor_prenatal,leukorrhea_history,behaviors_risk_sexually
-            ,update_user,update_datetime,version)
+            ,create_user,create_datetime,version)
             VALUES(:an,:rxdate,:rxtime,:labor_history,:intime,:cc,:current_illness,:c_chronic,:hos_history,:h_sergery
             ,:h_allergy,:history_of_drug,:pmh2,:g,:p,:l_ga,:l_ga_by,:prenatal_wks,:prenatral_count,:k8,:k8_less,:at_,:dt
             ,:dt_needle,:anc_lab_hiv1 ,:anc_lab_rpr1,:anc_lab_hbsag1,:anc_lab_hct1,:anc_lab_hb1,:anc_lab_blgr,:anc_lab_blgr_rh
-            ,:anc_lab_dcip1,:anc_lab_mvc1,:anc_lab_hb_typing1,:anc_lab_hiv2,:anc_lab_rpr2,:anc_lab_hct2,:hus_lab_hiv,:lab_rpr2,:lab_dcip2,:lab_hb_typing2
+            ,:anc_lab_dcip1,:anc_lab_mvc1,:anc_lab_hb_typing1,:anc_lab_hiv2,:anc_lab_rpr2,:anc_lab_hct2,:anc_lab_hb2,:hus_lab_hiv,:lab_rpr2,:lab_dcip2,:lab_hb_typing2
             ,:ma_fa_school,:quad_test,:other_lab,:bt,:pr,:rr,:bps,:bpd,:sleep_hour,:pain_area,:pain_score,:education,:ocupation
             ,:income,:income_enough,:caretaker,:caretaker_ocupation,:caretaker_income,:first_symptoms
             ,:bw,:hight,:bw_befor_prenatal,:bmi_befor_prenatal,:leukorrhea_history,:behaviors_risk_sexually
-            ,:update_user,:update_datetime,:version)");
+            ,:create_user,:create_datetime,:version)");
     
             $stmt->execute(array('an' => $an, 'rxdate' => $rxdate, 'rxtime' => $rxtime, 'labor_history' => $labor_history, 'intime' => $intime, 'cc' => $cc
             ,'current_illness'=>$current_illness,'c_chronic'=>$c_chronic,'hos_history'=>$hos_history,'h_sergery'=>$h_sergery
@@ -132,13 +132,13 @@ $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null
             ,'k8'=>$k8,'k8_less'=>$k8_less,'at_'=>$at_,'dt'=>$dt,'dt_needle'=>$dt_needle,'anc_lab_hiv1'=>$anc_lab_hiv1,'anc_lab_rpr1' => $anc_lab_rpr1
             ,'anc_lab_hbsag1' => $anc_lab_hbsag1,'anc_lab_hct1' => $anc_lab_hct1,'anc_lab_hb1' => $anc_lab_hb1,'anc_lab_blgr' => $anc_lab_blgr,'anc_lab_blgr_rh' => $anc_lab_blgr_rh
             ,'anc_lab_dcip1'=>$anc_lab_dcip1,'anc_lab_mvc1'=>$anc_lab_mvc1,'anc_lab_hb_typing1'=>$anc_lab_hb_typing1,'anc_lab_hiv2'=>$anc_lab_hiv2
-            ,'anc_lab_rpr2'=>$anc_lab_rpr2,'anc_lab_hct2'=>$anc_lab_hct2,'hus_lab_hiv'=>$hus_lab_hiv,'lab_rpr2'=>$lab_rpr2
+            ,'anc_lab_rpr2'=>$anc_lab_rpr2,'anc_lab_hct2'=>$anc_lab_hct2,'anc_lab_hb2'=>$anc_lab_hb2,'hus_lab_hiv'=>$hus_lab_hiv,'lab_rpr2'=>$lab_rpr2
             ,'lab_dcip2'=>$lab_dcip2,'lab_hb_typing2'=>$lab_hb_typing2,'ma_fa_school'=>$ma_fa_school,'quad_test'=>$quad_test,'other_lab'=>$other_lab
             ,'bt'=>$bt,'pr'=>$pr,'rr'=>$rr,'bps'=>$bps,'bpd'=>$bpd,'sleep_hour'=>$sleep_hour,'pain_area'=>$pain_area,'pain_score'=>$pain_score
             ,'education'=>$education,'ocupation'=>$ocupation,'income'=>$income,'income_enough'=>$income_enough,'caretaker'=>$caretaker
             ,'caretaker_ocupation'=>$caretaker_ocupation,'caretaker_income'=>$caretaker_income,'first_symptoms'=>$first_symptoms 
             ,'bw'=>$bw,'hight'=>$hight,'bw_befor_prenatal'=>$bw_befor_prenatal,'bmi_befor_prenatal'=>$bmi_befor_prenatal,'leukorrhea_history'=>$leukorrhea_history,'behaviors_risk_sexually'=>$behaviors_risk_sexually  
-            , 'update_user' => $update_user, 'update_datetime' => $update_datetime, 'version' => $version));
+            , 'create_user' => $create_user, 'create_datetime' => $create_datetime, 'version' => $version));
 
             $output_error = '<script>
         NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");

@@ -505,7 +505,7 @@ date_default_timezone_set('asia/bangkok');
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติการได้รับวัคซีน(เฉพาะ < 15 ปี)</label>
                                         <div class="custom-control custom-radio col-sm-1">
                                             &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <input type="radio" <?php if (
-                                                                                                                $row['vaccine_history'] == 'ปฏิเสธ'
+                                                                                                                $row['vaccine_history'] == 'ครบตามเกณฑ์'
 
                                                                                                             ) {
                                                                                                                 echo 'checked="checked"';

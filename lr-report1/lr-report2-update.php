@@ -50,7 +50,7 @@ $anc_lab_hb_typing1 = $_REQUEST['anc_lab_hb_typing1'];
 $anc_lab_hiv2 = $_REQUEST['anc_lab_hiv2'];
 $anc_lab_rpr2 = $_REQUEST['anc_lab_rpr2'];
 $anc_lab_hct2 = $_REQUEST['anc_lab_hct2'];
-
+$anc_lab_hb2 = $_REQUEST['anc_lab_hb2'];
 $hus_lab_hiv = $_REQUEST['hus_lab_hiv'];
 $lab_rpr2 = $_REQUEST['lab_rpr2'];
 $lab_dcip2 = $_REQUEST['lab_dcip2'];
@@ -106,7 +106,7 @@ try {
                 ,k8=:k8,k8_less=:k8_less,at_=:at_,dt=:dt,dt_needle=:dt_needle,anc_lab_hiv1 =:anc_lab_hiv1,anc_lab_rpr1 =:anc_lab_rpr1
                 ,anc_lab_hbsag1 =:anc_lab_hbsag1,anc_lab_hct1 =:anc_lab_hct1,anc_lab_hb1 =:anc_lab_hb1,anc_lab_blgr =:anc_lab_blgr,anc_lab_blgr_rh =:anc_lab_blgr_rh
                 ,anc_lab_dcip1=:anc_lab_dcip1,anc_lab_mvc1=:anc_lab_mvc1,anc_lab_hb_typing1=:anc_lab_hb_typing1,anc_lab_hiv2=:anc_lab_hiv2
-                ,anc_lab_rpr2=:anc_lab_rpr2,anc_lab_hct2=:anc_lab_hct2,hus_lab_hiv=:hus_lab_hiv,lab_rpr2=:lab_rpr2
+                ,anc_lab_rpr2=:anc_lab_rpr2,anc_lab_hct2=:anc_lab_hct2,anc_lab_hb2=:anc_lab_hb2,hus_lab_hiv=:hus_lab_hiv,lab_rpr2=:lab_rpr2
                 ,lab_dcip2=:lab_dcip2,lab_hb_typing2=:lab_hb_typing2,ma_fa_school=:ma_fa_school,quad_test=:quad_test,other_lab=:other_lab
                 ,bt=:bt,pr=:pr,rr=:rr,bps=:bps,bpd=:bpd,sleep_hour=:sleep_hour,pain_area=:pain_area,pain_score=:pain_score
                 ,education=:education,ocupation=:ocupation,income=:income,income_enough=:income_enough,caretaker=:caretaker
@@ -122,7 +122,7 @@ try {
                         ,'k8'=>$k8,'k8_less'=>$k8_less,'at_'=>$at_,'dt'=>$dt,'dt_needle'=>$dt_needle,'anc_lab_hiv1'=>$anc_lab_hiv1,'anc_lab_rpr1' => $anc_lab_rpr1
                         ,'anc_lab_hbsag1' => $anc_lab_hbsag1,'anc_lab_hct1' => $anc_lab_hct1,'anc_lab_hb1' => $anc_lab_hb1,'anc_lab_blgr' => $anc_lab_blgr,'anc_lab_blgr_rh' => $anc_lab_blgr_rh
                         ,'anc_lab_dcip1'=>$anc_lab_dcip1,'anc_lab_mvc1'=>$anc_lab_mvc1,'anc_lab_hb_typing1'=>$anc_lab_hb_typing1,'anc_lab_hiv2'=>$anc_lab_hiv2
-                        ,'anc_lab_rpr2'=>$anc_lab_rpr2,'anc_lab_hct2'=>$anc_lab_hct2,'hus_lab_hiv'=>$hus_lab_hiv,'lab_rpr2'=>$lab_rpr2
+                        ,'anc_lab_rpr2'=>$anc_lab_rpr2,'anc_lab_hct2'=>$anc_lab_hct2,'anc_lab_hb2'=>$anc_lab_hb2,'hus_lab_hiv'=>$hus_lab_hiv,'lab_rpr2'=>$lab_rpr2
                         ,'lab_dcip2'=>$lab_dcip2,'lab_hb_typing2'=>$lab_hb_typing2,'ma_fa_school'=>$ma_fa_school,'quad_test'=>$quad_test,'other_lab'=>$other_lab
                         ,'bt'=>$bt,'pr'=>$pr,'rr'=>$rr,'bps'=>$bps,'bpd'=>$bpd,'sleep_hour'=>$sleep_hour,'pain_area'=>$pain_area,'pain_score'=>$pain_score
                         ,'education'=>$education,'ocupation'=>$ocupation,'income'=>$income,'income_enough'=>$income_enough,'caretaker'=>$caretaker

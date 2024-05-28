@@ -33,10 +33,16 @@ $image_checkAddmissionDoctor2 = '';
 if(($getDocumentAddmissionDoctor2)){
     $image_checkAddmissionDoctor2 = $image_check;
 }
-
+//from kphis
 $getDocumentAddmissionNurse = KphisQueryUtils::getDocumentAddmissionNurse($an);
+
+//from prhis
+
+$getDocumentPreNurseNote = ReportQueryUtils::getDocumentPreNurseNote($an);
+
 $image_checkAddmissionNurse = '';
-if(($getDocumentAddmissionNurse)){
+
+if(($getDocumentAddmissionNurse || $getDocumentPreNurseNote)){
     $image_checkAddmissionNurse = $image_check;
 }
 $getDocumentOrder = KphisQueryUtils::getDocumentOrder($an);
