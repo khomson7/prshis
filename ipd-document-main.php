@@ -178,6 +178,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
                             <a id="AddmissionNurse_pdf"></a>
                             <a id="AddmissionNurse_pdf1"></a>
                             <a id="AddmissionNurse_pdf2"></a>
+                            <a id="AddmissionNurse_pdf3"></a>
                             
                         </div>
                     </div>
@@ -522,7 +523,9 @@ if((getDocumentSummary==true)){
 
         const getDocumentAddmissionNurse2 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse2($an))?>;
 
-        //console.log(getDocumentAddmissionNurse1);
+        const getDocumentAddmissionNurse3 = <?=json_encode(ReportQueryUtils::getDocumentLrReport2($an))?>;
+
+       // console.log(getDocumentAddmissionNurse3);
         
         if((getDocumentAddmissionNurse==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
@@ -536,7 +539,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-secondary fas fa-square");
         }
 
-        if((getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true)){
+        if((getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true || getDocumentAddmissionNurse3==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
             $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
 
@@ -545,6 +548,10 @@ if((getDocumentSummary==true)){
             }
             if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse2==true){
                 $("#AddmissionNurse_pdf2").attr({"class":"badge badge-secondary","href":"ipdnurse2/prs-pre-nursenote-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(ทั่วไป)").css({"cursor":"pointer"});
+            }
+
+            if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse3==true){
+                $("#AddmissionNurse_pdf3").attr({"class":"badge badge-secondary","href":"lr-report1/lr-report2-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(เฉพาะผู้มาคลอด)").css({"cursor":"pointer"});
             }
             
         }else{
