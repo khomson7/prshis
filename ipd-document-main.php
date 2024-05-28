@@ -525,7 +525,7 @@ if((getDocumentSummary==true)){
 
         const getDocumentAddmissionNurse3 = <?=json_encode(ReportQueryUtils::getDocumentLrReport2($an))?>;
 
-      // console.log(getDocumentAddmissionNurse3);
+      console.log(getDocumentAddmissionNurse3);
         
         if((getDocumentAddmissionNurse==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
