@@ -523,7 +523,7 @@ if((getDocumentSummary==true)){
 
         const getDocumentAddmissionNurse2 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse2($an))?>;
 
-        const getDocumentAddmissionNurse3 = <?=json_encode(ReportQueryUtils::getDocumentLrReport2($an))?>;
+        const getDocumentAddmissionNurse3 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse3($an))?>;
 
       console.log(getDocumentAddmissionNurse3);
         
