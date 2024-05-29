@@ -528,7 +528,7 @@ date_default_timezone_set('asia/bangkok');
                                     <select class="form-control form-control-sm CheckPer_2" id="l_ga_by" name="l_ga_by" value="">
                                         <option value="">- เลือก -</option>
 
-                                        <option value="V/S" <?php if ($row['l_ga_by'] == 'V/S') echo ' selected="selected"'; ?>>V/S</option>
+                                        <option value="U/S" <?php if ($row['l_ga_by'] == 'U/S') echo ' selected="selected"'; ?>>U/S</option>
                                         <option value="LMP" <?php if ($row['l_ga_by'] == 'LMP') echo ' selected="selected"'; ?>>LMP</option>
                                         <option value="SIZE" <?php if ($row['l_ga_by'] == 'SIZE') echo ' selected="selected"'; ?>>SIZE</option>
                                         
