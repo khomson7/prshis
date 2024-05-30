@@ -19,6 +19,7 @@ require_once '../mains/ipd-show-patient-sticky.php';
 
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = $_REQUEST['an']; //รับค่า an
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
@@ -172,6 +173,8 @@ $regdatetime = $row_ipt["regdatetime"];
 
 date_default_timezone_set('asia/bangkok');
 
+$id = '15'; //Link menu
+ $check_    = ReportQueryUtils::getProduction($id)
 
 ?>
 
@@ -237,7 +240,12 @@ date_default_timezone_set('asia/bangkok');
             <div class="col-auto p-1 font-weight-bold">
                 ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ (เฉพาะผู้มาคลอด) <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
                 <B>
-                    <font color="red"> (รอคุยรายละเอียดเพื่อออกแบบการเก็บข้อมูล) </font>
+                <?php if ($check_ == "1") { ?>
+
+<font color="red">ช่วงทดลอง</font>
+<?php } else { ?>
+
+<? } ?>
                 </B>
             </div>
 
@@ -522,7 +530,7 @@ date_default_timezone_set('asia/bangkok');
                                 </div>&nbsp; P&nbsp;<div>
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="P" name="p" id="p" value="<?= (isset($row['p']) ? htmlspecialchars($row['p']) : '') ?>">
                                 </div> &nbsp;<label>GA</label>
-                                <div class="col-md-1"><input type="number" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="l_ga" id="l_ga" value="<?= (isset($row['l_ga']) ? htmlspecialchars($row['l_ga']) : '') ?>" min="0"> </div>
+                                <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="l_ga" id="l_ga" value="<?= (isset($row['l_ga']) ? htmlspecialchars($row['l_ga']) : '') ?>" min="0"> </div>
                                 <label>wks by&nbsp;</label>
                                <div class="col-md-1">
                                     <select class="form-control form-control-sm CheckPer_2" id="l_ga_by" name="l_ga_by" value="">
@@ -536,10 +544,18 @@ date_default_timezone_set('asia/bangkok');
 
 
                                 </div> 
+                                <label>lmp&nbsp;</label>
+                                <div>
+                                <input type="date" class="form-control form-control-sm" id="lmp" name="lmp" value="<?= (isset($row['lmp']) ? htmlspecialchars($row['lmp']) : '') ?>">
+                                </div>
 
+                                <label>&nbsp;edc&nbsp;</label>
+                                <div>
+                                <input type="date" class="form-control form-control-sm" id="edc" name="edc" value="<?= (isset($row['edc']) ? htmlspecialchars($row['edc']) : '') ?>">
+                                </div>
                              <!--   <div class="col-md-1"><input type="text" class="form-control form-control-sm CheckPer_2" placeholder="กำหนดจาก" name="l_ga_by" id="l_ga_by" value="<?= (isset($row['l_ga_by']) ? htmlspecialchars($row['l_ga_by']) : '') ?>"></div>
                                                                                                                                     -->                                                                                                  
-                                <label>ฝากครรภ์ครั้งแรก</label>
+                                <label>&nbsp;ฝากครรภ์ครั้งแรก</label>
                                 <div class="col-md-1"><input type="number" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="prenatal_wks" id="prenatal_wks" value="<?= (isset($row['prenatal_wks']) ? htmlspecialchars($row['prenatal_wks']) : '') ?>" min="0"> </div>
                                 <label>wks&nbsp;ฝากครรภ์</label>
                                 <div class="col-md-1"><input type="number" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="prenatral_count" id="prenatral_count" value="<?= (isset($row['prenatral_count']) ? htmlspecialchars($row['prenatral_count']) : '') ?>" min="0"> </div>
@@ -1296,11 +1312,11 @@ date_default_timezone_set('asia/bangkok');
                         } else if (c_chronic == undefined) {
                             $('[name="c_chronic"]').focus();
                             alert('โรคประจำตัว');
-                        } else if (hos_history == undefined) {
+                        } /*else if (hos_history == undefined) {
 
                             $('[name="hos_history"]').focus();
                             alert('เคยรับการรักษาในโรงพยาบาล');
-                        } else if (h_sergery == undefined) {
+                        } */else if (h_sergery == undefined) {
 
                             $('[name="h_sergery"]').focus();
                             alert('ประวัติการผ่าตัด');
@@ -1320,7 +1336,7 @@ date_default_timezone_set('asia/bangkok');
                             $('[name="pmh2"]').focus();
                             alert('ประวัติการเจ็บป่วยในครอบครัว');
                             // console.log(h_sergery);
-                        } else if (prenatal_wks == undefined) {
+                        } /*else if (prenatal_wks == undefined) {
 
                             $('[name="prenatal_wks"]').focus();
                             alert('ฝากครรภ์ครั้งแรก');
@@ -1330,7 +1346,7 @@ date_default_timezone_set('asia/bangkok');
                             $('[name="labor_history"]').focus();
                             alert('บันทึกประวัติคลอด');
 
-                        }
+                        }*/
 
 
                         // console.log(labor_history);

@@ -147,11 +147,6 @@
         $pe_cvs = $_REQUEST['pe_cvs'];
         $pe_cns = $_REQUEST['pe_cns'];
         $svg_tag = $_REQUEST['svg_tag'];
-        $svg_tag1 = $_REQUEST['svg_tag1'];
-        $svg_tag2 = $_REQUEST['svg_tag2'];
-        $svg_tag3 = $_REQUEST['svg_tag3'];
-        $svg_tag4 = $_REQUEST['svg_tag4'];
-        $svg_tag5 = $_REQUEST['svg_tag5'];
         $impression = $_REQUEST['impression'];
         $problem_list = $_REQUEST['problem_list'];
         $diff_dx = $_REQUEST['diff_dx'];
@@ -164,6 +159,18 @@
         $last_meal= empty($_REQUEST['last_meal']) ? null : $_REQUEST['last_meal'];
         $event_environment= empty($_REQUEST['event_environment']) ? null : $_REQUEST['event_environment'];
         //    
+        $primary_a = empty($_REQUEST['primary_a']) ? null : $_REQUEST['primary_a'];
+        $c_spine = empty($_REQUEST['c_spine']) ? null : $_REQUEST['c_spine'];
+        $trachea = empty($_REQUEST['trachea']) ? null : $_REQUEST['trachea'];
+        $chest_wound = empty($_REQUEST['chest_wound']) ? null : $_REQUEST['chest_wound'];
+        $subcu_emp = empty($_REQUEST['subcu_emp']) ? null : $_REQUEST['subcu_emp'];
+        $cct = empty($_REQUEST['cct']) ? null : $_REQUEST['cct'];
+        $lung_sound = empty($_REQUEST['lung_sound']) ? null : $_REQUEST['lung_sound'];
+        $o2sat = empty($_REQUEST['o2sat']) ? null : $_REQUEST['o2sat'];
+        $sbp = empty($_REQUEST['sbp']) ? null : $_REQUEST['sbp'];
+        $dbp = empty($_REQUEST['dbp']) ? null : $_REQUEST['dbp'];
+        $pr2 = empty($_REQUEST['pr2']) ? null : $_REQUEST['pr2'];
+        $ext_act_bleed = empty($_REQUEST['ext_act_bleed']) ? null : $_REQUEST['ext_act_bleed'];
 
       
         $create_user = $_SESSION['loginname'];
@@ -189,7 +196,9 @@
                 pe_neurological=:pe_neurological, pe_ob_gynexam=:pe_ob_gynexam,
                 pe_other=:pe_other,pe_text=:pe_text,pe_cvs=:pe_cvs, pe_cns=:pe_cns
                 ,tr_allergy=:tr_allergy,tr_meddication=:tr_meddication,part_illness=:part_illness,last_meal=:last_meal,event_environment=:event_environment
-                ,svg_tag=:svg_tag,svg_tag1=:svg_tag1,svg_tag2=:svg_tag2,svg_tag3=:svg_tag3,svg_tag4=:svg_tag4,svg_tag5=:svg_tag5,impression=:impression,diff_dx=:diff_dx,problem_list=:problem_list,plan_management=:plan_management,
+                ,primary_a=:primary_a,c_spine=:c_spine,trachea=:trachea,chest_wound=:chest_wound,subcu_emp=:subcu_emp
+                ,cct=:cct,lung_sound=:lung_sound,o2sat=:o2sat,sbp=:sbp,dbp=:dbp,pr2=:pr2
+                ,svg_tag=:svg_tag,impression=:impression,diff_dx=:diff_dx,problem_list=:problem_list,plan_management=:plan_management,
                 update_user=:update_user,version=:version
                 WHERE admission_note_id=:admission_note_id");
                 $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
@@ -208,7 +217,9 @@
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns
                 ,'tr_allergy'=>$tr_allergy,'tr_meddication'=>$tr_meddication,'part_illness'=>$part_illness,'last_meal'=>$last_meal,'event_environment'=>$event_environment
-                ,'svg_tag'=>$svg_tag,'svg_tag1'=>$svg_tag1,'svg_tag2'=>$svg_tag2,'svg_tag3'=>$svg_tag3,'svg_tag4'=>$svg_tag4,'svg_tag5'=>$svg_tag5,'impression'=>$impression,'diff_dx'=>$diff_dx,'problem_list'=>$problem_list,'plan_management'=>$plan_management,
+                ,'primary_a'=>$primary_a,'c_spine'=>$c_spine,'trachea'=>$trachea,'chest_wound'=>$chest_wound,'subcu_emp'=>$subcu_emp
+                ,'cct'=>$cct,'lung_sound'=>$lung_sound,'o2sat'=>$o2sat,'sbp'=>$sbp,'dbp'=>$dbp,'pr2'=>$pr2
+                ,'svg_tag'=>$svg_tag,'impression'=>$impression,'diff_dx'=>$diff_dx,'problem_list'=>$problem_list,'plan_management'=>$plan_management,
                 'update_user'=>$update_user,'version'=>$version));
 
            /*  if(!empty($_REQUEST['admission_note_doctor'])){

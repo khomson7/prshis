@@ -80,7 +80,8 @@ $bw_befor_prenatal  =  empty($_REQUEST['bw_befor_prenatal']) ? null : $_REQUEST[
 $bmi_befor_prenatal  =  empty($_REQUEST['bmi_befor_prenatal']) ? null : $_REQUEST['bmi_befor_prenatal'];
 $leukorrhea_history  =  empty($_REQUEST['leukorrhea_history']) ? null : $_REQUEST['leukorrhea_history'];
 $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null : $_REQUEST['behaviors_risk_sexually'];
-
+$lmp =  empty($_REQUEST['lmp']) ? null : $_REQUEST['lmp'];
+$edc =  empty($_REQUEST['edc']) ? null : $_REQUEST['edc'];
 //    
 
 
@@ -94,7 +95,7 @@ try {
         //เรียกใช้งาน sql update
         if (
                 $rxdate != '' && $rxtime != '' && $labor_history != '' && $c_chronic !='' && $h_allergy !=''&& $history_of_drug != ''
-                && $pmh_2 !='' && $g !='' && $p !='' && $l_ga !='' && $l_ga_by !='' && $prenatal_wks !='' && $prenatral_count != '' /*&& $dt != ''
+                && $pmh_2 !='' /*&& $g !='' && $p !='' && $l_ga !='' && $l_ga_by !='' && $prenatal_wks !='' && $prenatral_count != '' && $dt != ''
                 && $dt_needle != '' && $first_symptoms != ''*/
         ) {
                 $output_error = '<script>
@@ -112,6 +113,7 @@ try {
                 ,education=:education,ocupation=:ocupation,income=:income,income_enough=:income_enough,caretaker=:caretaker
                 ,caretaker_ocupation=:caretaker_ocupation,caretaker_income=:caretaker_income,first_symptoms=:first_symptoms 
                 ,bw =:bw,hight=:hight,bw_befor_prenatal=:bw_befor_prenatal,bmi_befor_prenatal=:bmi_befor_prenatal,leukorrhea_history=:leukorrhea_history,behaviors_risk_sexually=:behaviors_risk_sexually 
+                ,lmp=:lmp,edc=:edc
                 ,update_user=:update_user,update_datetime=:update_datetime,version=:version
           WHERE id=:id");
                 //execute array
@@ -128,6 +130,7 @@ try {
                         ,'education'=>$education,'ocupation'=>$ocupation,'income'=>$income,'income_enough'=>$income_enough,'caretaker'=>$caretaker
                         ,'caretaker_ocupation'=>$caretaker_ocupation,'caretaker_income'=>$caretaker_income,'first_symptoms'=>$first_symptoms 
                         ,'bw'=>$bw,'hight'=>$hight,'bw_befor_prenatal'=>$bw_befor_prenatal,'bmi_befor_prenatal'=>$bmi_befor_prenatal,'leukorrhea_history'=>$leukorrhea_history,'behaviors_risk_sexually'=>$behaviors_risk_sexually  
+                        ,'lmp'=>$lmp,'edc'=>$edc
                         , 'update_user' => $update_user,  'update_datetime' => $update_datetime, 'version' => $version
                 ));
 

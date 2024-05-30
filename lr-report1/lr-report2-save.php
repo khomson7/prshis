@@ -78,7 +78,8 @@ $bw_befor_prenatal  =  empty($_REQUEST['bw_befor_prenatal']) ? null : $_REQUEST[
 $bmi_befor_prenatal  =  empty($_REQUEST['bmi_befor_prenatal']) ? null : $_REQUEST['bmi_befor_prenatal'];
 $leukorrhea_history  =  empty($_REQUEST['leukorrhea_history']) ? null : $_REQUEST['leukorrhea_history'];
 $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null : $_REQUEST['behaviors_risk_sexually'];
-
+$lmp =  empty($_REQUEST['lmp']) ? null : $_REQUEST['lmp'];
+$edc =  empty($_REQUEST['edc']) ? null : $_REQUEST['edc'];
 
    // $output_error = '';
 
@@ -105,8 +106,8 @@ $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null
 
     try {
 
-        if ( $rxdate != '' && $rxtime != '' && $labor_history != '' && $c_chronic !='' && $h_allergy !=''&& $history_of_drug != ''
-        && $pmh_2 !='' && $g !='' && $p !='' && $l_ga !='' && $l_ga_by !='' && $prenatal_wks !='' && $prenatral_count != ''
+        if ( $rxdate != '' && $rxtime != ''  && $c_chronic !='' && $h_allergy !=''&& $history_of_drug != ''
+        && $pmh_2 !='' 
 ) {
 
             $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_lr_report2(an,rxdate,rxtime,labor_history,intime,cc,current_illness,c_chronic,hos_history,h_sergery
@@ -116,6 +117,7 @@ $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null
             ,ma_fa_school,quad_test,other_lab,bt,pr,rr,bps,bpd,sleep_hour,pain_area,pain_score,education,ocupation
             ,income,income_enough,caretaker,caretaker_ocupation,caretaker_income,first_symptoms
             ,bw,hight,bw_befor_prenatal,bmi_befor_prenatal,leukorrhea_history,behaviors_risk_sexually
+            ,lmp,edc
             ,create_user,create_datetime,version)
             VALUES(:an,:rxdate,:rxtime,:labor_history,:intime,:cc,:current_illness,:c_chronic,:hos_history,:h_sergery
             ,:h_allergy,:history_of_drug,:pmh2,:g,:p,:l_ga,:l_ga_by,:prenatal_wks,:prenatral_count,:k8,:k8_less,:at_,:dt
@@ -124,6 +126,7 @@ $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null
             ,:ma_fa_school,:quad_test,:other_lab,:bt,:pr,:rr,:bps,:bpd,:sleep_hour,:pain_area,:pain_score,:education,:ocupation
             ,:income,:income_enough,:caretaker,:caretaker_ocupation,:caretaker_income,:first_symptoms
             ,:bw,:hight,:bw_befor_prenatal,:bmi_befor_prenatal,:leukorrhea_history,:behaviors_risk_sexually
+            ,:lmp,:edc
             ,:create_user,:create_datetime,:version)");
     
             $stmt->execute(array('an' => $an, 'rxdate' => $rxdate, 'rxtime' => $rxtime, 'labor_history' => $labor_history, 'intime' => $intime, 'cc' => $cc
@@ -138,6 +141,7 @@ $behaviors_risk_sexually   =  empty($_REQUEST['behaviors_risk_sexually']) ? null
             ,'education'=>$education,'ocupation'=>$ocupation,'income'=>$income,'income_enough'=>$income_enough,'caretaker'=>$caretaker
             ,'caretaker_ocupation'=>$caretaker_ocupation,'caretaker_income'=>$caretaker_income,'first_symptoms'=>$first_symptoms 
             ,'bw'=>$bw,'hight'=>$hight,'bw_befor_prenatal'=>$bw_befor_prenatal,'bmi_befor_prenatal'=>$bmi_befor_prenatal,'leukorrhea_history'=>$leukorrhea_history,'behaviors_risk_sexually'=>$behaviors_risk_sexually  
+            ,'lmp'=>$lmp,'edc'=>$edc
             , 'create_user' => $create_user, 'create_datetime' => $create_datetime, 'version' => $version));
 
             $output_error = '<script>

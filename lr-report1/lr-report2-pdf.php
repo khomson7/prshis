@@ -29,6 +29,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');
 
@@ -568,6 +569,16 @@ if ($row['behaviors_risk_sexually'] == '5') {
 
 
 
+$id = '15'; //Link menu
+$check_    = ReportQueryUtils::getProduction($id);
+
+$check_report = '( )';
+if ($check_  == '1') 
+{$check_report = '&nbsp;<font color="red">รอปรับรายงาน</font>';
+} else {
+    $check_report = '';
+}
+
 
 /*  $labor_history_top =  '<label> <b>ครรภ์ที่</b></label>
 
@@ -841,8 +852,7 @@ $head =
     </style>
     <h2 style="text-align:right;font-size:8pt;">&nbsp;</h2>
     
-    <h2 style="text-align:center;font-size:11pt;">ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ(เฉพาะผู้มาคลอด)&nbsp;<br>' . htmlspecialchars(DbConstant::HOSPITAL_NAME) . '</h2>
-    <label class="col-sm-12"><font color="red"> <b>รอปรับรายงานให้ถูกต้อง </b></font></label>
+    <h2 style="text-align:center;font-size:11pt;">ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ(เฉพาะผู้มาคลอด)&nbsp;<br>' . htmlspecialchars(DbConstant::HOSPITAL_NAME) .$check_report. '</h2>
    
     <div class="form-group row">
                                 <label class="col-sm-12">ข้อมูลทั่วไป</label>

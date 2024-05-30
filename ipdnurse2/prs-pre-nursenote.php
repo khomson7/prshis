@@ -20,6 +20,7 @@ require_once '../mains/ipd-show-patient-sticky.php';
 
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
@@ -124,6 +125,9 @@ date_default_timezone_set('asia/bangkok');
 
 //echo $_SESSION['name']; 
 
+$id = '16'; //Link menu
+ $check_    = ReportQueryUtils::getProduction($id)
+
 ?>
 
 <style>
@@ -191,7 +195,12 @@ date_default_timezone_set('asia/bangkok');
                 <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
             </div>
             <div class="col-auto p-1 font-weight-bold">
-                <h5><B>ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?><font color="red"> (ช่วงทดสอบ) </font></B></h5>
+                <h5><B>ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?><?php if ($check_ == "1") { ?>
+
+<font color="red">ช่วงทดลอง</font>
+<?php } else { ?>
+
+<? } ?></B></h5>
             </div>
 
         </div>

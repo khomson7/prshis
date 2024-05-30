@@ -102,6 +102,11 @@
         $plan_management = $_REQUEST['plan_management'];
         $diff_dx = $_REQUEST['diff_dx'];
         $problem_list = $_REQUEST['problem_list'];
+
+        $primary_a = $_REQUEST['primary_a'];
+
+
+
         $create_user = $_SESSION['loginname'];
         $nurse_name = empty($_REQUEST['nurse_name']) ? null : $_REQUEST['nurse_name'];
         // $doc_name = empty($_REQUEST['doc_name']) ? null : $_REQUEST['doc_name'];
@@ -122,6 +127,7 @@
                 pe_neck,pe_breastthorax,pe_heart,pe_lungs,pe_abdomen,pe_rectalgenitalia,pe_extremities,
                 pe_neurological,pe_ob_gynexam,pe_other,pe_text,pe_cvs,pe_cns,svg_tag,svg_tag1,svg_tag2,svg_tag3,svg_tag4,svg_tag5,plan_management,problem_list,
                 impression,diff_dx,
+                primary_a,
                 create_user,nurse_name,nurse_pos,update_user,create_datetime,update_datetime,version)
                 VALUES (:hn,:an,:chief_complaints,:medical_history,:req_hospital
                 ,:informant_patient,:informant_relatives,:informant_deliverer,:informant_etc
@@ -131,6 +137,7 @@
                 :pe_skin,:pe_heent,:pe_neck,:pe_breastthorax,:pe_heart,:pe_lungs,:pe_abdomen,:pe_rectalgenitalia,
                 :pe_extremities,:pe_neurological,:pe_ob_gynexam,:pe_other,:pe_text,:pe_cvs,:pe_cns,:svg_tag,:svg_tag1,:svg_tag2,:svg_tag3,:svg_tag4,:svg_tag5,:plan_management,:problem_list,
                 :impression,:diff_dx,
+                :primary_a,
                 :create_user,:nurse_name,:nurse_pos,:update_user,now(),now(),:version)");
                 $stmt->execute(array('hn'=>$hn,'an'=>$an ,'chief_complaints'=>$chief_complaints,
                 'medical_history'=>$medical_history,'req_hospital'=>$req_hospital
@@ -146,6 +153,7 @@
                 'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns, 'svg_tag'=>$svg_tag,'svg_tag1'=>$svg_tag1,'svg_tag2'=>$svg_tag2,'svg_tag3'=>$svg_tag3,'svg_tag4'=>$svg_tag4,'svg_tag5'=>$svg_tag5,'plan_management'=>$plan_management,'problem_list'=>$problem_list,
                 'impression'=>$impression,'diff_dx'=>$diff_dx,
+                'primary_a'=>$primary_a,
                 'create_user'=>$create_user,'nurse_name'=>$nurse_name,'nurse_pos'=>$nurse_pos,'update_user'=>$update_user,'version'=>$version));
 
               $admission_note_id = $conn->lastInsertId();

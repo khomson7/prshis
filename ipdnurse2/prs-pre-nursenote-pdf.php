@@ -30,6 +30,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');
 
@@ -364,6 +365,7 @@ while ($row_item = $stmt_item->fetch()) {
     
 
 
+
 //-------------------------Doctor admission note
 $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,
             (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
@@ -392,6 +394,19 @@ $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.ln
   
         $receive_date        =  $row['receive_date'];
         $receive_time        =  $row['receive_time'];
+
+        $id = '16'; //Link menu
+        $check_    = ReportQueryUtils::getProduction($id);
+
+        $check_report = '( )';
+        if ($check_  == '1') 
+        {$check_report = '&nbsp;<font color="red">รอปรับรายงาน</font>';
+        } else {
+            $check_report = '';
+        }
+       
+        
+       
 
 $head =
 '
@@ -438,9 +453,8 @@ $head =
     </style>
     <h2 style="text-align:right;font-size:8pt;">FM-CLT-001</h2>
     
-    <h2 style="text-align:center;font-size:11pt;">ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ&nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).'</h2>
+    <h2 style="text-align:center;font-size:11pt;">ใบบันทึกประวัติและประเมินสมรรถนะผู้ป่วยแรกรับ&nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>
     
-    <label class="col-sm-12"><font color="red"> <b>รอปรับรายงานให้ถูกต้อง </b></font></label>
     <div class="form-group row">
                                 <label class="col-sm-12">ข้อมูลทั่วไป</label>
                             </div>
