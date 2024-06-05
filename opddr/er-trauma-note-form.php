@@ -86,7 +86,7 @@ if ($row  = $stmt->fetch()) {
 $sql_item = "SELECT dr_adm_item.admission_note_item_id,
             dr_adm_item.admission_note_doctor,
             doctor.`name` AS admission_note_doctorname
-            FROM " . DbConstant::KPHIS_DBNAME . ".prs_dr_admission_note_item dr_adm_item
+            FROM " . DbConstant::KPHIS_DBNAME . ".prs_trauma_note_item dr_adm_item
             LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor ON doctor.code = dr_adm_item.admission_note_doctor
             WHERE an = :vn
             ORDER BY dr_adm_item.admission_note_item_id ASC
@@ -302,7 +302,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                             <div class="form-group row">
                                 <label class="col-sm-1"><B> PI: </B></label>
                                 <div class="col-sm-11">
-                                    <textarea class="form-control" id="medical_history" name="medical_history" rows="3"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['medical_history'])) ?></textarea>
+                                    <textarea class="form-control" id="hpi" name="hpi" rows="3"><?= (isset($row_opdscreen['hpi']) && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['hpi'])) ?></textarea>
                                 </div>
                             </div>
 
@@ -480,7 +480,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                                             && $row['vaccineation'] != NULL
                                                         ) {
                                                             echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="vaccineation3" name="vaccineation" onchange="vaccineation_check('on_checked');">
+                                                        } ?> class="custom-control-input" id="vaccineation3" name="vaccigdneation" onchange="vaccineation_check('on_checked');">
                                     <label class="custom-control-label" for="vaccineation3"></label>
                                 </div>
 
@@ -743,8 +743,8 @@ $check_    = ReportQueryUtils::getProduction($id)
                                     <input type="text" class="form-control form-control-sm" id="trachea_text" name="trachea" value="<?php if ($row['trachea'] != 'Midline' && $row['trachea'] != NULL) {
                                                                                                                                         echo htmlspecialchars($row['trachea']);
                                                                                                                                     } ?>" <?php if (!($row['trachea'] != 'Midline' && $row['trachea'] != NULL)) {
-                                                                                                                                                    echo 'disabled';
-                                                                                                                                                } ?>>
+                                                                                                                                                echo 'disabled';
+                                                                                                                                            } ?>>
                                 </div>
 
 
@@ -752,7 +752,7 @@ $check_    = ReportQueryUtils::getProduction($id)
 
 
 
-                            
+
 
 
                             <div class="form-group row">
@@ -781,11 +781,11 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control form-control-sm" id="chest_wound_text" name="chest_wound" value="<?php if ($row['chest_wound'] != 'No') {
-                                                                                                                                echo htmlspecialchars($row['chest_wound']);
-                                                                                                                            } ?>" <?php if (!($row['chest_wound'] != 'No'
-                                                                                                                                        && $row['chest_wound'] != NULL)) {
-                                                                                                                                        echo 'disabled';
-                                                                                                                                    } ?>>
+                                                                                                                                                echo htmlspecialchars($row['chest_wound']);
+                                                                                                                                            } ?>" <?php if (!($row['chest_wound'] != 'No'
+                                                                                                                                                        && $row['chest_wound'] != NULL)) {
+                                                                                                                                                        echo 'disabled';
+                                                                                                                                                    } ?>>
                                 </div>
 
 
@@ -835,7 +835,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                                         } ?> class="custom-control-input" id="cct2" name="cct" onchange="custom_check('on_cct');">
                                     <label class="custom-control-label" for="cct2">Positive</label>
                                 </div>
-                                
+
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control form-control-sm" id="cct_text" name="cct" value="<?php if ($row['cct'] != 'Negative') {
                                                                                                                                 echo htmlspecialchars($row['cct']);
@@ -846,32 +846,32 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 </div>
 
                             </div>
-                            
+
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
                                 &nbsp;&nbsp;&nbsp;<label class="col-sm-2 text-left">Lung sound</label>
                                 <div class="custom-control custom-checkbox col-sm-2">
                                     <input type="radio" <?php if ($row['lung_sound'] == 'clear') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="l1" value="clear" name="lung_sound">
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="l1" value="clear" name="lung_sound">
                                     <label class="custom-control-label" for="l1">clear & equal</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-2">
                                     <input type="radio" <?php if ($row['lung_sound'] == 'decrease') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="l2" value="decrease" name="lung_sound">
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="l2" value="decrease" name="lung_sound">
                                     <label class="custom-control-label" for="l2">decrease</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
                                     <input type="radio" <?php if ($row['lung_sound'] == 'rt') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="l3" value="rt" name="lung_sound">
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="l3" value="rt" name="lung_sound">
                                     <label class="custom-control-label" for="l3">Rt.</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
                                     <input type="radio" <?php if ($row['lung_sound'] == 'lt') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="l4" value="lt" name="lung_sound">
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="l4" value="lt" name="lung_sound">
                                     <label class="custom-control-label" for="l4">Lt.</label>
                                 </div>
 
@@ -912,30 +912,30 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                 <div class="custom-control custom-radio col-sm-1">
                                     <input type="radio" <?php if (
-                                                            $row['gd'] == 'Normal'
-                                                            || $row['gd'] == NULL
+                                                            $row['ext_act_bleed'] == 'No'
+                                                            || $row['ext_act_bleed'] == NULL
                                                         ) {
                                                             echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="gd1" name="gd" value="Normal" onchange="gd_check('off_checked');">
-                                    <label class="custom-control-label" for="gd1">No</label>
+                                                        } ?> class="custom-control-input" id="ext_act_bleed1" name="ext_act_bleed" value="No" onchange="custom_check('off_ext_act_bleed');">
+                                    <label class="custom-control-label" for="ext_act_bleed1">No</label>
                                 </div>
 
                                 <div class="custom-control custom-radio col-sm-1">
                                     <input type="radio" <?php if (
-                                                            $row['gd'] != 'Normal'
-                                                            && $row['gd'] != NULL
+                                                            $row['ext_act_bleed'] != 'No'
+                                                            && $row['ext_act_bleed'] != NULL
                                                         ) {
                                                             echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="gd2" name="gd" onchange="gd_check('on_checked');">
-                                    <label class="custom-control-label" for="gd2">Yes</label>
+                                                        } ?> class="custom-control-input" id="ext_act_bleed2" name="ext_act_bleed" onchange="custom_check('on_ext_act_bleed');">
+                                    <label class="custom-control-label" for="ext_act_bleed2">Yes</label>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-sm" id="gd_text" name="gd" value="<?php if ($row['gd'] != 'Normal') {
-                                                                                                                                echo htmlspecialchars($row['gd']);
-                                                                                                                            } ?>" <?php if (!($row['gd'] != 'Normal'
-                                                                                                                                        && $row['gd'] != NULL)) {
-                                                                                                                                        echo 'disabled';
-                                                                                                                                    } ?>>
+                                    <input type="text" class="form-control form-control-sm" id="ext_act_bleed_text" name="ext_act_bleed" value="<?php if ($row['ext_act_bleed'] != 'No') {
+                                                                                                                                                    echo htmlspecialchars($row['ext_act_bleed']);
+                                                                                                                                                } ?>" <?php if (!($row['ext_act_bleed'] != 'No'
+                                                                                                                                                            && $row['ext_act_bleed'] != NULL)) {
+                                                                                                                                                            echo 'disabled';
+                                                                                                                                                        } ?>>
                                 </div>
 
 
@@ -947,16 +947,16 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 <label>&nbsp;&nbsp;D: GCS E</label>
 
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" id="c_bps" name="c_bps" placeholder="E" value="<?= (isset($row['c_bps']) ? htmlspecialchars($row['c_bps']) : '') ?>">
+                                    <input type="text" class="form-control form-control-sm" id="gcs_e" name="gcs_e" placeholder="E" value="<?= (isset($row['gcs_e']) ? htmlspecialchars($row['gcs_e']) : '') ?>">
                                 </div> V
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" id="c_bpd" name="c_bpd" placeholder="V" value="<?= (isset($row['c_bpd']) ? htmlspecialchars($row['c_bpd']) : '') ?>">
+                                    <input type="text" class="form-control form-control-sm" id="gcs_v" name="gcs_v" placeholder="V" value="<?= (isset($row['gcs_v']) ? htmlspecialchars($row['gcs_v']) : '') ?>">
                                 </div>M
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" id="c_bps" name="c_bps" placeholder="M" value="<?= (isset($row['c_bps']) ? htmlspecialchars($row['c_bps']) : '') ?>">
+                                    <input type="text" class="form-control form-control-sm" id="gcs_m" name="gcs_m" placeholder="M" value="<?= (isset($row['gcs_m']) ? htmlspecialchars($row['gcs_m']) : '') ?>">
                                 </div>, Pupil Rt
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" id="c_bps" name="c_bps" placeholder="M" value="<?= (isset($row['c_bps']) ? htmlspecialchars($row['c_bps']) : '') ?>">
+                                    <input type="text" class="form-control form-control-sm" id="pupil_rt" name="pupil_rt" placeholder="Rt" value="<?= (isset($row['pupil_rt']) ? htmlspecialchars($row['pupil_rt']) : '') ?>">
                                 </div>
 
                             </div>
@@ -966,7 +966,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lt</label>
 
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm" id="c_bps" name="c_bps" placeholder="M" value="<?= (isset($row['c_bps']) ? htmlspecialchars($row['c_bps']) : '') ?>">
+                                    <input type="text" class="form-control form-control-sm" id="pupil_lt" name="pupil_lt" placeholder="Lt" value="<?= (isset($row['pupil_lt']) ? htmlspecialchars($row['pupil_lt']) : '') ?>">
                                 </div>
 
                             </div>
@@ -975,7 +975,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 <div class="col-sm-1"></div>
                                 <label>&nbsp;&nbsp;E:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="event_environment" name="event_environment" rows="4"><?= (isset($row['event_environment']) ? htmlspecialchars($row['event_environment']) : '') ?></textarea>
+                                    <textarea class="form-control" id="e_text" name="e_text" rows="4"><?= (isset($row['e_text']) ? htmlspecialchars($row['e_text']) : '') ?></textarea>
                                 </div>
                             </div>
 
@@ -1243,18 +1243,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                             <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_cns','No hepatosplenomegaly')"><i class="fas fa-baby"></i> Normal</button>
                                         </div>
                                     </div>
-                                    <!--
-                                    <div class="form-group row">
-                                        <label class="text-right col-sm-3">Neurological</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="" id="pe_neurological" name="pe_neurological">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neurological','E4V5M6, Grade V all extremities')"><i class="fas fa-user"></i> Normal</button>
-                                            <button type="button" class="btn btn-secondary btn-sm PhysicalExaminationBtn" onclick="onclick_Normal('pe_neurological','Moro reflex positive')"><i class="fas fa-baby"></i> Normal</button>
-                                        </div>
-                                    </div>
-                                                                                                                -->
+
                                     <div class="form-group row">
                                         <label class="text-right col-sm-3">OB/Gyn exam</label>
                                         <div class="col-sm-7">
@@ -1339,112 +1328,139 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                             <div class="form-group row">
 
-                                                <label class="text-right col-sm-3">Mild TBI</label>
-                                                <div class="custom-control custom-checkbox col-sm-1">
-                                                    <input type="checkbox" <?php if ($row['m_low_risk'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="m1" value="Y" name="m_low_risk">
-                                                    <label class="custom-control-label" for="m1">Low risk</label>
+                                            
+                                                    <input type="radio" <?php if ($row['mild_tbi'] == '' && $row['mild_tbi'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="mild_tbi0" value="" name="mild_tbi">
+                                                    <label class="custom-control-label" for="mild_tbi0">reset</label>
+                                             
+                     
+                                                <label class="text-right col-sm-3" >Mild TBI</label>
+
+                                                <div class="custom-control custom-checkbox col-sm-2">
+                                                    <input type="radio" <?php
+                                                                        if ($row['mild_tbi'] == 'Low risk' && $row['mild_tbi'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        }
+                                                                        ?> class="custom-control-input" id="mild_tbi1" value="Low risk" name="mild_tbi">
+                                                    <label class="custom-control-label" for="mild_tbi1">Low risk</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['m_moderate_risk'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="m2" value="Y" name="m_moderate_risk">
-                                                    <label class="custom-control-label" for="m2">Moderate risk</label>
+                                                    <input type="radio" <?php if ($row['mild_tbi'] == 'Moderate risk' && $row['mild_tbi'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="mild_tbi2" value="Moderate risk" name="mild_tbi">
+                                                    <label class="custom-control-label" for="mild_tbi2">Moderate risk</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['m_high_risk'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="m3" value="Y" name="m_high_risk">
-                                                    <label class="custom-control-label" for="m3">High risk</label>
+                                                    <input type="radio" <?php if ($row['mild_tbi'] == 'High risk' && $row['mild_tbi'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="mild_tbi3" value="High risk" name="mild_tbi">
+                                                    <label class="custom-control-label" for="mild_tbi3">High risk</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['m_moderate_risk'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="m4" value="Y" name="m_moderate_risk">
-                                                    <label class="custom-control-label" for="m4">Moderate TBI</label>
+                                                    <input type="radio" <?php if ($row['mild_tbi'] == 'Moderate TBI' && $row['mild_tbi'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="mild_tbi4" value="Moderate TBI" name="mild_tbi">
+                                                    <label class="custom-control-label" for="mild_tbi4">Moderate TBI</label>
                                                 </div>
+
+
 
 
                                             </div>
 
                                             <div class="form-group row">
+
+                                            <input type="radio" <?php if ($row['abdomen'] == '' && $row['abdomen'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="abdomen0" value="" name="abdomen">
+                                                    <label class="custom-control-label" for="abdomen0">reset</label>
 
                                                 <label class="text-right col-sm-3">Abdomen</label>
                                                 <div class="custom-control custom-checkbox col-sm-1">
-                                                    <input type="checkbox" <?php if ($row['ab_blunt'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="ab1" value="Y" name="ab_blunt">
-                                                    <label class="custom-control-label" for="ab1">blunt</label>
+                                                    <input type="radio" <?php if ($row['abdomen'] == 'blunt') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="abdomen1" value="blunt" name="abdomen">
+                                                    <label class="custom-control-label" for="abdomen1">blunt</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['ab_penetrating'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="m2" value="Y" name="ab_penetrating">
-                                                    <label class="custom-control-label" for="ab2">Penetrating</label>
+                                                    <input type="radio" <?php if ($row['abdomen'] == 'Penetrating') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="abdomen2" value="Penetrating" name="abdomen">
+                                                    <label class="custom-control-label" for="abdomen2">Penetrating</label>
                                                 </div>
 
                                             </div>
 
                                             <div class="form-group row">
+
+                                            <input type="radio" <?php if ($row['chest'] == '' && $row['chest'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="chest0" value="" name="chest">
+                                                    <label class="custom-control-label" for="chest0">reset</label>
 
                                                 <label class="text-right col-sm-3">Chest</label>
                                                 <div class="custom-control custom-checkbox col-sm-1">
-                                                    <input type="checkbox" <?php if ($row['ch_blunt'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="ch1" value="Y" name="ch_blunt">
-                                                    <label class="custom-control-label" for="ch1">blunt</label>
+                                                    <input type="radio" <?php if ($row['chest'] == 'blunt') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="chest1" value="blunt" name="chest">
+                                                    <label class="custom-control-label" for="chest1">blunt</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['ch_penetrating'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="ch2" value="Y" name="ch_penetrating">
-                                                    <label class="custom-control-label" for="ch2">Penetrating</label>
+                                                    <input type="radio" <?php if ($row['chest'] == 'Penetrating') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="chest2" value="Penetrating" name="chest">
+                                                    <label class="custom-control-label" for="chest2">Penetrating</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['ch_lung_contusion'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="ch3" value="Y" name="ch_lung_contusion">
-                                                    <label class="custom-control-label" for="ch3">Lung contusion</label>
+                                                    <input type="radio" <?php if ($row['chest'] == 'Lung contusion') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="chest3" value="Lung contusion" name="chest">
+                                                    <label class="custom-control-label" for="chest3">Lung contusion</label>
                                                 </div>
 
                                             </div>
 
                                             <div class="form-group row">
 
+                                            <input type="radio" <?php if ($row['pneumothorax'] == '' && $row['pneumothorax'] != null) {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="pneumothorax0" value="" name="pneumothorax">
+                                                    <label class="custom-control-label" for="pneumothorax0">reset</label>
+
                                                 <label class="text-right col-sm-3">Pneumothorax</label>
                                                 <div class="custom-control custom-checkbox col-sm-2">
-                                                    <input type="checkbox" <?php if ($row['pn_spontaneous'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="pn1" value="Y" name="pn_spontaneous">
-                                                    <label class="custom-control-label" for="pn1">Spontaneous</label>
+                                                    <input type="radio" <?php if ($row['pneumothorax'] == 'Spontaneous') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="pneumothorax1" value="Spontaneous" name="pneumothorax">
+                                                    <label class="custom-control-label" for="pneumothorax1">Spontaneous</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-1">
-                                                    <input type="checkbox" <?php if ($row['pn_tension'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="pn2" value="Y" name="pn_tension">
-                                                    <label class="custom-control-label" for="pn2">Tension</label>
+                                                    <input type="radio" <?php if ($row['pneumothorax'] == 'Tension') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="pneumothorax2" value="Tension" name="pneumothorax">
+                                                    <label class="custom-control-label" for="pneumothorax2">Tension</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-3">
-                                                    <input type="checkbox" <?php if ($row['pn_hemothorax'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="pn3" value="Y" name="pn_hemothorax">
-                                                    <label class="custom-control-label" for="pn3">Hemothorax (massive / Non-massive)</label>
+                                                    <input type="radio" <?php if ($row['pneumothorax'] == 'Hemothorax') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="pneumothorax3" value="Hemothorax" name="pneumothorax">
+                                                    <label class="custom-control-label" for="pneumothorax3">Hemothorax (massive / Non-massive)</label>
                                                 </div>
 
                                                 <div class="custom-control custom-checkbox col-sm-1">
-                                                    <input type="checkbox" <?php if ($row['pn_open'] == 'Y') {
-                                                                                echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="pn4" value="Y" name="pn_open">
-                                                    <label class="custom-control-label" for="pn4">Open</label>
+                                                    <input type="radio" <?php if ($row['pneumothorax'] == 'Open') {
+                                                                            echo 'checked="checked"';
+                                                                        } ?> class="custom-control-input" id="pneumothorax4" value="Open" name="pneumothorax">
+                                                    <label class="custom-control-label" for="pneumothorax4">Open</label>
                                                 </div>
 
                                             </div>
@@ -1456,14 +1472,14 @@ $check_    = ReportQueryUtils::getProduction($id)
                                             <div class="form-group row">
                                                 <label class="text-right col-sm-3">Fracture</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['fracture']) ? htmlspecialchars($row['fracture']) : '') ?>" id="" name="impression">
+                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['fracture']) ? htmlspecialchars($row['fracture']) : '') ?>" id="fracture" name="fracture">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label class="text-right col-sm-3">Other</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['other2']) ? htmlspecialchars($row['other2']) : '') ?>" id="" name="other2">
+                                                    <input type="text" class="form-control form-control-sm PhysicalExaminationInput" value="<?= (isset($row['other_text']) ? htmlspecialchars($row['other_text']) : '') ?>" id="" name="other_text">
                                                 </div>
                                             </div>
                                             <!--
@@ -1592,6 +1608,22 @@ $check_    = ReportQueryUtils::getProduction($id)
     <input type="hidden" id="doc_pos"     name="doc_pos"     value="<?= (htmlspecialchars($_SESSION['groupname']) == 'แพทย์' ? htmlspecialchars($row_opduser['entryposition']) : '') ?>"> -->
     </div>
 </form>
+
+<script src="../include/my_function.js"></script>
+
+<script type="text/javascript">
+    function sendPost() {
+        var value = $('input[name="ans"]:checked').val();
+
+        if (value == undefined) {
+            console.log('no_value');
+        } else {
+            console.log(value);
+        }
+        //window.location.href = "sendpost.php?ans="+value;
+    };
+</script>
+
 <script>
     function AddDoctorSignature() {
         const doc_name = <?= json_encode($_SESSION['name']) ?>;
@@ -1670,6 +1702,7 @@ $check_    = ReportQueryUtils::getProduction($id)
     //--------------------------------------------canvas----------------------------------------------
 
 
+    
     function custom_check(value) {
 
 
@@ -1695,6 +1728,14 @@ $check_    = ReportQueryUtils::getProduction($id)
         } else if (value == "on_cct") {
             $('#cct_text').attr("disabled", false).val('');
             $('#cct1').prop("checked", false);
+        }
+
+        if (value == "off_ext_act_bleed") {
+            $('#ext_act_bleed_text').attr("disabled", true).val('');
+            $('#ext_act_bleed2').prop("checked", false);
+        } else if (value == "on_ext_act_bleed") {
+            $('#ext_act_bleed_text').attr("disabled", false).val('');
+            $('#ext_act_bleed1').prop("checked", false);
         }
 
 
@@ -1880,16 +1921,6 @@ $check_    = ReportQueryUtils::getProduction($id)
         }
     }
 
-    function history_from_check(value) {
-        if (value == "off_checked") {
-            $('#history_from_text').attr("disabled", true).val('');
-            $('#history_from3').prop("checked", false);
-        } else if (value == "on_checked") {
-            $('#history_from_text').attr("disabled", false).val('');
-            $('#history_from1').prop("checked", false);
-            $('#history_from2').prop("checked", false);
-        }
-    }
 
     function vaccineation_check(value) {
         if (value == "off_checked") {
@@ -2023,8 +2054,8 @@ $check_    = ReportQueryUtils::getProduction($id)
             if (admission_note_id == "") {
                 $.post(url_save, er_trauma, function(data) {
                         $("#show_check_save").html(data);
-                        alert("บันทึกข้อมูลสำเร็จ");
-                        window.location.reload(true);
+                      ///  alert("บันทึกข้อมูลสำเร็จ");
+                      //  window.location.reload(true);
                         //self.close();
                     })
                     .fail(function() {
@@ -2033,7 +2064,7 @@ $check_    = ReportQueryUtils::getProduction($id)
             } else {
                 $.post(url_update, er_trauma, function(data) {
                         $("#show_check_save").html(data);
-                        alert("บันทึกข้อมูลสำเร็จ");
+                       // alert("บันทึกข้อมูลสำเร็จ");
                         // self.close();
                     })
                     .fail(function() {
@@ -2063,4 +2094,12 @@ $check_    = ReportQueryUtils::getProduction($id)
         $('#' + id9).val(value9);
         $('#' + id10).val(value10);
     }
+
+    $('.reset').click(function() {
+        var name = $(this).data('name');
+        $('input[name=' + name + ']').prop('checked', false);
+    });
 </script>
+
+<script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">

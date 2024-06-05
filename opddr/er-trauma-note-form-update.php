@@ -14,11 +14,11 @@
         $report_type_id = '1'; //from table prs_report_type
       //  $an = $_REQUEST['an'];
         $hn = $_REQUEST['hn'];
-        $hpi = $_REQUEST['hpi'];
+        $hpi  = empty($_REQUEST['hpi'])? null : $_REQUEST['hpi'];
         $req_hospital = $_REQUEST['req_hospital'];
         $ros = $_REQUEST['ros'];
         //$history_from = $_REQUEST['history_from'];
-        $history_from  = empty($_REQUEST['history_from'])? null : $_REQUEST['history_from'];
+       // $history_from  = empty($_REQUEST['history_from'])? null : $_REQUEST['history_from'];
         $pmh = $_REQUEST['pmh'];
         $fh = $_REQUEST['fh'];
         $vaccineation = $_REQUEST['vaccineation'];
@@ -40,7 +40,7 @@
         $informant_deliverer = empty($_REQUEST['informant_deliverer'])? null : $_REQUEST['informant_deliverer'];
         $informant_etc = empty($_REQUEST['informant_etc'])? null : $_REQUEST['informant_etc'];
         $chief_complaints = $_REQUEST['chief_complaints'];
-        $medical_history  = $_REQUEST['medical_history'];
+       // $medical_history  = $_REQUEST['medical_history'];
         $bp = empty($_REQUEST['bp']) ? null : $_REQUEST['bp'];
         $t  = empty($_REQUEST['t']) ? null : $_REQUEST['t'];
         $pr = empty($_REQUEST['pr']) ? null : $_REQUEST['pr'];
@@ -133,31 +133,18 @@
         $pe_general = $_REQUEST['pe_general'];
         $pe_skin = $_REQUEST['pe_skin'];
         $pe_heent = $_REQUEST['pe_heent'];
-        $pe_neck = $_REQUEST['pe_neck'];
+       
         $pe_breastthorax = $_REQUEST['pe_breastthorax'];
-        $pe_heart = $_REQUEST['pe_heart'];
-        $pe_lungs = $_REQUEST['pe_lungs'];
-        $pe_abdomen = $_REQUEST['pe_abdomen'];
-        $pe_rectalgenitalia = $_REQUEST['pe_rectalgenitalia'];
-        $pe_extremities = $_REQUEST['pe_extremities'];
-        $pe_neurological = $_REQUEST['pe_neurological'];
         $pe_ob_gynexam = $_REQUEST['pe_ob_gynexam'];
         $pe_other = $_REQUEST['pe_other'];
         $pe_text = $_REQUEST['pe_text'];
         $pe_cvs = $_REQUEST['pe_cvs'];
         $pe_cns = $_REQUEST['pe_cns'];
         $svg_tag = $_REQUEST['svg_tag'];
-        $impression = $_REQUEST['impression'];
         $problem_list = $_REQUEST['problem_list'];
-        $diff_dx = $_REQUEST['diff_dx'];
-        $plan_management = $_REQUEST['plan_management'];
+       
         $nurse_name = empty($_REQUEST['nurse_name']) ? null : $_REQUEST['nurse_name'];
         $nurse_pos = empty($_REQUEST['nurse_pos']) ? null : $_REQUEST['nurse_pos'];
-        $tr_allergy = empty($_REQUEST['tr_allergy']) ? null : $_REQUEST['tr_allergy'];
-        $tr_meddication = empty($_REQUEST['tr_meddication']) ? null : $_REQUEST['tr_meddication'];
-        $part_illness= empty($_REQUEST['part_illness']) ? null : $_REQUEST['part_illness'];
-        $last_meal= empty($_REQUEST['last_meal']) ? null : $_REQUEST['last_meal'];
-        $event_environment= empty($_REQUEST['event_environment']) ? null : $_REQUEST['event_environment'];
         //    
         $primary_a = empty($_REQUEST['primary_a']) ? null : $_REQUEST['primary_a'];
         $c_spine = empty($_REQUEST['c_spine']) ? null : $_REQUEST['c_spine'];
@@ -171,8 +158,26 @@
         $dbp = empty($_REQUEST['dbp']) ? null : $_REQUEST['dbp'];
         $pr2 = empty($_REQUEST['pr2']) ? null : $_REQUEST['pr2'];
         $ext_act_bleed = empty($_REQUEST['ext_act_bleed']) ? null : $_REQUEST['ext_act_bleed'];
+        $gcs_e = empty($_REQUEST['gcs_e']) ? null : $_REQUEST['gcs_e'];
+        $gcs_v = empty($_REQUEST['gcs_v']) ? null : $_REQUEST['gcs_v'];
+        $gcs_m = empty($_REQUEST['gcs_m']) ? null : $_REQUEST['gcs_m'];
+        $pupil_rt = empty($_REQUEST['pupil_rt']) ? null : $_REQUEST['pupil_rt'];
+        $pupil_lt = empty($_REQUEST['pupil_lt']) ? null : $_REQUEST['pupil_lt'];
+        $e_text = empty($_REQUEST['e_text']) ? null : $_REQUEST['e_text'];
+        $fracture = empty($_REQUEST['fracture']) ? null : $_REQUEST['fracture'];
+        $other_text = empty($_REQUEST['other_text']) ? null : $_REQUEST['other_text'];
+        $plan_of_treatment = empty($_REQUEST['plan_of_treatment']) ? null : $_REQUEST['plan_of_treatment'];
+        $mild_tbi = empty($_REQUEST['mild_tbi']) ? null : $_REQUEST['mild_tbi'];
+        $abdomen = empty($_REQUEST['abdomen']) ? null : $_REQUEST['abdomen'];
+        $chest = empty($_REQUEST['chest']) ? null : $_REQUEST['chest'];
+        $pneumothorax = empty($_REQUEST['pneumothorax']) ? null : $_REQUEST['pneumothorax'];
+        $tr_allergy = empty($_REQUEST['tr_allergy']) ? null : $_REQUEST['tr_allergy'];
+        $tr_meddication = empty($_REQUEST['tr_meddication']) ? null : $_REQUEST['tr_meddication'];
+        $part_illness = empty($_REQUEST['part_illness']) ? null : $_REQUEST['part_illness'];
+        $last_meal = empty($_REQUEST['last_meal']) ? null : $_REQUEST['last_meal'];
+        $event_environment = empty($_REQUEST['event_environment']) ? null : $_REQUEST['event_environment'];
 
-      
+           
         $create_user = $_SESSION['loginname'];
   
         $update_user = $_SESSION['loginname'];
@@ -182,59 +187,76 @@
  
 
             try {
-                $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_er_trauma_note SET hn=:hn, an=:an,
-                chief_complaints=:chief_complaints,medical_history=:medical_history,req_hospital=:req_hospital
+
+                if ( $chief_complaints != '' 
+) {
+    $output_error = '<script>
+        NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");     
+        </script>';
+
+        $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_er_trauma_note SET hn=:hn, an=:an,
+                chief_complaints=:chief_complaints,hpi=:hpi,req_hospital=:req_hospital
                 ,informant_patient=:informant_patient,informant_relatives=:informant_relatives, informant_deliverer=:informant_deliverer
                 ,informant_etc=:informant_etc
-                ,ros=:ros,vaccineation=:vaccineation,history_from=:history_from,pmh=:pmh,fh=:fh
+                ,ros=:ros,vaccineation=:vaccineation,pmh=:pmh,fh=:fh
                 ,gd=:gd,fdh=:fdh,lmp=:lmp,
                 inpatient_history=:inpatient_history,inpatient_last_date=:inpatient_last_date,inpatient_location=:inpatient_location,inpatient_because=:inpatient_because,
                 pe_general=:pe_general, pe_skin=:pe_skin,
-                pe_heent=:pe_heent, pe_neck=:pe_neck,pe_breastthorax=:pe_breastthorax,
-                pe_heart=:pe_heart, pe_lungs=:pe_lungs, pe_abdomen=:pe_abdomen,
-                pe_rectalgenitalia=:pe_rectalgenitalia,pe_extremities=:pe_extremities,
-                pe_neurological=:pe_neurological, pe_ob_gynexam=:pe_ob_gynexam,
+                pe_heent=:pe_heent,pe_ob_gynexam=:pe_ob_gynexam,
                 pe_other=:pe_other,pe_text=:pe_text,pe_cvs=:pe_cvs, pe_cns=:pe_cns
-                ,tr_allergy=:tr_allergy,tr_meddication=:tr_meddication,part_illness=:part_illness,last_meal=:last_meal,event_environment=:event_environment
                 ,primary_a=:primary_a,c_spine=:c_spine,trachea=:trachea,chest_wound=:chest_wound,subcu_emp=:subcu_emp
                 ,cct=:cct,lung_sound=:lung_sound,o2sat=:o2sat,sbp=:sbp,dbp=:dbp,pr2=:pr2
-                ,svg_tag=:svg_tag,impression=:impression,diff_dx=:diff_dx,problem_list=:problem_list,plan_management=:plan_management,
+                ,ext_act_bleed=:ext_act_bleed,gcs_e=:gcs_e,gcs_v=:gcs_v,gcs_m=:gcs_m,pupil_rt=:pupil_rt,pupil_lt=:pupil_lt,e_text=:e_text
+                ,fracture=:fracture,other_text=:other_text,plan_of_treatment=:plan_of_treatment,mild_tbi=:mild_tbi,abdomen=:abdomen,chest=:chest
+                ,event_environment=:event_environment
+                ,pneumothorax=:pneumothorax,tr_allergy=:tr_allergy,tr_meddication=:tr_meddication,part_illness=:part_illness,last_meal=:last_meal
+                ,svg_tag=:svg_tag,problem_list=:problem_list,
                 update_user=:update_user,version=:version
                 WHERE admission_note_id=:admission_note_id");
                 $stmt->execute(array('admission_note_id'=>$admission_note_id, 'hn'=>$hn, 'an'=>$an,
-                'chief_complaints'=>$chief_complaints,'medical_history'=>$medical_history,'req_hospital'=>$req_hospital,
+                'chief_complaints'=>$chief_complaints,'hpi'=>$hpi,'req_hospital'=>$req_hospital,
                 'informant_patient'=>$informant_patient,
                 'informant_relatives'=>$informant_relatives, 'informant_deliverer'=>$informant_deliverer,
                 'informant_etc'=>$informant_etc,
-                'ros'=>$ros,'vaccineation'=>$vaccineation,'history_from'=>$history_from,'pmh'=>$pmh,'fh'=>$fh,
+                'ros'=>$ros,'vaccineation'=>$vaccineation,'pmh'=>$pmh,'fh'=>$fh,
                 'gd'=>$gd,'fdh'=>$fdh,'lmp'=>$lmp,
                 'inpatient_history'=>$inpatient_history,'inpatient_last_date'=>$inpatient_last_date
                 ,'inpatient_location'=>$inpatient_location,'inpatient_because'=>$inpatient_because,
                 'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin,
-                'pe_heent'=>$pe_heent, 'pe_neck'=>$pe_neck,'pe_breastthorax'=>$pe_breastthorax,
-                'pe_heart'=>$pe_heart, 'pe_lungs'=>$pe_lungs, 'pe_abdomen'=>$pe_abdomen,
-                'pe_rectalgenitalia'=>$pe_rectalgenitalia,'pe_extremities'=>$pe_extremities,
-                'pe_neurological'=>$pe_neurological, 'pe_ob_gynexam'=>$pe_ob_gynexam,
+                'pe_heent'=>$pe_heent, 'pe_ob_gynexam'=>$pe_ob_gynexam,
                 'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns
-                ,'tr_allergy'=>$tr_allergy,'tr_meddication'=>$tr_meddication,'part_illness'=>$part_illness,'last_meal'=>$last_meal,'event_environment'=>$event_environment
                 ,'primary_a'=>$primary_a,'c_spine'=>$c_spine,'trachea'=>$trachea,'chest_wound'=>$chest_wound,'subcu_emp'=>$subcu_emp
                 ,'cct'=>$cct,'lung_sound'=>$lung_sound,'o2sat'=>$o2sat,'sbp'=>$sbp,'dbp'=>$dbp,'pr2'=>$pr2
-                ,'svg_tag'=>$svg_tag,'impression'=>$impression,'diff_dx'=>$diff_dx,'problem_list'=>$problem_list,'plan_management'=>$plan_management,
+                ,'ext_act_bleed'=>$ext_act_bleed,'gcs_e'=>$gcs_e,'gcs_v'=>$gcs_v,'gcs_m'=>$gcs_m,'pupil_rt'=>$pupil_rt,'pupil_lt'=>$pupil_lt,'e_text'=>$e_text
+                ,'pneumothorax'=>$pneumothorax,'tr_allergy'=>$tr_allergy,'tr_meddication'=>$tr_meddication,'part_illness'=>$part_illness,'last_meal'=>$last_meal
+                ,'event_environment'=>$event_environment
+                ,'fracture'=>$fracture,'other_text'=>$other_text,'plan_of_treatment'=>$plan_of_treatment,'mild_tbi'=>$mild_tbi,'abdomen'=>$abdomen,'chest'=>$chest
+                ,'svg_tag'=>$svg_tag,'problem_list'=>$problem_list,
                 'update_user'=>$update_user,'version'=>$version));
 
-           /*  if(!empty($_REQUEST['admission_note_doctor'])){
-                    $stmt_item_check = "SELECT COUNT(*) AS count_item  FROM ".DbConstant::KPHIS_DBNAME.".prs_dr_admission_note_item WHERE an=:an";
+}else {
+
+    echo   '<script>
+     alert("กรุณากรอกข้อมูลให้ครบถ้วน", "error");     
+     </script>'; 
+}
+
+
+                
+
+            if(!empty($_REQUEST['admission_note_doctor'])){
+                    $stmt_item_check = "SELECT COUNT(*) AS count_item  FROM ".DbConstant::KPHIS_DBNAME.".prs_trauma_note_item WHERE an=:an";
                     $stmt_item_check = $conn->prepare($stmt_item_check);
                     $stmt_item_check->execute(['an'=>$an]);
                     $row_item_check = $stmt_item_check->fetch();
                     $count_item = $row_item_check['count_item'];
                     if($count_item > 0){
-                        $stmt_item_delete = "DELETE FROM ".DbConstant::KPHIS_DBNAME.".prs_dr_admission_note_item WHERE an=:an";
+                        $stmt_item_delete = "DELETE FROM ".DbConstant::KPHIS_DBNAME.".prs_trauma_note_item WHERE an=:an";
                         $stmt_item_delete = $conn->prepare($stmt_item_delete);
                         $stmt_item_delete->execute(['an'=>$an]);
                     }
                     foreach($_REQUEST['admission_note_doctor'] as $admission_note_doctor){
-                        $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_dr_admission_note_item
+                        $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_trauma_note_item
                         (admission_note_id,an,admission_note_doctor,create_user,create_datetime,update_user,update_datetime,version)
                         VALUES (:admission_note_id,:an,:admission_note_doctor,:create_user,now(),:update_user,now(),:version)");
                         $stmt_item->execute(array('admission_note_id'=>$admission_note_id, 'an'=>$an,
@@ -243,7 +265,8 @@
                     }
                 } 
 
-                */
+                
+
 /*
                 Session::insertSystemAccessLog(json_encode(array(
                     'form'=>'PRE-ER-DR-ADMISSION-NOTE-FORM',
@@ -252,11 +275,12 @@
                 ),JSON_UNESCAPED_UNICODE));
 
 */
-                $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
+              //  $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
                 } catch (PDOException  $e) {
                     echo $e->getMessage();
-                    $output_error = '<div class="alert alert-danger">ERROR !!</div>';
+                   $output_error = '<div class="alert alert-danger">ERROR !!</div>';
+                  // $output_error = '<script>NotificationMessage("บันทึกข้อมูลไม่สำเร็จ", "error")</script>';
                 }
 
             echo $output_error;
