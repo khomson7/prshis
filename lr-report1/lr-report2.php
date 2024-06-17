@@ -707,7 +707,7 @@ $id = '15'; //Link menu
                                     <input type="text" placeholder="วว/ดด/ปปปป" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[1]) : '') ?>" id="labor_date1" name="labor_date1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="number" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[2]) : '') ?>" id="ga1" name="ga1">
+                                    <input type="text" class="form-control form-control-sm" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[2]) : '') ?>" id="ga1" name="ga1">
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
                                     <input type="text" class="form-control form-control-sm" placeholder="ห้ามเกิน 15 ตัวอักษร" value="<?= (isset($row['labor_history']) ? htmlspecialchars($labor_history_pos[3]) : '') ?>" id="labor_by1" name="labor_by1">
@@ -749,7 +749,7 @@ $id = '15'; //Link menu
                                                 id='labor_date" . $z . "' name='labor_date" . $z . "'value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                         </div>
                                         <div class='custom-control custom-checkbox col-sm-1'>
-                                            <input type='number' class='form-control form-control-sm'
+                                            <input type='text' class='form-control form-control-sm'
                                                 id='ga" . $z . "' name='ga" . $z . "' placeholder='ระบุตัวเลข' value='" . htmlspecialchars($labor_history_pos[$y++]) . "'>
                                         </div>
                                         <div class='custom-control custom-checkbox col-sm-1'>
@@ -806,7 +806,7 @@ $id = '15'; //Link menu
                                     var new_chq_no = parseInt($('#total_chq').val()) + 1;
                                     var new_input = "<div id='labor_row" + new_chq_no + "'class='form-group row'> <div class='col-sm-0'></div><div class='custom-control col-sm-1'><input type='number' class='form-control form-control-sm' id='preg_num" +
                                         new_chq_no + "'name='preg_num" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='labor_date" +
-                                        new_chq_no + "'name='labor_date" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='number' class='form-control form-control-sm' id='ga" +
+                                        new_chq_no + "'name='labor_date" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='ga" +
                                         new_chq_no + "'name='ga" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='labor_by" +
                                         new_chq_no + "'name='labor_by" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='number' class='form-control form-control-sm' id='labor_weight" +
                                         new_chq_no + "'name='labor_weight" + new_chq_no + "'></div><div class='custom-control col-sm-1'><input type='text' class='form-control form-control-sm' id='l_sex" +

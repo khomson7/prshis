@@ -190,63 +190,43 @@
         $version = 1;
 
         try {
-
-            if ( $chief_complaints != '' 
-) {
-
-    $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_er_trauma_note
-    (hn,an,chief_complaints,hpi,req_hospital,informant_patient,informant_relatives,informant_deliverer,informant_etc,ros,vaccineation,pmh,fh
-    ,gd,fdh,lmp,inpatient_history,inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,pe_ob_gynexam,pe_other
-    ,pe_text,pe_cvs,pe_cns,primary_a,c_spine,trachea,chest_wound,subcu_emp,cct,lung_sound,o2sat,sbp,dbp,pr2,ext_act_bleed
-    ,gcs_e,gcs_v,gcs_m,pupil_rt,pupil_lt,e_text,fracture,other_text,plan_of_treatment,mild_tbi,abdomen,chest,event_environment
-    ,pneumothorax,tr_allergy,tr_meddication,part_illness,last_meal,svg_tag,problem_list,create_user,create_datetime,version)
-    VALUES (:hn,:an,:chief_complaints,:hpi,:req_hospital,:informant_patient,:informant_relatives,:informant_deliverer,:informant_etc,:ros,:vaccineation,:pmh,:fh
-    ,:gd,:fdh,:lmp,:inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,:pe_skin,:pe_heent,:pe_ob_gynexam,:pe_other
-    ,:pe_text,:pe_cvs,:pe_cns,:primary_a,:c_spine,:trachea,:chest_wound,:subcu_emp,:cct,:lung_sound,:o2sat,:sbp,:dbp,:pr2,:ext_act_bleed
-    ,:gcs_e,:gcs_v,:gcs_m,:pupil_rt,:pupil_lt,:e_text,:fracture,:other_text,:plan_of_treatment,:mild_tbi,:abdomen,:chest,:event_environment
-    ,:pneumothorax,:tr_allergy,:tr_meddication,:part_illness,:last_meal,:svg_tag,:problem_list,:create_user,now(),:version)");
-    $stmt->execute(array( 'hn'=>$hn, 'an'=>$an,
-    'chief_complaints'=>$chief_complaints,'hpi'=>$hpi,'req_hospital'=>$req_hospital,
-    'informant_patient'=>$informant_patient,
-    'informant_relatives'=>$informant_relatives, 'informant_deliverer'=>$informant_deliverer,
-    'informant_etc'=>$informant_etc,
-    'ros'=>$ros,'vaccineation'=>$vaccineation,'pmh'=>$pmh,'fh'=>$fh,
-    'gd'=>$gd,'fdh'=>$fdh,'lmp'=>$lmp,
-    'inpatient_history'=>$inpatient_history,'inpatient_last_date'=>$inpatient_last_date
-    ,'inpatient_location'=>$inpatient_location,'inpatient_because'=>$inpatient_because,
-    'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin,
-    'pe_heent'=>$pe_heent, 'pe_ob_gynexam'=>$pe_ob_gynexam,
-    'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns
-    ,'primary_a'=>$primary_a,'c_spine'=>$c_spine,'trachea'=>$trachea,'chest_wound'=>$chest_wound,'subcu_emp'=>$subcu_emp
-    ,'cct'=>$cct,'lung_sound'=>$lung_sound,'o2sat'=>$o2sat,'sbp'=>$sbp,'dbp'=>$dbp,'pr2'=>$pr2
-    ,'ext_act_bleed'=>$ext_act_bleed,'gcs_e'=>$gcs_e,'gcs_v'=>$gcs_v,'gcs_m'=>$gcs_m,'pupil_rt'=>$pupil_rt,'pupil_lt'=>$pupil_lt,'e_text'=>$e_text
-    ,'pneumothorax'=>$pneumothorax,'tr_allergy'=>$tr_allergy,'tr_meddication'=>$tr_meddication,'part_illness'=>$part_illness,'last_meal'=>$last_meal
-    ,'event_environment'=>$event_environment
-    ,'fracture'=>$fracture,'other_text'=>$other_text,'plan_of_treatment'=>$plan_of_treatment,'mild_tbi'=>$mild_tbi,'abdomen'=>$abdomen,'chest'=>$chest
-    ,'svg_tag'=>$svg_tag,'problem_list'=>$problem_list,
-    'create_user'=>$create_user,'version'=>$version));
-
-    $output_error = '<script>
-        NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");     
-        </script>';
-
-}else {
-
-    echo   '<script>
-     alert("กรุณากรอกข้อมูลให้ครบถ้วน", "error");     
-     </script>'; 
-}
-
-            
-               
-
-              
+                $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_ipd_trauma_note
+                (hn,an,chief_complaints,hpi,req_hospital,informant_patient,informant_relatives,informant_deliverer,informant_etc,ros,vaccineation,pmh,fh
+                ,gd,fdh,lmp,inpatient_history,inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,pe_ob_gynexam,pe_other
+                ,pe_text,pe_cvs,pe_cns,primary_a,c_spine,trachea,chest_wound,subcu_emp,cct,lung_sound,o2sat,sbp,dbp,pr2,ext_act_bleed
+                ,gcs_e,gcs_v,gcs_m,pupil_rt,pupil_lt,e_text,fracture,other_text,plan_of_treatment,mild_tbi,abdomen,chest,event_environment
+                ,pneumothorax,tr_allergy,tr_meddication,part_illness,last_meal,svg_tag,problem_list,create_user,create_datetime,version)
+                VALUES (:hn,:an,:chief_complaints,:hpi,:req_hospital,:informant_patient,:informant_relatives,:informant_deliverer,:informant_etc,:ros,:vaccineation,:pmh,:fh
+                ,:gd,:fdh,:lmp,:inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,:pe_skin,:pe_heent,:pe_ob_gynexam,:pe_other
+                ,:pe_text,:pe_cvs,:pe_cns,:primary_a,:c_spine,:trachea,:chest_wound,:subcu_emp,:cct,:lung_sound,:o2sat,:sbp,:dbp,:pr2,:ext_act_bleed
+                ,:gcs_e,:gcs_v,:gcs_m,:pupil_rt,:pupil_lt,:e_text,:fracture,:other_text,:plan_of_treatment,:mild_tbi,:abdomen,:chest,:event_environment
+                ,:pneumothorax,:tr_allergy,:tr_meddication,:part_illness,:last_meal,:svg_tag,:problem_list,:create_user,now(),:version)");
+                $stmt->execute(array( 'hn'=>$hn, 'an'=>$an,
+                'chief_complaints'=>$chief_complaints,'hpi'=>$hpi,'req_hospital'=>$req_hospital,
+                'informant_patient'=>$informant_patient,
+                'informant_relatives'=>$informant_relatives, 'informant_deliverer'=>$informant_deliverer,
+                'informant_etc'=>$informant_etc,
+                'ros'=>$ros,'vaccineation'=>$vaccineation,'pmh'=>$pmh,'fh'=>$fh,
+                'gd'=>$gd,'fdh'=>$fdh,'lmp'=>$lmp,
+                'inpatient_history'=>$inpatient_history,'inpatient_last_date'=>$inpatient_last_date
+                ,'inpatient_location'=>$inpatient_location,'inpatient_because'=>$inpatient_because,
+                'pe_general'=>$pe_general, 'pe_skin'=>$pe_skin,
+                'pe_heent'=>$pe_heent, 'pe_ob_gynexam'=>$pe_ob_gynexam,
+                'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns
+                ,'primary_a'=>$primary_a,'c_spine'=>$c_spine,'trachea'=>$trachea,'chest_wound'=>$chest_wound,'subcu_emp'=>$subcu_emp
+                ,'cct'=>$cct,'lung_sound'=>$lung_sound,'o2sat'=>$o2sat,'sbp'=>$sbp,'dbp'=>$dbp,'pr2'=>$pr2
+                ,'ext_act_bleed'=>$ext_act_bleed,'gcs_e'=>$gcs_e,'gcs_v'=>$gcs_v,'gcs_m'=>$gcs_m,'pupil_rt'=>$pupil_rt,'pupil_lt'=>$pupil_lt,'e_text'=>$e_text
+                ,'pneumothorax'=>$pneumothorax,'tr_allergy'=>$tr_allergy,'tr_meddication'=>$tr_meddication,'part_illness'=>$part_illness,'last_meal'=>$last_meal
+                ,'event_environment'=>$event_environment
+                ,'fracture'=>$fracture,'other_text'=>$other_text,'plan_of_treatment'=>$plan_of_treatment,'mild_tbi'=>$mild_tbi,'abdomen'=>$abdomen,'chest'=>$chest
+                ,'svg_tag'=>$svg_tag,'problem_list'=>$problem_list,
+                'create_user'=>$create_user,'version'=>$version));
 
               $admission_note_id = $conn->lastInsertId();
 
-             if(!empty($_REQUEST['admission_note_doctor'])){
+              if(!empty($_REQUEST['admission_note_doctor'])){
                     foreach($_REQUEST['admission_note_doctor'] as $admission_note_doctor){
-                        $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_trauma_note_item(admission_note_id,an,admission_note_doctor,create_user,create_datetime,update_user,update_datetime,version)
+                        $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".ipd_trauma_note_item(admission_note_id,an,admission_note_doctor,create_user,create_datetime,update_user,update_datetime,version)
                         VALUES (:admission_note_id,:an,:admission_note_doctor,:create_user,now(),:update_user,now(),:version)");
                         $stmt_item->execute(array('admission_note_id'=>$admission_note_id, 'an'=>$an,
                         'admission_note_doctor'=>$admission_note_doctor,
@@ -254,9 +234,9 @@
                     }
                 }
 
-            
+               
 
-               // $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
+                $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
             } catch (PDOException  $e) {
                 echo $e->getMessage();

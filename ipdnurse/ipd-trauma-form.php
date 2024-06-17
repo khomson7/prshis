@@ -1,98 +1,77 @@
-<?php require_once '../include/Session.php';
+<?php  // require_once './project/function/Session.php';
 // Session::::checkPermissionAndShowMessage('ADMISSION_NOTE','VIEW');
-// require_once '../include/Session.php';
-// Session::checkLoginSessionAndShowMessage(); //เช็ค session
-
-
-// Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
-require_once '../mains/main-report.php';
-require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
-require_once '../mains/opd-show-patient-main-sticky.php';
-require_once '../include/DbUtils.php';
-require_once '../include/KphisQueryUtils.php';
-require_once '../include/ReportQueryUtils.php';
-
-
-$conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
-$hn = empty($_REQUEST['hn']) ? null : $_REQUEST['hn'];
-$vn = empty($_REQUEST['vn']) ? null : $_REQUEST['vn'];
-// $vn= '111';
+require_once '../include/Session.php';
+//ตรวจสอบว่า session login ตรงกันหรือไม่
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-//  $hn = '000000001';
-// $hn = KphisQueryUtils::getHnByAn($an);
-// $vn = KphisQueryUtils::getVnByAn($an);
-// $vn = KphisQueryUtils::getVnByHn($hn);
-//$vn = $_SESSION['vn'];
-$an_parameters = ['vn' => $vn];
-$hn_parameters = ['hn' => $hn];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
-
-//echo $hn;
-//  echo  $loginname;
-
-
-
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
 if ($login != $loginname) {
     session_start();
     session_destroy();
 }
+//ส่วนหัวหน้า
+require_once '../mains/main-report.php';
+//check session and permission  
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
+require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+require_once '../mains/ipd-show-patient-sticky.php';
+require_once '../include/DbUtils.php';
+require_once '../include/KphisQueryUtils.php';
 
-/*
 Session::insertSystemAccessLog(json_encode(array(
-    'form'=>'ER-TRAUMA-NOTE-FORM',
-    'vn'=>$vn,
-),JSON_UNESCAPED_UNICODE));
+    'form' => 'IPD-TRAUMA-FORM',
+    'an' => $an,
+), JSON_UNESCAPED_UNICODE));
 
-*/
+$conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
+$an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
+
+$hn = KphisQueryUtils::getHnByAn($an);
+$vn = KphisQueryUtils::getVnByAn($an);
+$an_parameters = ['an' => $an];
+$hn_parameters = ['hn' => $hn];
+
+
+
+
+
+if (isset($_POST['button1'])) {
+
+
+    $sql = "SELECT  " . DbConstant::KPHIS_DBNAME . ".IpdTraumaNote($an)";
+    $stmt = $conn->query($sql);
+    $stmt->execute();
+
+   // echo $stmt->rowCount();
+}
+
+
+//echo $_SESSION['name']; 
 
 //-------------------------Doctor admission note
 $sql = "SELECT *
-                FROM `prs_er_trauma_note`
-                WHERE an = :vn
-                ORDER BY admission_note_id ASC";
+                FROM `prs_ipd_trauma_note`
+                WHERE an = :an";
 $stmt = $conn->prepare($sql);
-$stmt->execute(['vn' => $vn]);
+$stmt->execute($an_parameters);
 if ($row  = $stmt->fetch()) {
     $admission_note_id = $row['admission_note_id'];
 } else {
     $admission_note_id = null;
 }
 
-// echo $vn;
-
-/*
-        $sql_item ="SELECT dr_adm_item.admission_note_item_id,
+$sql_item = "SELECT dr_adm_item.admission_note_item_id,
                     dr_adm_item.admission_note_doctor,
                     doctor.`name` AS admission_note_doctorname
-                    FROM ".DbConstant::KPHIS_DBNAME.".prs_dr_admission_note_item dr_adm_item
-                    LEFT OUTER JOIN ".DbConstant::HOSXP_DBNAME.".doctor ON doctor.code = dr_adm_item.admission_note_doctor
-                    WHERE an=:vn
+                    FROM " . DbConstant::KPHIS_DBNAME . ".ipd_trauma_note_item dr_adm_item
+                    LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor ON doctor.code = dr_adm_item.admission_note_doctor
+                    WHERE an=:an
                     ORDER BY dr_adm_item.admission_note_item_id ASC";
-        $stmt_item = $conn->prepare($sql_item);
-        $stmt_item->execute($hn_parameters);
-        $admission_note_count = 0;
-        while ($row_item = $stmt_item->fetch()){
-            $admission_note_item_id[] = $row_item['admission_note_item_id'];
-            $admission_note_doctor[] = $row_item['admission_note_doctor'];
-            $admission_note_doctorname[] = $row_item['admission_note_doctorname'];
-            //$admission_note_doctorentryposition[] = $row_item['admission_note_doctorentryposition'];
-            $admission_note_count++;
-        }
-
-*/
-
-$sql_item = "SELECT dr_adm_item.admission_note_item_id,
-            dr_adm_item.admission_note_doctor,
-            doctor.`name` AS admission_note_doctorname
-            FROM " . DbConstant::KPHIS_DBNAME . ".prs_trauma_note_item dr_adm_item
-            LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor ON doctor.code = dr_adm_item.admission_note_doctor
-            WHERE an = :vn
-            ORDER BY dr_adm_item.admission_note_item_id ASC
-            ";
 $stmt_item = $conn->prepare($sql_item);
-$stmt_item->execute(['vn' => $vn]);
+$stmt_item->execute($an_parameters);
 $admission_note_count = 0;
 while ($row_item = $stmt_item->fetch()) {
     $admission_note_item_id[] = $row_item['admission_note_item_id'];
@@ -101,38 +80,48 @@ while ($row_item = $stmt_item->fetch()) {
     //$admission_note_doctorentryposition[] = $row_item['admission_note_doctorentryposition'];
     $admission_note_count++;
 }
-
 //------------------------Doctor admission note
 
 //cc,pi
 if ($admission_note_id == null || $admission_note_id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
-                            round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
-                            round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
-                            round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
-                            opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
-                            opdscreen.pmh,opdscreen.fh,opdscreen.pe,
-                            opdscreen.pe_heart_text, opdscreen.pe_lung_text,
-                            opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
-                            opdscreen.pe_ext_text, opdscreen.pe, pt.cid, pt.passport_no, pt.hn,pt.pname,pt.fname,pt.lname,
-                            vn.age_y,vn.age_m,vn.age_d
-                            FROM " . DbConstant::HOSXP_DBNAME . ".opdscreen
-                            INNER JOIN " . DbConstant::HOSXP_DBNAME . ".vn_stat vn on vn.vn = opdscreen.vn
-                            INNER JOIN " . DbConstant::HOSXP_DBNAME . ".patient pt on pt.hn = opdscreen.hn
-                            WHERE opdscreen.vn= :vn ";
+                                    pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
+                                    round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
+                                    round((opdscreen.bw)*1000,0) as bw2,
+                                    round(opdscreen.bw,1) as bw,round(opdscreen.height,1) as height,
+                                    opdscreen.pe_ga_text, opdscreen.pe_heent_text,opdscreen.hpi,
+                                    opdscreen.pmh,opdscreen.fh,opdscreen.pe,
+                                    opdscreen.pe_heart_text, opdscreen.pe_lung_text,
+                                    opdscreen.pe_ab_text, opdscreen.pe_neuro_text,
+                                    opdscreen.pe_ext_text, opdscreen.pe, pt.cid, pt.passport_no, pt.hn,pt.pname,pt.fname,pt.lname,
+                                    vn.age_y,vn.age_m,vn.age_d,opdscreen.bw,opdscreen.height,(select oi.name from " . DbConstant::HOSXP_DBNAME . ".ovstist oi where oi.ovstist = ov.ovstist) as ovst_ist
+                                    FROM " . DbConstant::HOSXP_DBNAME . ".opdscreen
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".ovst ov on ov.vn = opdscreen.vn
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".vn_stat vn on vn.vn = opdscreen.vn
+                                    INNER JOIN " . DbConstant::HOSXP_DBNAME . ".patient pt on pt.hn = opdscreen.hn
+                                    WHERE opdscreen.vn= :vn ";
     $stmt_opdscreen = $conn->prepare($sql_opdscreen);
     $stmt_opdscreen->execute(['vn' => $vn]);
     $row_opdscreen  = $stmt_opdscreen->fetch();
 }
 
-//ipt
-if ($admission_note_id == null) {
-    $sql_ipt1 = "SELECT ipt.hn,ipt.regdate,ipt.regtime
-                            FROM " . DbConstant::HOSXP_DBNAME . ".ipt
-                            WHERE ipt.vn= :vn ";
-    $stmt_ipt1 = $conn->prepare($sql_ipt1);
-    $stmt_ipt1->execute(['vn' => $vn]);
-    $row_ipt1  = $stmt_ipt1->fetch();
+//from prs_dr_admission_note
+if ($admission_note_id != null) {
+    $sql_from_er = "SELECT hn,an,receiver_medication_date,receiver_medication_time
+                ,take_medication_by,arrive_by,informant_patient,informant_relatives,informant_deliverer,informant_etc
+                ,inpatient_history,inpatient_last_date,inpatient_location,inpatient_because
+                ,chief_complaints,medical_history
+                ,req_hospital,ros
+                ,history_from,pmh,fh,vaccineation,gd,fdh,lmp
+                ,bp,t,pr,rr,pe_general,pe_skin,pe_heent,pe_neck,pe_breastthorax
+                ,pe_heart,pe_lungs,pe_cvs,pe_abdomen
+                ,pe_rectalgenitalia,pe_extremities,pe_cns,pe_neurological,pe_ob_gynexam
+                ,pe_other,pe_text,svg_tag,impression,diff_dx,problem_list,plan_management
+                ,create_user,create_datetime,update_user,update_datetime,version
+                FROM prs_dr_admission_note WHERE an= :vn ";
+    $stmt_fromer = $conn->prepare($sql_from_er);
+    $stmt_fromer->execute(['vn' => $vn]);
+    $row_fromer  = $stmt_fromer->fetch();
 }
 
 
@@ -143,34 +132,33 @@ $stmt_opduser = $conn->prepare($sql_opduser);
 $stmt_opduser->execute($values);
 $row_opduser  = $stmt_opduser->fetch();
 
-/*
-        $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,
-            (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom))) as name
-                from ".DbConstant::HOSXP_DBNAME.".opd_allergy
-                where opd_allergy.hn = ipt.hn
-                order by display_order) as drugallergy,
-            an_stat.age_y,an_stat.age_m,an_stat.age_d,
-            concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
-            ipt.dchdate,ipt.dchtime,
-            ipt.ward,ward.name,
-            ipt.pttype, pttype.`name` as pttype_name,
-            iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
-            , (select vs.height from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_height
-            , (select vs.vs_datetime from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw_datetime
-            from ".DbConstant::HOSXP_DBNAME.".ipt
-            left outer join ".DbConstant::HOSXP_DBNAME.".an_stat on an_stat.an=ipt.an
-            left outer join ".DbConstant::HOSXP_DBNAME.".patient on patient.hn=ipt.hn
-            left outer join ".DbConstant::HOSXP_DBNAME.".ward on ward.ward=ipt.ward
-            LEFT OUTER JOIN ".DbConstant::HOSXP_DBNAME.".pttype ON pttype.pttype = ipt.pttype
-            LEFT OUTER JOIN ".DbConstant::HOSXP_DBNAME.".iptadm ON iptadm.an = ipt.an
-            WHERE ipt.an=:an
-            order by ipt.an
-            ";
-        $stmt_ipt = $conn->prepare($sql_ipt);
-        $stmt_ipt->execute(['an'=>$an]);
-        $row_ipt = $stmt_ipt->fetch();
-        $regdatetime = $row_ipt["regdatetime"];
-        */
+$sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
+        (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
+            from " . DbConstant::HOSXP_DBNAME . ".opd_allergy
+            where opd_allergy.hn = ipt.hn /*and (opd_allergy.no_alert<>'Y' or opd_allergy.no_alert is null)*/
+            order by display_order) as drugallergy,
+        an_stat.age_y,an_stat.age_m,an_stat.age_d,
+        concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
+        ipt.dchdate,ipt.dchtime,
+        ipt.regdate,ipt.regtime,
+        ipt.ward,ward.name,
+        ipt.pttype, pttype.`name` as pttype_name,
+        iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
+        , (select vs.height from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_height
+        , (select vs.vs_datetime from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw_datetime
+        from " . DbConstant::HOSXP_DBNAME . ".ipt
+        left outer join " . DbConstant::HOSXP_DBNAME . ".an_stat on an_stat.an=ipt.an
+        left outer join " . DbConstant::HOSXP_DBNAME . ".patient on patient.hn=ipt.hn
+        left outer join " . DbConstant::HOSXP_DBNAME . ".ward on ward.ward=ipt.ward
+        LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".pttype ON pttype.pttype = ipt.pttype
+        LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".iptadm ON iptadm.an = ipt.an
+        WHERE ipt.an=:an
+        order by ipt.an
+        ";
+$stmt_ipt = $conn->prepare($sql_ipt);
+$stmt_ipt->execute(['an' => $an]);
+$row_ipt = $stmt_ipt->fetch();
+$regdatetime = $row_ipt["regdatetime"];
 
 //sql_drug_allergy
 // $sql_drug_allergy = "select (concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
@@ -183,10 +171,10 @@ $row_opduser  = $stmt_opduser->fetch();
 // $row_sql_drug_allergy = $stmt_sql_drug_allergy->fetch();
 
 //ipt ล่าสุดก่อน an ปัจจุบัน
-$hnan_para = ['vn' => $vn, 'hn' => $hn];
+$hnan_para = ['an' => $an, 'hn' => $hn];
 $sql_ipt = "SELECT concat(ipt.regdate,' ',ipt.regtime) as old_regdatetime
                     FROM  " . DbConstant::HOSXP_DBNAME . ".ipt
-                    where ipt.hn = :hn and ipt.vn < :vn
+                    where ipt.hn = :hn and ipt.an < :an
                     ORDER BY ipt.an DESC limit 1";
 $stmt_old_ipt = $conn->prepare($sql_ipt);
 $stmt_old_ipt->execute($hnan_para);
@@ -209,16 +197,15 @@ foreach ($rows_ol as $row_ol) :
 endforeach;
 
 //Vital Sign
-/*        $sql_vs =   "SELECT opd_vs_vital_sign.sbp,opd_vs_vital_sign.dbp,opd_vs_vital_sign.bt,opd_vs_vital_sign.pr,opd_vs_vital_sign.rr,
-                    opd_vs_vital_sign.eye,opd_vs_vital_sign.verbal,opd_vs_vital_sign.movement,opd_vs_vital_sign.braden
-                    FROM ".DbConstant::KPHIS_DBNAME.".opd_vs_vital_sign
-                    WHERE opd_vs_vital_sign.an=:vn
-                    GROUP BY opd_vs_vital_sign.vs_datetime ASC LIMIT 1";
-        $stmt_vs = $conn->prepare($sql_vs);
-        $stmt_vs->execute(['vn'=>$vn]);
-        $row_vs  = $stmt_vs->fetch();
+$sql_vs =   "SELECT ipd_vs_vital_sign.sbp,ipd_vs_vital_sign.dbp,ipd_vs_vital_sign.bt,ipd_vs_vital_sign.pr,ipd_vs_vital_sign.rr,
+                    ipd_vs_vital_sign.eye,ipd_vs_vital_sign.verbal,ipd_vs_vital_sign.movement,ipd_vs_vital_sign.braden
+                    FROM " . DbConstant::KPHIS_DBNAME . ".ipd_vs_vital_sign
+                    WHERE ipd_vs_vital_sign.an=:an
+                    GROUP BY ipd_vs_vital_sign.vs_datetime ASC LIMIT 1";
+$stmt_vs = $conn->prepare($sql_vs);
+$stmt_vs->execute(['an' => $an]);
+$row_vs  = $stmt_vs->fetch();
 
-*/
 //ipd_nurse_addmission_note เรื่อง "ประจำเดือน","อาชีพ","สารเสพติด"
 $sql_period =  "SELECT period, period_normal, period_disorders,period_lmp, period_menopause,
                         occupation,
@@ -232,15 +219,10 @@ $stmt_period = $conn->prepare($sql_period);
 $stmt_period->execute(['an' => $an]);
 $row_period  = $stmt_period->fetch();
 
-$id = '18'; //Link menu
-$check_    = ReportQueryUtils::getProduction($id)
+
 
 
 ?>
-
-
-
-
 <script src="../include/fabric.js"></script>
 <style type="text/css">
     #show_img_select {
@@ -263,6 +245,19 @@ $check_    = ReportQueryUtils::getProduction($id)
         display: block;
     }
 </style>
+
+<form id="button1" method="post">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-1">
+                <input type="submit" name="button1" value="นำเข้าบันทึกรับใหม่" />
+
+            </div>
+        </div>
+</form>
+
+<br>
+
 <form id="er_trauma" action="" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">
@@ -2046,8 +2041,8 @@ $check_    = ReportQueryUtils::getProduction($id)
             alert("กรุณากรอกข้อมูล อาการระหว่างตั้งครรภ์ ให้ครบถ้วน");
             $('[name="condition_pregnant_text"]').focus();
         } else {
-            var url_update = "er-trauma-note-form-update.php";
-            var url_save = "er-trauma-note-form-save.php";
+            var url_update = "ipd-trauma-form-update.php";
+            var url_save = "ipd-trauma-form-save.php";
             var admission_note_id = $("#admission_note_id").val();
             var er_trauma = $("#er_trauma").serialize();
 
