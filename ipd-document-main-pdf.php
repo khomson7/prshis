@@ -17,15 +17,15 @@ $vn = KphisQueryUtils::getVnByAn($an);
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4']);
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 
-//$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
-//$values =['loginname'=>$loginname];
+$values =['loginname'=>$loginname];
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
 if(!$loginname){
  session_start();
  session_destroy();    
- exit();          
+ //exit();          
      
 }
 
