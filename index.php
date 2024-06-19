@@ -17,6 +17,12 @@
 
  $values =['loginname'=>$loginname];
 
+ if(!$an){
+ // session_start();
+ // session_destroy();  
+ exit();            
+      
+}
 
   if($sess == 'true'){ 
  require_once 'ipd-show-patient-main.php';

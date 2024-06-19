@@ -4,6 +4,7 @@
 //require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once './include/Session.php';
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once './include/DbUtils.php';
 require_once './include/KphisQueryUtils.php';
 require_once './include/ReportQueryUtils.php';
@@ -15,6 +16,19 @@ $hn = KphisQueryUtils::getHnByAn($an);   // function ที่ส่งค่า
 $vn = KphisQueryUtils::getVnByAn($an);
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4']);
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
+
+//$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+$loginname = $_SESSION['loginname'];
+//$values =['loginname'=>$loginname];
+
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if(!$loginname){
+ session_start();
+ session_destroy();    
+ exit();          
+     
+}
+
 //$image_check = '/';
 $getDocumentSummary = KphisQueryUtils::getDocumentSummary($an);
 $image_checkSummary = '';
@@ -169,7 +183,18 @@ $query_parameters_REQUEST = ['an'=>$an];
 // $mpdf->SetFooter(' (พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' )');
 // $mpdf->WriteHTML('');
 
-$image_check_an = "<img src='../include/images/an_qr/".$an.".png' width='65'>";
+//$image_check_an = "<img src='../include/images/an_qr/".$an.".png' width='65'>";
+
+$dataqr = $an;
+$barcodeObj = new \Com\Tecnick\Barcode\Barcode();
+$qrcodeObj = $barcodeObj->getBarcodeObj('QRCODE,H', $dataqr, -20, -16, 'black', array(-2, -2, -2, -2))->setBackgroundColor('#ffffff');
+$QR = imagecreatefromstring($qrcodeObj->getPngData());
+ob_start();
+imagepng($QR);
+$contents = ob_get_contents();
+ob_end_clean();
+$qrcode .= '<img alt="Embedded Image" style="width:40px;" align=left  width="60"    src="data:image/png;base64,' . 
+base64_encode($contents) . '"/>';
 
 $head =
 '   <style>
@@ -224,10 +249,8 @@ $head =
     </style>
   
     <div class="row">
-    <div class="column"><strong><span style="text-align:right;">'.'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    เอกสารใบปะหน้า</strong></div>
+    <div style="text-align:center;">
+   <strong> เอกสารใบปะหน้า</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$qrcode.'</div>
    
   </div>
    
@@ -236,9 +259,7 @@ $head =
         HN : '.$hn_row_ipt.' AN : '.$an.'&nbsp;&nbsp;WARD : '.$wardname_row_ipt.'<br> ชื่อ - สกุล : '.$pname_row_ipt.' '.$fname_row_ipt.' '.$lname_row_ipt.' วันที่จำหน่าย : '.$dchdate_row_ipt.'
     </p>
 
-   
-
-    <div class="qr-code" style="display: none;"></div>
+ 
 
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
         <tr style="border:1px solid #000;margin: 45px;">

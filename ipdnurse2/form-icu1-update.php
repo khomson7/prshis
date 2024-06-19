@@ -95,7 +95,7 @@
         $braden_score =  empty($_REQUEST['braden_score']) ? null : $_REQUEST['braden_score'];
         $mortor_power =  empty($_REQUEST['mortor_power']) ? null : $_REQUEST['mortor_power'];
         $mass =  empty($_REQUEST['mass']) ? null : $_REQUEST['mass'];
-        $ghistory_affects_stimulation =  empty($_REQUEST['history_affects_stimulation']) ? null : $_REQUEST['history_affects_stimulation'];
+        $history_affects_stimulation =  empty($_REQUEST['history_affects_stimulation']) ? null : $_REQUEST['history_affects_stimulation'];
         $gcs_e =  empty($_REQUEST['gcs_e']) ? null : $_REQUEST['gcs_e'];
         $gcs_v =  empty($_REQUEST['gcs_v']) ? null : $_REQUEST['gcs_v'];
         $gcs_m =  empty($_REQUEST['gcs_m']) ? null : $_REQUEST['gcs_m'];

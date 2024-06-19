@@ -883,9 +883,9 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>ส่วนสูง</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="bw" id="bw" value="<?= (isset($row['bw']) ? htmlspecialchars($row['bw']) : '') ?>">
-                                </div>cms น้ำหนัก<div class="col-sm-2">
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="hight" id="hight" value="<?= (isset($row['hight']) ? htmlspecialchars($row['hight']) : '') ?>">
+                                </div>cms น้ำหนัก<div class="col-sm-2">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="bw" id="bw" value="<?= (isset($row['bw']) ? htmlspecialchars($row['bw']) : '') ?>">
                                 </div>kg BMI:<div class="col-sm-2">
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="bmi" id="bmi" value="<?= (isset($row['bmi']) ? htmlspecialchars($row['bmi']) : '') ?>">
                                 </div>Kg/m<sub>2</sub> Alb:<div class="col-sm-2">
@@ -916,7 +916,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                             </div>
 
                             <div class="row">
-
+                           
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติโรคทางการสื่อสาร</label>
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['communication_history'] == 'ไม่มี') {
@@ -945,9 +945,13 @@ $check_    = ReportQueryUtils::getProduction($id)
                             <br>
 
                             <div class="row">
+                            <div class="custom-control custom-checkbox">
+                                    <input type="radio" class="custom-control-input" id="speaking0" name="speaking" value="" onchange="custom_check('on_speaking_reset');">
+                                    <label class="custom-control-label" for="speaking0">reset</label>
 
+                                </div>
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>การพูด:</label>
-                                <div class="custom-control custom-radio col-sm-2">
+                                <div class="custom-control col-sm-2">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['speaking'] == 'ไม่ได้ On ET-Tube') {
                                                                                     echo 'checked="checked"';
                                                                                 } ?> class="custom-control-input" id="speaking1" name="speaking" value="ไม่ได้ On ET-Tube" onchange="custom_check('off_speaking');">
@@ -991,10 +995,14 @@ $check_    = ReportQueryUtils::getProduction($id)
                             <br>
 
                             <div class="row">
+                            <div class="custom-control custom-checkbox">
+                                    <input type="radio" class="custom-control-input" id="communication0" name="communication" value="" onchange="custom_check('on_communication_reset');">
+                                    <label class="custom-control-label" for="communication0">reset</label>
 
+                                </div>
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label></label>
-                                <div class="custom-control custom-radio col-sm-2">
-                                    <input type="radio" <?php if ($row['communication'] == 'On ET-Tube or TT') {
+                                <div class="custom-control col-sm-2">
+                                <input type="radio" <?php if ($row['communication'] == 'On ET-Tube or TT') {
                                                             echo 'checked="checked"';
                                                         } ?> class="custom-control-input" id="communication1" name="communication" value="On ET-Tube or TT" onchange="custom_check('off_communication');">
                                     <label class="custom-control-label" for="communication1">On ET-Tube or TT</label>
@@ -1887,6 +1895,13 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 $('#speaking2').prop("checked", false);
                                 $('#speaking3').prop("checked", false);
 
+                            }else if (value == "on_speaking_reset") {
+                                $('#speaking1').prop("checked", false);
+                                $('#speaking2').prop("checked", false);
+                                $('#speaking3').prop("checked", false);
+                                $('#speaking4').prop("checked", false);
+                                $('#speaking_text').attr("disabled", true).val('');
+
                             }
 
                             if (value == "off_communication") {
@@ -1901,6 +1916,15 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 $('#communication4').prop("checked", false);
                                 $('#communication5').prop("checked", false);
                                 //  $('#entered_by2').prop("checked", false);
+                            }else if (value == "on_communication_reset") {
+                                $('#communication1').prop("checked", false);
+                                $('#communication2').prop("checked", false);
+                                $('#communication3').prop("checked", false);
+                                $('#communication4').prop("checked", false);
+                                $('#communication5').prop("checked", false);
+                                $('#communication6').prop("checked", false);
+                                $('#communication_text').attr("disabled", true).val('');
+
                             }
 
                             if (value == "off_vision") {
