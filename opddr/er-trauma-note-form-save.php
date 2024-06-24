@@ -154,9 +154,11 @@
       $cct = empty($_REQUEST['cct']) ? null : $_REQUEST['cct'];
       $lung_sound = empty($_REQUEST['lung_sound']) ? null : $_REQUEST['lung_sound'];
       $o2sat = empty($_REQUEST['o2sat']) ? null : $_REQUEST['o2sat'];
-      $sbp = empty($_REQUEST['sbp']) ? null : $_REQUEST['sbp'];
-      $dbp = empty($_REQUEST['dbp']) ? null : $_REQUEST['dbp'];
-      $pr2 = empty($_REQUEST['pr2']) ? null : $_REQUEST['pr2'];
+      //$sbp = empty($_REQUEST['sbp']) ? null : $_REQUEST['sbp'];
+      //$dbp = empty($_REQUEST['dbp']) ? null : $_REQUEST['dbp'];
+      //$pr2 = empty($_REQUEST['pr2']) ? null : $_REQUEST['pr2'];
+      $bp_check = empty($_REQUEST['bp_check ']) ? null : $_REQUEST['bp_check '];
+      $pr_check = empty($_REQUEST['pr_check ']) ? null : $_REQUEST['pr_check '];
       $ext_act_bleed = empty($_REQUEST['ext_act_bleed']) ? null : $_REQUEST['ext_act_bleed'];
       $gcs_e = empty($_REQUEST['gcs_e']) ? null : $_REQUEST['gcs_e'];
       $gcs_v = empty($_REQUEST['gcs_v']) ? null : $_REQUEST['gcs_v'];
@@ -197,12 +199,12 @@
     $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_er_trauma_note
     (hn,an,chief_complaints,hpi,req_hospital,informant_patient,informant_relatives,informant_deliverer,informant_etc,ros,vaccineation,pmh,fh
     ,gd,fdh,lmp,inpatient_history,inpatient_last_date,inpatient_location,inpatient_because,pe_general,pe_skin,pe_heent,pe_ob_gynexam,pe_other
-    ,pe_text,pe_cvs,pe_cns,primary_a,c_spine,trachea,chest_wound,subcu_emp,cct,lung_sound,o2sat,sbp,dbp,pr2,ext_act_bleed
+    ,pe_text,pe_cvs,pe_cns,primary_a,c_spine,trachea,chest_wound,subcu_emp,cct,lung_sound,o2sat,bp_check,pr_check,ext_act_bleed
     ,gcs_e,gcs_v,gcs_m,pupil_rt,pupil_lt,e_text,fracture,other_text,plan_of_treatment,mild_tbi,abdomen,chest,event_environment
     ,pneumothorax,tr_allergy,tr_meddication,part_illness,last_meal,svg_tag,problem_list,create_user,create_datetime,version)
     VALUES (:hn,:an,:chief_complaints,:hpi,:req_hospital,:informant_patient,:informant_relatives,:informant_deliverer,:informant_etc,:ros,:vaccineation,:pmh,:fh
     ,:gd,:fdh,:lmp,:inpatient_history,:inpatient_last_date,:inpatient_location,:inpatient_because,:pe_general,:pe_skin,:pe_heent,:pe_ob_gynexam,:pe_other
-    ,:pe_text,:pe_cvs,:pe_cns,:primary_a,:c_spine,:trachea,:chest_wound,:subcu_emp,:cct,:lung_sound,:o2sat,:sbp,:dbp,:pr2,:ext_act_bleed
+    ,:pe_text,:pe_cvs,:pe_cns,:primary_a,:c_spine,:trachea,:chest_wound,:subcu_emp,:cct,:lung_sound,:o2sat,:bp_check,:pr_check,:ext_act_bleed
     ,:gcs_e,:gcs_v,:gcs_m,:pupil_rt,:pupil_lt,:e_text,:fracture,:other_text,:plan_of_treatment,:mild_tbi,:abdomen,:chest,:event_environment
     ,:pneumothorax,:tr_allergy,:tr_meddication,:part_illness,:last_meal,:svg_tag,:problem_list,:create_user,now(),:version)");
     $stmt->execute(array( 'hn'=>$hn, 'an'=>$an,
@@ -218,7 +220,7 @@
     'pe_heent'=>$pe_heent, 'pe_ob_gynexam'=>$pe_ob_gynexam,
     'pe_other'=>$pe_other,'pe_text'=>$pe_text,'pe_cvs'=>$pe_cvs, 'pe_cns'=>$pe_cns
     ,'primary_a'=>$primary_a,'c_spine'=>$c_spine,'trachea'=>$trachea,'chest_wound'=>$chest_wound,'subcu_emp'=>$subcu_emp
-    ,'cct'=>$cct,'lung_sound'=>$lung_sound,'o2sat'=>$o2sat,'sbp'=>$sbp,'dbp'=>$dbp,'pr2'=>$pr2
+    ,'cct'=>$cct,'lung_sound'=>$lung_sound,'o2sat'=>$o2sat,'bp_check'=>$bp_check,'pr_check'=>$pr_check
     ,'ext_act_bleed'=>$ext_act_bleed,'gcs_e'=>$gcs_e,'gcs_v'=>$gcs_v,'gcs_m'=>$gcs_m,'pupil_rt'=>$pupil_rt,'pupil_lt'=>$pupil_lt,'e_text'=>$e_text
     ,'pneumothorax'=>$pneumothorax,'tr_allergy'=>$tr_allergy,'tr_meddication'=>$tr_meddication,'part_illness'=>$part_illness,'last_meal'=>$last_meal
     ,'event_environment'=>$event_environment

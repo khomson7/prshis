@@ -20,7 +20,7 @@
  if(!$an){
  // session_start();
  // session_destroy();  
- //exit();            
+ exit();            
       
 }
 

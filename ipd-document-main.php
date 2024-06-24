@@ -75,6 +75,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
             <a href="ipd-document-main-pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารใบปะหน้า</a>
         </div>
 
+        <div class="col-md-2 text-right">
+            <a href="allpdfprint/all_pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารรวม</a>
+        </div>
+
          
     </div>
     <div class="row">
@@ -179,6 +183,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
                             <a id="AddmissionNurse_pdf1"></a>
                             <a id="AddmissionNurse_pdf2"></a>
                             <a id="AddmissionNurse_pdf3"></a>
+                            <a id="AddmissionNurse_pdf_icu"></a>
                             
                         </div>
                     </div>
@@ -525,7 +530,9 @@ if((getDocumentSummary==true)){
 
         const getDocumentAddmissionNurse3 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse3($an))?>;
 
-      console.log(getDocumentAddmissionNurse3);
+        const getDocumentAddmissionNurseIcu = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurseIcu($an))?>;
+
+    //  console.log(getDocumentAddmissionNurse3);
         
         if((getDocumentAddmissionNurse==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
@@ -539,7 +546,7 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-secondary fas fa-square");
         }
 
-        if((getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true || getDocumentAddmissionNurse3==true)){
+        if((getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true || getDocumentAddmissionNurse3==true || getDocumentAddmissionNurseIcu==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
             $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
 
@@ -552,6 +559,10 @@ if((getDocumentSummary==true)){
 
             if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse3==true){
                 $("#AddmissionNurse_pdf3").attr({"class":"badge badge-secondary","href":"lr-report1/lr-report2-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(เฉพาะผู้มาคลอด)").css({"cursor":"pointer"});
+            }
+
+            if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurseIcu==true){
+                $("#AddmissionNurse_pdf_icu").attr({"class":"badge badge-secondary","href":"ipdnurse2/prs-icu1-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(ICU)").css({"cursor":"pointer"});
             }
             
         }else{

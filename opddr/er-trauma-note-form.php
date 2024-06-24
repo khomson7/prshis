@@ -890,6 +890,78 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
+                                <label>&nbsp;&nbsp;C: BP&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if (
+                                                            $row['bp_check'] == 'Normal'
+                                                            /*|| $row['bp_check'] == NULL*/
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="bp_check1" name="bp_check" value="Normal" onchange="custom_check('off_bp_check');">
+                                    <label class="custom-control-label" for="bp_check1">Normal</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if (
+                                                            $row['bp_check'] != 'Normal'
+                                                            && $row['bp_check'] != NULL
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="bp_check2" name="bp_check" onchange="custom_check('on_bp_check');">
+                                    <label class="custom-control-label" for="bp_check2">AbNormal</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-sm" id="bp_check_text" name="bp_check" value="<?php if ($row['bp_check'] != 'Normal') {
+                                                                                                                                                    echo htmlspecialchars($row['bp_check']);
+                                                                                                                                                } ?>" <?php if (!($row['bp_check'] != 'Normal'
+                                                                                                                                                            && $row['bp_check'] != NULL)) {
+                                                                                                                                                            echo 'disabled';
+                                                                                                                                                        } ?>>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-1"></div>
+                                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PR&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if (
+                                                            $row['pr_check'] == 'Normal'
+                                                            /*|| $row['ext_act_bleed'] == NULL*/
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="pr_check1" name="pr_check" value="Normal" onchange="custom_check('off_pr_check');">
+                                    <label class="custom-control-label" for="pr_check1">Normal</label>
+                                </div>
+
+                                <div class="custom-control custom-radio col-sm-2">
+                                    <input type="radio" <?php if (
+                                                            $row['pr_check'] != 'Normal'
+                                                            && $row['pr_check'] != NULL
+                                                        ) {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="pr_check2" name="pr_check" onchange="custom_check('on_pr_check');">
+                                    <label class="custom-control-label" for="pr_check2">AbNormal</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-sm" id="pr_check_text" name="pr_check" value="<?php if ($row['pr_check'] != 'Normal') {
+                                                                                                                                                    echo htmlspecialchars($row['pr_check']);
+                                                                                                                                                } ?>" <?php if (!($row['pr_check'] != 'Normal'
+                                                                                                                                                            && $row['pr_check'] != NULL)) {
+                                                                                                                                                            echo 'disabled';
+                                                                                                                                                        } ?>>
+                                </div>
+
+
+                            </div>
+
+
+
+                         <!--   <div class="form-group row">
+                                <div class="col-sm-1"></div>
                                 <label>&nbsp;&nbsp;C: BP</label>
 
                                 <div class="col-sm-1">
@@ -905,6 +977,8 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 </div>/min
 
                             </div>
+
+                                                                                                                                                    -->
 
                             <div class="form-group row">
                                 <div class="col-sm-1"></div>
@@ -1886,6 +1960,23 @@ $check_    = ReportQueryUtils::getProduction($id)
             $('#h5').attr("disabled", false).val('');
             $('#h1').prop("checked", false);
         }
+
+        if (value == "off_bp_check") {
+            $('#bp_check_text').attr("disabled", true).val('');
+            $('#bp_check2').prop("checked", false);
+        } else if (value == "on_bp_check") {
+            $('#bp_check_text').attr("disabled", false).val('');
+            $('#bp_check1').prop("checked", false);
+        }
+
+        if (value == "off_pr_check") {
+            $('#pr_check_text').attr("disabled", true).val('');
+            $('#pr_check2').prop("checked", false);
+        } else if (value == "on_pr_check") {
+            $('#pr_check_text').attr("disabled", false).val('');
+            $('#pr_check1').prop("checked", false);
+        }
+
     }
 
     function plan_management_check(value) {

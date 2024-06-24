@@ -56,9 +56,11 @@ $getDocumentPreNurseNote = ReportQueryUtils::getDocumentPreNurseNote($an);
 
 $getDocumentLrReport2 = ReportQueryUtils::getDocumentLrReport2($an);
 
+$getDocumentAddmissionNurseIcu = ReportQueryUtils::getDocumentAddmissionNurseIcu($an);
+
 $image_checkAddmissionNurse = '';
 
-if(($getDocumentAddmissionNurse || $getDocumentPreNurseNote || $getDocumentLrReport2)){
+if(($getDocumentAddmissionNurse || $getDocumentPreNurseNote || $getDocumentLrReport2 || $getDocumentAddmissionNurseIcu)){
     $image_checkAddmissionNurse = $image_check;
 }
 $getDocumentOrder = KphisQueryUtils::getDocumentOrder($an);
