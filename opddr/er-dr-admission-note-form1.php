@@ -6,6 +6,7 @@
 
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
 require_once '../mains/main-report.php';
+Session::checkPermissionAndShowMessage('ER_DR_ADMISSION_NOTE', 'VIEW');
 require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/opd-show-patient-main-sticky.php';
 require_once '../include/DbUtils.php';
@@ -1064,8 +1065,11 @@ $row_period  = $stmt_period->fetch();
 
                             <!-- ปรับแก้-->
                             <?php
-                            if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
-                            ?>
+                                if((
+        
+                                    Session::checkPermission('ER_DR_ADMISSION_NOTE','ADD')
+
+                                ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
                                 <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
                             <?php
                             }

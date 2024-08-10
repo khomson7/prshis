@@ -13,8 +13,8 @@ if ($login != $loginname) {
 
 require_once '../mains/main-report.php';
 
-Session::checkLoginSessionAndShowMessage(); //เช็ค session
-Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
+//Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('PRS_PRE_NURSENOTE', 'VIEW');
 require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/ipd-show-patient-sticky.php';
 
@@ -217,7 +217,7 @@ $id = '16'; //Link menu
 
 
 
-<form id="my_form" onsubmit="return validateForm()">
+<form id="my_form" >
     <div class="container-fluid">
         <div class="row">
             <div class="col-auto">
@@ -1161,7 +1161,7 @@ $id = '16'; //Link menu
                                 <?php
                                 if((
                                     //SessionManager::checkPermission('IPD_NURSE_MAIN_PROGRAM','ACCESS')
-                                    Session::checkPermission('IPD_NURSE_NOTE','ADD')
+                                    Session::checkPermission('PRS_PRE_NURSENOTE','ADD')
             
                                     // && SessionManager::checkPermission('IPD_NURSE_NOTE','EDIT')
                                     // && SessionManager::checkPermission('IPD_NURSE_NOTE','VIEW')
