@@ -21,6 +21,7 @@
         require_once '../mains/ipd-show-patient-sticky.php';
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
+        require_once '../include/ReportQueryUtils.php';
         date_default_timezone_set("Asia/Bangkok");
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
         $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
@@ -1122,7 +1123,14 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <?php if( (($nurse_admission_note_id == null)) || ( ($nurse_admission_note_id != null)) ){?>
+                                <?php if((
+                        //SessionManager::checkPermission('IPD_NURSE_MAIN_PROGRAM','ACCESS')
+                        Session::checkPermission('IPD_NURSE_NOTE','ADD')
+
+                        // && SessionManager::checkPermission('IPD_NURSE_NOTE','EDIT')
+                        // && SessionManager::checkPermission('IPD_NURSE_NOTE','VIEW')
+                        // && SessionManager::checkPermission('IPD_NURSE_NOTE','REMOVE')
+                    ) && (ReportQueryUtils::checkReadOnly($an))){?>
                                         <button type="button" class="btn btn-primary" onclick="onclick_save_nurse_admission_note()" ><i class="fas fa-save"></i> บันทึก</button>
                                 <?php }?>
                                 <a href="ipd-nurse-admission-note-pdf.php?an=<?php echo $an;?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>

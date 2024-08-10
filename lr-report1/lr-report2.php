@@ -33,6 +33,7 @@ Session::insertSystemAccessLog(json_encode(array(
 
 
 
+//echo Session::checkPermission('IPD_NURSE_ADDMISSION_NOTE','ADD');
 /*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
@@ -1139,8 +1140,11 @@ $id = '15'; //Link menu
                         <div class="row">
 
                             <div class="col-md-12 text-right">
-                                <?php
-                                if ((($id == null)) || (($id != null))) { ?>
+
+                            <?php if((
+                                    Session::checkPermission('IPD_NURSE_NOTE','ADD')
+                                ) && (ReportQueryUtils::checkReadOnly($an))){?>
+
                                     <button type="button" class="btn btn-primary" id="btn_save_report" onclick="lr_report2_save()"><i class="fas fa-save"></i> บันทึก</button>
                                 <?php } ?>
                                 <a href="lr-report2-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>

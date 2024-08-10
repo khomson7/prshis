@@ -21,6 +21,7 @@ require_once '../mains/ipd-show-patient-sticky.php';
 
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = $_REQUEST['an']; //รับค่า an
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
@@ -1132,7 +1133,9 @@ date_default_timezone_set('asia/bangkok');
                             </div>
                             <div class="col-md-12 text-right">
                                 <?php
-                                if ((($id == null)) || (($id != null))) { ?>
+                                if((
+                                    Session::checkPermission('IPD_NURSE_NOTE','ADD')
+                                ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
                                     <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="lr_report1_save()"><i class="fas fa-save"></i> บันทึก</button>
                                 <?php } ?>
                                 <a href="lr-report1-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>

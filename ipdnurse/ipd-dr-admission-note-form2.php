@@ -20,7 +20,7 @@ require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนท
 require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
-
+require_once '../include/ReportQueryUtils.php';
 
 
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
@@ -2712,9 +2712,9 @@ $row_period  = $stmt_period->fetch();
                     <div class="col-sm-12 text-right">
 
                         <?php
-                        //รอแก้ไข
-
-                        if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
+                       if((
+                        Session::checkPermission('ADMISSION_NOTE', 'EDIT')
+                    ) && (ReportQueryUtils::checkReadOnly($an))) {
                         ?>
                             <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
                         <?php

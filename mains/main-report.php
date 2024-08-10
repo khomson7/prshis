@@ -94,6 +94,10 @@ session_start();
 
     </script>
 
+    
+
+    <!-- Include your external JavaScript file -->
+    <script src="../include/js/modalshow.js"></script>
 
 </head>
 <body>
@@ -190,6 +194,10 @@ session_start();
 
 
     <?php } ?>
+
+
+    
+
 
 
     </body>

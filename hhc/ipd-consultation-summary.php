@@ -103,6 +103,21 @@ $row_ipt = $stmt_ipt->fetch();
 $regdatetime = $row_ipt["regdatetime"];
 
 
+$id = '13'; //ลำดับในตาราง prs_link_menu
+$sql = "SELECT *
+                FROM `prs_link_menu`
+                WHERE id = :id
+                LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->execute(['id' => $id]);
+if ($row0  = $stmt->fetch()) {
+    $menu_name = $row0['menu_name'];
+    $production = $row0['production'];
+} else {
+    $menu_name = '-';
+}
+
+
 ?>
 <script src="../include/fabric.js"></script>
 <style type="text/css">
@@ -133,13 +148,21 @@ $regdatetime = $row_ipt["regdatetime"];
 
 <form id="ipd_consultation" action="" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-1">
-                <button type="button" class="btn btn-danger btn-block" onclick="self.close()"><i class="fa fa-window-close"></i> ปิด</button>
+    <div class="row">
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
             </div>
             <div class="col-md-11">
-                <h4>แบบบันทึกการปรึกษาผู้ป่วยเพื่อการดูแลต่อเนื่องในชุมชน <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?></h4>
+                <h4><?= htmlspecialchars($menu_name) ?>
+                    <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?><?php if ($production == "2") { ?>
+
+                    <font color="red">ช่วงทดลอง</font>
+                <?php } else { ?>
+
+                <? } ?>
+                </h4>
             </div>
+
         </div>
 
 <br> 
@@ -355,7 +378,10 @@ $regdatetime = $row_ipt["regdatetime"];
                             <?php
                             //รอแก้ไข
                             // $a = 1;
-                            if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
+                            if((
+                                Session::checkPermission('IPD_NURSE_NOTE','ADD')
+                            ) && (ReportQueryUtils::checkReadOnly($an)))
+                             {
                             ?>
                                 <button type="button" class="btn btn-primary" onclick="consultation_save()">บันทึก</button>
                             <?php

@@ -67,7 +67,12 @@
         $breathing_characteristics =  empty($_REQUEST['breathing_characteristics']) ? null : $_REQUEST['breathing_characteristics'];
         $on_icd =  empty($_REQUEST['on_icd']) ? null : $_REQUEST['on_icd'];
         $on_icd_2 =  empty($_REQUEST['on_icd_2']) ? null : $_REQUEST['on_icd_2'];
-        $listen_sound_lungs =  empty($_REQUEST['listen_sound_lungs']) ? null : $_REQUEST['listen_sound_lungs'];
+       // $listen_sound_lungs =  empty($_REQUEST['listen_sound_lungs']) ? null : $_REQUEST['listen_sound_lungs'];
+        $listen_sound_lungs_clear =  empty($_REQUEST['listen_sound_lungs_clear']) ? null : $_REQUEST['listen_sound_lungs_clear'];
+        $listen_sound_lungs_crepitation =  empty($_REQUEST['listen_sound_lungs_crepitation']) ? null : $_REQUEST['listen_sound_lungs_crepitation'];
+        $listen_sound_lungs_wheezing =  empty($_REQUEST['listen_sound_lungs_wheezing']) ? null : $_REQUEST['listen_sound_lungs_wheezing'];
+        $listen_sound_lungs_rhonchi =  empty($_REQUEST['listen_sound_lungs_rhonchi']) ? null : $_REQUEST['listen_sound_lungs_rhonchi'];
+        $listen_sound_lungs_stridor =  empty($_REQUEST['listen_sound_lungs_stridor']) ? null : $_REQUEST['listen_sound_lungs_stridor'];
         $cxr =  empty($_REQUEST['cxr']) ? null : $_REQUEST['cxr'];
         $sputum =  empty($_REQUEST['sputum']) ? null : $_REQUEST['sputum'];
         $abg =  empty($_REQUEST['abg']) ? null : $_REQUEST['abg'];
@@ -139,7 +144,9 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_icu_form SET hn=
           ,bun=:bun,cr=:cr,gfr=:gfr,e_lyte_na=:e_lyte_na,e_lyte_k=:e_lyte_k,e_lyte_cl=:e_lyte_cl,e_lyte_co2=:e_lyte_co2,e_lyte_aniengap=:e_lyte_aniengap
           ,ca=:ca,po_4=:po_4,mg=:mg,dtx=:dtx,urine_sr_gr=:urine_sr_gr,history_of_lung_disease=:history_of_lung_disease
           ,rr=:rr,o2_sat=:o2_sat,et_tube_no=:et_tube_no,et_tube_no2=:et_tube_no2,o2_hfnc=:o2_hfnc,candular=:candular,mark_c_bag=:mark_c_bag
-          ,breathing_characteristics=:breathing_characteristics,on_icd=:on_icd,on_icd_2=:on_icd_2,listen_sound_lungs=:listen_sound_lungs
+          ,breathing_characteristics=:breathing_characteristics,on_icd=:on_icd,on_icd_2=:on_icd_2
+          ,listen_sound_lungs_clear=:listen_sound_lungs_clear,listen_sound_lungs_crepitation=:listen_sound_lungs_crepitation,listen_sound_lungs_wheezing=:listen_sound_lungs_wheezing
+          ,listen_sound_lungs_rhonchi=:listen_sound_lungs_rhonchi,listen_sound_lungs_stridor=:listen_sound_lungs_stridor
           ,cxr=:cxr,sputum=:sputum,abg=:abg,pa_co2=:pa_co2,hco3=:hco3,pao2=:pao2,be=:be,history_of_gastrointestinal=:history_of_gastrointestinal
           ,bw=:bw,hight=:hight,bmi=:bmi,alb=:alb,bee=:bee,tee=:tee,spent=:spent,communication_history=:communication_history,speaking=:speaking
           ,communication=:communication,vision=:vision,listening=:listening,hearing_aids=:hearing_aids,history_affects_activities=:history_affects_activities
@@ -158,7 +165,9 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_icu_form SET hn=
           ,'bun'=>$bun,'cr'=>$cr,'gfr'=>$gfr,'e_lyte_na'=>$e_lyte_na,'e_lyte_k'=>$e_lyte_k,'e_lyte_cl'=>$e_lyte_cl,'e_lyte_co2'=>$e_lyte_co2,'e_lyte_aniengap'=>$e_lyte_aniengap
           ,'ca'=>$ca,'po_4'=>$po_4,'mg'=>$mg,'dtx'=>$dtx,'urine_sr_gr'=>$urine_sr_gr,'history_of_lung_disease'=>$history_of_lung_disease
           ,'rr'=>$rr,'o2_sat'=>$o2_sat,'et_tube_no'=>$et_tube_no,'et_tube_no2'=>$et_tube_no2,'o2_hfnc'=>$o2_hfnc,'candular'=>$candular,'mark_c_bag'=>$mark_c_bag
-          ,'breathing_characteristics'=>$breathing_characteristics,'on_icd'=>$on_icd,'on_icd_2'=>$on_icd_2,'listen_sound_lungs'=>$listen_sound_lungs
+          ,'breathing_characteristics'=>$breathing_characteristics,'on_icd'=>$on_icd,'on_icd_2'=>$on_icd_2
+          ,'listen_sound_lungs_clear'=>$listen_sound_lungs_clear,'listen_sound_lungs_crepitation'=>$listen_sound_lungs_crepitation,'listen_sound_lungs_wheezing'=>$listen_sound_lungs_wheezing
+          ,'listen_sound_lungs_rhonchi'=>$listen_sound_lungs_rhonchi ,'listen_sound_lungs_stridor'=>$listen_sound_lungs_stridor
           ,'cxr'=>$cxr,'sputum'=>$sputum,'abg'=>$abg,'pa_co2'=>$pa_co2,'hco3'=>$hco3,'pao2'=>$pao2,'be'=>$be,'history_of_gastrointestinal'=>$history_of_gastrointestinal
           ,'bw'=>$bw,'hight'=>$hight,'bmi'=>$bmi,'alb'=>$alb,'bee'=>$bee,'tee'=>$tee,'spent'=>$spent,'communication_history'=>$communication_history,'speaking'=>$speaking
           ,'communication'=>$communication,'vision'=>$vision,'listening'=>$listening,'hearing_aids'=>$hearing_aids,'history_affects_activities'=>$history_affects_activities

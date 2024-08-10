@@ -58,6 +58,9 @@ $state_of_mind = $_REQUEST['state_of_mind'];
 $swelling = $_REQUEST['swelling'];
 $update_datetime = $_REQUEST['update_datetime'];
 $vaccine_history = $_REQUEST['vaccine_history'];
+$return_checkdoctorSignature = $_REQUEST['return_checkdoctorSignature'];
+
+$doctor0 = $_REQUEST['doctor'];
 
     //$create_datetime = ใช้ NOW()
     $create_datetime =  date('Y-m-d H:i:s');
@@ -70,10 +73,10 @@ $vaccine_history = $_REQUEST['vaccine_history'];
 
     try {
 
-        if ( $rxdate != '' && $rxtime !='' && $hospital_by !='' && $depart !='' && $cc !='' && $current_illness !=''  && $c_chronic !=''  && $hos_history !=''
+        if ( $rxdate != '' && $rxtime !=''  && $hospital_by !='' && $depart !='' && $cc !='' && $current_illness !=''  && $c_chronic !=''  && $hos_history !=''
         && $h_sergery !='' && $h_allergy !='' && $history_of_drug != '' && $pmh2 != '' && $communication_eyes != '' && $communication_speak != '' && $bps != ''
         && $bpd != ''  && $pr != '' && $rr != '' && $level_of_con != '' && $swelling != '' && $skin != '' && $communication_ears != '' && $state_of_mind != ''
-        && $first_symptoms != '' && $breathing != ''
+        && $first_symptoms != '' && $breathing != '' && $doctor0 !=''
 ) {
 
             $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_pre_nursenote(hn,an,rxdate,rxtime,refer_from,hospital_by,depart,cc,hpi
@@ -114,6 +117,10 @@ $vaccine_history = $_REQUEST['vaccine_history'];
             }
         }  
 
+        } else if( $doctor0 ==''){
+            $output_error = '<script>
+            alert("กรุณา Attending physician");
+        </script>';
         }
 //บันทึกรายการ
      /*   $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_pre_nursenote(rxdate,rxtime,refer_from,cc,hpi

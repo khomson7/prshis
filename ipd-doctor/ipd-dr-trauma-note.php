@@ -1,66 +1,60 @@
-<?php require_once '../include/Session.php';
+<?php  // require_once './project/function/Session.php';
 // Session::::checkPermissionAndShowMessage('ADMISSION_NOTE','VIEW');
-// require_once '../include/Session.php';
-// Session::checkLoginSessionAndShowMessage(); //เช็ค session
-
-
-// Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
-require_once '../mains/main-report.php';
-require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
-require_once '../mains/opd-show-patient-main-sticky.php';
-require_once '../include/DbUtils.php';
-require_once '../include/KphisQueryUtils.php';
-require_once '../include/ReportQueryUtils.php';
-
-
-$conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
-$hn = empty($_REQUEST['hn']) ? null : $_REQUEST['hn'];
-$vn = empty($_REQUEST['vn']) ? null : $_REQUEST['vn'];
-// $vn= '111';
+require_once '../include/Session.php';
+//ตรวจสอบว่า session login ตรงกันหรือไม่
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-//  $hn = '000000001';
-// $hn = KphisQueryUtils::getHnByAn($an);
-// $vn = KphisQueryUtils::getVnByAn($an);
-// $vn = KphisQueryUtils::getVnByHn($hn);
-//$vn = $_SESSION['vn'];
-$an_parameters = ['vn' => $vn];
-$hn_parameters = ['hn' => $hn];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
-
-//echo $hn;
-//  echo  $loginname;
-
-
-
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
 if ($login != $loginname) {
     session_start();
     session_destroy();
 }
+//ส่วนหัวหน้า
+require_once '../mains/main-report.php';
+//check session and permission  
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
+Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
+require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+require_once '../mains/ipd-show-patient-sticky.php';
+require_once '../include/DbUtils.php';
+require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 
-/*
 Session::insertSystemAccessLog(json_encode(array(
-    'form'=>'ER-TRAUMA-NOTE-FORM',
-    'vn'=>$vn,
-),JSON_UNESCAPED_UNICODE));
+    'form' => 'IPD-DR-TRAUMA-NOTE',
+    'an' => $an,
+), JSON_UNESCAPED_UNICODE));
 
-*/
+$conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
+$an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
+
+$hn = KphisQueryUtils::getHnByAn($an);
+$vn = KphisQueryUtils::getVnByAn($an);
+$an_parameters = ['an' => $an];
+$hn_parameters = ['hn' => $hn];
+
+
+ReportQueryUtils::getTraumaNoteFunction($an);
+
+
+//echo $_SESSION['name']; 
 
 //-------------------------Doctor admission note
+
 $sql = "SELECT *
-                FROM `prs_er_trauma_note`
-                WHERE an = :vn
-                ORDER BY admission_note_id ASC";
+                FROM `prs_ipd_trauma_note`
+                WHERE an = :an";
 $stmt = $conn->prepare($sql);
-$stmt->execute(['vn' => $vn]);
+$stmt->execute($an_parameters);
 if ($row  = $stmt->fetch()) {
     $admission_note_id = $row['admission_note_id'];
 } else {
     $admission_note_id = null;
 }
 
-$id = '18'; //ลำดับในตาราง prs_link_menu
+$id = '19'; //ลำดับในตาราง prs_link_menu
 $sql = "SELECT *
                 FROM `prs_link_menu`
                 WHERE id = :id

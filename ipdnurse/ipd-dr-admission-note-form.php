@@ -20,6 +20,7 @@ require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนท
 require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 
 Session::insertSystemAccessLog(json_encode(array(
     'form' => 'IPD-DR-ADMISSION-NOTE-FORM',
@@ -246,17 +247,33 @@ $row_period  = $stmt_period->fetch();
     }
 </style>
 
-<form id="button1" method="post">
+
+        
+            <?php
+                             if((
+                                Session::checkPermission('ADMISSION_NOTE', 'EDIT')
+                            ) && (ReportQueryUtils::checkReadOnly($an)))
+                            {
+                            ?>
+                            <form id="button1" method="post">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-1">
-                <input type="submit" name="button1" value="นำเข้าบันทึกรับใหม่" />
+                            <div class="row">
+                            <div class="col-md-1">
+                                <input type="submit" name="button1" value="นำเข้าบันทึกรับใหม่" />
+                                </div>
+                                </div>
+                                </form>
+                                <br>
+                            <?php
+                            }
+                            ?>
+                
 
-            </div>
-        </div>
-</form>
+            
+        
 
-<br>
+
+
 
 <form id="admit_firsth" action="" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
@@ -2414,9 +2431,10 @@ $row_period  = $stmt_period->fetch();
                         <div class="col-sm-12 text-right">
                             <a href="ipd-dr-admission-note-pdf.php?an=<?php echo $an; ?>&admission_note_id=<?php echo $admission_note_id; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                             <?php
-                            //รอแก้ไข
-                            // $a = 1;
-                            if (Session::checkPermission('ADMISSION_NOTE', 'EDIT')) {
+                             if((
+                                Session::checkPermission('ADMISSION_NOTE', 'EDIT')
+                            ) && (ReportQueryUtils::checkReadOnly($an)))
+                            {
                             ?>
                                 <button type="button" class="btn btn-primary" onclick="admission_save()">บันทึก</button>
                             <?php

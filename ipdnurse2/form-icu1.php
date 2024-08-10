@@ -777,7 +777,43 @@ $check_    = ReportQueryUtils::getProduction($id)
                             <br>
 
                             <div class="row">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>ฟังเสียงลมเข้าปอด</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<label>ฟังเสียงลมเข้าปอด</label>
+
+                            <div class="custom-control custom-checkbox col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?php if ($row['listen_sound_lungs_clear'] == 'Y') {
+                                                                                                        echo 'checked="checked"';
+                                                                                                    } ?>class="custom-control-input" id="listen_sound_lungs_clear" value="Y" name="listen_sound_lungs_clear">
+                                <label class="custom-control-label" for="listen_sound_lungs_clear">Clear</label>
+                            </div>
+                            <div class="custom-control custom-checkbox col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?php if ($row['listen_sound_lungs_crepitation'] == 'Y') {
+                                                                                                        echo 'checked="checked"';
+                                                                                                    } ?>class="custom-control-input" id="listen_sound_lungs_crepitation" value="Y" name="listen_sound_lungs_crepitation">
+                                <label class="custom-control-label" for="listen_sound_lungs_crepitation">Crepitation</label>
+                            </div>
+                            <div class="custom-control custom-checkbox col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?php if ($row['listen_sound_lungs_wheezing'] == 'Y') {
+                                                                                                        echo 'checked="checked"';
+                                                                                                    } ?>class="custom-control-input" id="listen_sound_lungs_wheezing" value="Y" name="listen_sound_lungs_wheezing">
+                                <label class="custom-control-label" for="listen_sound_lungs_wheezing">Wheezing</label>
+                            </div>
+                            <div class="custom-control custom-checkbox col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?php if ($row['listen_sound_lungs_rhonchi'] == 'Y') {
+                                                                                                        echo 'checked="checked"';
+                                                                                                    } ?>class="custom-control-input" id="listen_sound_lungs_rhonchi" value="Y" name="listen_sound_lungs_rhonchi">
+                                <label class="custom-control-label" for="listen_sound_lungs_rhonchi">Rhonchi</label>
+                            </div>
+                            <div class="custom-control custom-checkbox col-sm-1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?php if ($row['listen_sound_lungs_stridor'] == 'Y') {
+                                                                                                        echo 'checked="checked"';
+                                                                                                    } ?>class="custom-control-input" id="listen_sound_lungs_stridor" value="Y" name="listen_sound_lungs_stridor">
+                                <label class="custom-control-label" for="listen_sound_lungs_stridor">Stridor</label>
+                            </div>
+
+
+
+
+    <!--                            
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <input type="radio" <?php if ($row['listen_sound_lungs'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -810,6 +846,8 @@ $check_    = ReportQueryUtils::getProduction($id)
                                                                             } ?> class="custom-control-input" id="listen_sound_lungs5" name="listen_sound_lungs" value="5">
                                     <label class="custom-control-label" for="listen_sound_lungs5">Stridor</label>
                                 </div>
+
+-->
 
                             </div>
                             <br>
@@ -1567,10 +1605,10 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                             <!-- 1-->
                                         <tr style="border:1px solid #000;margin: 45px;">
-                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การแสดงออกทางสีหน้า (Facial expression)</td>
-                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ผ่อนคลายหน้าเรียบเฉย (relaxed)
-                                                <br>&nbsp;หน้านิ่วคิ้วขมวด/ตึงเครียด
-                                                <br>&nbsp;หน้านิ่วคิ้วขมวด/บึ้งตึงมาก เปลือกตาปิดแน่น
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การแสดงออกทางสีหน้า</td>
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ผ่อนคลาย หน้าเรียบเฉย
+                                                <br>&nbsp;หน้านิ่วคิ้วขมวด ตึงเครียด
+                                                <br>&nbsp;หน้านิ่วคิ้วขมวด บึ้งตึงมาก เปลือกตาปิดแน่น
                                             </td>
                                             <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="3%">&nbsp;0
                                                 <br>1
@@ -1579,7 +1617,7 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                             <!-- 1-->
                                         <tr style="border:1px solid #000;margin: 45px;">
-                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การเคลื่อนไหวของร่างกาย (Body movement)</td>
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การเคลื่อนไหวของร่างกาย</td>
                                             <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ไม่มีการเคลื่อนไหว
                                                 <br>&nbsp;ปกป้องบริเวณที่ปวด
                                                 <br>&nbsp;กระสับกระส่าย
@@ -1591,7 +1629,7 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                                             <!-- 1-->
                                         <tr style="border:1px solid #000;margin: 45px;">
-                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การเกร็งของกล้ามเนื้อ (Muscle tention) ประเมินจากการเหยียดและการงอแขน</td>
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การเกร็งของกล้ามเนื้อ(ประเมินจากการเหยียดและการงอแขน)</td>
                                             <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ผ่อนคลาย
                                                 <br>&nbsp;ตึงแข็ง
                                                 <br>&nbsp;ตึงแข็งเป็นอย่างมาก
@@ -1604,19 +1642,26 @@ $check_    = ReportQueryUtils::getProduction($id)
                                             <!-- 1-->
                                         <tr style="border:1px solid #000;margin: 45px;">
                                             <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การหายใจสอดคล้องกับเครืองช่วยหายใจ
-                                                สำหรับผู้ป่วยที่คาท่อหายใจ หรือการเปล่งเสียง สำหรับผู้ป่วยที่ไม่ได้ใส่ท่อช่วยหายใจ
+                                                (มี Tube) หรือการเปล่งเสียง สำหรับผู้ป่วยที่ไม่ได้ใส่ท่อช่วยหายใจ
                                             </td>
                                             <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;หายใจสอดคล้องกับเครื่องช่วยหายใจ
                                                 <br>&nbsp;มีอาการไอ แต่สามารถหายใจขณะที่ใช้ เครื่องช่วยหายใจได้
                                                 <br>&nbsp;มีการต้านเครื่องช่วยหายใจ
-                                                <br>&nbsp;พูดด้วยน้ำเสียงปกติ
-                                                <br>&nbsp;ถอนหายใจ ร้องคราง
-                                                <br>&nbsp;ร้องไห้ สะอื้น
                                             </td>
                                             <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="3%">&nbsp;0
                                                 <br>1
                                                 <br>2
-                                                <br>0
+                                            </td>
+
+                                            <tr style="border:1px solid #000;margin: 45px;">
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="7%">&nbsp;การเปล่งเสียง
+                                                (ไม่ได้มี Tube)
+                                            </td>
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;พูดด้วยน้ำเสียงปกติ
+                                                <br>&nbsp;ถอนหายใจ ร้องคราง
+                                                <br>&nbsp;ร้องไห้ สะอื้น
+                                            </td>
+                                            <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="3%">&nbsp;0
                                                 <br>1
                                                 <br>2
                                             </td>
@@ -1650,8 +1695,8 @@ $check_    = ReportQueryUtils::getProduction($id)
                                     <div style="text-align:left; padding:5px;"><b>SPENT 4 คะแนน</b></div>
 
                                     <div style="text-align:left; padding:5px;">( ) 1. นน.ลดโดยไม่ได้ตั้งใจในช่วง 6 เดือนที่ผ่านมา</div>
-                                    <div style="text-align:left; padding:5px;">( ) 2. ผู้ป่วยได้รับอาหาร ที่เคยได้มากกว่า 7 วัน</div>
-                                    <div style="text-align:left; padding:5px;">( ) 3. BMI < 18.5 or>= 25.0 kg/m<sup>2</sup></div>
+                                    <div style="text-align:left; padding:5px;">( ) 2. ผู้ป่วยได้รับอาหาร < ที่เคยได้(>7 วัน)</div>
+                                    <div style="text-align:left; padding:5px;">( ) 3. BMI < 18.5 or >= 25.0 kg/m<sup>2</sup></div>
                                     <div style="text-align:left; padding:5px;">( ) 4. ผู้ป่วยมีภาวะโรควิกฤต หรือกึ่งวิกฤต</div>
 
                                 </div>
@@ -1709,7 +1754,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                         <tr style="border:1px solid #000;margin: 45px;">
                                             <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="15%">&nbsp;ลุกจากเตียง + มี Activity
                                             </td>
-                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="3%">&nbsp;1.2
+                                            <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="3%">&nbsp;1.3
                                             </td>
                                             <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="15%">&nbsp;<b>Burn (20-40% body surface area)</b>
                                             </td>

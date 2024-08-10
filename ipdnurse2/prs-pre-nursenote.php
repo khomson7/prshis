@@ -57,9 +57,9 @@ $sql = "SELECT *
 $stmt = $conn->prepare($sql);
 $stmt->execute($an_parameters);
 if ($row  = $stmt->fetch()) {
-    $id = $row['id'];
+    $admission_note_id = $row['id'];
 } else {
-    $id = null;
+    $admission_note_id = null;
 }
 
 
@@ -84,11 +84,40 @@ while ($row_item = $stmt_item->fetch()) {
 
 
 
-//echo $id;
-//echo $vn;
+$sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
+        (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
+            from " . DbConstant::HOSXP_DBNAME . ".opd_allergy
+            where opd_allergy.hn = ipt.hn /*and (opd_allergy.no_alert<>'Y' or opd_allergy.no_alert is null)*/
+            order by display_order) as drugallergy,
+        an_stat.age_y,an_stat.age_m,an_stat.age_d,
+        concat(ipt.regdate,' ',ipt.regtime) as regdatetime,
+        ipt.dchdate,ipt.dchtime,
+        ipt.regdate,ipt.regtime,
+        ipt.ward,ward.name,
+        ipt.pttype, pttype.`name` as pttype_name,
+        iptadm.bedno, (select vs.bw from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw
+        , (select vs.height from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_height
+        , (select vs.vs_datetime from ipd_vs_vital_sign vs where vs.an = ipt.an and vs.bw is not null and trim(vs.bw) <> '' order by vs_datetime desc limit 1) as latest_bw_datetime
+        from " . DbConstant::HOSXP_DBNAME . ".ipt
+        left outer join " . DbConstant::HOSXP_DBNAME . ".an_stat on an_stat.an=ipt.an
+        left outer join " . DbConstant::HOSXP_DBNAME . ".patient on patient.hn=ipt.hn
+        left outer join " . DbConstant::HOSXP_DBNAME . ".ward on ward.ward=ipt.ward
+        LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".pttype ON pttype.pttype = ipt.pttype
+        LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".iptadm ON iptadm.an = ipt.an
+        WHERE ipt.an=:an
+        order by ipt.an
+        ";
+$stmt_ipt = $conn->prepare($sql_ipt);
+$stmt_ipt->execute(['an' => $an]);
+$row_ipt = $stmt_ipt->fetch();
+$regdatetime = $row_ipt["regdatetime"];
+
+
+//echo htmlspecialchars($row_ipt['regdate']);
+//echo $regdatetime;
 // opdscreen
 
-if ($id == null || $id != null) {
+if ($admission_note_id == null || $admission_note_id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
                                     pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
                                     round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
@@ -188,7 +217,7 @@ $id = '16'; //Link menu
 
 
 
-<form id="my_form">
+<form id="my_form" onsubmit="return validateForm()">
     <div class="container-fluid">
         <div class="row">
             <div class="col-auto">
@@ -219,11 +248,11 @@ $id = '16'; //Link menu
                                 <div class="col-sm-1"></div>
                                 <label>รับใหม่วันที่</label>
                                 <div class="col-sm-2">
-                                    <input type="date" class="form-control form-control-sm" id="rxdate" name="rxdate" value="<?= (isset($row['rxdate']) ? htmlspecialchars($row['rxdate']) : '') ?>">
+                                <input type="date" class="form-control form-control-sm" id="rxdate" name="rxdate" value="<?= (isset($row_ipt['regdate'])  && $admission_note_id == null ? htmlspecialchars($row_ipt['regdate']) : htmlspecialchars($row['rxdate'])) ?>">
                                 </div>
                                 <label>เวลา</label>
                                 <div class="col-sm-2">
-                                    <input type="time" class="form-control form-control-sm" id="rxtime" name="rxtime" value="<?= (isset($row['rxtime']) ? htmlspecialchars($row['rxtime']) : '') ?>">
+                                    <input type="time" class="form-control form-control-sm" id="rxtime" name="rxtime" value="<?= (isset($row_ipt['regtime'])  && $admission_note_id == null ? htmlspecialchars($row_ipt['regtime']) : htmlspecialchars($row['rxtime'])) ?>">
                                 </div>
 
 
@@ -343,7 +372,7 @@ $id = '16'; //Link menu
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                    <textarea class="form-control" id="cc" name="cc" rows="4"><?= (isset($row_opdscreen['cc']) && $id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['cc'])) ?></textarea>
+                                    <textarea class="form-control" id="cc" name="cc" rows="6"><?= (isset($row_opdscreen['cc'])  && $admission_note_id == null ? htmlspecialchars($row_opdscreen['cc']) : htmlspecialchars($row['cc'])) ?></textarea>
                                 </div>
                             </div>
                             <!--
@@ -364,8 +393,8 @@ $id = '16'; //Link menu
                             <div class="form-group row">
                                 <div class="col-sm-12">
 
-                                    <!-- <textarea class="form-control" id="current_illness" name="current_illness" rows="4"><?= (isset($row_opdscreen['hpi']) && $id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['current_illness'])) ?></textarea> -->
-                                    <textarea class="form-control" id="current_illness" name="current_illness" rows="4"><?= (isset($row['current_illness']) ? htmlspecialchars($row['current_illness']) : '') ?></textarea>
+                                    <!-- <textarea class="form-control" id="current_illness" name="current_illness" rows="4"><?= (isset($row_opdscreen['hpi'])  ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['current_illness'])) ?></textarea> -->
+                                    <textarea class="form-control" id="current_illness" name="current_illness" rows="4"><?= (isset($row_opdscreen['hpi'])  && $admission_note_id == null ? htmlspecialchars($row_opdscreen['hpi']) : htmlspecialchars($row['current_illness'])) ?></textarea>
 
                                 </div>
                             </div>
@@ -1120,7 +1149,7 @@ $id = '16'; //Link menu
                             <input type="hidden" id="version" name="version" value="<?= htmlspecialchars($row['version']) ?>">
                             <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($row['id']) ?>">
                             <input type="hidden" id="create_user" name="create_user" value="<?= htmlspecialchars($_SESSION['name']) ?>">
-
+                            
                         </div>
 
 
@@ -1130,7 +1159,14 @@ $id = '16'; //Link menu
 
                             <div class="col-md-12 text-right">
                                 <?php
-                                if ((($id == null)) || (($id != null))) { ?>
+                                if((
+                                    //SessionManager::checkPermission('IPD_NURSE_MAIN_PROGRAM','ACCESS')
+                                    Session::checkPermission('IPD_NURSE_NOTE','ADD')
+            
+                                    // && SessionManager::checkPermission('IPD_NURSE_NOTE','EDIT')
+                                    // && SessionManager::checkPermission('IPD_NURSE_NOTE','VIEW')
+                                    // && SessionManager::checkPermission('IPD_NURSE_NOTE','REMOVE')
+                                ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
                                     <button type="button" class="btn btn-primary" id="btn_save_report" onclick="pre_nursenote_save()"><i class="fas fa-save"></i> บันทึก</button>
                                 <?php } ?>
                                 <a href="prs-pre-nursenote-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
@@ -1160,6 +1196,7 @@ $id = '16'; //Link menu
                             const doc_name = <?= json_encode($_SESSION['name']) ?>;
                             const doctorcode = <?= json_encode($_SESSION['doctorcode']) ?>;
                             const clone_template_dr_admission_input_div = document.querySelector('#template_dr_admission_input_div').content.cloneNode(true);
+                            
                             if (CheckDoctorSignature()) {
                                 $('#dr-admission-group-input-div').append(clone_template_dr_admission_input_div);
                                 $('[name="doctor[]"].last-focus-input').removeClass('last-focus-input');
@@ -1168,8 +1205,14 @@ $id = '16'; //Link menu
                                 $('[name="doctor[]"]').last().addClass('last-focus-input').val(doctorcode);
                                 $('[name="doc_name[]"]').last().addClass('last-focus-input').val(doc_name);
 
+                                
                             }
+
+                            console.log(doctorcode)
+
+                            
                         }
+
 
                         function CheckDoctorSignature() {
                             const doctorcode_check = <?= json_encode($_SESSION['doctorcode']) ?>;
@@ -1183,15 +1226,38 @@ $id = '16'; //Link menu
                                 }
                             });
                             return return_checkdoctorSignature;
+
+                            
                         }
 
 
+                        function validateForm() {
+                            
+                            console.log('ok true')
+                      /*  const doctorcode_check = <?= json_encode($_SESSION['doctorcode']) ?>;
+                        let return_checkdoctorSignature = true;
+                        $.each($("input:hidden[name='doctor[]']"), function(index, value) {
+                                //console.log({index,value})
+                                if (doctorcode_check != $(this).val()) {
+                                    alert("คุณได้ลงชื่อบันทึกข้อมูลไว้แล้ว");
+                                    return_checkdoctorSignature = false;
+                                    return false;
+                                }
+                            });
 
+                            return return_checkdoctorSignature;
 
+                            console.log(return_checkdoctorSignature)*/
 
+                        }
+
+                      
 
                         function pre_nursenote_save() {
+                       
+
                             // var rxdate = $('input[type=date][name="rxdate]').val();
+                           // var signaturePad = <?= json_encode($_SESSION['doctorcode']) ?>;
                             var rxdate = $.trim($('[name="rxdate"]').val());
                             var rxtime = $.trim($('[name="rxtime"]').val());
                             var depart = $('input[name="depart"]:checked').val();
@@ -1225,7 +1291,7 @@ $id = '16'; //Link menu
 
 
                             // var depart = $('input[type=radio][name=depart]:checked').val();
-                            console.log(depart)
+                           // console.log(signaturePad)
 
                             if (rxdate == "") {
 
@@ -1235,7 +1301,7 @@ $id = '16'; //Link menu
 
                                 $('[name="rxtime"]').focus();
                                 alert('เลือกเวลา');
-                            } else if (depart == undefined) {
+                            }  else if (depart == undefined) {
 
                                 $('[name="depart"]').focus();
                                 //alert(depart)
@@ -1268,11 +1334,7 @@ $id = '16'; //Link menu
                                 alert('ประวัติการแพ้');
                                 // console.log(h_sergery);
                             }
-                            /*else if (child_devilopment == undefined) {
-
-                                                           $('[name="child_devilopment"]').focus();
-                                                           // console.log(h_sergery);
-                                                       } */
+                   
                             else if (history_of_drug == undefined) {
 
                                 $('[name="history_of_drug"]').focus();
@@ -1352,12 +1414,11 @@ $id = '16'; //Link menu
 
                                 $('[name="state_of_mind"]').focus();
                                 alert('สภาพจิตใจแรกรับ');
-                            } else if (first_symptoms == '') {
+                            } else if (state_of_mind == '') {
 
-                                $('[name="first_symptoms"]').focus();
-                                alert('อาการแรกรับ');
-                            }
-
+                            $('[name="state_of_mind"]').focus();
+                            alert('สภาพจิตใจแรกรับ');
+                            } 
 
 
 
@@ -1365,11 +1426,14 @@ $id = '16'; //Link menu
                             var url_save = "prs-pre-nursenote-save.php";
                             var id = $("#id").val();
                             var my_form = $("#my_form").serialize();
+                            
+                           
+                         
 
                             if (id == "") {
                                 $.post(url_save, my_form, function(data) {
                                         $("#show_check_save").html(data);
-
+//console.log(doctorcode_check)
                                         // alert("บันทึกข้อมูลสำเร็จ");
                                         // self.close();
                                         // window.location.reload(true);
