@@ -13,9 +13,11 @@ if ($login != $loginname) {
 }
 //ส่วนหัวหน้า
 require_once '../mains/main-report.php';
-//check session and permission  
-Session::checkLoginSessionAndShowMessage(); //เช็ค session
-Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE', 'VIEW');
+
+$permissionCheck = Session::checkPermissionAndShowMessage('ADMISSION_NOTE', 'VIEW');
+$permissionCheckJson = json_encode($permissionCheck);
+require_once '../include/session-modal.php';
+
 require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
@@ -246,6 +248,7 @@ $row_period  = $stmt_period->fetch();
 </style>
 
 <br>
+<div id="formContainer">    
 
 <form name="add" method="post" id="myForm" action="<?php echo $_SERVER['PHP_SELF']; ?>?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" onsubmit="changeActionURL()">
     <input name="id" type="hidden" />
@@ -2745,6 +2748,8 @@ $row_period  = $stmt_period->fetch();
     <input type="hidden" id="doc_pos"     name="doc_pos"     value="<?= (htmlspecialchars($_SESSION['groupname']) == 'แพทย์' ? htmlspecialchars($row_opduser['entryposition']) : '') ?>"> -->
     </div>
 </form>
+                    </div>
+
 <script>
     function AddDoctorSignature() {
         const doc_name = <?= json_encode($_SESSION['name']) ?>;

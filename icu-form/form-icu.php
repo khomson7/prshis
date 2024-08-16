@@ -14,6 +14,9 @@ require_once '../mains/main-report.php';
 
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
+$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_ICU1', 'VIEW');
+$permissionCheckJson = json_encode($permissionCheck);
+require_once '../include/session-modal.php';
 
 require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/ipd-show-patient-sticky.php';
@@ -21,6 +24,7 @@ require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
+
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = $_REQUEST['an']; //รับค่า an
 
@@ -29,7 +33,7 @@ $vn = KphisQueryUtils::getVnByAn($an);
 ?>
 
 
-            
+<div id="formContainer">        
 <div class="row">
     <div class="col-sm-12">
         <nav>
@@ -45,4 +49,7 @@ $vn = KphisQueryUtils::getVnByAn($an);
         </div>
     </div>
 </div><br>
+</div>
 
+<script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">

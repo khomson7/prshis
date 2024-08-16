@@ -16,7 +16,7 @@ require_once '../mains/main-report.php';
 
 $permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_ICU1', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
-require_once '../include/session-modal.php';
+
 
 
 
@@ -25,6 +25,7 @@ require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
+require_once '../include/session-modal.php';
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = $_REQUEST['an']; //รับค่า an
 $ids = $_REQUEST['id']; //รับค่า an
@@ -171,8 +172,7 @@ $check_    = ReportQueryUtils::getProduction($id)
 </style>
 
 
-
-
+<div id="formContainer">
 <form id="my_form">
     <div class="container-fluid">
         <div class="row">
@@ -1851,7 +1851,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                             </div>
                         </div>
                     </div>
-
+                                    </div>
                     <br>
 
                     <script src="../include/my_function.js"></script>
