@@ -18,8 +18,8 @@ require_once '../mains/main-report.php';
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
 $permissionCheck = Session::checkPermissionAndShowMessage('PRS_MENTAL_HEAL', 'VIEW');
-
 $permissionCheckJson = json_encode($permissionCheck);
+require_once '../include/session-modal.php';
 
 //Session::checkPermissionAndShowMessage('PRS_MENTAL_HEAL1', 'VIEW');
 
@@ -29,7 +29,6 @@ require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
-require_once '../include/session-modal.php';
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = $_REQUEST['an']; //รับค่า an
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
@@ -285,7 +284,7 @@ if ($row0  = $stmt->fetch()) {
                                                                                                                                                     } ?>>
                                 </div>
 
-                                <div class="custom-control custom-radio col-sm-1">
+                              <div class="custom-control custom-radio col-sm-1">
                                     <input type="radio" <?php if (
                                                             $row['appearance'] != '1'
                                                             && $row['appearance'] != '2' && $row['appearance'] != '3' && $row['appearance'] != '4'
@@ -296,7 +295,7 @@ if ($row0  = $stmt->fetch()) {
                                                         } ?> class="custom-control-input" id="appearance_check2" name="appearance_check" value ="2" onchange="custom_check('on_appearance_check');">
                                                         
                                     <label class="custom-control-label" for="appearance_check2">อื่นๆ</label>
-                                </div>
+                                </div> 
 
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control form-control-sm" id="appearance6_text" name="appearance" value="<?php if (
@@ -395,7 +394,7 @@ if ($row0  = $stmt->fetch()) {
                                                             && $row['body_movement_behavior'] != NULL
                                                         ) {
                                                             echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="body_movement_behavior4" onchange="custom_check('on_body_movement_behavior');">
+                                                        } ?> class="custom-control-input" id="body_movement_behavior4" name="body_movement_behavior" onchange="custom_check('on_body_movement_behavior');">
                                     <label class="custom-control-label" for="body_movement_behavior4">ผิดปกติ</label>
                                 </div>
 
@@ -730,7 +729,7 @@ if ($row0  = $stmt->fetch()) {
                                                             && $row['mood'] != NULL
                                                         ) {
                                                             echo 'checked="checked"';
-                                                        } ?> class="custom-control-input" id="mood5" onchange="custom_check('on_mood');">
+                                                        } ?> class="custom-control-input" id="mood5" name="mood" onchange="custom_check('on_mood');">
                                     <label class="custom-control-label" for="mood5">อื่นๆ</label>
                                 </div>
 
@@ -974,7 +973,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['illution'] == 'ไม่มี') {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="illution1" name="illutionl" value="ไม่มี" onchange="custom_check('off_illution');">
+                                                                                } ?> class="custom-control-input" id="illution1" name="illution" value="ไม่มี" onchange="custom_check('off_illution');">
                                     <label class="custom-control-label" for="illution1">ไม่มี</label>
                                 </div>
 
@@ -984,7 +983,7 @@ if ($row0  = $stmt->fetch()) {
                                                                                     && $row['illution'] != NULL
                                                                                 ) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="illution2" onchange="custom_check('on_illution');">
+                                                                                } ?> class="custom-control-input" id="illution2" name="illution" onchange="custom_check('on_illution');">
                                     <label class="custom-control-label" for="illution2">มี ระบุ</label>
                                 </div>
 
@@ -1041,7 +1040,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['vision'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="vision1" onchange="custom_check('on_vision');">
+                                                                                } ?> class="custom-control-input" id="vision1" name="vision" onchange="custom_check('on_vision');">
                                     <label class="custom-control-label" for="vision1">การมองเห็น</label>
                                 </div>
 
@@ -1072,7 +1071,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['tast_perception'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="tast_perception1" onchange="custom_check('on_tast_perception');">
+                                                                                } ?> class="custom-control-input" id="tast_perception1" name="tast_perception"  onchange="custom_check('on_tast_perception');">
                                     <label class="custom-control-label" for="tast_perception1">การรับรู้รส</label>
                                 </div>
 
@@ -1097,7 +1096,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['touch'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="touch1" onchange="custom_check('on_touch');">
+                                                                                } ?> class="custom-control-input" id="touch1" name="touch" onchange="custom_check('on_touch');">
                                     <label class="custom-control-label" for="touch1">การสัมผัส</label>
                                 </div>
 
@@ -1112,7 +1111,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['smell'] != NULL) {
                                                                                     echo 'checked="checked"';
-                                                                                } ?> class="custom-control-input" id="smell1" onchange="custom_check('on_smell');">
+                                                                                } ?> class="custom-control-input" id="smell1" name="smell" onchange="custom_check('on_smell');">
                                     <label class="custom-control-label" for="smell1">การได้กลิ่น</label>
                                 </div>
 
@@ -1209,22 +1208,22 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention1'] == '1') {
+                                    <input type="radio" <?php if ($row['attention1'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention11" value="1" name="attention1" onchange="custom_check('on_attention11');">
+                                                            } ?>class="custom-control-input" id="attention11" value="1" name="attention1">
                                     <label class="custom-control-label" for="attention11">ทำได้</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention1'] == '2') {
+                                    <input type="radio" <?php if ($row['attention1'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention12" value="2" name="attention1" onchange="custom_check('on_attention12');">
+                                                            } ?>class="custom-control-input" id="attention12" value="2" name="attention1">
                                     <label class="custom-control-label" for="attention12">ทำไม่ได้</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention1'] == '3') {
+                                    <input type="radio" <?php if ($row['attention1'] == '3') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention13" value="3" name="attention1" onchange="custom_check('on_attention13');">
+                                                            } ?>class="custom-control-input" id="attention13" value="3" name="attention1">
                                     <label class="custom-control-label" for="attention13">ทำได้บางส่วน</label>
                                 </div>
 
@@ -1237,22 +1236,22 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention2'] == '1') {
+                                    <input type="radio" <?php if ($row['attention2'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention21" value="1" name="attention2" onchange="custom_check('on_attention21');">
+                                                            } ?>class="custom-control-input" id="attention21" value="1" name="attention2" >
                                     <label class="custom-control-label" for="attention21">ทำได้</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention2'] == '2') {
+                                    <input type="radio" <?php if ($row['attention2'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention22" value="2" name="attention2" onchange="custom_check('on_attention22');">
+                                                            } ?>class="custom-control-input" id="attention22" value="2" name="attention2">
                                     <label class="custom-control-label" for="attention22">ทำไม่ได้</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention2'] == '3') {
+                                    <input type="radio" <?php if ($row['attention2'] == '3') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention23" value="3" name="attention2" onchange="custom_check('on_attention23');">
+                                                            } ?>class="custom-control-input" id="attention23" value="3" name="attention2">
                                     <label class="custom-control-label" for="attention23">ทำได้บางส่วน</label>
                                 </div>
 
@@ -1265,22 +1264,22 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention3'] == '1') {
+                                    <input type="radio" <?php if ($row['attention3'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention31" value="1" name="aeration3" onchange="custom_check('on_attention31');">
+                                                            } ?>class="custom-control-input" id="attention31" value="1" name="attention3">
                                     <label class="custom-control-label" for="attention31">ทำได้</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention3'] == '2') {
+                                    <input type="radio" <?php if ($row['attention3'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention32" value="2" name="aeration3" onchange="custom_check('on_attention32');">
+                                                            } ?>class="custom-control-input" id="attention32" value="2" name="attention3">
                                     <label class="custom-control-label" for="attention32">ทำไม่ได้</label>
                                 </div>
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['attention3'] == '3') {
+                                    <input type="radio" <?php if ($row['attention3'] == '3') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="attention33" value="3" name="aeration3" onchange="custom_check('on_attention33');">
+                                                            } ?>class="custom-control-input" id="attention33" value="3" name="attention3">
                                     <label class="custom-control-label" for="attention33">ทำได้บางส่วน</label>
                                 </div>
 
@@ -1294,20 +1293,20 @@ if ($row0  = $stmt->fetch()) {
                             <div class="row">
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>- ความจำในช่วงเวลา เป้น นาที ชั่วโมล หรือ วัน (Recent memory) </label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>- ความจำในช่วงเวลา เป็น นาที ชั่วโมง หรือ วัน (Recent memory) </label>
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['memory1'] == '1') {
+                                    <input type="radio" <?php if ($row['memory1'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="memory11" value="1" name="memory1" onchange="custom_check('on_memory11');">
+                                                            } ?>class="custom-control-input" id="memory11" value="1" name="memory1">
                                     <label class="custom-control-label" for="memory11">บอกถูก</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['memory1'] == '2') {
+                                    <input type="radio" <?php if ($row['memory1'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="memory12" value="2" name="memory1" onchange="custom_check('on_memory12');">
+                                                            } ?>class="custom-control-input" id="memory12" value="2" name="memory1">
                                     <label class="custom-control-label" for="memory12">บอกไม่ได้</label>
                                 </div>
 
@@ -1320,16 +1319,16 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['memory2'] == '1') {
+                                    <input type="radio" <?php if ($row['memory2'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="memory21" value="1" name="memory2" onchange="custom_check('on_memory21');">
+                                                            } ?>class="custom-control-input" id="memory21" value="1" name="memory2">
                                     <label class="custom-control-label" for="memory21">บอกถูก</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['memory2'] == '2') {
+                                    <input type="radio" <?php if ($row['memory2'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="memory22" value="2" name="memory2" onchange="custom_check('on_memory22');">
+                                                            } ?>class="custom-control-input" id="memory22" value="2" name="memory2">
                                     <label class="custom-control-label" for="memory22">บอกไม่ได้</label>
                                 </div>
 
@@ -1341,16 +1340,16 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['memory3'] == '1') {
+                                    <input type="radio" <?php if ($row['memory3'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="memory31" value="1" name="memory3" onchange="custom_check('on_memory31');">
+                                                            } ?>class="custom-control-input" id="memory31" value="1" name="memory3">
                                     <label class="custom-control-label" for="memory31">บอกถูก</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['memory3'] == '2') {
+                                    <input type="radio" <?php if ($row['memory3'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="memory32" value="2" name="memory3" onchange="custom_check('on_memory32');">
+                                                            } ?>class="custom-control-input" id="memory32" value="2" name="memory3">
                                     <label class="custom-control-label" for="memory32">บอกไม่ได้</label>
                                 </div>
 
@@ -1363,16 +1362,16 @@ if ($row0  = $stmt->fetch()) {
                                 &nbsp;&nbsp;&nbsp;&nbsp;
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['general_khowledge'] == '1') {
+                                    <input type="radio" <?php if ($row['general_khowledge'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="general_khowledge1" value="1" name="general_khowledge" onchange="custom_check('on_general_khowledge1');">
+                                                            } ?>class="custom-control-input" id="general_khowledge1" value="1" name="general_khowledge">
                                     <label class="custom-control-label" for="general_khowledge1">บอกถูก</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['general_khowledge'] == '2') {
+                                    <input type="radio" <?php if ($row['general_khowledge'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="general_khowledge2" value="2" name="general_khowledge" onchange="custom_check('on_general_khowledge2');">
+                                                            } ?>class="custom-control-input" id="general_khowledge2" value="2" name="general_khowledge">
                                     <label class="custom-control-label" for="general_khowledge2">บอกไม่ได้</label>
                                 </div>
 
@@ -1645,16 +1644,16 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['judment1'] == '1') {
+                                    <input type="radio" <?php if ($row['judment1'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="judment11" value="1" name="judment1" onchange="custom_check('on_judment11');">
+                                                            } ?>class="custom-control-input" id="judment11" value="1" name="judment1">
                                     <label class="custom-control-label" for="judment11">เหมาะสม</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['judment1'] == '2') {
+                                    <input type="radio" <?php if ($row['judment1'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="judment12" value="2" name="judment1" onchange="custom_check('on_judment12');">
+                                                            } ?>class="custom-control-input" id="judment12" value="2" name="judment1">
                                     <label class="custom-control-label" for="judment12">ไม่เหมาะสม</label>
                                 </div>
 
@@ -1667,16 +1666,16 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['judment2'] == '1') {
+                                    <input type="radio" <?php if ($row['judment2'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="judment21" value="1" name="judment2" onchange="custom_check('on_judment21');">
+                                                            } ?>class="custom-control-input" id="judment21" value="1" name="judment2">
                                     <label class="custom-control-label" for="judment21">เหมาะสม</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['judment2'] == '2') {
+                                    <input type="radio" <?php if ($row['judment2'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="judment22" value="2" name="judment2" onchange="custom_check('on_judment22');">
+                                                            } ?>class="custom-control-input" id="judment22" value="2" name="judment2">
                                     <label class="custom-control-label" for="judment22">ไม่เหมาะสม</label>
                                 </div>
 
@@ -1689,16 +1688,16 @@ if ($row0  = $stmt->fetch()) {
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['judment3'] == '1') {
+                                    <input type="radio" <?php if ($row['judment3'] == '1') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="judment31" value="1" name="judment3" onchange="custom_check('on_judment31');">
+                                                            } ?>class="custom-control-input" id="judment31" value="1" name="judment3">
                                     <label class="custom-control-label" for="judment31">เหมาะสม</label>
                                 </div>
 
                                 <div class="custom-control custom-checkbox col-sm-1">
-                                    <input type="checkbox" <?php if ($row['judment3'] == '2') {
+                                    <input type="radio" <?php if ($row['judment3'] == '2') {
                                                                 echo 'checked="checked"';
-                                                            } ?>class="custom-control-input" id="judment32" value="2" name="judment3" onchange="custom_check('on_judment32');">
+                                                            } ?>class="custom-control-input" id="judment32" value="2" name="judment3">
                                     <label class="custom-control-label" for="judment32">ไม่เหมาะสม</label>
                                 </div>
 
@@ -1761,8 +1760,15 @@ if ($row0  = $stmt->fetch()) {
                                     <label class="custom-control-label" for="insight5">ยอมรับว่าตนเองผิดปกติ แต่ไม่ได้แก้ปัญหา</label>
                                 </div>
 
+                                <div class="custom-control custom-radio col-sm-3">
+                                    <input type="radio" <?php if ($row['insight'] == '6') {
+                                                            echo 'checked="checked"';
+                                                        } ?> class="custom-control-input" id="insight6" name="insight" value="6" onchange="custom_check('off_insight');">
+                                    <label class="custom-control-label" for="insight6">ยอมรับการเจ็บป่วยและยอมรับการรักษา</label>
+                                </div>
 
-                                <div class="custom-control custom-radio col-sm-1">
+
+             <!--                   <div class="custom-control custom-radio col-sm-1">
                                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if (
                                                                                     $row['insight'] != '1'
                                                                                     && $row['insight'] != '2'
@@ -1775,8 +1781,8 @@ if ($row0  = $stmt->fetch()) {
                                                                                 } ?> class="custom-control-input" id="insight6" name="insight" onchange="custom_check('on_insight');">
                                     <label class="custom-control-label" for="insight6">มี ระบุ</label>
                                 </div>
-
-                                <div class="col-sm-3">
+                                                                            -->
+                       <!--         <div class="col-sm-3">
                                     <input type="text" class="form-control form-control-sm" id="insight_text" name="insight" value="<?php if (
                                                                                                                                         $row['insight'] != '1'
                                                                                                                                         && $row['insight'] != '2'
@@ -1795,7 +1801,7 @@ if ($row0  = $stmt->fetch()) {
                                             echo 'disabled';
                                         } ?>>
                                 </div>
-
+                                    -->
 
 
                             </div>
@@ -1810,7 +1816,7 @@ if ($row0  = $stmt->fetch()) {
                                 <input type="hidden" id="version" name="version" value="<?= htmlspecialchars($row['version']) ?>">
                                 <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($row['id']) ?>">
                                 <input type="hidden" id="create_user" name="create_user" value="<?= htmlspecialchars($_SESSION['name']) ?>">
-                                <input type="hidden" name="appearance_check_value" id="appearance_check_value">
+                               
 
                                 <div class="col-md-12 text-right">
                                     <?php
@@ -1819,7 +1825,7 @@ if ($row0  = $stmt->fetch()) {
                                     ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
                                         <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="form_save()"><i class="fas fa-save"></i> บันทึก</button>
                                     <?php } ?>
-                                    <a href="prs-icu1-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                                    <a href="mental-health1-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
                                 </div>
                             </div>
                         </div>
@@ -1835,11 +1841,13 @@ if ($row0  = $stmt->fetch()) {
                                     $('#appearance5_text').attr("disabled", true).val('');
                                     $('#appearance6_text').attr("disabled", true).val('');
                                     $('#appearance').prop("checked", false);
-                                    $('#appearance5').prop("checked", false);
-                                    $('#appearance6').prop("checked", false);
+                                    $('#appearance_check1').prop("checked", false);
+                                    $('#appearance_check2').prop("checked", false);
+
                                 } else if (value == "off_appearance_check1") {
                                     $('#appearance5_text').attr("disabled", false).val('');
                                     $('#appearance6_text').attr("disabled", true).val('');
+                                   // $('#appearance_check1').prop("checked", false);
                                     $('#appearance1').prop("checked", false);
                                     $('#appearance2').prop("checked", false);
                                     $('#appearance3').prop("checked", false);
@@ -1847,8 +1855,10 @@ if ($row0  = $stmt->fetch()) {
                                     $('#appearance6').prop("checked", false);
 
                                 } else if (value == "on_appearance_check") {
+
                                     $('#appearance5_text').attr("disabled", true).val('');
                                     $('#appearance6_text').attr("disabled", false).val('');
+                                   // $('#appearance_check2').prop("checked", false);
                                     $('#appearance1').prop("checked", false);
                                     $('#appearance2').prop("checked", false);
                                     $('#appearance3').prop("checked", false);
@@ -1856,6 +1866,28 @@ if ($row0  = $stmt->fetch()) {
                                     $('#appearance5').prop("checked", false);
 
                                 }
+
+
+                             /*   if (value == "off_appearance_check1") {
+                                $('#appearance5_text').attr("disabled", false).val('');
+                                $('#appearance6_text').attr("disabled", true).val('');
+                                $('#appearance1').prop("checked", false);
+                                $('#appearance2').prop("checked", false);
+                                $('#appearance3').prop("checked", false);
+                                $('#appearance4').prop("checked", false);
+                                $('#appearance6').prop("checked", false);
+        
+                            } else if (value == "on_appearance_check") {
+                                $('#appearance5_text').attr("disabled", true).val('');
+                                    $('#appearance6_text').attr("disabled", false).val('');
+                                    $('#appearance1').prop("checked", false);
+                                    $('#appearance2').prop("checked", false);
+                                    $('#appearance3').prop("checked", false);
+                                    $('#appearance4').prop("checked", false);
+                                    $('#appearance5').prop("checked", false);
+                            } */
+
+
 
                                 if (value == "off_skin") {
                                     $('#skin_text').attr("disabled", true).val('');
@@ -1871,26 +1903,146 @@ if ($row0  = $stmt->fetch()) {
 
                                 }
 
+                                    if (value == "off_body_movement_behavior") {
+                                    $('#body_movement_behavior_text').attr("disabled", true).val('');
+                                    $('#body_movement_behavior4').prop("checked", false);
+                                    } else if (value == "on_body_movement_behavior") {
+                                    $('#body_movement_behavior_text').attr("disabled", false).val('');
+                                    $('#body_movement_behavior1').prop("checked", false);
+                                    $('#body_movement_behavior2').prop("checked", false);
+                                    $('#body_movement_behavior3').prop("checked", false);
+                                    $('#body_movement_behavior5').prop("checked", false);
+                                    $('#body_movement_behavior6').prop("checked", false);
+                                    $('#body_movement_behavior7').prop("checked", false);
+                                    $('#body_movement_behavior8').prop("checked", false);
+                                
+                                }
+
+                                if (value == "off_speech_disorder") {
+                                    $('#speech_disorder_text').attr("disabled", true).val('');
+                                    $('#speech_disorder2').prop("checked", false);
+                                    } else if (value == "on_speech_disorder") {
+                                    $('#speech_disorder_text').attr("disabled", false).val('');
+                                    $('#speech_disorder1').prop("checked", false);
+                                    $('#speech_disorder3').prop("checked", false);
+                                    $('#speech_disorder4').prop("checked", false);
+                          
+                                }
+
+                                if (value == "off_mood") {
+                                    $('#mood_text').attr("disabled", true).val('');
+                                    $('#mood5').prop("checked", false);
+                                    } else if (value == "on_mood") {
+                                    $('#mood_text').attr("disabled", false).val('');
+                                    $('#mood1').prop("checked", false);
+                                    $('#mood2').prop("checked", false);
+                                    $('#mood3').prop("checked", false);
+                                    $('#mood4').prop("checked", false);
+
+                                }
+
+                                if (value == "off_illution") {
+                                    $('#illution_text').attr("disabled", true).val('');
+                                    $('#illution2').prop("checked", false);
+                                    } else if (value == "on_illution") {
+                                    $('#illution_text').attr("disabled", false).val('');
+                                    $('#illution1').prop("checked", false);
+                                }
+
+                                if (value == "off_hallucination") {
+                                    $('#hallucination_text').attr("disabled", true).val('');
+                                    $('#hallucination2').prop("checked", false);
+                                    } else if (value == "on_hallucination") {
+                                    $('#hallucination_text').attr("disabled", false).val('');
+                                    $('#hallucination1').prop("checked", false);
+                                }
+
+                                if (value == "on_vision") {
+                                    $('#vision_text').attr("disabled", false).val('');
+                                    } 
+
+                                    if (value == "on_hearing") {
+                                    $('#hearing_text').attr("disabled", false).val('');
+                                    } 
+
+                                    if (value == "on_tast_perception") {
+                                    $('#tast_perception_text').attr("disabled", false).val('');
+                                    } 
+
+                                    if (value == "on_touch") {
+                                    $('#touch_text').attr("disabled", false).val('');
+                                    } 
+
+                                    if (value == "on_smell") {
+                                    $('#smell_text').attr("disabled", false).val('');
+                                    } 
+
+                                    if (value == "off_insight") {
+                                    $('#insight_text').attr("disabled", true).val('');
+                                    $('#insight7').prop("checked", false);
+                                    } else if (value == "on_insight") {
+                                    $('#insight_text').attr("disabled", false).val('');
+                                    $('#insight1').prop("checked", false);
+                                    $('#insight2').prop("checked", false);
+                                    $('#insight3').prop("checked", false);
+                                    $('#insight4').prop("checked", false);
+                                    $('#insight5').prop("checked", false);
+                                    $('#insight6').prop("checked", false);
+                          
+                                }
+
+
                             }
 
-                            $(document).ready(function() {
+                                //on_insight
+                                    
+
+                            
+
+                      /*      $(document).ready(function() {
                          var appearance6 = $('input[name="appearance_check"]:checked').val();
 
             // Set the value of the hidden input field
             $('#appearance_check_value').val(appearance6);
-            console.log(appearance6)
+            console.log(appearance6) 
 
        
-        });
+        }); */
 
 
                             function form_save() {
+                                
+                            var appearance = $('input[name="appearance"]:checked').val();
+                            var dress = $('input[name="dress"]:checked').val();
+                            var cc = $.trim($('[name="cc"]').val());
+                            var current_illness = $.trim($('[name="current_illness"]').val());
+                            var c_chronic = $('input[name="c_chronic"]:checked').val();
+                            var hos_history = $('input[name="hos_history"]:checked').val();
+                            var h_sergery = $('input[name="h_sergery"]:checked').val();
+                            var h_allergy = $('input[name="h_allergy"]:checked').val();
+                            var child_devilopment = $('input[name="child_devilopment"]:checked').val();
+                            var history_of_drug = $('input[name="history_of_drug"]:checked').val();
 
-                                var appearance5 = $('input[name="appearance_check"]:checked').val();
-                                $('#appearance_check_value').val(appearance5);
-                                var appearance6 = $('input[name="appearance_check"]:checked').val();
-                                $('#appearance_check_value').val(appearance6);
-                                console.log(appearance5)
+                                 if (appearance == undefined) {
+                                $('[name="appearance"]').focus();
+                                //alert(depart)
+                                alert('กรุณาเลือกรูปร่างลักษณะ');
+                                } else if (dress == undefined) {
+
+                                $('[name="dress"]').focus();
+                                alert('กรุณาเลือกการแต่งกาย');
+                                } /*else if (current_illness == "") {
+
+                                $('[name="current_illness"]').focus();
+                                alert('บันทึกประวัติเจ็บป่วยปัจจุบัน');
+                                // console.log(h_sergery);
+                                } */
+
+                              //  var appearance5 = $('input[name="appearance_check"]:checked').val();
+                               // $('#appearance_check_value').val(appearance5);
+                              //  var appearance6 = $('input[name="appearance_check"]:checked').val();
+                               // $('#appearance_check_value').val(appearance6);
+                               // console.log(appearance6)
                                 
                                // var appearance6 = $('input[name="appearance_check"]:checked').val();
 
