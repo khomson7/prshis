@@ -6,7 +6,7 @@
         $getDoc = 'getDocument';
         $getData = 'getData';
 
-        $getreport = 'Mental2Form';
+        $getreport = 'Mental3Form';
         $docmain = $getDoc.$getreport;
         $docmain2 = '$'.$docmain ;
         $data = $getData.$getreport;
@@ -20,37 +20,82 @@
 
         if($docmain2){
             $data2  = FormQueryUtils::$data($an);
-            echo $data2;
+            //echo $data2;
             foreach($data2 as $row){
                 $create_datetimeAddmissionNurse = $row['create_datetimeAddmissionNurse'];
                 $update_datetimeAddmissionNurse = $row['update_datetimeAddmissionNurse'];
-                $total_sum = isset($row['total_Sum']) ? (int)$row['total_Sum'] : 0;
-
+                $variation1 = isset($row['variation_1']) ? (int)$row['variation_1'] : 0;
+                $variation2 = isset($row['variation2']) ? (int)$row['variation2'] : 0;
+                $variation3 = isset($row['variation3']) ? (int)$row['variation3'] : 0;
+                $variation4 = isset($row['variation4']) ? (int)$row['variation4'] : 0;
+                
                 // Set the background color based on the value of total_sum
-                if ($total_sum >= 1 && $total_sum <= 36) {
-                    $bg_color = 'green';
-                    $message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
-                } elseif ($total_sum >= 37 && $total_sum <= 40) {
-                    $bg_color = 'orange';
-                    $message = 'แนะนำประเมินต่อทุก 2 วัน';
-                } elseif ($total_sum > 40) {
+                
+                $font_color = 'white';
+                $bg_color = 'green';
+                $message1 = 'S';
+                  //$message1 = 'S';
+                if ($variation1 >= 1 && $variation1 <= 2) {
+                    $bg_color = 'yellow';
+                    $font_color = 'black';
+                } elseif ($variation1 > 2) {
                     $bg_color = 'red';
-                    $message = 'แนะนำประเมินวันละ 1 ครั้ง';
-                } else {
-                    $bg_color = ''; // default if the value is outside the range
+                } 
+
+                $font_color2 = 'white';
+                $bg_color2 = 'green';
+                $message2 = 'A';
+                if ($variation2 >= 1 && $variation2 <= 2) {
+                    $bg_color2 = 'yellow';
+                    $font_color2 = 'black';
+                } elseif ( $variation2 > 2) {
+                    $bg_color2 = 'red';
                 }
 
+                $font_color3 = 'white';
+                $bg_color3 = 'green';
+                $message3 = 'V';
+                if ($variation3 >= 1 && $variation3 <= 2) {
+                    $bg_color3 = 'yellow';
+                    $font_color3 = 'black';
+                } elseif ( $variation3 > 2) {
+                    $bg_color3 = 'red';
+                }
 
+                $font_color4 = 'white';
+                $bg_color4 = 'green';
+                $message4 = 'E';
+                if ($variation4 >= 1 && $variation4 <= 2) {
+                    $bg_color4 = 'yellow';
+                    $font_color4 = 'black';
+                } elseif ( $variation4 > 2) {
+                    $bg_color4 = 'red';
+                }
+
+                
                 $ids = $row['ids'];
-            ?>  <tr>
+            ?>  
+        
+            <tr>
                
-                    <td><a href="form-mental-health21.php?an=<?=$an?>&id=<?=$ids?>&loginname=<?=$login?>" target="_blank">แบบประเมินอาการทางจิต(Brief Phychiatric Rating Scale : BRPS) (วันที่ <?=date("d/m/Y", strtotime($create_datetimeAddmissionNurse))?>)</a></td>
+                    <td><a href="form-mental-health31.php?an=<?=$an?>&id=<?=$ids?>&loginname=<?=$login?>" target="_blank">แบบประเมินอาการทางจิต(Save) (วันที่ <?=date("d/m/Y", strtotime($create_datetimeAddmissionNurse))?>)</a></td>
                     
-                    <td><div class='badge text-white mt-1 font-weight-bold' style="font-size:100%; background-color: <?= htmlspecialchars($bg_color) ?>;">
-    <!-- Your content here -->
-    คะแนนรวม <?= htmlspecialchars($total_sum) ?> คะแนน
-    <br>
-    <?= htmlspecialchars($message) ?>
+                    <td><div class='badge  mt-1 font-weight-bold' style="color: <?= htmlspecialchars($font_color) ?>;  font-size:100%; background-color: <?= htmlspecialchars($bg_color) ?>;">
+  
+    <?= htmlspecialchars($message1) ?>
+
+</div><div class='badge  mt-1 font-weight-bold' style="color: <?= htmlspecialchars($font_color2) ?>;  font-size:100%; background-color: <?= htmlspecialchars($bg_color2) ?>;">
+  
+  <?= htmlspecialchars($message2) ?>
+
+</div><div class='badge  mt-1 font-weight-bold' style="color: <?= htmlspecialchars($font_color3) ?>;  font-size:100%; background-color: <?= htmlspecialchars($bg_color3) ?>;">
+  
+  <?= htmlspecialchars($message3) ?>
+
+</div><div class='badge  mt-1 font-weight-bold' style="color: <?= htmlspecialchars($font_color4) ?>;  font-size:100%; background-color: <?= htmlspecialchars($bg_color4) ?>;">
+  
+  <?= htmlspecialchars($message4) ?>
+
 </div></td>
                     <td><?=date("d/m/Y H:i:s", strtotime($create_datetimeAddmissionNurse))?></td>
                     <td><?=date("d/m/Y H:i:s", strtotime($update_datetimeAddmissionNurse))?></td>

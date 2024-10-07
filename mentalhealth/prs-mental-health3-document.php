@@ -42,12 +42,30 @@ require_once '../include/Session.php';
         <a class="nav-link" onClick="javascript:location.reload();"  ><i class="fas fa-undo"></i> Refresh </a>
         
 </buton>
-   
+
+<buton >
+<a class="nav-link" href="mental-health3-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+</buton> 
     
 
 </div>
 
 <br>
+<style>
+    /* CSS for table header alignment */
+    th.left-align {
+      text-align: left;
+    }
+
+    th.center-align {
+      text-align: center;
+    }
+
+    th.right-align {
+      text-align: right;
+    }
+  </style>
+
 <div class="row">
     <div class="col-md-12">
         <h5><em class="fas fa-th-list"></em> รายการเอกสาร</h5>
@@ -55,7 +73,7 @@ require_once '../include/Session.php';
             <thead>
                 <tr class="table-info">
                     <th scope="col">ชื่อเอกสาร</th>
-                    <th scope="col">คะแนน</th>
+                    <th class = "center-align" scope="col">คะแนน</th>
                     <th scope="col">วันที่/เวลา (ที่บันทึก)</th>
                     <th scope="col">วันที่/เวลา (ที่แก้ไขล่าสุด)</th>
                 </tr>

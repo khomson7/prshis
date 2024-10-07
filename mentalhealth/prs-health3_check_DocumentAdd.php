@@ -10,7 +10,7 @@
 
 
         if(($an)){
-            ?><a class="dropdown-item" href="form-mental-health21.php?an=<?=$an?>&loginname=<?php echo $loginname; ?>" target="_blank"><em class="fas fa-file-alt"></em> แบบประเมินอาการทางจิต(Save)</a><?php
+            ?><a class="dropdown-item" href="form-mental-health31.php?an=<?=$an?>&loginname=<?php echo $loginname; ?>" target="_blank"><em class="fas fa-file-alt"></em> แบบประเมินอาการทางจิต(Save)</a><?php
         }
 
 ?>

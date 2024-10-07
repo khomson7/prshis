@@ -25,6 +25,7 @@
                 $create_datetimeAddmissionNurse = $row['create_datetimeAddmissionNurse'];
                 $update_datetimeAddmissionNurse = $row['update_datetimeAddmissionNurse'];
                 $total_sum = isset($row['total_Sum']) ? (int)$row['total_Sum'] : 0;
+                $dateAlert = $row['date_alert'];
 
                 // Set the background color based on the value of total_sum
                 if ($total_sum >= 1 && $total_sum <= 36) {
@@ -51,6 +52,8 @@
     คะแนนรวม <?= htmlspecialchars($total_sum) ?> คะแนน
     <br>
     <?= htmlspecialchars($message) ?>
+    <br>
+    <font color='orange'>วันที่ <?=date("d/m/Y", strtotime($dateAlert))?></font>
 </div></td>
                     <td><?=date("d/m/Y H:i:s", strtotime($create_datetimeAddmissionNurse))?></td>
                     <td><?=date("d/m/Y H:i:s", strtotime($update_datetimeAddmissionNurse))?></td>
