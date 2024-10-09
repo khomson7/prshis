@@ -77,13 +77,13 @@ $sql = "select t.*,t2.level_of_consciousness as shift from
 ,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation1
 ,if(question2_1 = 1 ,'ล','-') as question2_1,if(question2_2 = 1 ,'ล','-') as question2_2,if(question2_3 > 0 ,'ด','-') as question2_3
 ,if(question2_4 > 0 ,'ด','-') as question2_4,if(question2_5 > 0 ,'ด','-') as question2_5
-,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation2
+,case when variation2 = 0 then 'ข' when (variation2 > 0 and variation2 <=2) then 'ล' when (variation2 > 2 ) then 'ด' else '' end as variation2
 ,if(question3_1 = 1 ,'ล','-') as question3_1,if(question3_2 = 1 ,'ล','-') as question3_2,if(question3_3 > 0 ,'ด','-') as question3_3
 ,if(question3_4 > 0 ,'ด','-') as question3_4,if(question3_5 > 0 ,'ด','-') as question3_5
-,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation3
+,case when variation3 = 0 then 'ข' when (variation3 > 0 and variation3 <=2) then 'ล' when (variation3 > 2 ) then 'ด' else '' end as variation3
 ,if(question4_1 = 1 ,'ล','-') as question4_1,if(question4_2 = 1 ,'ล','-') as question4_2,if(question4_3 > 0 ,'ด','-') as question4_3
 ,if(question4_4 > 0 ,'ด','-') as question4_4,if(question4_5 > 0 ,'ด','-') as question4_5
-,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation4
+,case when variation4 = 0 then 'ข' when (variation4 > 0 and variation4 <=2) then 'ล' when (variation4 > 2 ) then 'ด' else '' end as variation4
 FROM prs_mental_health3
 WHERE an = :an
 GROUP BY date(create_datetime)
