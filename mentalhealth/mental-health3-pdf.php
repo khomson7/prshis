@@ -89,7 +89,7 @@ WHERE an = :an
 GROUP BY date(create_datetime)
 ORDER BY date ASC
 LIMIT :limit OFFSET :offset)t
-LEFT JOIN prs_mental_health3 t2 on date(t2.create_datetime) = t.date
+LEFT JOIN prs_mental_health3 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
 ";
 $stmt = $conn->prepare($sql);
 
