@@ -63,24 +63,39 @@ $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='che
 //-------------------------Doctor admission note
 
 // Pagination variables
-$limit = 3;  // Show 7 days per page
+$limit = 4;  // Show 7 days per page
+
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
+//echo $page ;
 
-
-$sql = "SELECT an,create_datetime as date,level_of_consciousness as shift
-,if(question1_1 = 1 ,'/','-') as question1_1,if(question1_2 = 1 ,'/','-') as question1_2,if(question1_3 > 0 ,'/','-') as question1_3
+$sql = "select t.*,t2.level_of_consciousness as shift from
+(SELECT an,date(create_datetime) as date,'' as head_
+,if(question1_1 = 1 ,'ล','-') as question1_1,if(question1_2 = 1 ,'ล','-') as question1_2,if(question1_3 > 0 ,'ด','-') as question1_3
+,if(question1_4 > 0 ,'ด','-') as question1_4,if(question1_5 > 0 ,'ด','-') as question1_5
+,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation1
+,if(question2_1 = 1 ,'ล','-') as question2_1,if(question2_2 = 1 ,'ล','-') as question2_2,if(question2_3 > 0 ,'ด','-') as question2_3
+,if(question2_4 > 0 ,'ด','-') as question2_4,if(question2_5 > 0 ,'ด','-') as question2_5
+,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation2
+,if(question3_1 = 1 ,'ล','-') as question3_1,if(question3_2 = 1 ,'ล','-') as question3_2,if(question3_3 > 0 ,'ด','-') as question3_3
+,if(question3_4 > 0 ,'ด','-') as question3_4,if(question3_5 > 0 ,'ด','-') as question3_5
+,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation3
+,if(question4_1 = 1 ,'ล','-') as question4_1,if(question4_2 = 1 ,'ล','-') as question4_2,if(question4_3 > 0 ,'ด','-') as question4_3
+,if(question4_4 > 0 ,'ด','-') as question4_4,if(question4_5 > 0 ,'ด','-') as question4_5
+,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation4
 FROM prs_mental_health3
 WHERE an = :an
+GROUP BY date(create_datetime)
 ORDER BY date ASC
-LIMIT 1000 OFFSET :offset
+LIMIT :limit OFFSET :offset)t
+LEFT JOIN prs_mental_health3 t2 on date(t2.create_datetime) = t.date
 ";
 $stmt = $conn->prepare($sql);
 
 // Bind parameters
 $stmt->bindParam(':an', $an); // Assuming $an is defined and contains the Admission Number
-//$stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // Bind limit
+$stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // Bind limit
 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT); // Bind offset
 
 // Execute the statement
@@ -115,19 +130,52 @@ foreach ($rows as $row) {
     if (!in_array($date, $dates)) {
         $dates[] = $date;
     }
-    
+   // echo $date;
     // Group data by date and store shift values
     if (!isset($groupedData[$date])) {
         $groupedData[$date] = [
-            '1' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-'],
-            '2' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-'],
-            '3' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-']
+            '1' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-', 'question1_4' => '-', 'question1_5' => '-', 'variation1' => '-'
+            ,'question2_1' => '-', 'question2_2' => '-', 'question2_3' => '-', 'question2_4' => '-', 'question2_5' => '-', 'variation2' => '-'
+            ,'question3_1' => '-', 'question3_2' => '-', 'question3_3' => '-', 'question3_4' => '-', 'question3_5' => '-', 'variation3' => '-'
+            ,'question4_1' => '-', 'question4_2' => '-', 'question4_3' => '-', 'question4_4' => '-', 'question4_5' => '-', 'variation4' => '-'     
+        ],
+            '2' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-', 'question1_4' => '-', 'question1_5' => '-', 'variation1' => '-'
+            ,'question2_1' => '-', 'question2_2' => '-', 'question2_3' => '-', 'question2_4' => '-', 'question2_5' => '-', 'variation2' => '-'
+            ,'question3_1' => '-', 'question3_2' => '-', 'question3_3' => '-', 'question3_4' => '-', 'question3_5' => '-', 'variation3' => '-'
+            ,'question4_1' => '-', 'question4_2' => '-', 'question4_3' => '-', 'question4_4' => '-', 'question4_5' => '-', 'variation4' => '-'      
+        ],
+            '3' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-', 'question1_4' => '-', 'question1_5' => '-', 'variation1' => '-'
+            ,'question2_1' => '-', 'question2_2' => '-', 'question2_3' => '-', 'question2_4' => '-', 'question2_5' => '-', 'variation2' => '-'
+            ,'question3_1' => '-', 'question3_2' => '-', 'question3_3' => '-', 'question3_4' => '-', 'question3_5' => '-', 'variation3' => '-'
+            ,'question4_1' => '-', 'question4_2' => '-', 'question4_3' => '-', 'question4_4' => '-', 'question4_5' => '-', 'variation4' => '-'
+            ]
         ];
     }
     $groupedData[$date][$shift] = [
         'question1_1' => $row['question1_1'],
         'question1_2' => $row['question1_2'],
-        'question1_3' => $row['question1_3']
+        'question1_3' => $row['question1_3'],
+        'question1_4' => $row['question1_4'],
+        'question1_5' => $row['question1_5'],
+        'variation1' => $row['variation1'],
+        'question2_1' => $row['question2_1'],
+        'question2_2' => $row['question2_2'],
+        'question2_3' => $row['question2_3'],
+        'question2_4' => $row['question2_4'],
+        'question2_5' => $row['question2_5'],
+        'variation2' => $row['variation2'],
+        'question3_1' => $row['question3_1'],
+        'question3_2' => $row['question3_2'],
+        'question3_3' => $row['question3_3'],
+        'question3_4' => $row['question3_4'],
+        'question3_5' => $row['question3_5'],
+        'variation3' => $row['variation3'],
+        'question4_1' => $row['question4_1'],
+        'question4_2' => $row['question4_2'],
+        'question4_3' => $row['question4_3'],
+        'question4_4' => $row['question4_4'],
+        'question4_5' => $row['question4_5'],
+        'variation4' => $row['variation4']
     ];
 }
 
@@ -152,100 +200,7 @@ foreach ($rows as $row) {
        // $maxNrOfPages = ceil($max/$itemsPerPage);
      
 
-$html0 =
-'
 
-    <style>
-    div.f15 {
- 
-        font-size: 12px; 
-        
-      }
-      div.line_dotted {
-        text-decoration: underline dotted;  
-        text-decoration-color: rgb(105,42,49); 
-        font-size: 12px;
-        text-decoration-style: dotted;  
-      }
-
-        body{
-            font-family: "Garuda";//เรียกใช้font Garuda สำหรับแสดงผล ภาษาไทย
-        }
-        footer {
-            position: fixed;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 70px;
-
-            /** Extra personal styles **/
-            line-height: 35px;
-        }
-        br {
-            display: block;
-            content: " ";
-            margin: 10px 0;
-            height:10pt;
-            line-height: 150%;
-        }
-        #show_img_select  {
-            background-image: url("../include/images/allbody.jpg");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-image-resize:5;
-            height:180px;
-        }
-
-        
-    </style>
-    <h2 style="text-align:right;font-size:8pt;">&nbsp;</h2>
-    
-    <h2 style="text-align:center;font-size:11pt;">แบบประเมินภาวะเสี่ยง (SAVE) &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>
-    
-   
-<div class="f15"> วันที่ <b>'.LongDateThai2($strDate).'<br>'
-.'<div class="row">
-
-                        <div class="col-12 col-md-12">                              
-                                        <table lass="center" id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">                                              
-                                        <tr style="border:1px solid #000;margin: 35px;">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;<b>ภาวะเสี่ยง</b></td>
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b>ระดับรุนแรง</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%" colspan="2">&nbsp;<b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการทำร้าย (S)</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;1.มีภาวะซึมเศร้า โดย 1 เดือนที่ผ่านมารวมถึงวันนี้รู้สึกหดหู่เศร้า หรือท้อแท้สิ้นหวัง รู้สึกไม่มีคุณค่า</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                                <div class="custom-control custom-checkbox  col-sm-1">
-                                                                        <input type="checkbox" class="custom-control-input" id="question1_1" value="1" name="question1_1" oninput="oninputcheckValue1()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="question1_1" style="font-size:100%; background-color:yellow;">เหลือง</label>
-                                                                </div>
-
-                                                        </td>
-
-
-
-
-
-                                                </tr>
-
-
-                                                </table></div></div>'
-
-
-
-
-      .'<br>'                     
-    .'<footter> <h2 style="text-align:right;font-size:8pt;">ประกาศใช้ 29 มกราคม 2566 งานเอกสารคุณภาพ ศูนย์คุณภาพ</h2> </footer>' ;
-//$mpdf->SetColumns(2);
 
 
 $html =
@@ -343,12 +298,11 @@ $html = '
         
     </style>
     <h2 style="text-align:right;font-size:8pt;">&nbsp;</h2>
-    <h2 style="text-align:center;font-size:15pt;">แบบประเมินภาวะเสี่ยง (SAVE) &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>'.
-'<h2 style="text-align:center;font-size:11pt;">ทดสอบtest SAVE AN ' . $an . '</h2>';
+    <h2 style="text-align:center;font-size:15pt;">แบบประเมินภาวะเสี่ยง (SAVE) &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>';
 
 // Table header
 $html .= '<table border="1" cellpadding="10" cellspacing="0">';
-$html .= '<thead><tr><th rowspan="2">Level</th>';
+$html .= '<thead><tr><th rowspan="2">ภาวะเสี่ยง</th>';
 foreach ($dates as $date) {
     $html .= '<th colspan="3">' . date('d/m/Y', strtotime($date)) . '</th>';
 }
@@ -358,25 +312,115 @@ foreach ($dates as $date) {
 }
 $html .= '</tr></thead><tbody>';
 
+
+
+    $html .= '<tr><td colspan="13"><b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการทำร้าย (S)</b></td></tr>'; // Adjust level as needed
 // Table body
-foreach (['question1_1', 'question1_2', 'question1_3'] as $questionIndex => $questionName) {
+foreach (['question1_1', 'question1_2', 'question1_3', 'question1_4', 'question1_5', 'variation1'] as $questionIndex => $questionName) {
+ 
     $html .= '<tr>';
-    if ($questionIndex === 0) {
-        $html .= '<td>A</td>'; // Adjust level as needed
+   if ($questionIndex === 0) {
+        $html .= '<td>1.มีภาวะซึมเศร้า โดย 1 เดือนที่ผ่านมารวมถึงวันนี้รู้สึกหดหู่เศร้า หรือท้อแท้สิ้นหวัง รู้สึกไม่มีคุณค่า</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>B</td>';
-    } else {
-        $html .= '<td>C</td>';
-    }
-
-
+        $html .= '<td>2. มีประวัติเคยพยายามฆ่าตัวตายภายใน 1 เดือน ก่อนมาโรงพยาบาล</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>3. มีความคิด / พูดบ่นอยากตาย</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td>4.หลงผิดเกี่ยวกับการผิดบาป โทษตัวเองมีเสียงแว่วให้ทำร้ายตัวเอง</td>';
+    }elseif ($questionIndex === 4) {
+        $html .= '<td>5.มีพฤติกรรมทำร้ายตัวเอง</td>';
+    }elseif ($questionIndex === 5) {
+        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
+    }  
     foreach ($dates as $date) {
         $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
         $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
         $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
     }
 
-    $html .= '</tr>';
+    $html .= '</tr>';  
+}
+
+$html .= '<tr><td colspan="13"><b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการได้รับอุบัติเหตุ (A)</b></td></tr>'; // Adjust level as needed
+// Table body
+foreach (['question2_1', 'question2_2', 'question2_3', 'question2_4', 'question2_5', 'variation2'] as $questionIndex => $questionName) {
+ 
+    $html .= '<tr>';
+   if ($questionIndex === 0) {
+        $html .= '<td>1.ผู้ป่วยมีอายุ 60 ปีขึ้นไป และ/หรือ มีโรคประจำตัว</td>'; // Adjust level as needed
+    } elseif ($questionIndex === 1) {
+        $html .= '<td>2.ผู้ป่วยได้รับยา HAD หรือผู้ป่วยได้รับยาในกลุ่ม Benzodizepine ตามการประเมิน AWS Score หรือได้รับยาฉีด PRN มากกว่า 2 ครั้ง ใน 1 วัน</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>3.ผู้ป่วยมีการถอนพิษสุรา</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td>4.ผู้ป่วยที่มีการทรงตัวไม่ดี มึนงง สับสน</td>';
+    }elseif ($questionIndex === 4) {
+        $html .= '<td>5.ผู้ป่วยมีอาการชักภายใน 1 เดือน</td>';
+    }elseif ($questionIndex === 5) {
+        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
+    }  
+    foreach ($dates as $date) {
+        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
+        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
+        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
+    }
+
+    $html .= '</tr>';  
+}
+
+$html .= '<tr><td colspan="13"><b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อพฤติกรรมรุนแรง (V)</b></td></tr>'; // Adjust level as needed
+// Table body
+foreach (['question3_1', 'question3_2', 'question3_3', 'question3_4', 'question3_5', 'variation3'] as $questionIndex => $questionName) {
+ 
+    $html .= '<tr>';
+   if ($questionIndex === 0) {
+        $html .= '<td>1.มีประวัติพฤติกรรมรุนแรง ปฏิเสธการเจ็บป่วย ไม่ให้ความร่วมมือในการรักษา</td>'; // Adjust level as needed
+    } elseif ($questionIndex === 1) {
+        $html .= '<td>2.ระแวง หลงผิดคิดว่ามีผู้อื่นมาทำร้าย</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>3.มีการรับรู้ผิดปกติ เช่น มีหูแว่ว เห็นภาพหลอน</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td>4.มีพฤติกรรมรุนแรง</td>';
+    }elseif ($questionIndex === 4) {
+        $html .= '<td>5.ตาขวาง พูดเสียงดัง ดุด่าผู้อื่น ไม่รับฟัง</td>';
+    }elseif ($questionIndex === 5) {
+        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
+    }  
+    foreach ($dates as $date) {
+        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
+        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
+        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
+    }
+
+    $html .= '</tr>';  
+}
+
+
+$html .= '<tr><td colspan="13"><b> เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการหลบหนี (E)</b></td></tr>'; // Adjust level as needed
+// Table body
+foreach (['question4_1', 'question4_2', 'question4_3', 'question4_4', 'question4_5', 'variation4'] as $questionIndex => $questionName) {
+ 
+    $html .= '<tr>';
+   if ($questionIndex === 0) {
+        $html .= '<td>1.มีประวัติพยายามหลบหนี ปฏิเสธการเจ็บป่วย ไม่อยู่โรงพยาบาล</td>'; // Adjust level as needed
+    } elseif ($questionIndex === 1) {
+        $html .= '<td>2.มีประวัติติดสารเสพติดและอยากยาเสพติด หรือ Admit ใน 7 วันแรก</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>3.รบเร้าเรื่องกลับบ้านบ่อยๆ หรือ ขอให้โทรศัพท์ติดต่อญาติหรือไม่ได้กลับบ้านตามกำหนด พูดขู่ว่าจะหนี ขอออกนอกตึกบ่อยๆ</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td>4.มีพฤติกรรมบ่งชี้ถึงสัญญาณการเตือนว่าจะมีการหลบหนี้ เช่น จ้องมองประตูพยายามงัดแงะหาทางออก</td>';
+    }elseif ($questionIndex === 4) {
+        $html .= '<td>5.มีพฤติกรรมหลบหนี</td>';
+    }elseif ($questionIndex === 5) {
+        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
+    }  
+    foreach ($dates as $date) {
+        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
+        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
+        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
+    }
+
+    $html .= '</tr>';  
 }
 
 $html .= '</tbody></table>';
@@ -392,6 +436,9 @@ if ($page < $totalPages) {
     
 }
 $html .= '</div>';
+//แสดงข้อมุลอยู่ในช่วง ก่อน footer
+$mpdf->setAutoTopMargin = 'stretch';
+$mpdf->setAutoBottomMargin = 'stretch';
 
 $mpdf->setFooter('HN: '.htmlspecialchars($hn).' AN: '.htmlspecialchars($an).' Page '.$page);
 // Write the HTML content to the PDF

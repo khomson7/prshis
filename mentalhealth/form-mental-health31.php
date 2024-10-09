@@ -878,7 +878,7 @@ table.center {
                                                                                 ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
                                                                                         <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="form_save()"><i class="fas fa-save"></i> บันทึก</button>
                                                                                 <?php } ?>
-                                                                                <a href="mental-health3-pdf.php?an=<?php echo $an; ?>&id=<?=$ids?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                                                                              <!--  <a href="mental-health3-pdf.php?an=<?php echo $an; ?>&id=<?=$ids?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a> -->
                                                                         </div>
                                                                 </div>
                                                         </div>
