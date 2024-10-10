@@ -29,6 +29,17 @@ if(!$loginname){
      
 }
 
+
+
+$getDocumentOther = (ReportQueryUtils::getDocumentOther($an));
+$image_checkOther = '';
+if(($getDocumentOther)){
+    $image_checkOther = $image_check;
+}
+
+
+//
+
 //$image_check = '/';
 $getDocumentSummary = KphisQueryUtils::getDocumentSummary($an);
 $image_checkSummary = '';
@@ -471,7 +482,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
-            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">'.$image_checkOther.'</td>
             <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;เอกสารอื่นๆ ระบุ</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">

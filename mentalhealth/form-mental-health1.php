@@ -477,7 +477,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     <input type="radio" <input type="radio" <?php if ($row['attitude'] == '3') {
                                                                                 echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="attitude2" name="attitude" value="3">
+                                                                            } ?> class="custom-control-input" id="attitude3" name="attitude" value="3">
                                     <label class="custom-control-label" for="attitude3">ไม่ไว้วางใจ</label>
                                 </div>
                                 <div class="custom-control custom-radio col-sm-1">
@@ -495,7 +495,7 @@ if ($row0  = $stmt->fetch()) {
                                 <div class="custom-control custom-radio col-sm-1">
                                     <input type="radio" <input type="radio" <?php if ($row['attitude'] == '6') {
                                                                                 echo 'checked="checked"';
-                                                                            } ?> class="custom-control-input" id="attitude6" name="lattitude" value="6">
+                                                                            } ?> class="custom-control-input" id="attitude6" name="attitude" value="6">
                                     <label class="custom-control-label" for="attitude6">ปิดบังข้อมูล</label>
                                 </div>
 

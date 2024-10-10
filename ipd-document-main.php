@@ -473,6 +473,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
                             <label>เอกสารอื่นๆ</label>
                            <span id="show_text_Other_prhis"></span>
                             <a id="mentalHealth1_pdf"></a>
+                            <a id="mentalHealth2_pdf"></a>
+                            <a id="mentalHealth3_pdf"></a>
                             
                         </div>
                     </div>
@@ -756,30 +758,29 @@ if((getDocumentSummary==true)){
         }
 
 const getDocumentMentalHealth1 = <?=json_encode(ReportQueryUtils::getDocumentMentalHealth1($an))?>;
+const getDocumentMentalHealth2 = <?=json_encode(ReportQueryUtils::getDocumentMentalHealth2($an))?>;
+const getDocumentMentalHealth3 = <?=json_encode(ReportQueryUtils::getDocumentMentalHealth3($an))?>;
 
 
- console.log(getDocumentMentalHealth1);
+ console.log(getDocumentMentalHealth2);
 
 
 
-if((getDocumentMentalHealth1==true )){
+if((getDocumentMentalHealth1==true || getDocumentMentalHealth2==true ||getDocumentMentalHealth3==true || getDocumentAddmissionNurse2==true || getDocumentAddmissionNurse3==true ||  getDocumentAddmissionNurseIcu==true)){
     $("#check_countRowData_Other").attr("class","text-success fas fa-check-square");
     $("#show_text_Other_prhis").attr("class","text-light font-weight-bold badge badge-primary").text(" PRHIS ");
 
    if(IPD_DOCUMENT_PRINT && getDocumentMentalHealth1==true){
         $("#mentalHealth1_pdf").attr({"class":"badge badge-secondary","href":"pdffile/mental-health1-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(แบบประเมินสุขภาพจิต)").css({"cursor":"pointer"});
     }
-    if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse2==true){
-        $("#AddmissionNurse_pdf2").attr({"class":"badge badge-secondary","href":"ipdnurse2/prs-pre-nursenote-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(ทั่วไป)").css({"cursor":"pointer"});
+    if(IPD_DOCUMENT_PRINT && getDocumentMentalHealth2==true){
+        $("#mentalHealth2_pdf").attr({"class":"badge badge-secondary","href":"pdffile/mental-health2-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(BPRS)").css({"cursor":"pointer"});
     }
 
-    if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse3==true){
-        $("#AddmissionNurse_pdf3").attr({"class":"badge badge-secondary","href":"lr-report1/lr-report2-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(เฉพาะผู้มาคลอด)").css({"cursor":"pointer"});
+    if(IPD_DOCUMENT_PRINT && getDocumentMentalHealth3==true){
+        $("#mentalHealth3_pdf").attr({"class":"badge badge-secondary","href":"pdffile/mental-health3-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(SAVE)").css({"cursor":"pointer"});
     }
 
-    if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurseIcu==true){
-        $("#AddmissionNurse_pdf_icu").attr({"class":"badge badge-secondary","href":"ipdnurse2/prs-icu1-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(ICU)").css({"cursor":"pointer"});
-    }
     
 }else{
     $("#check_countRowData_Other").attr("class","text-secondary fas fa-square");
