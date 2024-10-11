@@ -72,11 +72,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
             <h4><p class="text-right"><B><i class="fas fa-file-alt"></i> เอกสารที่อยู่ในระบบคอมพิวเตอร์</B></p></h4>
         </div>
         <div class="col-md-2 text-right">
-            <a href="ipd-document-main-pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารใบปะหน้า</a>
+            <a href="ipd-document-main-pdf.php?an=<?=$an?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารใบปะหน้า</a>
         </div>
 
         <div class="col-md-2 text-right">
-            <a href="allpdfprint/all_pdf.php?an=<?=$an?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารรวม</a>
+            <a href="allpdfprint/all_pdf.php?an=<?=$an?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-print"></i> พิมพ์เอกสารรวม</a>
         </div>
 
          
