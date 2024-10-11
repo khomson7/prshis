@@ -84,7 +84,7 @@ $sql = "select t.*,t2.level_of_consciousness as shift from
 ,if(question4_1 = 1 ,'ล','-') as question4_1,if(question4_2 = 1 ,'ล','-') as question4_2,if(question4_3 > 0 ,'ด','-') as question4_3
 ,if(question4_4 > 0 ,'ด','-') as question4_4,if(question4_5 > 0 ,'ด','-') as question4_5
 ,case when variation4 = 0 then 'ข' when (variation4 > 0 and variation4 <=2) then 'ล' when (variation4 > 2 ) then 'ด' else '' end as variation4
-,'abcdef' as create_
+,create_user as create_
 FROM prs_mental_health3
 WHERE an = :an
 GROUP BY date(create_datetime)
@@ -112,11 +112,12 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
 
 // Get total number of days for this AN
-$countQuery = "SELECT COUNT(DISTINCT create_datetime) as total_days FROM prs_mental_health3 WHERE an = :an";
+$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM prs_mental_health3 WHERE an = :an";
 $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($query_parameters);
 $totalDays = $countStmt->fetchColumn();
 $totalPages = ceil($totalDays / $limit);
+
 
 //echo $totalDays;
 // Group data by date and shift
@@ -388,7 +389,7 @@ foreach (['create_'] as $questionIndex  => $questionName) {
 
     // Add a "Signature" label in the first row
     if ($questionIndex  === 0) {
-        $html .= '<td>Signature</td>'; // Add the label for the signature
+        $html .= '<td>ผู้ประเมิน</td>'; // Add the label for the signature
     }
 
     // Loop through the dates and insert the rotated signature values
@@ -417,7 +418,8 @@ $html .= '</tbody></table>';
 
 
 
-$html .= '<h2 style="text-align:left;font-size:10pt;"><u>หมายเหตุ</u> กรณีไม่พบตามเกณฑ์ตามประเมินให้รับดับเขียว</h2>'; // Adjust level as needed
+$html .= '<h2 style="text-align:left;font-size:10pt;"><u>หมายเหตุ</u> กรณีไม่พบตามเกณฑ์ตามประเมินให้ระดับเขียว <br> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ข(สีเขียว)&nbsp;&nbsp; ล(สีเหลือง) &nbsp;&nbsp;ด(สีแดง)</h2>'; // Adjust level as needed
 
 
 
