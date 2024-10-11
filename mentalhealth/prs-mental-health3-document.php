@@ -44,7 +44,7 @@ require_once '../include/Session.php';
 </buton>
 
 <buton >
-<a class="nav-link" href="mental-health3-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+<a class="nav-link" href="/pdffile/mental-health3-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
 </buton> 
     
 
