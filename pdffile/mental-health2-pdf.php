@@ -70,27 +70,14 @@ $offset = ($page - 1) * $limit;
 
 //echo $page ;
 
-$sql = "select t.*,t2.level_of_consciousness as shift from
-(SELECT an,date(create_datetime) as date,'' as head_
-,if(question1_1 = 1 ,'ล','-') as question1_1,if(question1_2 = 1 ,'ล','-') as question1_2,if(question1_3 > 0 ,'ด','-') as question1_3
-,if(question1_4 > 0 ,'ด','-') as question1_4,if(question1_5 > 0 ,'ด','-') as question1_5
-,case when variation1 = 0 then 'ข' when (variation1 > 0 and variation1 <=2) then 'ล' when (variation1 > 2 ) then 'ด' else '' end as variation1
-,if(question2_1 = 1 ,'ล','-') as question2_1,if(question2_2 = 1 ,'ล','-') as question2_2,if(question2_3 > 0 ,'ด','-') as question2_3
-,if(question2_4 > 0 ,'ด','-') as question2_4,if(question2_5 > 0 ,'ด','-') as question2_5
-,case when variation2 = 0 then 'ข' when (variation2 > 0 and variation2 <=2) then 'ล' when (variation2 > 2 ) then 'ด' else '' end as variation2
-,if(question3_1 = 1 ,'ล','-') as question3_1,if(question3_2 = 1 ,'ล','-') as question3_2,if(question3_3 > 0 ,'ด','-') as question3_3
-,if(question3_4 > 0 ,'ด','-') as question3_4,if(question3_5 > 0 ,'ด','-') as question3_5
-,case when variation3 = 0 then 'ข' when (variation3 > 0 and variation3 <=2) then 'ล' when (variation3 > 2 ) then 'ด' else '' end as variation3
-,if(question4_1 = 1 ,'ล','-') as question4_1,if(question4_2 = 1 ,'ล','-') as question4_2,if(question4_3 > 0 ,'ด','-') as question4_3
-,if(question4_4 > 0 ,'ด','-') as question4_4,if(question4_5 > 0 ,'ด','-') as question4_5
-,case when variation4 = 0 then 'ข' when (variation4 > 0 and variation4 <=2) then 'ล' when (variation4 > 2 ) then 'ด' else '' end as variation4
-,'abcdef' as create_
-FROM prs_mental_health3
+$sql = "select t.*,'1' as shift from
+(SELECT *,date(create_datetime) as date,'' as head_
+FROM prs_mental_health2
 WHERE an = :an
 GROUP BY date(create_datetime)
 ORDER BY date ASC
 LIMIT :limit OFFSET :offset)t
-LEFT JOIN prs_mental_health3 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
+LEFT JOIN prs_mental_health2 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
 ";
 $stmt = $conn->prepare($sql);
 
@@ -112,11 +99,12 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
 
 // Get total number of days for this AN
-$countQuery = "SELECT COUNT(DISTINCT create_datetime) as total_days FROM prs_mental_health3 WHERE an = :an";
+$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM prs_mental_health2 WHERE an = :an";
 $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($query_parameters);
 $totalDays = $countStmt->fetchColumn();
 $totalPages = ceil($totalDays / $limit);
+
 
 //echo $totalDays;
 // Group data by date and shift
@@ -135,54 +123,38 @@ foreach ($rows as $row) {
     // Group data by date and store shift values
     if (!isset($groupedData[$date])) {
         $groupedData[$date] = [
-            '1' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-', 'question1_4' => '-', 'question1_5' => '-', 'variation1' => '-'
-            ,'question2_1' => '-', 'question2_2' => '-', 'question2_3' => '-', 'question2_4' => '-', 'question2_5' => '-', 'variation2' => '-'
-            ,'question3_1' => '-', 'question3_2' => '-', 'question3_3' => '-', 'question3_4' => '-', 'question3_5' => '-', 'variation3' => '-'
-            ,'question4_1' => '-', 'question4_2' => '-', 'question4_3' => '-', 'question4_4' => '-', 'question4_5' => '-', 'variation4' => '-' ,'create_' =>'-'   
-        ],
-            '2' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-', 'question1_4' => '-', 'question1_5' => '-', 'variation1' => '-'
-            ,'question2_1' => '-', 'question2_2' => '-', 'question2_3' => '-', 'question2_4' => '-', 'question2_5' => '-', 'variation2' => '-'
-            ,'question3_1' => '-', 'question3_2' => '-', 'question3_3' => '-', 'question3_4' => '-', 'question3_5' => '-', 'variation3' => '-'
-            ,'question4_1' => '-', 'question4_2' => '-', 'question4_3' => '-', 'question4_4' => '-', 'question4_5' => '-', 'variation4' => '-' ,'create_' =>'-'     
-        ],
-            '3' => ['question1_1' => '-', 'question1_2' => '-', 'question1_3' => '-', 'question1_4' => '-', 'question1_5' => '-', 'variation1' => '-'
-            ,'question2_1' => '-', 'question2_2' => '-', 'question2_3' => '-', 'question2_4' => '-', 'question2_5' => '-', 'variation2' => '-'
-            ,'question3_1' => '-', 'question3_2' => '-', 'question3_3' => '-', 'question3_4' => '-', 'question3_5' => '-', 'variation3' => '-'
-            ,'question4_1' => '-', 'question4_2' => '-', 'question4_3' => '-', 'question4_4' => '-', 'question4_5' => '-', 'variation4' => '-','create_' =>'-'
-            ]
+            '1' => ['somatic_concern' => '-' ,'anxiety' => '-','emotional'=>'-','conceptual'=>'-','guilt'=>'-','tension'=>'-','mannerism'=>'-','grandiosity'=>'-'
+            ,'depressive'=>'-','hostility'=>'-','suspiciousness'=>'-','hallucinatory'=>'-','motor'=>'-','uncooperativeness'=>'-','unusual'=>'-','blunted'=>'-'
+            ,'excitement'=>'-','disorientation'=>'-','total_sum'=>'-','create_user' =>'-'   
+        ]
         ];
     }
     $groupedData[$date][$shift] = [
-        'question1_1' => $row['question1_1'],
-        'question1_2' => $row['question1_2'],
-        'question1_3' => $row['question1_3'],
-        'question1_4' => $row['question1_4'],
-        'question1_5' => $row['question1_5'],
-        'variation1' => $row['variation1'],
-        'question2_1' => $row['question2_1'],
-        'question2_2' => $row['question2_2'],
-        'question2_3' => $row['question2_3'],
-        'question2_4' => $row['question2_4'],
-        'question2_5' => $row['question2_5'],
-        'variation2' => $row['variation2'],
-        'question3_1' => $row['question3_1'],
-        'question3_2' => $row['question3_2'],
-        'question3_3' => $row['question3_3'],
-        'question3_4' => $row['question3_4'],
-        'question3_5' => $row['question3_5'],
-        'variation3' => $row['variation3'],
-        'question4_1' => $row['question4_1'],
-        'question4_2' => $row['question4_2'],
-        'question4_3' => $row['question4_3'],
-        'question4_4' => $row['question4_4'],
-        'question4_5' => $row['question4_5'],
-        'variation4' => $row['variation4'],
-        'create_' => $row['create_']
+        'somatic_concern' => $row['somatic_concern'],   
+        'anxiety' => $row['anxiety'],   
+        'emotional' => $row['emotional'], 
+        'conceptual' => $row['conceptual'],
+        'guilt' => $row['guilt'],  
+        'tension' => $row['tension'],
+        'mannerism' => $row['mannerism'],
+        'grandiosity' => $row['grandiosity'],
+        'depressive' => $row['depressive'],
+        'hostility' => $row['hostility'],
+        'suspiciousness' => $row['suspiciousness'],
+        'hallucinatory' => $row['hallucinatory'],
+        'motor' => $row['motor'],
+        'uncooperativeness' => $row['uncooperativeness'],
+        'unusual' => $row['unusual'],
+        'blunted' => $row['blunted'],
+        'excitement' => $row['excitement'],
+        'disorientation' => $row['disorientation'],
+        'total_sum' => $row['total_sum'],
+        'create_user' => $row['create_user']
     ];
 }
 
 
-        $ids = '22'; //Link menu
+        $ids = '21'; //Link menu
         $check_    = ReportQueryUtils::getProduction($ids);
 
         $check_report = '( )';
@@ -206,7 +178,7 @@ $html = '
 <style>
     div.f15 {
  
-        font-size: 12px; 
+        font-size: 10px; 
         
       }
       div.line_dotted {
@@ -255,157 +227,102 @@ $html = '
             text-align: center; /* Optional: center the text in the cell */
             white-space: nowrap; /* Prevent unwanted line wrapping */
           }
+
+          .fontsize {
+            font-size:11px;
+          }
     
     </style>
-    <h2 style="text-align:right;font-size:8pt;">FM-PSY-002-00 ประกาศใช้ 8 พฤษภาคม 2567</h2>
-    <h2 style="text-align:center;font-size:15pt;">แบบประเมินภาวะเสี่ยง (SAVE) &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>';
+    <h3 style="text-align:right;font-size:8pt;">FM-PSY-002-00 ประกาศใช้ 8 พฤษภาคม 2567</h3>
+    <h3 style="text-align:center;font-size:10pt;">แบบประเมินอาการทางจิต(Brief Phychiatric Rating Scale : BRPS) <br>'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h3>';
 
 // Table header
-$html .= '<table border="1" cellpadding="10" cellspacing="0">';
-$html .= '<thead><tr><th rowspan="2">ภาวะเสี่ยง</th>';
+$html .= '<table class="fontsize" border="1" cellpadding="10" cellspacing="0">';
+$html .= '<thead><tr><th>หัวข้อ</th> <th>อาการและการแสดงออก</th>';
 foreach ($dates as $date) {
-    $html .= '<th colspan="3">' . date('d/m/Y', strtotime($date)) . '</th>';
+    $html .= '<th>' . date('d/m/Y', strtotime($date)) . '</th>';
 }
-$html .= '</tr><tr>';
+/*$html .= '</tr><tr>';
 foreach ($dates as $date) {
-    $html .= '<th>ด</th><th>ช</th><th>บ</th>';
-}
+    $html .= '<th></th>';
+} */
 $html .= '</tr></thead><tbody>';
 
 
 
-    $html .= '<tr><td colspan="13"><b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการทำร้าย (S)</b></td></tr>'; // Adjust level as needed
+    
 // Table body
-foreach (['question1_1', 'question1_2', 'question1_3', 'question1_4', 'question1_5', 'variation1'] as $questionIndex => $questionName) {
+foreach (['somatic_concern', 'anxiety', 'emotional', 'conceptual', 'guilt', 'tension', 'mannerism','grandiosity','depressive','hostility','suspiciousness'
+,'hallucinatory','motor','uncooperativeness','unusual','blunted','excitement','disorientation','total_sum'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>1.มีภาวะซึมเศร้า โดย 1 เดือนที่ผ่านมารวมถึงวันนี้รู้สึกหดหู่เศร้า หรือท้อแท้สิ้นหวัง รู้สึกไม่มีคุณค่า</td>'; // Adjust level as needed
+        $html .= '<td style="text-align:center;">1</td><td>Somatic_concern (G) คุณรู้สึกตนเองป่วยเป็นโรคทางกายภาพหรือไม่</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>2. มีประวัติเคยพยายามฆ่าตัวตายภายใน 1 เดือน ก่อนมาโรงพยาบาล</td>';
+        $html .= '<td style="text-align:center;">2</td><td> Anxiety (G) ใน 1 สัปดาห์ที่ผ่านมาคุณรู้สึกกังวลหรือกลัวอะไรบ้างไหม/ความคิดนี้รบกวนจตใจบ่อยไหม /รู้สึกมีการใจสั่น เหงื่อออก/อาการที่บอก มีผลต่อการทำงานของคุณไหม</td>';
     }elseif ($questionIndex === 2) {
-        $html .= '<td>3. มีความคิด / พูดบ่นอยากตาย</td>';
+        $html .= '<td style="text-align:center;">3</td><td> Emotional Withdrawal (N) มีลักษณะแยกตัว ไม่ค่อยมีปฏิกิริยาโต้ตอบกับ ผู้อื่น ไม่แสดงอารมณ์ หน้าเฉยเมย</td>';
     }elseif ($questionIndex === 3) {
-        $html .= '<td>4.หลงผิดเกี่ยวกับการผิดบาป โทษตัวเองมีเสียงแว่วให้ทำร้ายตัวเอง</td>';
+        $html .= '<td style="text-align:center;">4</td><td>Conceptual disorganization (P) พูดไม่เป็นเรื่องราว ขาดการเชื่อโยง พูดอ้อมค้อม ไม่ค่อยต่อเนื่อง (ดูใน 15 นาทีแรก)</td>';
     }elseif ($questionIndex === 4) {
-        $html .= '<td>5.มีพฤติกรรมทำร้ายตัวเอง</td>';
+        $html .= '<td style="text-align:center;">5</td><td>Guilt Feeling (G) รู้สึกตำหนิตนเองในสิ่งที่ทำไม่ดี หรือเสียใจต่อสิ่งที่ทำในอดีตหรือไม่</td>';
     }elseif ($questionIndex === 5) {
-        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
+        $html .= '<td style="text-align:center;">6</td><td>Tension (G) มองจากท่านั่งรู้สึกตึงเครียด ขณะพูดอาจมีการกระดก เสียงสั่น</td>';
+    }elseif ($questionIndex === 6) {
+        $html .= '<td style="text-align:center;">7</td><td>Mannerism and posturing (G) มีท่าทางการเคลื่อนไหวไม่เป็นธรรมชาติเก้งก้าง แข็ง ดู แปลกๆ</td>';
+    }elseif ($questionIndex === 7) {
+        $html .= '<td style="text-align:center;">8</td><td>Grandiosity (P) คุณมีความรู้สึกมีอำนาจพิเศษบางอย่างหรือไม่/ที่ผ่านมาคิดเป็นใครที่มีชื่อเสียงหรือไม่</td>';
+    }elseif ($questionIndex === 8) {
+        $html .= '<td style="text-align:center;">9</td><td>Depressive mood (G) คุณรู้สึกว่าไม่มีความสุขหรือความเศร้า/รู้สึกเศร้าไหม/รู้สึกเศร้าบ่อยแค่ไหน สามารถเบนความสนใจไปในเรื่องที่ทำให้รู้สึกได้ไหม/ความรู้สึกรบกวนการทำงานของคุณไหม</td>';
+    }elseif ($questionIndex === 9) {
+        $html .= '<td style="text-align:center;">10</td><td>Hostility (P) ใน 1 สัปดาห์ที่ผ่านมา คุณรู้สึกหงุดหงิดหรืออารมณ์เสียบ่อยๆเคยมีปัญหาชกต่อย หรือทะเลาะกับคนอื่น/สัมพันธภาพกับคนอื่น คนในครอบครัว เพื่อนร่วมงานเป็นอย่างไร</td>';
+    }elseif ($questionIndex === 10) {
+        $html .= '<td style="text-align:center;">11</td><td>Suspiciousness (P) คุณรู้สึกมีคนคอยจับผิด มีคนคิดร้ายบ้างไหม/โดยวิธีใด/รู้สึกกังวลกับการคิดร้ายของใครบ้างไหม</td>';
+    }elseif ($questionIndex === 11) {
+        $html .= '<td style="text-align:center;">12</td><td>Hallucinatory behavior(P) คุณได้ยินเสียงหรือมีคนพูดโดยไม่เห็นตัวตนหรือไม่ คุณมองเห็นหรือได้กลิ่นอะไรบางอย่างโดยคนอื่นไม่รู้สึก / ประสบการณ์นี้มีผลกระทบต่อชีวิตประจำวันไหม</td>';
+    }elseif ($questionIndex === 12) {
+        $html .= '<td style="text-align:center;">13</td><td>Motor retardation (G) การพูด การเคลื่อนไหวเชื่องช้า (สังเกตพฤติกรรม)</td>';
+    }elseif ($questionIndex === 13) {
+        $html .= '<td style="text-align:center;">14</td><td>Uncooperativeness (G) มีท่าทีต่อต้าน ระมัดระวัง ไม่เป้นมิตรต่อผู้อื่นและ ผู้ตรวจ</td>';
+    }elseif ($questionIndex === 14) {
+        $html .= '<td style="text-align:center;">15</td><td>Unusual thought content (G) ความคิดแปลก เช่น มีความคิดเชื่อเรื่องพลังจิต วิญญาณ หากพบในข้อ Somatic Grandiosity Delusion จะพบในหัวข้อนี้ด้วย</td>';
+    }elseif ($questionIndex === 15) {
+        $html .= '<td style="text-align:center;">16</td><td>Blunted affect (N) สีหน้าไม่ค่อยสดงความรู้สึก อารมณ์</td>';
+    }elseif ($questionIndex === 16) {
+        $html .= '<td style="text-align:center;">17</td><td>Excitement (P) มีท่าทีลุกลี้ลุกลน มีปฏิกิริยาโต้ตอบเร็ว อยู่ไม่เป็นสุข</td>';
+    }elseif ($questionIndex === 17) {
+        $html .= '<td style="text-align:center;">18</td><td>Disorientation (G) ถามวันที่ สถานที่ เวลา บุคคล</td>';
+    }elseif ($questionIndex === 18) {
+        $html .= '<td style="text-align:right;"></td><td style="text-align:right;">คะแนนรวม</td>';
+    }elseif ($questionIndex === 19) {
+        $html .= '<td></td><td><b>ss</b></td>';
     }  
     foreach ($dates as $date) {
-        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
-    }
-
-    $html .= '</tr>';  
-}
-
-$html .= '<tr><td colspan="13"><b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการได้รับอุบัติเหตุ (A)</b></td></tr>'; // Adjust level as needed
-// Table body
-foreach (['question2_1', 'question2_2', 'question2_3', 'question2_4', 'question2_5', 'variation2'] as $questionIndex => $questionName) {
- 
-    $html .= '<tr>';
-   if ($questionIndex === 0) {
-        $html .= '<td>1.ผู้ป่วยมีอายุ 60 ปีขึ้นไป และ/หรือ มีโรคประจำตัว</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td>2.ผู้ป่วยได้รับยา HAD หรือผู้ป่วยได้รับยาในกลุ่ม Benzodizepine ตามการประเมิน AWS Score หรือได้รับยาฉีด PRN มากกว่า 2 ครั้ง ใน 1 วัน</td>';
-    }elseif ($questionIndex === 2) {
-        $html .= '<td>3.ผู้ป่วยมีการถอนพิษสุรา</td>';
-    }elseif ($questionIndex === 3) {
-        $html .= '<td>4.ผู้ป่วยที่มีการทรงตัวไม่ดี มึนงง สับสน</td>';
-    }elseif ($questionIndex === 4) {
-        $html .= '<td>5.ผู้ป่วยมีอาการชักภายใน 1 เดือน</td>';
-    }elseif ($questionIndex === 5) {
-        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
-    }  
-    foreach ($dates as $date) {
-        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
-    }
-
-    $html .= '</tr>';  
-}
-
-$html .= '<tr><td colspan="13"><b>เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อพฤติกรรมรุนแรง (V)</b></td></tr>'; // Adjust level as needed
-// Table body
-foreach (['question3_1', 'question3_2', 'question3_3', 'question3_4', 'question3_5', 'variation3'] as $questionIndex => $questionName) {
- 
-    $html .= '<tr>';
-   if ($questionIndex === 0) {
-        $html .= '<td>1.มีประวัติพฤติกรรมรุนแรง ปฏิเสธการเจ็บป่วย ไม่ให้ความร่วมมือในการรักษา</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td>2.ระแวง หลงผิดคิดว่ามีผู้อื่นมาทำร้าย</td>';
-    }elseif ($questionIndex === 2) {
-        $html .= '<td>3.มีการรับรู้ผิดปกติ เช่น มีหูแว่ว เห็นภาพหลอน</td>';
-    }elseif ($questionIndex === 3) {
-        $html .= '<td>4.มีพฤติกรรมรุนแรง</td>';
-    }elseif ($questionIndex === 4) {
-        $html .= '<td>5.ตาขวาง พูดเสียงดัง ดุด่าผู้อื่น ไม่รับฟัง</td>';
-    }elseif ($questionIndex === 5) {
-        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
-    }  
-    foreach ($dates as $date) {
-        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
+        $html .= '<td style="text-align:center;">' . $groupedData[$date]['1'][$questionName] . '</td>';
     }
 
     $html .= '</tr>';  
 }
 
 
-$html .= '<tr><td colspan="13"><b> เกณฑ์การประเมินผู้ป่วยเสี่ยงต่อการหลบหนี (E)</b></td></tr>'; // Adjust level as needed
-// Table body
-foreach (['question4_1', 'question4_2', 'question4_3', 'question4_4', 'question4_5', 'variation4'] as $questionIndex => $questionName) {
- 
-    $html .= '<tr>';
-   if ($questionIndex === 0) {
-        $html .= '<td>1.มีประวัติพยายามหลบหนี ปฏิเสธการเจ็บป่วย ไม่อยู่โรงพยาบาล</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td>2.มีประวัติติดสารเสพติดและอยากยาเสพติด หรือ Admit ใน 7 วันแรก</td>';
-    }elseif ($questionIndex === 2) {
-        $html .= '<td>3.รบเร้าเรื่องกลับบ้านบ่อยๆ หรือ ขอให้โทรศัพท์ติดต่อญาติหรือไม่ได้กลับบ้านตามกำหนด พูดขู่ว่าจะหนี ขอออกนอกตึกบ่อยๆ</td>';
-    }elseif ($questionIndex === 3) {
-        $html .= '<td>4.มีพฤติกรรมบ่งชี้ถึงสัญญาณการเตือนว่าจะมีการหลบหนี้ เช่น จ้องมองประตูพยายามงัดแงะหาทางออก</td>';
-    }elseif ($questionIndex === 4) {
-        $html .= '<td>5.มีพฤติกรรมหลบหนี</td>';
-    }elseif ($questionIndex === 5) {
-        $html .= '<td><b>ความรุนแรงระดับสี</b></td>';
-    } 
-    foreach ($dates as $date) {
-        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
-    }
 
-    $html .= '</tr>';  
-}
-
-foreach (['create_'] as $questionIndex  => $questionName) {
+foreach (['create_user'] as $questionIndex  => $questionName) {
     $html .= '<tr>';
 
     // Add a "Signature" label in the first row
     if ($questionIndex  === 0) {
-        $html .= '<td>Signature</td>'; // Add the label for the signature
+        $html .= '<td style="text-align:right;font-size:8pt;" colspan="2">ผู้บันทึก</td>'; // Add the label for the signature
     }
 
     // Loop through the dates and insert the rotated signature values
     foreach ($dates as $date) {
 
         $value1 = $groupedData[$date]['1'][$questionName];
-        $value2 = $groupedData[$date]['2'][$questionName];
-        $value3 = $groupedData[$date]['3'][$questionName];
 
         $verticalText1 = implode('<br>', str_split($value1)); // Split the text into characters
-        $verticalText2 = implode('<br>', str_split($value2));
-        $verticalText3 = implode('<br>', str_split($value3));
-
         // Add the vertical text to the table cells
         $html .= '<td class="manual-vertical-text">' . $verticalText1 . '</td>';
-        $html .= '<td class="manual-vertical-text">' . $verticalText2 . '</td>';
-        $html .= '<td class="manual-vertical-text">' . $verticalText3 . '</td>';
+
     }
 
     $html .= '</tr>';  
@@ -417,18 +334,25 @@ $html .= '</tbody></table>';
 
 
 
-$html .= '<h2 style="text-align:left;font-size:10pt;"><u>หมายเหตุ</u> กรณีไม่พบตามเกณฑ์ตามประเมินให้รับดับเขียว</h2>'; // Adjust level as needed
+$html .= '<div style="text-align:left;font-size:8pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rating risk 1 = ไม่มีอาการ
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 = มีเล็กน้อยเป็นบางครั้ง
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 = มีอาการเล็กน้อย
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 = อาการปานกลาง
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5 = อาการค่อนข้างรุนแรง
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 = อาการรุนแรง
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 = อาการรุนแรงมาก
+</div>'; // Adjust level as needed
 
 
 
 // Pagination links in the PDF (optional)
 $html .= '<div style="text-align: center; margin-top: 20px;">';
 if ($page > 1) {
-    $html .= '<a href="mental-health3-pdf.php?an=' . $an . '&page=' . ($page - 1) . '">Previous Page</a> | ';
+    $html .= '<a href="mental-health2-pdf.php?an=' . $an . '&page=' . ($page - 1) . '">Previous Page</a> | ';
 }
 $html .= 'Page ' . $page . ' of ' . $totalPages;
 if ($page < $totalPages) {
-    $html .= ' | <a href="mental-health3-pdf.php?an=' . $an . '&page=' . ($page + 1) . '">Next Page</a>';
+    $html .= ' | <a href="mental-health2-pdf.php?an=' . $an . '&page=' . ($page + 1) . '">Next Page</a>';
     
 }
 $html .= '</div>';
