@@ -71,7 +71,7 @@ if ($login != $loginname) {
 $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 //-------------------------Doctor admission note
-$sql = "SELECT pn.*
+$sql = "SELECT pn.*,date(create_datetime) as rxdate
         FROM prs_mental_health1 pn
         WHERE pn.an = :an 
         limit 1";
