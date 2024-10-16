@@ -49,12 +49,15 @@ $id = $_REQUEST['id'];
 $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
 $hn = KphisQueryUtils::getHnByAn($an);
 $query_parameters = ['an' => $an];
+$query_parameters2 = ['an' => $an,'id' => $id];
 
 Session::insertSystemAccessLog(json_encode(array(
     'report'=>'PRE-NURSENOTE-PDF',
    // 'action'=>'PRINT',
     'an'=>$an,
 ),JSON_UNESCAPED_UNICODE));
+
+//echo $id;
 
 /*
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
@@ -69,8 +72,8 @@ $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class=
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 //-------------------------Doctor admission note
 $sql = "SELECT pn.*
-        FROM prs_icu_form pn
-        WHERE pn.an = :an
+        FROM prs_mental_health1 pn
+        WHERE pn.an = :an 
         limit 1";
 $stmt = $conn->prepare($sql);
 $stmt->execute($query_parameters);
@@ -105,331 +108,612 @@ while ($row_item = $stmt_item->fetch()) {
 
 
 
-
-
-
- //โรคประจำคัว
- $heart_disease_history_1 = '( )';
- if ($row['heart_disease_history'] == 'ไม่มี') {$heart_disease_history_1 = '('.$image_check.')';
- }
- $heart_disease_history_2 = '( )';
- if ($row['heart_disease_history'] != 'ไม่มี' && $row['heart_disease_history'] != null) {$heart_disease_history_2 = '('.$image_check.')';
-    $heart_disease_history  =  htmlspecialchars($row['heart_disease_history']);
- }
-
- $neck_vien_engorement_1 = '( )';
- if ($row['neck_vien_engorement'] == 'ไม่พบ') {$neck_vien_engorement_1 = '('.$image_check.')';
- }
- $neck_vien_engorement_2 = '( )';
- if ($row['neck_vien_engorement'] == 'ประเมินไม่ได้') {$neck_vien_engorement_2 = '('.$image_check.')';
- }
- $neck_vien_engorement_3 = '( )';
- if ($row['neck_vien_engorement'] != 'ไม่พบ' && $row['neck_vien_engorement'] != 'ประเมินไม่ได้' && $row['neck_vien_engorement'] != null) {$neck_vien_engorement_3 = '('.$image_check.')';
-    $neck_vien_engorement  =  htmlspecialchars($row['neck_vien_engorement']);
- }
-
-  //โรคประจำคัว
-  $skin_1 = '( )';
-  if ($row['skin'] == 'ปกติ') {$skin_1 = '('.$image_check.')';
-  }
-  $skin_2 = '( )';
-  if ($row['skin'] == 'ซีด') {$skin_2 = '('.$image_check.')';
-  }
-  $skin_3 = '( )';
-  if ($row['skin'] == 'เขียว') {$skin_3 = '('.$image_check.')';
-  }
-  $skin_4 = '( )';
-  if ($row['skin'] == 'จุดจ้ำเลือด') {$skin_4 = '('.$image_check.')';
-  }
-  $skin_5 = '( )';
-  if ($row['skin'] == 'แห้ง') {$skin_5 = '('.$image_check.')';
-  }
-  $skin_6 = '( )';
-  if ($row['skin'] != 'จุดจ้ำเลือด' && $row['skin'] != 'ซีด' 
-  && $row['skin'] != 'เขียว' && $row['skin'] != 'จุดจ้ำเลือด' && $row['skin'] != 'แห้ง' 
-  && $row['skin'] != null) {$skin_6 = '('.$image_check.')';
-     $skin =  htmlspecialchars($row['skin']);
-  }
-
-  $listen_to_the_heart_1 = '( )';
-  if ($row['listen_to_the_heart'] == '1') {$listen_to_the_heart_1 = '('.$image_check.')';
-  }
-
-  $listen_to_the_heart_2 = '( )';
-  if ($row['listen_to_the_heart'] == '2') {$listen_to_the_heart_2 = '('.$image_check.')';
-  }
-
-  $listen_to_the_heart_3 = '( )';
-  if ($row['listen_to_the_heart'] == '3') {$listen_to_the_heart_3 = '('.$image_check.')';
-  }
-
-
-  $kidney_disease_history_1 = '( )';
-  if ($row['kidney_disease_history'] == 'ไม่มี') {$kidney_disease_history_1 = '('.$image_check.')';
-  }
-  $kidney_disease_history_2 = '( )';
-  if ($row['kidney_disease_history'] != 'ไม่มี' && $row['kidney_disease_history'] != null) {$kidney_disease_history_2 = '('.$image_check.')';
-     $kidney_disease_history  =  htmlspecialchars($row['kidney_disease_history']);
-  }
-
-  $history_of_lung_disease_1 = '( )';
-  if ($row['history_of_lung_disease'] == 'ไม่มี') {$history_of_lung_disease_1 = '('.$image_check.')';
-  }
-  $history_of_lung_disease_2 = '( )';
-  if ($row['history_of_lung_disease'] != 'ไม่มี' && $row['history_of_lung_disease'] != null) {$history_of_lung_disease_2 = '('.$image_check.')';
-     $history_of_lung_disease =  htmlspecialchars($row['history_of_lung_disease']);
-  }
-
-  $et_other_1 = '( )';
-  if ($row['et_other'] == 'ET-Tube') {$et_other_1 = '('.$image_check.')';
-  }
-
-  $et_other_2 = '( )';
-  if ($row['et_other'] == 'TT-Tube') {$et_other_2 = '('.$image_check.')';
-  }
-
-  $et_other_3 = '( )';
-  if ($row['et_other'] == 'O2HFNC') {$et_other_3 = '('.$image_check.')';
-  }
-
-  $et_other_4 = '( )';
-  if ($row['et_other'] == 'candular') {$et_other_4 = '('.$image_check.')';
-  }
-  $et_other_5 = '( )';
-  if ($row['et_other'] == 'Mark c bag') {$et_other_5 = '('.$image_check.')';
-  }
-  $et_other_6 = '( )';
-  if ($row['et_other'] == 'RA') {$et_other_6 = '('.$image_check.')';
-  }
-
-  $breathing_characteristics_1 = '( )';
-  if ($row['breathing_characteristics'] == '1') {$breathing_characteristics_1 = '('.$image_check.')';
-  }
-
-  $breathing_characteristics_2 = '( )';
-  if ($row['breathing_characteristics'] == '2') {$breathing_characteristics_2 = '('.$image_check.')';
-  }
-
-  $breathing_characteristics_3 = '( )';
-  if ($row['breathing_characteristics'] == '3') {$breathing_characteristics_3 = '('.$image_check.')';
-  }
-
-
-  $on_icd_1 = '( )';
-  if ($row['on_icd'] == 'ไม่มี') {$on_icd_1 = '('.$image_check.')';
-  }
-  $on_icd_2 = '( )';
-  if ($row['on_icd'] != 'ไม่มี' && $row['on_icd'] != null) {$on_icd_2 = '('.$image_check.')';
-     $on_icd  =  htmlspecialchars($row['on_icd']);
-  }
-
-  $listen_sound_lungs_1 = '( )';
-  if ($row['listen_sound_lungs'] == '1') {$listen_sound_lungs_1 = '('.$image_check.')';
-  }
-
-  $listen_sound_lungs_2 = '( )';
-  if ($row['listen_sound_lungs'] == '2') {$listen_sound_lungs_2 = '('.$image_check.')';
-  }
-
-  $listen_sound_lungs_3 = '( )';
-  if ($row['listen_sound_lungs'] == '3') {$listen_sound_lungs_3 = '('.$image_check.')';
-  }
-
-  $listen_sound_lungs_4 = '( )';
-  if ($row['listen_sound_lungs'] == '4') {$listen_sound_lungs_4 = '('.$image_check.')';
-  }
-
-  $listen_sound_lungs_5 = '( )';
-  if ($row['listen_sound_lungs'] == '5') {$listen_sound_lungs_5 = '('.$image_check.')';
-  }
-
-
-  $history_of_gastrointestinal_1 = '( )';
-  if ($row['history_of_gastrointestinal'] == 'ไม่มี') {$history_of_gastrointestinal_1 = '('.$image_check.')';
-  }
-  $history_of_gastrointestinal_2 = '( )';
-  if ($row['history_of_gastrointestinal'] != 'ไม่มี' && $row['history_of_gastrointestinal'] != null) {$history_of_gastrointestinal_2 = '('.$image_check.')';
-     $history_of_gastrointestinal  =  htmlspecialchars($row['history_of_gastrointestinal']);
-  }
-
-  $communication_history_1 = '( )';
-  if ($row['communication_history'] == 'ไม่มี') {$communication_history_1 = '('.$image_check.')';
-  }
-  $communication_history_2 = '( )';
-  if ($row['communication_history'] != 'ไม่มี' && $row['communication_history'] != null) {$communication_history_2 = '('.$image_check.')';
-     $communication_history  =  htmlspecialchars($row['communication_history']);
-  }
-
-
-  $speaking_check = '( )';
-  if ($row['speaking'] != null) {$speaking_check = '('.$image_check.')';
-  }
-
-  $speaking_2 = '( )';
-  if ($row['speaking'] == 'พูดได้เองชัดเจน') {$speaking_2 = '('.$image_check.')';
-  }
-
-  $speaking_3 = '( )';
-  if ($row['speaking'] == 'พูดไม่ชัด') {$speaking_3 = '('.$image_check.')';
-  }
-
-  $speaking_4= '( )';
-  if ($row['speaking'] != 'พูดได้เองชัดเจน' && $row['speaking'] != 'พูดไม่ชัด' && $row['speaking'] != null) {$speaking_4 = '('.$image_check.')';
-     $speaking  =  htmlspecialchars($row['speaking']);
-  }
-
-
-  $communication_check = '( )';
-  if ($row['communication'] != null) {$communication_check = '('.$image_check.')';
-  }
-
-  $communication_2 = '( )';
-  if ($row['communication'] == 'สื่อสารด้วยการเขียน') {$communication_2 = '('.$image_check.')';
-  }
-
-  $communication_3 = '( )';
-  if ($row['communication'] == 'สื่อสารโดยการใช้สายตา') {$communication_3 = '('.$image_check.')';
-  }
-
-  $communication_4 = '( )';
-  if ($row['communication'] == 'สื่อสารโดยใช้ท่าทาง') {$communication_4 = '('.$image_check.')';
-  }
-
-  $communication_5 = '( )';
-  if ($row['communication'] == 'ประเมินไม่ได้') {$communication_5 = '('.$image_check.')';
-  }
-
-  $communication_6= '( )';
-  if ($row['communication'] != 'สื่อสารด้วยการเขียน' 
-  && $row['communication'] != 'สื่อสารโดยการใช้สายตา' 
-  && $row['communication'] != 'สื่อสารโดยใช้ท่าทาง' 
-  && $row['communication'] != 'ประเมินไม่ได้' 
-  && $row['communication'] != null) {$communication_4 = '('.$image_check.')';
-     $communication  =  htmlspecialchars($row['communication']);
-  }
-  
-
-
- $vision_1 = '( )';
- if ($row['vision'] == 'เห็นชัดเจน') {$vision_1 = '('.$image_check.')';
- }
- $vision_2 = '( )';
- if ($row['vision'] == 'เห็นไม่ชัดเจน') {$vision_2 = '('.$image_check.')';
- }
-
- $vision_3 = '( )';
- if ($row['vision'] == 'ประเมินไม่ได้') {$vision_3 = '('.$image_check.')';
- }
-
-
- $vision_4 = '( )';
- if ($row['vision'] != 'เห็นชัดเจน' && $row['vision'] != 'เห็นไม่ชัดเจน' && $row['vision'] != 'ประเมินไม่ได้'  && $row['vision'] != null) {$vision_4 = '('.$image_check.')';
-    $vision  =  htmlspecialchars($row['vision']);
- }
- 
- $hearing_aids_1 = '( )';
- if ($row['hearing_aids'] == '1') {$hearing_aids_1 = '('.$image_check.')';
- }
-
- $hearing_aids_2 = '( )';
- if ($row['hearing_aids'] == '2') {$hearing_aids_2 = '('.$image_check.')';
- }
-
- $listening_1 = '( )';
- if ($row['listening'] == '1') {$listening_1 = '('.$image_check.')';
- }
- $listening_2 = '( )';
- if ($row['listening'] == '2') {$listening_2 = '('.$image_check.')';
- }
- $listening_3 = '( )';
- if ($row['listening'] == '3') {$listening_3 = '('.$image_check.')';
- }
-
- $listening_4 = '( )';
- if ($row['listening'] == '4') {$listening_4 = '('.$image_check.')';
- }
-
- $history_affects_activities_1 = '( )';
- if ($row['history_affects_activities'] == 'ไม่มี') {$history_affects_activities_1 = '('.$image_check.')';
- }
- $history_affects_activities_2 = '( )';
- if ($row['history_affects_activities'] != 'ไม่มี' && $row['history_affects_activities'] != null) {$history_affects_activities_2 = '('.$image_check.')';
-    $history_affects_activities =  htmlspecialchars($row['history_affects_activities']);
- }
-
- $daily_activities_1 = '( )';
- if ($row['daily_activities'] == '1') {$daily_activities_1 = '('.$image_check.')';
- }
- $daily_activities_2 = '( )';
- if ($row['daily_activities'] == '2') {$daily_activities_2 = '('.$image_check.')';
- }
- $daily_activities_3 = '( )';
- if ($row['daily_activities'] == '3') {$daily_activities_3 = '('.$image_check.')';
- }
- $daily_activities_4 = '( )';
- if ($row['daily_activities'] == '4') {$daily_activities_4 = '('.$image_check.')';
- }
-
- $history_affects_stimulation_1 = '( )';
- if ($row['history_affects_stimulation'] == 'ไม่มี') {$history_affects_stimulation_1 = '('.$image_check.')';
- }
- $history_affects_stimulation_2 = '( )';
- if ($row['history_affects_stimulation'] != 'ไม่มี' && $row['history_affects_stimulation'] != null) {$history_affects_stimulation_2 = '('.$image_check.')';
-    $history_affects_stimulation =  htmlspecialchars($row['history_affects_stimulation']);
- }
-
- $level_of_consciousness_1 = '( )';
- if ($row['level_of_consciousness'] == '1') {$level_of_consciousness_1 = '('.$image_check.')';
- }
-
- $level_of_consciousness_2 = '( )';
- if ($row['level_of_consciousness'] == '2') {$level_of_consciousness_2 = '('.$image_check.')';
- }
-
- $level_of_consciousness_3 = '( )';
- if ($row['level_of_consciousness'] == '3') {$level_of_consciousness_3 = '('.$image_check.')';
- }
-
- $level_of_consciousness_4 = '( )';
- if ($row['level_of_consciousness'] == '4') {$level_of_consciousness_4 = '('.$image_check.')';
- }
-
- $level_of_consciousness_5 = '( )';
- if ($row['level_of_consciousness'] == '5') {$level_of_consciousness_5 = '('.$image_check.')';
- } 
-
- $pain_score_1 = '( )';
- if ($row['pain_score'] == '1') {$pain_score_1 = '('.$image_check.')';
- }
-
- $pain_score_2 = '( )';
- if ($row['pain_score'] == '2') {$pain_score_2 = '('.$image_check.')';
- }
-
- $fluid_balance = '( )';
- if ($row['fluid_balance'] == 'Y') {$fluid_balance = '('.$image_check.')';
- }
-
- $aeration = '( )';
- if ($row['aeration'] == 'Y') {$aeration = '('.$image_check.')';
- }
-
- $nutrition = '( )';
- if ($row['nutrition'] == 'Y') {$nutrition = '('.$image_check.')';
- }
-
- $communication_problem = '( )';
- if ($row['communication_problem'] == 'Y') {$communication_problem = '('.$image_check.')';
- }
-
- $activity = '( )';
- if ($row['activity'] == 'Y') {$activity = '('.$image_check.')';
- }
-
- $stimulation = '( )';
- if ($row['stimulation'] == 'Y') {$stimulation = '('.$image_check.')';
- }
-
+                       $appearance_1 = '( )';
+                       if ($row['appearance'] == '1') {
+                         $appearance_1 = '('.$image_check.')';
+                       }
+                      
+                       $appearance_2 = '( )';
+                       if ($row['appearance'] == '2') {
+                         $appearance_2 = '('.$image_check.')';
+                       }
+                       $appearance_3 = '( )';
+                       if ($row['appearance'] == '3') {
+                         $appearance_3 = '('.$image_check.')';
+                       }
+
+                       $appearance_4 = '( )';
+                       if ($row['appearance'] == '4') {
+                         $appearance_4 = '('.$image_check.')';
+                       }
+
+                       $appearance_check1 = '( )';
+                       if ($row['appearance_check'] == '1'  ) {$appearance_check1 = '('.$image_check.')';
+                        $appearance1  =  htmlspecialchars($row['appearance']);
+                       }
+
+                       
+                       $appearance_check2 = '( )';
+                       if ($row['appearance_check'] == '2' ) {$appearance_check2 = '('.$image_check.')';
+                        $appearance2  =  htmlspecialchars($row['appearance']);
+                       }
+
+
+                       $dress_1 = '( )';
+                       if ($row['dress'] == '1') {
+                         $dress_1 = '('.$image_check.')';
+                       }
+                      
+                       $dress_2 = '( )';
+                       if ($row['dress'] == '2') {
+                         $dress_2 = '('.$image_check.')';
+                       }
+                       $dress_3 = '( )';
+                       if ($row['dress'] == '3') {
+                         $dress_3 = '('.$image_check.')';
+                       }
+
+                       $dress_4 = '( )';
+                       if ($row['dress'] == '4') {
+                         $dress_4 = '('.$image_check.')';
+                       }
+
+                       
+                       $body_movement_behavior_1 = '( )';
+                       if ($row['body_movement_behavior'] == 'ปกติ') {
+                        $body_movement_behavior_1 = '('.$image_check.')';
+                       }
+                      
+                       $body_movement_behavior_2 = '( )';
+                       if ($row['body_movement_behavior'] == 'น้อยกว่าปกติ') {
+                        $body_movement_behavior_2 = '('.$image_check.')';
+                       }
+
+                       $body_movement_behavior_3 = '( )';
+                       if ($row['body_movement_behavior'] == 'มากกว่าปกติ') {
+                        $body_movement_behavior_3 = '('.$image_check.')';
+                       }
+
+                       $body_movement_behavior_4 = '( )';
+                       if ($row['body_movement_behavior'] != 'ปกติ'  && $row['body_movement_behavior'] != 'น้อยกว่าปกติ' && $row['body_movement_behavior'] != 'มากกว่าปกติ' 
+                       && $row['body_movement_behavior'] != 'เคลื่อนไหวซ้ำๆ'  && $row['body_movement_behavior'] != 'กระตุก' && $row['body_movement_behavior'] != 'อยู่ไม่สุข' 
+                       && $row['body_movement_behavior'] != 'กระสับกระส่าย' && $row['body_movement_behavior'] != null) {
+                        $body_movement_behavior_4 = '('.$image_check.')';
+                        $body_movement_behavior  =  htmlspecialchars($row['body_movement_behavior']);
+                       }
+
+                       $body_movement_behavior_5 = '( )';
+                       if ($row['body_movement_behavior'] == 'เคลื่อนไหวซ้ำๆ') {
+                        $body_movement_behavior_5 = '('.$image_check.')';
+                       }
+
+                       $body_movement_behavior_6 = '( )';
+                       if ($row['body_movement_behavior'] == 'กระตุก') {
+                        $body_movement_behavior_6 = '('.$image_check.')';
+                       }
+
+                       $body_movement_behavior_7 = '( )';
+                       if ($row['body_movement_behavior'] == 'อยู่ไม่สุข') {
+                        $body_movement_behavior_7 = '('.$image_check.')';
+                       }
+
+                       $body_movement_behavior_8 = '( )';
+                       if ($row['body_movement_behavior'] == 'กระสับกระส่าย') {
+                        $body_movement_behavior_8 = '('.$image_check.')';
+                       }
+                       
+                       $attitude_1 = '( )';
+                       if ($row['attitude'] == '1') {
+                        $attitude_1 = '('.$image_check.')';
+                       }
+                       $attitude_2 = '( )';
+                       if ($row['attitude'] == '2') {
+                        $attitude_2 = '('.$image_check.')';
+                       }
+                       $attitude_3 = '( )';
+                       if ($row['attitude'] == '3') {
+                        $attitude_3 = '('.$image_check.')';
+                       }
+                       $attitude_4 = '( )';
+                       if ($row['attitude'] == '4') {
+                        $attitude_4 = '('.$image_check.')';
+                       }
+                       $attitude_5 = '( )';
+                       if ($row['attitude'] == '5') {
+                        $attitude_5 = '('.$image_check.')';
+                       }
+                       $attitude_6 = '( )';
+                       if ($row['attitude'] == '6') {
+                        $attitude_6 = '('.$image_check.')';
+                       }
+
+                       $rate_1 = '( )';
+                       if ($row['rate'] == '1') {
+                        $rate_1 = '('.$image_check.')';
+                       }
+                       $rate_2 = '( )';
+                       if ($row['rate'] == '2') {
+                        $rate_2 = '('.$image_check.')';
+                       }
+                       $rate_3 = '( )';
+                       if ($row['rate'] == '3') {
+                        $rate_3 = '('.$image_check.')';
+                       }
+
+                       $rhythm_1 = '( )';
+                       if ($row['rhythm'] == '1') {
+                        $rhythm_1 = '('.$image_check.')';
+                       }
+                       $rhythm_2 = '( )';
+                       if ($row['rhythm'] == '2') {
+                        $rhythm_2 = '('.$image_check.')';
+                       }
+                       $rhythm_3 = '( )';
+                       if ($row['rhythm'] == '3') {
+                        $rhythm_3 = '('.$image_check.')';
+                       }
+                       
+                       $speech_disorder_1 = '( )';
+                       if ($row['speech_disorder'] == 'ปกติ') {
+                        $speech_disorder_1 = '('.$image_check.')';
+                       }
+                       $speech_disorder_2 = '( )';
+                       if ($row['speech_disorder'] != 'ปกติ' && $row['speech_disorder'] != 'neologism' && $row['speech_disorder'] != 'world salad' && $row['speech_disorder'] != null) {
+                        $speech_disorder_2 = '('.$image_check.')';
+                        $speech_disorder  =  htmlspecialchars($row['speech_disorder']);
+                       }
+                       $speech_disorder_3 = '( )';
+                       if ($row['speech_disorder'] == 'neologism') {
+                        $speech_disorder_3 = '('.$image_check.')';
+                       }
+                       $speech_disorder_4 = '( )';
+                       if ($row['speech_disorder'] == 'world salad') {
+                        $speech_disorder_4 = '('.$image_check.')';
+                       }
+
+                       $stream_of_talk_1 = '( )';
+                       if ($row['stream_of_talk'] == '1') {
+                        $stream_of_talk_1 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_2 = '( )';
+                       if ($row['stream_of_talk'] == '2') {
+                        $stream_of_talk_2 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_3 = '( )';
+                       if ($row['stream_of_talk'] == '3') {
+                        $stream_of_talk_3 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_4 = '( )';
+                       if ($row['stream_of_talk'] == '4') {
+                        $stream_of_talk_4 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_5 = '( )';
+                       if ($row['stream_of_talk'] == '5') {
+                        $stream_of_talk_5 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_6 = '( )';
+                       if ($row['stream_of_talk'] == '6') {
+                        $stream_of_talk_6 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_7 = '( )';
+                       if ($row['stream_of_talk'] == '7') {
+                        $stream_of_talk_7 = '('.$image_check.')';
+                       }
+                       $stream_of_talk_8 = '( )';
+                       if ($row['stream_of_talk'] == '8') {
+                        $stream_of_talk_8 = '('.$image_check.')';
+                       }
+
+                       $mood_1 = '( )';
+                       if ($row['mood'] == 'เศร้า') {
+                        $mood_1 = '('.$image_check.')';
+                       }
+                       $mood_2 = '( )';
+                       if ($row['mood'] == 'หงุดหงิด') {
+                        $mood_2 = '('.$image_check.')';
+                       }
+                       $mood_3 = '( )';
+                       if ($row['mood'] == 'กังวล') {
+                        $mood_3 = '('.$image_check.')';
+                       }
+                       $mood_4 = '( )';
+                       if ($row['mood'] == 'ครื้นเครง') {
+                        $mood_4 = '('.$image_check.')';
+                       }
+                       $mood_5 = '( )';
+                       if ($row['mood'] != 'เศร้า' && $row['mood'] != 'หงุดหงิด' && $row['mood'] != 'กังวล' && $row['mood'] != 'ครื้นเครง' && $row['mood'] != NULL) {
+                        $mood_5 = '('.$image_check.')';
+                        $mood =  htmlspecialchars($row['mood']);
+                       }
+
+                       $affect_1 = '( )';
+                       if ($row['affect'] == '1') {
+                        $affect_1 = '('.$image_check.')';
+                       }
+                       $affect_2 = '( )';
+                       if ($row['affect'] == '2') {
+                        $affect_2 = '('.$image_check.')';
+                       }
+                       $affect_3 = '( )';
+                       if ($row['affect'] == '3') {
+                        $affect_3 = '('.$image_check.')';
+                       }
+                       $affect_4 = '( )';
+                       if ($row['affect'] == '4') {
+                        $affect_4 = '('.$image_check.')';
+                       }
+                       $affect_5 = '( )';
+                       if ($row['affect'] == '5') {
+                        $affect_5 = '('.$image_check.')';
+                       }
+                       $affect_6 = '( )';
+                       if ($row['affect'] == '6') {
+                        $affect_6 = '('.$image_check.')';
+                       }
+                       $affect_7 = '( )';
+                       if ($row['affect'] == '7') {
+                        $affect_7 = '('.$image_check.')';
+                       }
+                       $affect_8 = '( )';
+                       if ($row['affect'] == '8') {
+                        $affect_8 = '('.$image_check.')';
+                       }
+
+                       $thought_process_1 = '( )';
+                       if ($row['thought_process'] == '1') {
+                        $thought_process_1 = '('.$image_check.')';
+                       }
+                       $thought_process_2 = '( )';
+                       if ($row['thought_process'] == '2') {
+                        $thought_process_2 = '('.$image_check.')';
+                       }
+                       $thought_process_3 = '( )';
+                       if ($row['thought_process'] == '3') {
+                        $thought_process_3 = '('.$image_check.')';
+                       }
+                       $thought_process_4 = '( )';
+                       if ($row['thought_process'] == '4') {
+                        $thought_process_4 = '('.$image_check.')';
+                       }
+                       $thought_process_5 = '( )';
+                       if ($row['thought_process'] == '5') {
+                        $thought_process_5 = '('.$image_check.')';
+                       }
+                       $thought_process_6 = '( )';
+                       if ($row['thought_process'] == '6') {
+                        $thought_process_6 = '('.$image_check.')';
+                       }
+                       $thought_process_7 = '( )';
+                       if ($row['thought_process'] == '7') {
+                        $thought_process_7 = '('.$image_check.')';
+                       }
+                       $thought_process_8 = '( )';
+                       if ($row['thought_process'] == '8') {
+                        $thought_process_8 = '('.$image_check.')';
+                       }
+                       $thought_process_9 = '( )';
+                       if ($row['thought_process'] == '9') {
+                        $thought_process_9 = '('.$image_check.')';
+                       }
+                       $thought_process_10 = '( )';
+                       if ($row['thought_process'] == '10') {
+                        $thought_process_10 = '('.$image_check.')';
+                       }
+                       $thought_process_11 = '( )';
+                       if ($row['thought_process'] == '11') {
+                        $thought_process_11 = '('.$image_check.')';
+                       }
+
+                       $thought_content_1 = '( )';
+                       if ($row['thought_content'] == '1') {
+                        $thought_content_1 = '('.$image_check.')';
+                       }
+                       $thought_content_2 = '( )';
+                       if ($row['thought_content'] == '2') {
+                        $thought_content_2 = '('.$image_check.')';
+                       }
+                       $thought_content_3 = '( )';
+                       if ($row['thought_content'] == '3') {
+                        $thought_content_3 = '('.$image_check.')';
+                       }
+                       $thought_content_4 = '( )';
+                       if ($row['thought_content'] == '4') {
+                        $thought_content_4 = '('.$image_check.')';
+                       }
+                       $thought_content_5 = '( )';
+                       if ($row['thought_content'] == '5') {
+                        $thought_content_5 = '('.$image_check.')';
+                       }
+                       $thought_content_6 = '( )';
+                       if ($row['thought_content'] == '6') {
+                        $thought_content_6 = '('.$image_check.')';
+                       }
+
+                       $illution_1 = '( )';
+                       if ($row['illution'] == 'ไม่มี') {
+                        $illution_1 = '('.$image_check.')';
+                       }
+                       $illution_2 = '( )';
+                       if ($row['illution'] != 'ไม่มี' && $row['illution'] != null) {
+                        $illution_2 = '('.$image_check.')';
+                        $illution =  htmlspecialchars($row['illution']);
+                       }
+
+                       $hallucination_1 = '( )';
+                       if ($row['hallucination'] == 'ไม่มี') {
+                        $hallucination_1 = '('.$image_check.')';
+                       }
+                       $hallucination_2 = '( )';
+                       if ($row['hallucination'] != 'ไม่มี' && $row['hallucination'] != null) {
+                        $hallucination_2 = '('.$image_check.')';
+                        $hallucination =  htmlspecialchars($row['hallucination']);
+                       }
+
+                       $vision_1 = '( )';
+                       if ($row['vision'] != null) {
+                        $vision_1 = '('.$image_check.')';
+                        $vision =  htmlspecialchars($row['vision']);
+                       }
+                       $hearing_1 = '( )';
+                       if ($row['hearing'] != null) {
+                        $hearing_1 = '('.$image_check.')';
+                        $hearing =  htmlspecialchars($row['hearing']);
+                       }
+                       $tast_perception_1 = '( )';
+                       if ($row['tast_perception'] != null) {
+                        $tast_perception_1 = '('.$image_check.')';
+                        $tast_perception =  htmlspecialchars($row['tast_perception']);
+                       }
+                       $touch_1 = '( )';
+                       if ($row['touch'] != null) {
+                        $touch_1 = '('.$image_check.')';
+                        $touch =  htmlspecialchars($row['touch']);
+                       }
+                       $smell_1 = '( )';
+                       if ($row['smell'] != null) {
+                        $smell_1 = '('.$image_check.')';
+                        $smell =  htmlspecialchars($row['smell']);
+                       }
+
+                       $orientation = '( )';
+                       if ($row['orientation'] == 'Y') {
+                        $orientation = '('.$image_check.')';
+                       }
+                       $orientation_time = '( )';
+                       if ($row['orientation_time'] == 'Y') {
+                        $orientation_time = '('.$image_check.')';
+                       }
+                       $orientation_location = '( )';
+                       if ($row['orientation_location'] == 'Y') {
+                        $orientation_location = '('.$image_check.')';
+                       }
+                       $orientation_person = '( )';
+                       if ($row['orientation_person'] == 'Y') {
+                        $orientation_person = '('.$image_check.')';
+                       }
+                       $non_orientation = '( )';
+                       if ($row['non_orientation'] == 'Y') {
+                        $non_orientation = '('.$image_check.')';
+                       }
+                       $non_orientation_time = '( )';
+                       if ($row['non_orientation_time'] == 'Y') {
+                        $non_orientation_time = '('.$image_check.')';
+                       }
+                       $non_orientation_location = '( )';
+                       if ($row['non_orientation_location'] == 'Y') {
+                        $non_orientation_location = '('.$image_check.')';
+                       }
+                       $non_orientation_person = '( )';
+                       if ($row['non_orientation_person'] == 'Y') {
+                        $non_orientation_person = '('.$image_check.')';
+                       }
+
+                       $attention1_1 = '( )';
+                       if ($row['attention1'] == '1') {
+                        $attention1_1 = '('.$image_check.')';
+                       }
+                       $attention1_2 = '( )';
+                       if ($row['attention1'] == '2') {
+                        $attention1_2 = '('.$image_check.')';
+                       }
+                       $attention1_3 = '( )';
+                       if ($row['attention1'] == '3') {
+                        $attention1_3 = '('.$image_check.')';
+                       }
+
+                       $attention2_1 = '( )';
+                       if ($row['attention2'] == '1') {
+                        $attention2_1 = '('.$image_check.')';
+                       }
+                       $attention2_2 = '( )';
+                       if ($row['attention2'] == '2') {
+                        $attention2_2 = '('.$image_check.')';
+                       }
+                       $attention2_3 = '( )';
+                       if ($row['attention2'] == '3') {
+                        $attention2_3 = '('.$image_check.')';
+                       }
+
+                       $attention3_1 = '( )';
+                       if ($row['attention3'] == '1') {
+                        $attention3_1 = '('.$image_check.')';
+                       }
+                       $attention3_2 = '( )';
+                       if ($row['attention3'] == '2') {
+                        $attention3_2 = '('.$image_check.')';
+                       }
+                       $attention3_3 = '( )';
+                       if ($row['attention3'] == '3') {
+                        $attention3_3 = '('.$image_check.')';
+                       }
+
+                       $memory1_1 = '( )';
+                       if ($row['memory1'] == '1') {
+                        $memory1_1 = '('.$image_check.')';
+                       }
+                       $memory1_2 = '( )';
+                       if ($row['memory1'] == '2') {
+                        $memory1_2 = '('.$image_check.')';
+                       }                     
+
+                       $memory2_1 = '( )';
+                       if ($row['memory2'] == '1') {
+                        $memory2_1 = '('.$image_check.')';
+                       }
+                       $memory2_2 = '( )';
+                       if ($row['memory2'] == '2') {
+                        $memory2_2 = '('.$image_check.')';
+                       }
+                       
+                       $memory3_1 = '( )';
+                       if ($row['memory3'] == '1') {
+                        $memory3_1 = '('.$image_check.')';
+                       }
+                       $memory3_2 = '( )';
+                       if ($row['memory3'] == '2') {
+                        $memory3_2 = '('.$image_check.')';
+                       }
+
+                       $general_khowledge_1 = '( )';
+                       if ($row['general_khowledge'] == '1') {
+                        $general_khowledge_1 = '('.$image_check.')';
+                       }
+                       $general_khowledge_2 = '( )';
+                       if ($row['general_khowledge'] == '2') {
+                        $general_khowledge_2 = '('.$image_check.')';
+                       }
+
+
+                       $concrete_difference1 = '( )';
+                       if ($row['concrete_difference1'] == 'Y') {
+                        $concrete_difference1 = '('.$image_check.')';
+                       }
+                       $concrete_difference2 = '( )';
+                       if ($row['concrete_difference2'] == 'Y') {
+                        $concrete_difference2 = '('.$image_check.')';
+                       }
+                       $concrete_difference3 = '( )';
+                       if ($row['concrete_difference3'] == 'Y') {
+                        $concrete_difference3 = '('.$image_check.')';
+                       }
+                       
+                       $abstract_difference1 = '( )';
+                       if ($row['abstract_difference1'] == 'Y') {
+                        $abstract_difference1 = '('.$image_check.')';
+                       }
+                       $abstract_difference2 = '( )';
+                       if ($row['abstract_difference2'] == 'Y') {
+                        $abstract_difference2 = '('.$image_check.')';
+                       }
+                       $abstract_difference3 = '( )';
+                       if ($row['abstract_difference3'] == 'Y') {
+                        $abstract_difference3 = '('.$image_check.')';
+                       }
+
+                       $concrete_similarities1 = '( )';
+                       if ($row['concrete_similarities1'] == 'Y') {
+                        $concrete_similarities1 = '('.$image_check.')';
+                       }
+                       $concrete_similarities2 = '( )';
+                       if ($row['concrete_similarities2'] == 'Y') {
+                        $concrete_similarities2 = '('.$image_check.')';
+                       }
+                       $concrete_similarities3 = '( )';
+                       if ($row['concrete_similarities3'] == 'Y') {
+                        $concrete_similarities3 = '('.$image_check.')';
+                       }
+
+                       $abstract_similarities1 = '( )';
+                       if ($row['abstract_similarities1'] == 'Y') {
+                        $abstract_similarities1 = '('.$image_check.')';
+                       }
+                       $abstract_similarities2 = '( )';
+                       if ($row['abstract_similarities2'] == 'Y') {
+                        $abstract_similarities2 = '('.$image_check.')';
+                       }
+                       $abstract_similarities3 = '( )';
+                       if ($row['abstract_similarities3'] == 'Y') {
+                        $abstract_similarities3 = '('.$image_check.')';
+                       }
+
+                       $concrete_aphorisms1 = '( )';
+                       if ($row['concrete_aphorisms1'] == 'Y') {
+                        $concrete_aphorisms1 = '('.$image_check.')';
+                       }
+                       $concrete_aphorisms2 = '( )';
+                       if ($row['concrete_aphorisms2'] == 'Y') {
+                        $concrete_aphorisms2 = '('.$image_check.')';
+                       }
+                       $concrete_aphorisms3 = '( )';
+                       if ($row['concrete_aphorisms3'] == 'Y') {
+                        $concrete_aphorisms3 = '('.$image_check.')';
+                       }
+                       
+                       $abstract_aphorisms1 = '( )';
+                       if ($row['abstract_aphorisms1'] == 'Y') {
+                        $abstract_aphorisms1 = '('.$image_check.')';
+                       }
+                       $abstract_aphorisms2 = '( )';
+                       if ($row['abstract_aphorisms2'] == 'Y') {
+                        $abstract_aphorisms2 = '('.$image_check.')';
+                       }
+                       $abstract_aphorisms3 = '( )';
+                       if ($row['abstract_aphorisms3'] == 'Y') {
+                        $abstract_aphorisms3 = '('.$image_check.')';
+                       }
+
+                       $judment1_1 = '( )';
+                       if ($row['judment1'] == '1') {
+                        $judment1_1 = '('.$image_check.')';
+                       }
+                       $judment1_2 = '( )';
+                       if ($row['judment1'] == '2') {
+                        $judment1_2 = '('.$image_check.')';
+                       }
+
+                       $judment2_1 = '( )';
+                       if ($row['judment2'] == '1') {
+                        $judment2_1 = '('.$image_check.')';
+                       }
+                       $judment2_2 = '( )';
+                       if ($row['judment2'] == '2') {
+                        $judment2_2 = '('.$image_check.')';
+                       }
+
+                       $judment3_1 = '( )';
+                       if ($row['judment3'] == '1') {
+                        $judment3_1 = '('.$image_check.')';
+                       }
+                       $judment3_2 = '( )';
+                       if ($row['judment3'] == '2') {
+                        $judment3_2 = '('.$image_check.')';
+                       }
+
+                       $insight_1 = '( )';
+                       if ($row['insight'] == '1') {
+                        $insight_1 = '('.$image_check.')';
+                       }
+                       $insight_2 = '( )';
+                       if ($row['insight'] == '2') {
+                        $insight_2 = '('.$image_check.')';
+                       }
+                       $insight_3 = '( )';
+                       if ($row['insight'] == '3') {
+                        $insight_3 = '('.$image_check.')';
+                       }
+                       $insight_4 = '( )';
+                       if ($row['insight'] == '4') {
+                        $insight_4 = '('.$image_check.')';
+                       }
+                       $insight_5 = '( )';
+                       if ($row['insight'] == '5') {
+                        $insight_5 = '('.$image_check.')';
+                       }
+                       $insight_6 = '( )';
+                       if ($row['insight'] == '6') {
+                        $insight_6 = '('.$image_check.')';
+                       }
+                       
 
 
 
@@ -462,8 +746,8 @@ $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.ln
         $receive_date        =  $row['receive_date'];
         $receive_time        =  $row['receive_time'];
 
-        $id = '17'; //Link menu
-        $check_    = ReportQueryUtils::getProduction($id);
+        $ids = '20'; //Link menu
+        $check_    = ReportQueryUtils::getProduction($ids);
 
         $check_report = '( )';
         if ($check_  == '1') 
@@ -524,95 +808,88 @@ $head =
             height:180px;
         }
 
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .column {
+            flex: 1;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+
+        }
+
         
     </style>
-    <h2 style="text-align:right;font-size:8pt;">FM-ICU-005-00</h2>
+    <h2 style="text-align:right;font-size:8pt;">&nbsp;</h2>
     
-    <h2 style="text-align:center;font-size:11pt;">แบบประเมินผู้ป่วยวิกฤตแรกรับตามแนวคิด FANCAS &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>
+    <h2 style="text-align:center;font-size:11pt;">แบบประเมินสภาพจิต &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>
     
    
-<div class="f15"> วันที่ <b>'.LongDateThai2($strDate).'</b>&nbsp;รับใหม่/รับย้ายเวลา <b>'.htmlspecialchars($rxtime).'</b>&nbsp;น.&nbsp;จากหน่วยงาน&nbsp;'.
-$from_dep.'<br>'
+<div class="f15"> วันที่ <b>'.LongDateThai2($strDate).'<br>'
 .'<table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">'.
+
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>1. ด้านสมดุลของน้ำ(Fluid balance)</B>
+<B>1 ลักษณะโดยทั่วไป</B><br><br>
+<B>&nbsp;&nbsp;&nbsp;1.1 Generation appearance</B>
+
 </div>'.
-'</td>'.
-'</tr>'.
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
-' <div class="form-group row alert alert-dark text-left">
-<B>1.1 Cardiovascalar system</B>
-</div>'.
-'</td>'.
-'</tr>'.
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติโรคหัวใจ/หลอดเลือด</label>&nbsp;'.
-$heart_disease_history_1.'&nbsp;ไม่มี&nbsp;'.$heart_disease_history_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$heart_disease_history.'</u>'.
-'</div>
-<br>'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ผิวหนัง</label>&nbsp;'.
-$skin_1.'&nbsp;ปกติ&nbsp;'
-.$skin_2.'&nbsp;ซีด&nbsp;'
-.$skin_3.'&nbsp;เขียว&nbsp;'
-.$skin_4.'&nbsp;จุดจ้ำเลือด&nbsp;'
-.$skin_5.'&nbsp;แห้ง&nbsp;'
-.$skin_6.'&nbsp;บวมกดบุ๋ม&nbsp;'
-.'<u>'.$skin.'</u>'.
-'</div>
-<br>'.
 
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>Neck vien engorement</label>&nbsp;'.
-$neck_vien_engorement_1.'&nbsp;ไม่พบ&nbsp;'
-.$neck_vien_engorement_3.'&nbsp;พบระบุ&nbsp;'
-.'<u>'.$neck_vien_engorement.'</u>&nbsp;'
-.$neck_vien_engorement_2.'&nbsp;ประเมินไม่ได้&nbsp;'
-.'</div>
-<br>'.
-
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>1.1.1 รูปร่างลักษณะ</b></label>&nbsp;'.
+$appearance_1.'&nbsp;อ้วน&nbsp;'
+.$appearance_2.'&nbsp;สันทัด&nbsp;'
+.$appearance_3.'&nbsp;สันทัด&nbsp;'
+.$appearance_4.'&nbsp;พิการ&nbsp;'
+.$appearance_check1.'&nbsp;มีแผลเป็น&nbsp;'
+.'<u>'.$appearance1.'</u>&nbsp;'
+.$appearance_check2.'&nbsp;&nbsp;อื่นๆ&nbsp;'
+.'<u>'.$appearance2.'</u>'.
+'</div>'.
+'<br>'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ฟังเสียงหัวใจ</label>&nbsp;'.
-$listen_to_the_heart_1.'&nbsp;Murmur&nbsp;'
-.$listen_to_the_heart_2.'&nbsp;Rub&nbsp;'
-.$listen_to_the_heart_3.'&nbsp;ไม่พบ&nbsp;'
-.'</div>
-<br>'.
-
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>1.1.2 การแต่งกาย</b></label>&nbsp;'.
+$dress_1.'&nbsp;สะอาด เหมาะสมกับวัย&nbsp;&nbsp;&nbsp;&nbsp;'
+.$dress_2.'&nbsp;สะอาด ไม่เหมาะสมกับวัย&nbsp;&nbsp;&nbsp;&nbsp;'
+.$dress_3.'&nbsp;สกปรก เหมาะสมกับวัย&nbsp;&nbsp;&nbsp;&nbsp;'
+.$dress_4.'&nbsp;สกปรก ไม่เหมาะสมกับวัย&nbsp;&nbsp;&nbsp;&nbsp;'
+.'</div>'.
+'<br>'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>V/S&nbsp;BT</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['bt'])).'</u>&nbsp;<sup>๐</sup>C&nbsp;'
-.'<label>HR&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pr'])).'</u>&nbsp;/min&nbsp;'
-.'<label>BP&nbsp;</label><u>'.nl2br(htmlspecialchars($row['bps'])).' / '.nl2br(htmlspecialchars($row['bpd'])).'</u>&nbsp;mmHg&nbsp;'
-.'</div>
-<br>'.
-
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>1.1.3 พฤติกรรมการเคลื่อนไหวร่างการ(Psychomotor)</label></b>&nbsp;'.
+$body_movement_behavior_1.'&nbsp;ปกติ&nbsp;'
+.$body_movement_behavior_2.'&nbsp;น้อยกว่าปกติ&nbsp;'
+.$body_movement_behavior_3.'&nbsp;มากกว่าปกติ&nbsp;'
+.$body_movement_behavior_4.'&nbsp;ผิดปกติ&nbsp;'
+.'<u>'.$body_movement_behavior.'</u>&nbsp;'
+.$body_movement_behavior_5.'&nbsp;เคลื่อนไหวซ้ำๆ&nbsp;'
+.$body_movement_behavior_6.'&nbsp;กระตุก&nbsp;'
+.$body_movement_behavior_7.'&nbsp;อยู่ไม่สุข&nbsp;'
+.$body_movement_behavior_8.'&nbsp;กระสับกระส่าย'
+.'</div>'.
+'<br>'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ผลการตรวจ&nbsp;CBC : WBC</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['cbc'])).'</u>'
-.'<label>&nbsp;Hct&nbsp;</label><u>'.nl2br(htmlspecialchars($row['hct'])).'</u>%'
-.'<label>&nbsp;Hb&nbsp;</label><u>'.nl2br(htmlspecialchars($row['hb'])).'</u>'
-.'<label>&nbsp;Plt&nbsp;</label><u>'.nl2br(htmlspecialchars($row['plt'])).'</u>'
-.'<label>&nbsp;PT&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pt'])).'</u>'
-.'<label>&nbsp;PTT&nbsp;</label><u>'.nl2br(htmlspecialchars($row['ptt'])).'</u>'
-.'<label>&nbsp;INR&nbsp;</label><u>'.nl2br(htmlspecialchars($row['inr'])).'</u>'
-.'</div>
-<br>'.
-'<div class="row">'
-.'&nbsp;&nbsp;&nbsp;&nbsp;<label>Trop -T&nbsp;</label><u>'.nl2br(htmlspecialchars($row['trop_t'])).'</u>'
-.'<label>&nbsp;CKMB&nbsp;</label><u>'.nl2br(htmlspecialchars($row['ckmb'])).'</u>'
-.'<label>&nbsp;CPK&nbsp;</label><u>'.nl2br(htmlspecialchars($row['cpk'])).'</u>'
-.'&nbsp;&nbsp;&nbsp;&nbsp;<label>Echo&nbsp;</label><u>'.nl2br(htmlspecialchars($row['echo'])).'</u>'
-.'<label>&nbsp;EKG&nbsp;</label><u>'.nl2br(htmlspecialchars($row['ekg'])).'</u>'
-.'</div>
-<br>'.
-
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>1.1.4 ท่าทีต่อผู้ตรวจ(Attitude)</b></label>&nbsp;'.
+$attitude_1.'&nbsp;เป็นมิตร&nbsp;&nbsp;&nbsp;&nbsp;'
+.$attitude_2.'&nbsp;ต่อต้าน&nbsp;&nbsp;&nbsp;&nbsp;'
+.$attitude_3.'&nbsp;ไม่ไว้วางใจ&nbsp;&nbsp;&nbsp;&nbsp;'
+.$attitude_4.'&nbsp;ไม่เชื่อถือ&nbsp;&nbsp;&nbsp;&nbsp;'
+.$attitude_5.'&nbsp;ยียวน&nbsp;&nbsp;&nbsp;&nbsp;'
+.$attitude_6.'&nbsp;ปิดบังข้อมูล&nbsp;&nbsp;&nbsp;&nbsp;'
+.'</div>'.
 
 '</td>'.
 '</tr>'.
@@ -620,45 +897,44 @@ nl2br(htmlspecialchars($row['cbc'])).'</u>'
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>1.2 Kidney system</B>
+<B>2. คำพูดและกระแสคำพูด (speech and stream talk)</B><br>
 </div>'.
-'</td>'.
-'</tr>'.
-
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติโรคไต</label>&nbsp;'.
-$kidney_disease_history_1.'&nbsp;ไม่มี&nbsp;'
-.$kidney_disease_history_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$kidney_disease_history.'</u>'.
-'</div>
-<br>'.
 
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ลักษณะปัสสาวะ</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['urine_characteristics'])).'</u>'
-.'<label>&nbsp;I/O ใน 24 ชม.&nbsp;</label><u>'.nl2br(htmlspecialchars($row['io_1'])).' / '.nl2br(htmlspecialchars($row['io_2'])).'</u>&nbsp;ซีซี&nbsp;'
-.'</div>
-<br>'.
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>2.1 อัตราการพูด (Rate)</b></label>&nbsp;'.
+$rate_1.'&nbsp;ปกติ&nbsp;'
+.$rate_2.'&nbsp;เร็ว&nbsp;'
+.$rate_3.'&nbsp;ช้า&nbsp;'
+.'</div>'.
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>2.2 จังหวะ (Rhythm)</b></label>&nbsp;'.
+$rhythm_1.'&nbsp;พูดราบเรียบ&nbsp;'
+.$rhythm_2.'&nbsp;ติดขัด&nbsp;'
+.$rhythm_3.'&nbsp;ติดอ่าง&nbsp;'
+.'</div>'.
+'<br>'.
 
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ผลการตรวจ LAB BUN</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['bun'])).'</u>'
-.'<label>&nbsp;Cr&nbsp;</label><u>'.nl2br(htmlspecialchars($row['cr'])).'</u>'
-.'<label>&nbsp;GFR&nbsp;</label><u>'.nl2br(htmlspecialchars($row['gfr'])).'</u>'
-.'<label>&nbsp;Elyte&nbsp;Na&nbsp;</label><u>'.nl2br(htmlspecialchars($row['e_lyte_na'])).'</u>'
-.'<label>&nbsp;K&nbsp;</label><u>'.nl2br(htmlspecialchars($row['e_lyte_k'])).'</u>'
-.'<label>&nbsp;Cl&nbsp;</label><u>'.nl2br(htmlspecialchars($row['e_lyte_cl'])).'</u>'
-.'<label>&nbsp;Co<sub>2</sub>&nbsp;</label><u>'.nl2br(htmlspecialchars($row['e_lyte_co2'])).'</u>'
-.'<label>&nbsp;Anien Gap&nbsp;</label><u>'.nl2br(htmlspecialchars($row['e_lyte_aniengap'])).'</u>'
-.'<label>&nbsp;Ca&nbsp;</label><u>'.nl2br(htmlspecialchars($row['ca'])).'</u>'
-.'<label>&nbsp;Po<sub>4</sub>&nbsp;</label><u>'.nl2br(htmlspecialchars($row['po_4'])).'</u>'
-.'<label>&nbsp;Mg&nbsp;</label><u>'.nl2br(htmlspecialchars($row['mg'])).'</u>'
-.'<label>&nbsp;DTX&nbsp;</label><u>'.nl2br(htmlspecialchars($row['dtx'])).'</u>mg%'
-.'<label>&nbsp;Urine Sp.gr&nbsp;</label><u>'.nl2br(htmlspecialchars($row['urine_sr_gr'])).'</u>'
-.'</div>
-<br>'.
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>2.3 ความผิดปกติของคำพูด</label></b>&nbsp;'.
+$speech_disorder_1.'&nbsp;ปกติ&nbsp;'
+.$speech_disorder_2.'&nbsp;ผิดปกติ&nbsp;'
+.'<u>'.$speech_disorder.'</u>&nbsp;'
+.$speech_disorder_3.'&nbsp;คำพูดฟังแล้วไม่รู้ความหมาย (neologism)&nbsp;'
+.$speech_disorder_4.'&nbsp;เอาคำหรือวลีมารวมกันแต่ไม่มีความหมาย (word salad)&nbsp;'
+.'</div>'.
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>2.4 กระแสคำพูด (stream of talk)</b></label>&nbsp;'.
+$stream_of_talk_1.'&nbsp;สมเหตุสมผล&nbsp;'
+.$stream_of_talk_2.'&nbsp;ไม่สมเหตุสมผล (illogical)&nbsp;'
+.$stream_of_talk_3.'&nbsp;ประติดประต่อ&nbsp;'
+.$stream_of_talk_4.'&nbsp;ไม่ประติดประต่อ (incoherrence)&nbsp;'
+.$stream_of_talk_5.'&nbsp;ตรงคำถาม&nbsp;'
+.$stream_of_talk_6.'&nbsp;ไม่ตรงคำถาม (irelevance)&nbsp;'
+.$stream_of_talk_7.'&nbsp;พูดวกวน&nbsp;'
+.$stream_of_talk_8.'&nbsp;ไม่พูดเลย (mutism)&nbsp;'
+.'</div>'.
 
 '</td>'.
 '</tr>'.
@@ -666,72 +942,30 @@ nl2br(htmlspecialchars($row['bun'])).'</u>'
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>2.ด้านการหายใจ (Aeration)</B>
+<B>3. อารมณ์และการแสดงออก (Mood and Affect)</B><br>
 </div>'.
-'</td>'.
-'</tr>'.
-
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติโรคปอด</label>&nbsp;'.
-$history_of_lung_disease_1.'&nbsp;ไม่มี&nbsp;'.$history_of_lung_disease_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$history_of_lung_disease.'</u>'.
-'</div>
-<br>'.
 
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>การหายใจ RR</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['rr'])).'</u>&nbsp;/min'
-.'<label>&nbsp;O2Sat&nbsp;</label><u>'.nl2br(htmlspecialchars($row['o2_sat'])).'</u>&nbsp;%&nbsp;'
-.'<label>On</label>&nbsp;'.
-$et_other_1.'&nbsp;ET-Tube&nbsp;'
-.$et_other_2.'&nbsp;TT-Tube No&nbsp;'
-.'<u>'.nl2br(htmlspecialchars($row['et_tube_no'])).'</u> ขีด'
-.'<u>'.nl2br(htmlspecialchars($row['et_tube_no2'])).'</u> cms.&nbsp;'
-.$et_other_3.'&nbsp;O<sub>2</sub>HFNC&nbsp;'
-.'<u>'.nl2br(htmlspecialchars($row['o2_hfnc'])).'</u>'
-.$et_other_4.'&nbsp;Candular&nbsp;'
-.'<u>'.nl2br(htmlspecialchars($row['candular'])).'</u>'
-.$et_other_5.'&nbsp;Mark c bag&nbsp;'
-.'<u>'.nl2br(htmlspecialchars($row['mark_c_bag'])).'</u>'
-.$et_other_6.'&nbsp;RA&nbsp;'
-.'</div>
-<br>'.
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>3.1 พื้นฐานอารมณ์ (Mood)</b></label>&nbsp;'.
+$mood_1.'&nbsp;เศร้า&nbsp;'
+.$mood_2.'&nbsp;หงุดหงิด&nbsp;'
+.$mood_3.'&nbsp;กังวล&nbsp;'
+.$mood_4.'&nbsp;ครื้นเครง&nbsp;'
+.$mood_5.'&nbsp;อื่นๆ&nbsp;'
+.'<u>'.$mood.'</u>'
+.'</div>'.
+'<br>'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ลักษณะการหายใจ</label>&nbsp;'.
-$breathing_characteristics_1.'&nbsp;หายใจหอบ&nbsp;'
-.$breathing_characteristics_2.'&nbsp;หายใจลำบาก&nbsp;'
-.$breathing_characteristics_3.'&nbsp;หายใจปกติ&nbsp;'
-.'</div>
-<br>'.
-'&nbsp;&nbsp;&nbsp;&nbsp;<label>On ICD</label>&nbsp;'.
-$on_icd_1.'&nbsp;ไม่มี&nbsp;'.$on_icd_2.'&nbsp;มี ข้าง&nbsp;'
-.'<u>'.$on_icd.'</u> ขีด'
-.'&nbsp;<u>'.nl2br(htmlspecialchars($row['on_icd_2'])).'</u>'
-.'</div>
-<br>'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ฟังเสียงลมเข้าปอด</label>&nbsp;'.
-$listen_sound_lungs_1.'&nbsp;Clear&nbsp;'
-.$listen_sound_lungs_2.'&nbsp;Crepitation&nbsp;'
-.$listen_sound_lungs_3.'&nbsp;Wheezing&nbsp;'
-.$listen_sound_lungs_4.'&nbsp;Rhonchi&nbsp;'
-.$listen_sound_lungs_5.'&nbsp;Stridor&nbsp;'
-.'</div>
-<br>'.
-
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>CXR</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['cxr'])).'</u>'
-.'<label>&nbsp;Sputum G/S&nbsp;</label><u>'.nl2br(htmlspecialchars($row['sputum'])).'</u>'
-.'<label>&nbsp;ABG/VBG:PH&nbsp;</label><u>'.nl2br(htmlspecialchars($row['abg'])).'</u>'
-.'<label>&nbsp;PaCO2&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pa_co2'])).'</u>'
-.'<label>&nbsp;HCO3&nbsp;</label><u>'.nl2br(htmlspecialchars($row['hco3'])).'</u>'
-.'<label>&nbsp;PaO2&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pao2'])).'</u>'
-.'<label>&nbsp;BE&nbsp;</label><u>'.nl2br(htmlspecialchars($row['be'])).'</u>'
-.'</div>
-<br>'.
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>3.2 อารมณ์ที่แสดงออกขณะนั้น (Affect)</b></label>&nbsp;'.
+$affect_1.'&nbsp;อารมณ์ดี&nbsp;'
+.$affect_2.'&nbsp;เศร้า&nbsp;'
+.$affect_3.'&nbsp;แสดงออกเล็กน้อย&nbsp;'
+.$affect_4.'&nbsp;ปราศจากอารมณ์&nbsp;'
+.$affect_5.'&nbsp;เหมาะสมกับสิ่งที่เล่า&nbsp;<br />'
+.$affect_6.'&nbsp;ไม่เหมาะสมกับสิ่งที่เล่า&nbsp;'
+.$affect_7.'&nbsp;คงที่&nbsp;'
+.$affect_8.'&nbsp;เปลี่ยนแปลงง่าย&nbsp;'
+.'</div>'.
 
 '</td>'.
 '</tr>'.
@@ -739,207 +973,311 @@ nl2br(htmlspecialchars($row['cxr'])).'</u>'
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>3.ด้านภาวะโภชนาการ (Nutrition)</B>
+<B>4. ความคิด (Thought)</B><br>
 </div>'.
+
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>4.1 กระบวนความคิด </b></label>&nbsp;'.
+$thought_process_1.'&nbsp;คิดช้า&nbsp;'
+.$thought_process_2.'&nbsp;คิดเร็ว&nbsp;'
+.$thought_process_3.'&nbsp;คิดเร็วมากเปลี่ยนเรื่องคุยบ่อย&nbsp;'
+.$thought_process_4.'&nbsp;ความคิดต่อเนื่อง&nbsp;'
+.$thought_process_5.'&nbsp;ความคิดไม่ต่อเนื่อง&nbsp;'
+.$thought_process_6.'&nbsp;ตรงคำถาม&nbsp;'
+.$thought_process_7.'&nbsp;ไม่ตรงคำถาม&nbsp;<br />'
+.$thought_process_8.'&nbsp;ได้เรื่องราว&nbsp;'
+.$thought_process_9.'&nbsp;ไม่ได้เรื่องราว&nbsp;'
+.$thought_process_10.'&nbsp;มีเหตุผล&nbsp;'
+.$thought_process_11.'&nbsp;ไม่มีเหตุผล&nbsp;'
+.'</div>'.
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>4.2 เนื้อหาความคิด</b></label>&nbsp;'.
+$thought_content_1.'&nbsp;ปกติ&nbsp;'
+.$thought_content_2.'&nbsp;หมกมุ่น&nbsp;'
+.$thought_content_3.'&nbsp;ย้ำคิดย้ำทำ&nbsp;'
+.$thought_content_4.'&nbsp;กลัวผิคปกติ&nbsp;'
+.$thought_content_5.'&nbsp;หลงผิด&nbsp;'
+.$thought_content_6.'&nbsp;คิดฆ่าตัวตาย&nbsp;'
+
+.'</div>'.
+
 '</td>'.
 '</tr>'.
 
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติโรคระบบทางเดินอาหาร</label>&nbsp;'.
-$history_of_gastrointestinal_1.'&nbsp;ไม่มี&nbsp;'.$history_of_gastrointestinal_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$history_of_gastrointestinal.'</u>'.
-'</div>
-<br>'.
-
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ส่วนสูง</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['hight'])).'</u> cms'
-.'<label>&nbsp;น้ำหนัก&nbsp;</label><u>'.nl2br(htmlspecialchars($row['bw'])).'</u> kg'
-.'<label>&nbsp;BMI:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['bmi'])).'</u> Kg/m<sup>2</sup>'
-.'<label>&nbsp;Alb&nbsp;</label><u>'.nl2br(htmlspecialchars($row['alb'])).'</u> mmol'
-.'<label>&nbsp;BEE:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['bee'])).'</u>'
-.'<label>&nbsp;TEE:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['tee'])).'</u>'
-.'<label>&nbsp;SPENT Nutrition Screening Tool&nbsp;</label><u>'.nl2br(htmlspecialchars($row['spent'])).'</u> / 4 คะแนน'
-.'</div>
-<br>'.
-
-'</td>'.
-'</tr>'.
 
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>4.ด้านการติดต่อสื่อสาร (Communication)</B>
+<B>5. การรับรู้ (Perception)</B><br>
 </div>'.
-'</td>'.
-'</tr>'.
-
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ประวัติโรคทางการสื่อสาร</label>&nbsp;'.
-$communication_history_1.'&nbsp;ไม่มี&nbsp;'.$communication_history_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$communication_history.'</u>'.
-'</div>
-<br>'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>การพูด:</label>&nbsp;'.
-$speaking_check.'&nbsp;ไม่ได้ On ET-Tube&nbsp;'
-.$speaking_2.'&nbsp;พูดได้เองชัดเจน&nbsp;'
-.$speaking_3.'&nbsp;พูดไม่ชัด&nbsp;'
-.$speaking_4.'&nbsp;อื่นๆ&nbsp;'
-.'<u>'.$speaking.'</u>'.
-'</div>
-<br>'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
-$communication_check.'&nbsp;On ET-Tube or TT&nbsp;'
-.$communication_2.'&nbsp;สื่อสารด้วยการเขียน&nbsp;'
-.$communication_3.'&nbsp;สื่อสารโดยการใช้สายตา&nbsp;'
-.$communication_4.'&nbsp;สื่อสารโดยใช้ท่าทาง&nbsp;'
-.$communication_6.'&nbsp;ไม่สามารถสื่อสารได้ เนื่องจาก&nbsp;'
-.'<u>'.$communication.'</u>&nbsp;'
-.$communication_5.'&nbsp;ประเมินไม่ได้&nbsp;'.
-'</div>
-<br>'.
 
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>การมองเห็น : ตา</label>&nbsp;'.
-$vision_1.'&nbsp;เห็นได้ชัดเจน&nbsp;'
-.$vision_2.'&nbsp;เห็นไม่ชัดเจน&nbsp;'
-.$vision_4.'&nbsp;ตาบอด&nbsp;'
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>5.1 อาการแปลสิ่งเร้าผิด (illution) </b></label>&nbsp;'.
+$illution_1.'&nbsp;ไม่มี&nbsp;'
+.$illution_2.'&nbsp;มี ระบุ&nbsp;'
+.'<u>'.$illution.'</u>'
+
+.'</div>'.
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>5.2 อาการประสาทหลอน (Hallucination)</b></label>&nbsp;'.
+$hallucination_1.'&nbsp;ไม่มี&nbsp;'
+.$hallucination_2.'&nbsp;มี ระบุ&nbsp;'
+.'<u>'.$hallucination.'</u>'
+
+.'</div>'.
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label></label>&nbsp;'.
+$vision_1.'&nbsp;การมองเห็น&nbsp;'
 .'<u>'.$vision.'</u>&nbsp;'
-.$vision_3.'&nbsp;ประเมินไม่ได้&nbsp;'.
-'</div>
-<br>'.
-
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>การได้ยิน : หู</label>&nbsp;'.
-$listening_1.'&nbsp;ได้ยินชัดเจน&nbsp;'
-.$listening_2.'&nbsp;หูหนวก&nbsp;'
-.$listening_3.'&nbsp;ได้ยินไม่ชัด&nbsp;:&nbsp;ใช้อุปกรณ์ช่วยฟัง'
-.$hearing_aids_1.'&nbsp;มี&nbsp;'
-.$hearing_aids_2.'&nbsp;ไม่มี&nbsp;'
-.$listening_4.'&nbsp;ประเมินไม่ได้&nbsp;'
-.'</div>
-<br>'.
+.$hearing_1.'&nbsp;การได้ยิน&nbsp;'
+.'<u>'.$hearing.'</u>&nbsp;'
+.$tast_perception_1.'&nbsp;การรับรู้รส&nbsp;'
+.'<u>'.$tast_perception.'</u>&nbsp;'
+.$touch_1.'&nbsp;การสัมผัส&nbsp;'
+.'<u>'.$touch.'</u>&nbsp;'
+.$smell_1.'&nbsp;การได้กลิ่น&nbsp;'
+.'<u>'.$smell.'</u>&nbsp;'
+.'</div>'.
 
 '</td>'.
 '</tr>'.
+
 
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>5.ด้านการทำกิจกรรม (Activity)</B>
+<B>6. Cognitive Function</B><br>
 </div>'.
+
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>6.1 Orientation</b></label>&nbsp;'.
+$orientation.'&nbsp;<b>รับรู้</b>&nbsp;'
+.$orientation_time.'&nbsp;เวลา&nbsp;'
+.$orientation_location.'&nbsp;สถานที่&nbsp;'
+.$orientation_person.'&nbsp;บุคคล&nbsp;'
+.$non_orientation.'&nbsp;<b>ไม่รับรู้</b>&nbsp;'
+.$non_orientation_time.'&nbsp;เวลา&nbsp;'
+.$non_orientation_location.'&nbsp;สถานที่&nbsp;'
+.$non_orientation_person.'&nbsp;บุคคล&nbsp;'
+
+.'</div>'.
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>6.2 Attention and Concentation</b></label>&nbsp;<br>'.
+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- เอา 20 ลบทีละ3&nbsp;'.$attention1_1.'&nbsp;ทำได้&nbsp;'
+.$attention1_2.'&nbsp;ทำไม่ได้&nbsp;'
+.$attention1_3.'&nbsp;ทำได้บางส่วน&nbsp;'
+.'</div>'.
+
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label></label>&nbsp;<br>'.
+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- เอา 100 ลบทีละ7&nbsp;'.$attention2_1.'&nbsp;ทำได้&nbsp;'
+.$attention2_2.'&nbsp;ทำไม่ได้&nbsp;'
+.$attention2_3.'&nbsp;ทำได้บางส่วน&nbsp;'
+.'</div>'.
+
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label></label>&nbsp;<br>'.
+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- อ่านเลขแล้วให้พูดตาม พูดทวน (ปกติจะพูดตามได้ 6-7 หลัก พูดทวน 4-5 หลัก)&nbsp;'.$attention3_1.'&nbsp;ทำได้&nbsp;'
+.$attention3_2.'&nbsp;ทำไม่ได้&nbsp;'
+.$attention3_3.'&nbsp;ทำได้บางส่วน&nbsp;'
+.'</div>'.
+
+
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>6.3 Memory</b></label>&nbsp;<br>'.
+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ความจำในช่วงเวลา เป็น นาที ชั่วโมง หรือ วัน (Recent memory)&nbsp;'.$memory1_1.'&nbsp;บอกถูก&nbsp;'
+.$memory1_2.'&nbsp;บอกไม่ถูก&nbsp;'
+.'</div>'.
+
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label></label>&nbsp;<br>'.
+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ความจำระยะสั้น (Recall memory) (พูดคำว่า ดอกไม้ เก้าอี้ รถไฟ แล้วคุยเรื่องอื่นนาน 5 นาที แล้วถามผู้ป่วย)&nbsp;'.$memory2_1.'&nbsp;บอกถูก&nbsp;'
+.$memory2_2.'&nbsp;บอกไม่ได้&nbsp;'
+
+.'</div>'.
+
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label></label>&nbsp;<br>'.
+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>- ความจำในอดีต (Remote memory)</b> &nbsp;'.$memory3_1.'&nbsp;บอกถูก&nbsp;'
+.$memory3_2.'&nbsp;บอกไม่ได้&nbsp;'
+.'</div>'.
+
+'<br>'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>6.4 General Knowledge ถามความรู้ทั่วไป เช่น สัปดาห์หนึ่งมีกี่วัน</b></label>&nbsp;'
+.$general_khowledge_1.'&nbsp;บอกถูก&nbsp;'
+.$general_khowledge_2.'&nbsp;บอกไม่ถูก&nbsp;'
+.'</div>'.
+
+'<br>'.
+
 '</td>'.
-'</tr>'.
+'</tr>'
+
+.'</table>'
+
+
+.'<div style="font-size:8pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>6.5 Abtstract thinking</b></div>
+<table width="100%" style="font-size:8pt;">
+<tr>
+    <td style="text-align:center;"><b>1.​ ถาม​ความ​แตก​ต่าง</b>​</td>
+    <td style="text-align:center;"><b>concrete</b>​</td>
+    <td style="text-align:center;"><b>Abstract</b>​</td>
+</tr>
+<tr>
+    <td>กลาง​วัน​กับ​กลาง​คืน​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_difference1.'&nbsp;พระอาทิตย์กับพระจันทร์
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_difference1.'&nbsp;สว่างกับมืด
+</div></td>
+</tr>
+<tr>
+    <td>เด็กกับคนแคระ​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_difference2.'&nbsp;สูงไม่เท่ากัน
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_difference2.'&nbsp;เด็กกับผู้ใหญ่
+</div></td>
+</tr>
+
+<tr>
+    <td>ต้นมะเขือกับต้นโพธิ์​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_difference3.'&nbsp;ต้นเล็กกับต้นใหญ่
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_difference3.'&nbsp;ไม้ล้มลุกกับไม้ยืนต้น
+</div></td>
+</tr>
+'
+.'<tr>
+<td style="text-align:center;"><b>2.​ ถามถึงความเหมือน</b>​</td>
+<td style="text-align:center;"><b>concrete</b>​</td>
+<td style="text-align:center;"><b>Abstract</b>​</td>
+</tr>
+<tr>
+    <td>ส้มกับกล้วย​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_similarities1.'&nbsp;เปลือกสีเหมือนกัน
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_similarities1.'&nbsp;เป็นผลไม้เหมือนกัน
+</div></td>
+</tr>
+<tr>
+    <td>หนูกับแมว</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_similarities2.'&nbsp;มีหนวด มีหาง เหมือนกัน
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_similarities2.'&nbsp;เป็นสัตว์เหมือนกัน
+</div></td>
+</tr>
+
+<tr>
+    <td>รถกับเรือ​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_similarities3.'&nbsp;วิ่งเหมือนกันใช้น้ำมัน
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_similarities3.'&nbsp;เป็นพาหนะเหมือนกัน
+</div></td>
+</tr>'
+
+.'<tr>
+<td style="text-align:center;"><b>3. ถามถึงคำพังเพย</b>​</td>
+<td style="text-align:center;"><b>concrete</b>​</td>
+<td style="text-align:center;"><b>Abstract</b>​</td>
+</tr>
+<tr>
+    <td>น้ำขึ้นให้รีบตัก​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_aphorisms1.'&nbsp;น้ำลงจะตักลำบาก
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_aphorisms1.'&nbsp;เมื่อมีโอกาสให้รีบฉวย
+</div></td>
+</tr>
+<tr>
+    <td>หนีเสือปะจระเข้</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_aphorisms2.'&nbsp;หนีเสือแล้วยังจะเจอสัตว์ร้ายอีก
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_aphorisms2.'&nbsp;หนีสิ่งเลวร้ายแล้วยังเจอสิ่งที่เลวร้ายกว่า
+</div></td>
+</tr>
+
+<tr>
+    <td>ขี่ช้างจับตั๊กแตน​</td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$concrete_aphorisms3.'&nbsp;ขี่ช้างสูงไปจับตั๊กแตนไม่ได้
+</div></td>
+    <td><div class="custom-control custom-checkbox col-sm-5">'
+    .$abstract_aphorisms3.'&nbsp;ลงทุนเกินตัว
+</div></td>
+</tr>
+
+</table>'
+
+.'<table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">'.
+
+
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>มีประวัติโรคที่ส่งผลต่อการทำกิจกรรม</label>&nbsp;'.
-$history_affects_activities_1.'&nbsp;ไม่มี&nbsp;'.$history_affects_activities_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$history_affects_activities.'</u>'.
-'</div>
-<br>'.
+&nbsp;&nbsp;&nbsp;&nbsp;<label><b>6.6 การตัดสินใจ (Judment)</b></label>&nbsp;'
+.'</div>'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>การทำกิจวัตรประจำวัน</label>&nbsp;'.
-$daily_activities_1.'&nbsp;ช่วยเหลือตัวเองได้ดี&nbsp;'
-.$daily_activities_2.'&nbsp;Bed ridden&nbsp;'
-.$daily_activities_3.'&nbsp;หอบ เหนื่อย&nbsp;'
-.$daily_activities_4.'&nbsp;ถูกจำกัดกิจกรรมบนเตียง&nbsp;'
-.'</div>
-<br>'.
+<label>ถามทุกข้อดังนี้ พบซองจดหมายจ่าหน้าซองติดแสตมป์เรียบร้อยหล่นอยู่ข้างทาง</label>&nbsp;'
+.$judment1_1.'&nbsp;เหมาะสม&nbsp;'
+.$judment1_2.'&nbsp;ไม่เหมาะสม&nbsp;'
+.'</div><br />'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$daily_activities_1.'&nbsp;มี Fracture ตำแหน่ง&nbsp;<u>'.
-nl2br(htmlspecialchars($row['fracture'])).'</u>'
-.'<label>&nbsp;Braden score&nbsp;</label><u>'.nl2br(htmlspecialchars($row['braden_score'])).'</u> / 23 คะแนน'
-.'<label>&nbsp;Mortor power&nbsp;</label><u>'.nl2br(htmlspecialchars($row['mortor_power'])).'</u>'
-.'<label>&nbsp;MASS&nbsp;</label><u>'.nl2br(htmlspecialchars($row['mass'])).'</u> / 6 คะแนน'
-.'</div>
-<br>'.
-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<label>เป็นคนแรกที่เห็นไฟไหม้ขณะดูภาพยนต์ในโรงภาพยนต์</label>&nbsp;'
+.$judment2_1.'&nbsp;เหมาะสม&nbsp;'
+.$judment2_2.'&nbsp;ไม่เหมาะสม&nbsp;'
+.'</div><br />'.
+'<div class="row">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<label>ออกจากบ้านใส่กุญแจแล้วนึกขึ้นได้ว่าลืมกุญแจทิ้งไว้ในบ้าน</label>&nbsp;'
+.$judment3_1.'&nbsp;เหมาะสม&nbsp;'
+.$judment3_2.'&nbsp;ไม่เหมาะสม&nbsp;'
+.'</div>'.
 '</td>'.
 '</tr>'.
+
+
 
 '<tr style="border:1px solid #000;margin: 35px;">'.
 '<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
 ' <div class="form-group row alert alert-dark text-left">
-<B>6.ด้านการกระตุ้น (Stimulation)</B>
+<B>7. ความตระหนักต่อการเจ็บป่วย (Insight)</B><br>
 </div>'.
-'</td>'.
-'</tr>'.
 
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">'.
+'<br>'.
 '<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>มีประวัติโรคที่ส่งผลต่อการกระตุ้น</label>&nbsp;'.
-$history_affects_stimulation_1.'&nbsp;ไม่มี&nbsp;'.$history_affects_stimulation_2.'&nbsp;มี ระบุ&nbsp;'
-.'<u>'.$history_affects_stimulation.'</u>'.
-'</div>
-<br>'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>GCS: E</label>&nbsp;<u>'.
-nl2br(htmlspecialchars($row['gcs_e'])).'</u>'
-.'<label>&nbsp;V:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['gcs_v'])).'</u>'
-.'<label>&nbsp;M:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['gcs_m'])).'</u>'
-.'<label>&nbsp;Pupil:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pupil'])).'</u>'
-.'<label>&nbsp;RE:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pupil_rt'])).'</u> mm'
-.'<label>&nbsp;LE:&nbsp;</label><u>'.nl2br(htmlspecialchars($row['pupil_lt'])).'</u> mm'
-.'</div>
-<br>'.
-'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>ระดับความรู้สึกตัว</label>&nbsp;'.
-$level_of_consciousness_1.'&nbsp;Alert&nbsp;'
-.$level_of_consciousness_2.'&nbsp;Confuse&nbsp;'
-.$level_of_consciousness_3.'&nbsp;Drowsiness&nbsp;'
-.$level_of_consciousness_4.'&nbsp;Stupors&nbsp;'
-.$level_of_consciousness_5.'&nbsp;Coma&nbsp;'
-.'</div>
-'.
-'<br><B>ผล CT-Brain</B>&nbsp;'.nl2br(htmlspecialchars($row['ct_brain']))
-.'</br>'
-.'<div class="row">
-&nbsp;&nbsp;&nbsp;&nbsp;<label>Pain score</label>&nbsp;'
-.$pain_score_1.'&nbsp;COPT&nbsp;'
-.'<u>'.nl2br(htmlspecialchars($row['copt'])).'</u> / 8 คะแนน'
-.$pain_score_2.'&nbsp;NRS&nbsp;'
-.'<u>'.nl2br(htmlspecialchars($row['nrs'])).'</u> / 10 คะแนน'
-
-.'</div>
-<br>'.
+&nbsp;&nbsp;&nbsp;&nbsp;<label></label>&nbsp;'.
+$insight_1.'&nbsp;ปฏิเสธการเจ็บป่วย&nbsp;'
+.$insight_2.'&nbsp;พอจะทราบว่าตนเองผิดปกติ ปฏิเสธการรักษา&nbsp;'
+.$insight_3.'&nbsp;ทราบว่าตนเองผิดปกติ แต่โทษว่าเกิดจากสิ่งอื่น<br /><br />'
+.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$insight_4.'&nbsp;ทราบว่าตนเองผิดปกติจากปัญหาบางประการในตนเองแต่ไม่ทราบว่าปัญหาอะไร&nbsp;<br /><br />'
+.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$insight_5.'&nbsp;ยอมรับว่าตนเองผิดปกติ แต่ไม่แก้ปัญหา&nbsp;<br /><br />'
+.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$insight_6.'&nbsp;ยอมรับการเจ็บป่วยและยอมรับการรักษา&nbsp;'
+.'</div>'.
 
 '</td>'.
 '</tr>'.
 
-'<tr style="border:1px solid #000;margin: 35px;">'.
-'<td  colspan="4" width="100%" style="border-right:0.5px solid #000;margin: 40px;padding:4px;vertical-align:text-top;">'.
-' <div class="form-group row  text-left">
-<h3><B>สรุปปัญหา</B></h3>
-</div><br>'
-
-.'<div class="row">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-.$fluid_balance.'&nbsp;ด้านสมดุลของสารน้ำ(Fluid balance)'
-.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$aeration.'&nbsp;ด้านการหายใจ(Aeration)'
-.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$nutrition.'&nbsp;ด้านภาวะโภชนาการ(Nutrition)'
-.'</div>'
-.'<br>'
-.'<div class="row">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-.$communication_problem.'&nbsp;ด้านการติดต่อสื่อสาร(Communication)'
-.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$activity.'&nbsp;ด้านการทำกิจจกรรม(Activity)'
-.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$stimulation.'&nbsp;ด้านการกระตุ้น(Stimulation)'
-.'</div>'
-
-
-
-.'</td>'.
-'</tr>'.
 
  '</table>'
 
@@ -961,9 +1299,12 @@ $level_of_consciousness_1.'&nbsp;Alert&nbsp;'
     </table>'
    
 
-      .'<br>'                     
-      .$icu_form1.'</br>'.$icu_form2.'</br>'.$icu_form3.'<footter> <h2 style="text-align:right;font-size:8pt;">ประกาศใช้ 29 มกราคม 2566 งานเอกสารคุณภาพ ศูนย์คุณภาพ</h2> </footer>' ;
+      .'<br>'.'<footter> <h2 style="text-align:right;font-size:8pt;">ประกาศใช้ 29 มกราคม 2566 งานเอกสารคุณภาพ ศูนย์คุณภาพ</h2> </footer>' ;
 //$mpdf->SetColumns(2);
+
+//แสดงข้อมุลอยู่ในช่วง ก่อน footer
+$mpdf->setAutoTopMargin = 'stretch';
+$mpdf->setAutoBottomMargin = 'stretch';
 
 $mpdf->setFooter('HN: '.htmlspecialchars($hn).' AN: '.htmlspecialchars($an).' Page '.'{PAGENO}');
 $mpdf->WriteHTML($head);
