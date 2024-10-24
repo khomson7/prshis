@@ -105,6 +105,10 @@ $stmt->execute();
 // Fetch all rows for the current page
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+
+
+
 // Output the results (for debugging or display)
 /*foreach ($rows as $row) {
     echo "AN: {$row['an']}, Date: {$row['date']}, Shift: {$row['shift']}, Question1: {$row['question1_1']}, Question2: {$row['question1_2']}, Question3: {$row['question1_3']}<br>";
