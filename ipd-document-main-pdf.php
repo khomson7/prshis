@@ -197,14 +197,17 @@ if(($getDocumentOther)){
     $image_checkOther = $image_check;
 }
 */
+$getCheckOther = (ReportQueryUtils::getCheckOther($an));
 
         $a = '';
         $b = '';
         $c = '';
+
+       // echo $getCheckOther;
         
        $newtext  = $a.$b.$c;
        $image_checkOther = '';
-       if (strlen($newtext) > 0 )
+       if (strlen($getCheckOther) > 0 )
 {
     $image_checkOther = $image_check;
 }
@@ -306,6 +309,21 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="15%">&nbsp;ในระบบHOSxP</td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="15%">&nbsp;ในระบบKPHIS</td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">&nbsp;ชื่อเอกสาร</td>
+        </tr>
+        
+        <tr style="border:1px solid #000;margin: 45px;">
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;ใบตรวจสอบสิทธการรักษา</td>
+        </tr>
+        <tr style="border:1px solid #000;margin: 45px;">
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;ใบแบบสรุปค่าใช้จ่าย</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
@@ -508,7 +526,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">'.$image_checkOther.'</td>
-            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;เอกสารอื่นๆ ระบุ '.$newtext.'</td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;เอกสารอื่นๆ ระบุ '.$getCheckOther.'</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
