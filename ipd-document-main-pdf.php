@@ -31,11 +31,6 @@ if(!$loginname){
 
 
 
-$getDocumentOther = (ReportQueryUtils::getDocumentOther($an));
-$image_checkOther = '';
-if(($getDocumentOther)){
-    $image_checkOther = $image_check;
-}
 
 
 //
@@ -193,6 +188,35 @@ $query_parameters_REQUEST = ['an'=>$an];
             $dchdate_row_ipt = htmlspecialchars($row_ipt['dchdate']);
             $wardname_row_ipt = htmlspecialchars($row_ipt['wardname']);
         }
+
+/*
+        
+$getDocumentOther = (ReportQueryUtils::getDocumentOther($an));
+$image_checkOther = '';
+if(($getDocumentOther)){
+    $image_checkOther = $image_check;
+}
+*/
+
+        $a = '';
+        $b = '';
+        $c = '';
+        
+       $newtext  = $a.$b.$c;
+       $image_checkOther = '';
+       if (strlen($newtext) > 0 )
+{
+    $image_checkOther = $image_check;
+}
+
+
+//$text = "(The quick brown fox jumped),(over the lazy dog.)";
+//$newtext = wordwrap($text, 100, "<br />\n");
+
+
+
+//echo $newtext;
+
 // $mpdf->SetFooter(' (พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' )');
 // $mpdf->WriteHTML('');
 
@@ -213,6 +237,7 @@ $head =
 '   <style>
         body{
             font-family: "Garuda";//เรียกใช้font Garuda สำหรับแสดงผล ภาษาไทย
+            
         }
         footer {
             position: fixed;
@@ -262,7 +287,7 @@ $head =
     </style>
   
     <div class="row">
-    <div style="text-align:center;">
+    <div style="text-align:center; font-size: 10pt;">
    <strong> เอกสารใบปะหน้า</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$qrcode.'</div>
    
   </div>
@@ -274,7 +299,7 @@ $head =
 
  
 
-    <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
+    <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:9pt;margin-top:8px;">
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="8%">&nbsp;ในแฟ้ม</td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="13%">&nbsp;ในระบบScan</td>
@@ -287,7 +312,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">'.$image_checkSummary.'</td>
-            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;Discharge Summary</td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;Discharge Summary & Summary Discharge</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
@@ -413,7 +438,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
-            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Special Clinical Report</td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Special Clinical Report, ( ) NTS, ( ) USG</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
@@ -483,7 +508,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;">'.$image_checkOther.'</td>
-            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;เอกสารอื่นๆ ระบุ</td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;เอกสารอื่นๆ ระบุ '.$newtext.'</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
@@ -493,7 +518,7 @@ $head =
             <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;เอกสาร ER</td>
         </tr>
     </table>
-    <p style="text-align:right;">(พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' ) </p>
+    <p style="text-align:right; font-size: 10pt;">(พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' ) </p>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"> </script>
     <script src="./include/js/script.js"> </script>
