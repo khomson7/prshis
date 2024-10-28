@@ -612,7 +612,7 @@ $html .= '</tbody></table>';
 
 
 
-$html .= '<h2 style="text-align:left;font-size:10pt;"><u>สรุปก่อนจำหน่าย / ย้าย</u> ผู้ป่วยรายนี้ '.$check1.' ไม่เกิดแผล '.$check2.' เกิดแผลระดับ '.$check1_value.'.............จำนวน......................<br> 
+$html .= '<h2 style="text-align:left;font-size:10pt;"><u>สรุปก่อนจำหน่าย / ย้าย</u> ผู้ป่วยรายนี้ '.$check1.' ไม่เกิดแผล '.$check2.' เกิดแผลระดับ '.'.............จำนวน......................<br> 
 </h2>
 <tr style="border:1px solid #000;margin: 35px;">
             <td  colspan="3" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
