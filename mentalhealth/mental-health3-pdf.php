@@ -52,7 +52,7 @@ $query_parameters = ['an' => $an];
 $query_parameters2 = ['an' => $an,'id' => $id];
 
 Session::insertSystemAccessLog(json_encode(array(
-    'report'=>'PRE-NURSENOTE-PDF',
+    'report'=>'MENTAL-HEALTH3-PDF',
    // 'action'=>'PRINT',
     'an'=>$an,
 ),JSON_UNESCAPED_UNICODE));

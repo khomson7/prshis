@@ -36,7 +36,7 @@ $vn = KphisQueryUtils::getVnByAn($an);
 
 
 Session::insertSystemAccessLog(json_encode(array(
-    'form' => 'ICU1-FORM',
+    'form' => 'MENTAL-HEALTH1-FORM',
     'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
