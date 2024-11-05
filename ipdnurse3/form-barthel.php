@@ -7,8 +7,8 @@ $values = ['loginname' => $loginname];
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
 if ($login != $loginname) {
-        session_start();
-        session_destroy();
+    session_start();
+    session_destroy();
 }
 
 //Session::checkPermissionAndShowMessage('PRS_MENTAL_HEAL', 'VIEW');
@@ -17,54 +17,51 @@ require_once '../mains/main-report.php';
 
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
-$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_BEDSORES', 'VIEW');
+$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_BARTHEL', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
+require_once '../include/session-modal.php';
 
 //Session::checkPermissionAndShowMessage('PRS_MENTAL_HEAL1', 'VIEW');
+
 require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/ipd-show-patient-sticky.php';
+
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
-require_once '../include/session-modal.php';
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = $_REQUEST['an']; //รับค่า an
-$ids = $_REQUEST['id']; //รับค่า an
-$hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
+//$hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $vn = KphisQueryUtils::getVnByAn($an);
 
 
 Session::insertSystemAccessLog(json_encode(array(
-        'form' => 'BEDSORES-FORM',
-        'an' => $an,
+    'form' => 'BARTHEL-FORM',
+    'an' => $an,
 ), JSON_UNESCAPED_UNICODE));
 
 
-//echo $ids;
+
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
-
-
-
 $sql = "SELECT *
-                FROM `prs_bedsores`
-                WHERE an = :an and id = :id";
+                FROM `prs_barthel_index`
+                WHERE an = :an";
 $id  = null;
 $parameters['an'] = $an;
-$parameters['id'] = $ids;
 $stmt = $conn->prepare($sql);
 $stmt->execute($parameters);
 if ($row  = $stmt->fetch()) {
-        $id = $row['id'];
+    $id = $row['id'];
 } else {
-        $id = null;
+    $id = null;
 }
 
 
 
 if ($id == null || $id != null) {
-        $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
+    $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
                                     pt.sex,round(opdscreen.bps,0) as sbp,round(opdscreen.bpd,0) as dbp,
                                     round(opdscreen.pulse,0) as pr,round(opdscreen.rr,0) as rr,round(opdscreen.temperature,1) as bt,
                                     round((opdscreen.bw)*1000,0) as bw2,
@@ -80,9 +77,9 @@ if ($id == null || $id != null) {
                                     INNER JOIN " . DbConstant::HOSXP_DBNAME . ".vn_stat vn on vn.vn = opdscreen.vn
                                     INNER JOIN " . DbConstant::HOSXP_DBNAME . ".patient pt on pt.hn = opdscreen.hn
                                     WHERE opdscreen.vn= :vn ";
-        $stmt_opdscreen = $conn->prepare($sql_opdscreen);
-        $stmt_opdscreen->execute(['vn' => $vn]);
-        $row_opdscreen  = $stmt_opdscreen->fetch();
+    $stmt_opdscreen = $conn->prepare($sql_opdscreen);
+    $stmt_opdscreen->execute(['vn' => $vn]);
+    $row_opdscreen  = $stmt_opdscreen->fetch();
 }
 
 $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,/*patient.drugallergy, */
@@ -116,24 +113,8 @@ $regdatetime = $row_ipt["regdatetime"];
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
 date_default_timezone_set('asia/bangkok');
-/*
-$id = '21'; //ลำดับในตาราง prs_link_menu
-$sql = "SELECT *
-                FROM `prs_link_menu`
-                WHERE id = :id
-                LIMIT 1";
-$stmt = $conn->prepare($sql);
-$stmt->execute(['id' => $id]);
-if ($row0  = $stmt->fetch()) {
-    $menu_name = $row0['menu_name'];
-    $production = $row0['production'];
-} else {
-    $menu_name = '-';
-}
-*/
 
-
-$_id = '23'; //Link menu
+$_id = '25'; //Link menu
 
 $sql = "SELECT *
                 FROM `prs_link_menu`
@@ -142,75 +123,63 @@ $sql = "SELECT *
 $stmt = $conn->prepare($sql);
 $stmt->execute(['id' => $_id]);
 if ($row0  = $stmt->fetch()) {
-        $menu_name = $row0['menu_name'];
-        $production = $row0['production'];
+    $menu_name = $row0['menu_name'];
+    $production = $row0['production'];
 } else {
-        $menu_name = '-';
+    $menu_name = '-';
 }
 
 $check_    = ReportQueryUtils::getProduction($_id)
-
-
 ?>
 
 <style>
-        .main {
-                border: 1px solid #4287f5;
-                height: 180px;
-                width: 500px;
-                position: relative;
-        }
+    .main {
+        border: 1px solid #4287f5;
+        height: 180px;
+        width: 500px;
+        position: relative;
+    }
 
-        .column1 {
-                color: #4287f5;
-                text-align: center;
-        }
+    .column1 {
+        color: #4287f5;
+        text-align: center;
+    }
 
-        .column2 {
-                text-align: center;
-        }
+    .column2 {
+        text-align: center;
+    }
 
-        #bottom {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-        }
+    #bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
 
-        .top-container {
-                background-color: #f1f1f1;
-                padding: 30px;
-                text-align: center;
-        }
+    .top-container {
+        background-color: #f1f1f1;
+        padding: 30px;
+        text-align: center;
+    }
 
-        .header {
-                padding: 10px 16px;
-                background: #555;
-                color: #f1f1f1;
-        }
+    .header {
+        padding: 10px 16px;
+        background: #555;
+        color: #f1f1f1;
+    }
 
-        .content {
-                padding: 16px;
-        }
+    .content {
+        padding: 16px;
+    }
 
-        .sticky {
-                position: fixed;
-                top: 0;
-                width: 100%;
-        }
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
 
-        .sticky+.content {
-                padding-top: 102px;
-        }
-
-        table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-table.center {
-   margin-right: 150px;
-  margin-left: 80px;
-}
+    .sticky+.content {
+        padding-top: 102px;
+    }
 </style>
 
 
@@ -218,9 +187,9 @@ table.center {
 
 
 <div id="formContainer">
-        <form id="my_form">
-                <div class="container-fluid">
-                        <!--  <div class="row">
+    <form id="my_form">
+        <div class="container-fluid">
+            <!--  <div class="row">
             <div class="col-auto">
                 <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
             </div>
@@ -237,920 +206,1448 @@ table.center {
 
         </div> -->
 
-                        <div class="row">
-                                <div class="col-auto">
-                                        <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
-                                </div>
-                                <div class="col-auto p-1 font-weight-bold">
-                                        <h5><B><?= htmlspecialchars($menu_name) ?> <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
-                                                        <?php if ($check_ == "1") { ?>
+            <div class="row">
+                <div class="col-auto">
+                    <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
+                </div>
+                <div class="col-auto p-1 font-weight-bold">
+                    <h5><B><?= htmlspecialchars($menu_name) ?> <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
+                            <?php if ($check_ == "1") { ?>
 
-                                                                <font color="red">ช่วงทดลอง</font>
-                                                        <?php } else { ?>
+                                <font color="red">ช่วงทดลอง</font>
+                            <?php } else { ?>
 
-                                                        <? } ?>
-                                                </B></h5>
-                                </div>
-
-
-                        </div>
-
-                                <div><b>กลุ่มเป้าหมาย</b> ผู้ป่วยทุกรายที่เข้าพักการรักษาตัวโรงพยาบาล ยกเว้น ผู้ป่วยแผนกกุมารเวชกรรม สูติกรรม (ห้องคลอด,หลังคลอด) ต้องได้รับการประเมินคะแนนความเสี่ยงต่อการเกิดแผลกดทับตามแบบ Braden Scale โดยกำหนด ให้บันทึกค่าคะแนนความเสี่ยง<br />
-                        ต่อการเกิดแผลในแบบประเมินสมรรถนะแรกรับหรือภายใน 24 ชั่วโมง<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;คะแนนรวม  &le; 16 คะแนน จัดเป็นกลุ่มเสี่ยงต้องประเมินความเสี่ยงต่อการเกิดแผลทุกวันและได้รับการดูแลตามมาตรฐานที่กำหนด<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;คะแนนรวม  &gt; 16 คะแนน ประเมินซ้ำเมื่อมีปัจจัยเสี่ยงอย่างใดอย่างหนึ่งใน 6 ปัจจัยลดลงอย่างน้อย 1 คะแนน<br />
-                        ส่วนที่ 1 แบบประเมิน Braden scale &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทำเครื่องหมาย / ในช่องและรวมคะแนน
-                        </div>
-
-                        <?php
-                        $checked = 'checked="checked"';
-
-                        $variation1 = isset($row['variation1']) ? (int)$row['variation1'] : 0;
-                        $variation2 = isset($row['variation2']) ? (int)$row['variation2'] : 0;
-                        $variation3 = isset($row['variation3']) ? (int)$row['variation3'] : 0;
-                        $variation4 = isset($row['variation4']) ? (int)$row['variation4'] : 0;
+                            <? } ?>
+                        </B></h5>
+                </div>
 
 
-                        
-                        $font_color = 'white';
-                         // Set the background color based on the value of total_sum
-                        if ($variation1 == 0) {
-
-                                $bg_color1 = 'green';       
-                                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
-                               
-                        } elseif ($variation1 >= 1 && $variation1 <= 2) {
-
-                                $bg_color1 = 'yellow';
-                                $font_color = 'black';
-                                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
-                        } elseif ($variation1 >= 3 ) {
-                                $bg_color1 = 'red';
-                                
-                                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
-                        } else {
-                                $bg_color1 = ''; // default if the value is outside the range
-                        }
-
-
-                        if ($variation2 == 0) {
-
-                                $bg_color2 = 'green';       
-                                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
-                               
-                        } elseif ($variation2 >= 1 && $variation2 <= 2) {
-
-                                $bg_color2 = 'yellow';
-                                $font_color = 'black';
-                                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
-                        } elseif ($variation2 >= 3 ) {
-                                $bg_color2 = 'red';
-                                
-                                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
-                        } else {
-                                $bg_color2 = ''; // default if the value is outside the range
-                        }
-
-                        if ($variation3 == 0) {
-
-                                $bg_color3 = 'green';       
-                                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
-                               
-                        } elseif ($variation3 >= 1 && $variation3 <= 2) {
-
-                                $bg_color3 = 'yellow';
-                                $font_color = 'black';
-                                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
-                        } elseif ($variation3 >= 3 ) {
-                                $bg_color3 = 'red';
-                                
-                                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
-                        } else {
-                                $bg_color3 = ''; // default if the value is outside the range
-                        }
-
-                        if ($variation4 == 0) {
-
-                                $bg_color4 = 'green';       
-                                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
-                               
-                        } elseif ($variation4 >= 1 && $variation4 <= 2) {
-
-                                $bg_color4 = 'yellow';
-                                $font_color = 'black';
-                                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
-                        } elseif ($variation4 >= 3 ) {
-                                $bg_color4 = 'red';
-                                
-                                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
-                        } else {
-                                $bg_color4 = ''; // default if the value is outside the range
-                        }
+            </div>
 
 
 
-                       //echo $variation1;
+            <?php
+            $checked = 'checked="checked"';
 
-                        ?>
-
-                        <div class="card-group pb-3 ">
-                                <div class="card">
-                                        <div class="card-body" style=" overflow-y: auto;">
-
-
-                                        <?php
-// Get the current hour in 24-hour format
-$current_hour = date('H:i');
-
-// Determine which radio should be checked based on the time range
-$work_shift1_checked = '';
-$work_shift2_checked = '';
-$work_shift3_checked = '';
+            $variation1 = isset($row['variation1']) ? (int)$row['variation1'] : 0;
+            $variation2 = isset($row['variation2']) ? (int)$row['variation2'] : 0;
+            $variation3 = isset($row['variation3']) ? (int)$row['variation3'] : 0;
+            $variation4 = isset($row['variation4']) ? (int)$row['variation4'] : 0;
 
 
 
-if ($current_hour >= '00:00' && $current_hour <= '07:59') {
+            $font_color = 'white';
+            // Set the background color based on the value of total_sum
+            if ($variation1 == 0) {
 
-    $work_shift1_checked = 'checked="checked"'; // Morning shift (08:00 - 16:00)
+                $bg_color1 = 'green';
+                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
 
-} elseif ($current_hour > '08:00' && $current_hour <= '15:59') {
-    $work_shift2_checked = 'checked="checked"'; // Evening shift (16:01 - 23:59)
-} elseif ($current_hour >= '16:00' && $current_hour <= '23:59') {
-    $work_shift3_checked = 'checked="checked"'; // Night shift (00:00 - 07:00)
-}
-?>
+            } elseif ($variation1 >= 1 && $variation1 <= 2) {
 
-<!--<div class="custom-control custom-radio col-sm-1">
-    <input type="radio"  <?= (isset($work_shift1_checked)  ? htmlspecialchars($work_shift1_checked) : htmlspecialchars($row['work_shift'])) ?>  class="custom-control-input" id="work_shift1" name="work_shift" value="1">
-    <label class="custom-control-label" for="work_shift1" style="font-size:100%; background-color:yellow;">
-        <strong>&nbsp;ดึก&nbsp;</strong>
-    </label>
-</div>
+                $bg_color1 = 'yellow';
+                $font_color = 'black';
+                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
+            } elseif ($variation1 >= 3) {
+                $bg_color1 = 'red';
 
-<div class="custom-control custom-radio col-sm-1">
-    <input type="radio" <?= (isset($work_shift2_checked)  ? htmlspecialchars($work_shift2_checked) : htmlspecialchars($row['work_shift'])) ?> class="custom-control-input" id="work_shift2" name="work_shift" value="2">
-    <label class="custom-control-label" for="work_shift2" style="font-size:100%; background-color:yellow;">
-        <strong>&nbsp;เช้า&nbsp;</strong>
-    </label>
-</div>
+                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
+            } else {
+                $bg_color1 = ''; // default if the value is outside the range
+            }
 
-<div class="custom-control custom-radio col-sm-1">
-    <input type="radio" <?= (isset($work_shift3_checked)  ? htmlspecialchars($work_shift3_checked) : htmlspecialchars($row['work_shift'])) ?> class="custom-control-input" id="work_shift3" name="work_shift" value="3">
-    <label class="custom-control-label" for="work_shift3" style="font-size:100%; background-color:yellow;">
-        <strong>&nbsp;บ่าย&nbsp;</strong>
-    </label>
-</div>-->
+
+            if ($variation2 == 0) {
+
+                $bg_color2 = 'green';
+                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
+
+            } elseif ($variation2 >= 1 && $variation2 <= 2) {
+
+                $bg_color2 = 'yellow';
+                $font_color = 'black';
+                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
+            } elseif ($variation2 >= 3) {
+                $bg_color2 = 'red';
+
+                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
+            } else {
+                $bg_color2 = ''; // default if the value is outside the range
+            }
+
+            if ($variation3 == 0) {
+
+                $bg_color3 = 'green';
+                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
+
+            } elseif ($variation3 >= 1 && $variation3 <= 2) {
+
+                $bg_color3 = 'yellow';
+                $font_color = 'black';
+                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
+            } elseif ($variation3 >= 3) {
+                $bg_color3 = 'red';
+
+                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
+            } else {
+                $bg_color3 = ''; // default if the value is outside the range
+            }
+
+            if ($variation4 == 0) {
+
+                $bg_color4 = 'green';
+                //$message = 'แนะนำประเมินต่อทุก 1 สัปดาห์';
+
+            } elseif ($variation4 >= 1 && $variation4 <= 2) {
+
+                $bg_color4 = 'yellow';
+                $font_color = 'black';
+                //$message = 'แนะนำประเมินต่อทุก 2 วัน';
+            } elseif ($variation4 >= 3) {
+                $bg_color4 = 'red';
+
+                //$message = 'แนะนำประเมินวันละ 1 ครั้ง';
+            } else {
+                $bg_color4 = ''; // default if the value is outside the range
+            }
+
+
+
+            //echo $variation1;
+
+            ?>
+
+            <div class="card-group pb-3 ">
+                <div class="card">
+                    <div class="card-body" style=" overflow-y: auto;">
 
 
                         <div class="row">
 
 
-                            &nbsp;&nbsp;&nbsp;&nbsp;<label>เวร: </label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['work_shift'] == '1') {
-                                                                                                echo 'checked="checked"';
-                                                                                        } else if($id == null) {
-                                                                                                echo $work_shift1_checked;
-                                                                                        }?> class="custom-control-input" id="work_shift1" name="work_shift" value="1">
-                                        <label class="custom-control-label" for="work_shift1" style="font-size:100%; background-color:yellow;"><strong>&nbsp;ดึก&nbsp;</strong></label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?php if ($row['work_shift'] == '2') {
-                                                                                                echo 'checked="checked"';
-                                                                                        } else if($id == null) {
-                                                                                                echo $work_shift2_checked;
-                                                                                        }?>  class="custom-control-input" id="work_shift2" name="work_shift" value="2">
-                                        <label class="custom-control-label" for="work_shift2" style="font-size:100%; background-color:orange;"><strong>&nbsp;เช้า&nbsp;</strong></label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?php if ($row['work_shift'] == '3') {
-                                                                                                echo 'checked="checked"';
-                                                                                        } else if($id == null) {
-                                                                                                echo $work_shift3_checked;
-                                                                                        }?>  class="custom-control-input" id="work_shift3" name="work_shift" value="3">
-                                        <label class="custom-control-label" for="work_shift3" style="font-size:100%; background-color:gray;"><strong>&nbsp;บ่าย&nbsp;</strong></label>
-                                </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="custom-control custom-radio col-2 col-md-2">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['chronic_check'] == '1') {
+                                                                                echo 'checked="checked"';
+                                                                            } ?> class="custom-control-input" id="chronic_check1" name="chronic_check" value="1">
+                                <label class="custom-control-label" for="chronic_check1" style="font-size:100%; background-color:yellow;"><strong>&nbsp;Stroke&nbsp;</strong></label>
+                            </div>
+                            <div class="custom-control custom-radio col-2 col-md-2">
+                                <input type="radio" <?php if ($row['chronic_check'] == '2') {
+                                                        echo 'checked="checked"';
+                                                    } ?> class="custom-control-input" id="chronic_check2" name="chronic_check" value="2">
+                                <label class="custom-control-label" for="chronic_check2" style="font-size:100%; background-color:orange;"><strong>&nbsp;TBI&nbsp;</strong></label>
+                            </div>
+                            <div class="custom-control custom-radio col-2 col-md-2">
+                                <input type="radio" <?php if ($row['chronic_check'] == '3') {
+                                                        echo 'checked="checked"';
+                                                    } ?> class="custom-control-input" id="chronic_check3" name="chronic_check" value="3">
+                                <label class="custom-control-label" for="chronic_check3" style="font-size:100%; background-color:gray;"><strong>&nbsp;SCI&nbsp;</strong></label>
+                            </div>
 
-                                                        
-
+                            <div class="row">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" <?php if ($row['type_check'] == '1') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="type_check1" value="1" name="type_check">
+                                    <label class="custom-control-label" for="type_check1"> IMC </label>
+                                </div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<div class="custom-control custom-radio">
+                                    <input type="radio" <?php if ($row['type_check'] == '2') {
+                                                                echo 'checked="checked"';
+                                                            } ?> class="custom-control-input" id="type_check2" value="2" name="type_check">
+                                    <label class="custom-control-label" for="type_check2"> Non-IMC </label>
+                                </div>
+                            </div>
 
                         </div>
 
 
 
 
+
+
                         <div class="row">
 
-                        <div class="col-12 col-md-12">
-                               
+                            <div class="col-12 col-md-12">
 
-                                        <table lass="center" id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
-                                                <tr style="border:1px solid #000;margin: 45px;">
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%" colspan="2" >&nbsp;<b>คะแนน Braden Scale</b></td>
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b>คะแนน</b></td>
+                                <table lass="center" id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;<b>กิจกรรม</b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;<b>แบบประเมินกิจวัตรประจำวันของผู้ป่วย (Barthel index)</b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b>Admit</b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b>D/C</b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b></b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b></b></td>
 
 
 
-                                                </tr>
+                                    </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การรับรู้</b></td>
-                                                </tr>
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>1.Feeding รับประทานอาหารเมื่อเตรียมสำรับไว้ให้เรียบร้อยต่อหน้า</b></td>
+                                    </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                    <tr style="border:1px solid #000;margin: 45px;">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ไม่สามารถตักอาหารเข้าปากเองได้</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['perception'] == '4') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="perception4" value="4" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception4" style="font-size:100%;">4</label>
-                                                                </div>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['feeding'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="feeding0" value='1' name="feeding" oninput="feedingCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="feeding0" style="font-size:100%;">0</label>
+                                            </div>
 
-                                                        </td>
+                                        </td>
 
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['feeding_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="feeding_dc0" value="1" name="feeding_dc" oninput="feedingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="feeding_dc0" style="font-size:100%;">0</label>
+                                            </div>
 
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
 
 
 
-                                                </tr>
+                                    </tr>
 
-                                                <!-- 2 -->
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                    
+                                    <tr style="border:1px solid #000;margin: 45px;">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;สับสน สื่อสารไม่ได้บางครั้ง</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ตักอาหารเองได้ แต่ต้องมีคนช่วย เช่น ช่วยใช้ช้อนตักอาหารเตรียมไว้ / ตัดเป็นชิ้น</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                      <input type="radio" <?php if ($row['perception'] == '3') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="perception3" value="3" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception3" style="font-size:100%;">3</label>
-                                                                </div>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['feeding'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="feeding5" value="5" name="feeding" oninput="feedingCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="feeding5" style="font-size:100%;">5</label>
+                                            </div>
 
-                                                        </td>
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['feeding_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="feeding_dc5" value="5" name="feeding_dc" oninput="feedingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="feeding_dc5" style="font-size:100%;">5</label>
+                                            </div>
 
-                                                </tr>
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
 
-                                                <!-- 3 -->
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                    </tr>
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ตอบสนองความเจ็บปวด</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['perception'] == '2') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="perception2" value="2" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception2" style="font-size:100%;">2</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                <!-- 4 -->
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ไม่ตอบสนอง</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['perception'] == '1') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="perception1" value="1" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception1" style="font-size:100%;">1</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-
-
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การเปียกชุ่มของผิวหนัง</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['wetting_the_skin'] == '4') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="wetting_the_skin4" value="4" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin4" style="font-size:100%;">4</label>
-                                                                </div>
-
-                                                        </td>
-
-
-
-
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปียกชุ่มบางครั้ง</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['wetting_the_skin'] == '3') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="wetting_the_skin3" value="3" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin3" style="font-size:100%;">3</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปียกชุ่มบ่อยครั้ง</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['wetting_the_skin'] == '2') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="wetting_the_skin2" value="2" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin2" style="font-size:100%;">2</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปียกชุ่มตลอดเวลา</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['wetting_the_skin'] == '1') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="wetting_the_skin1" value="1" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin1" style="font-size:100%;">1</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                               
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การทำกิจกรรม</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['doing_activities'] == '4') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="doing_activities4" value="4" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities4" style="font-size:100%;">4</label>
-                                                                </div>
-
-                                                        </td>
-
-
-
-
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เดินได้ระยะสั้น/ต้องพยุง</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['doing_activities'] == '3') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="doing_activities3" value="3" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities3" style="font-size:100%;">3</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                               
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ทรงตัวไม่อยู่ ใช้รถเข็น</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['doing_activities'] == '2') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="doing_activitie2" value="2" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities2" style="font-size:100%;">2</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                               
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;อยู่บนเตียงตลอดเวลา</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['doing_activities'] == '1') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="doing_activities1" value="1" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities1" style="font-size:100%;">1</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-
-                                            
-
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การเคลื่อนไหว</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['movement'] == '4') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="movement4" value="4" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement4" style="font-size:100%;">4</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปลี่ยนท่าได้บ่อยครั้ง</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['movement'] == '3') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="movement3" value="3" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement3" style="font-size:100%;">3</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                               
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปลี่ยนท่าได้บางครั้ง</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['movement'] == '2') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="movement2" value="2" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement2" style="font-size:100%;">2</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปลี่ยนท่าไม่ได้</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['movement'] == '1') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="movement1" value="1" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement1" style="font-size:100%;">1</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การได้รับอาหาร</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['getting_food'] == '4') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="getting_food4" value="4" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food4" style="font-size:100%;">4</label>
-                                                                </div>
-
-                                                        </td>
-
-
-
-
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;Feed ได้หมด/กินได้ &gt; 1/2 ถาด</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['getting_food'] == '3') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="getting_food3" value="3" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food3" style="font-size:100%;">3</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;Feed ได้บ้าง/กินได้ 1/2 ถาด</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['getting_food'] == '2') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="getting_food2" value="2" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food2" style="font-size:100%;">2</label>
-                                                                </div>
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;NPO / กินได้ &lt; 1/3 ถาด</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['getting_food'] == '1') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="getting_food1" value="1" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food1" style="font-size:100%;">1</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-
-
-
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>การเสียดสี</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ไม่มีปัญหา</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['sarcasm'] == '3') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="sarcasm3" value="3" name="sarcasm" oninput="sarcasmcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sarcasm3" style="font-size:100%;">3</label>
-                                                                </div>
-                                                        </td>
-
-
-
-
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เสียดสี / ลื่นไถลได้</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['sarcasm'] == '2') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="sarcasm2" value="2" name="sarcasm" oninput="sarcasmcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sarcasm2" style="font-size:100%;">2</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
-
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;กล้ามเนื้อหดเกร็ง</td>
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
-                                                        <div class="custom-control custom-radio col-sm-1">
-                                                                        <input type="radio" <?php if ($row['sarcasm'] == '1') {
-                                                                                                        echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="sarcasm1" value="1" name="sarcasm" oninput="sarcasmcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sarcasm1" style="font-size:100%;">1</label>
-                                                                </div>
-
-                                                        </td>
-
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="2">&nbsp;<b>คะแนน</b></td>
-                                                </tr>
-
-                                                <tr style="border:1px solid #000;margin: 45px;">
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;( 5 - 23 คะแนน)</td>
-
-
-
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px; font-size: 20px;" width="1%">
-                                                                <div>
-                                                                <b><?= htmlspecialchars($row['score']) ?></b> 
-                                                                </div>
-
-                                                        </td>
-
-
-                                                                                        </tr>                                      
-
-                                                
-
-
-                                        </table>
-
-                                        <br>
                                   
-                        
+                                    <tr style="border:1px solid #000;margin: 45px;">
 
-                                </div>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = ตักอาหารและช่วยตัวเองได้ปกติ</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['feeding'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="feeding10" value="10" name="feeding" oninput="feedingCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="feeding10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['feeding_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="feeding_dc10" value="10" name="feeding_dc" oninput="feedingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="feeding_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
 
 
 
 
-                               
-                                <hr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>2.Transfer ลุกนั่งจากที่นอนหรือจากเตียงไปยังเก้าอี้
+                                            </b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ไม่สามารถนั่งได้ (นั่งแล้วจะล้มเสมอ)หรือต้องใช้คน 2 คนช่วยกันยกขึ้น</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer0" value="1" name="tranfer" oninput="tranferCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer_dc0" value="1" name="tranfer_dc" oninput="tranferDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ต้องการความช่วยเหลืออย่างมากจึงจะนั่งได้ เช่น ต้องใช้คน 1-2คนพยุงจึงจะนั่งได้</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer5" value="5" name="tranfer" oninput="tranferCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer_dc5" value="5" name="tranfer_dc" oninput="tranferDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = ต้องการความช่วยเหลือบ้าง เช่น บอกให้ทำตามช่วยพยุงเล็กน้อย</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer10" value="10" name="tranfer" oninput="WettingTheSkinCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer_dc10" value="10" name="tranfer_dc" oninput="tranferDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;15 = ทำเองได้</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer'] == '15') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer15" value="15" name="tranfer" oninput="WettingTheSkinCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer15" style="font-size:100%;">15</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['tranfer_dc'] == '15') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="tranfer_dc15" value="15" name="tranfer_dc" oninput="tranferDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="tranfer_dc15" style="font-size:100%;">15</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="3">&nbsp;<b>3.Grooming การล้างหน้า หวีผม แปรงฟัน โกนหนวด</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ต้องการความช่วยเหลือ</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['grooming'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="grooming0" value="1" name="grooming" oninput="groomingCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="grooming0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['grooming_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="grooming_dc0" value="1" name="grooming_dc" oninput="groomingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="grooming_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ทำได้เอง (รวมทั้งที่ทำได้เอง ถ้าเตรียมอุปกรณ์ไว้ให้)</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['grooming'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="grooming5" value="5" name="grooming" oninput="groomingCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="grooming5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['grooming_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="grooming_dc5" value="5" name="grooming_dc" oninput="groomingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="grooming_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>4.Toilet use การใช้ห้องน้ำ</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ช่วยตัวเองไม่ได้</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['toilet_use'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="toilet_use0" value="1" name="toilet_use" oninput="toiletUseCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="toilet_use0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['toilet_use_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="toilet_use_dc0" value="1" name="toilet_use_dc" oninput="toiletUseDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="toilet_use_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ทำได้เอง (ต้องการความช่วยเหลือในบางสิ่ง)</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['toilet_use'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="toilet_use5" value="5" name="toilet_use" oninput="toiletUseCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="toilet_use5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['toilet_use_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="toilet_use_dc5" value="5" name="toilet_use_dc" oninput="toiletUseDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="toilet_use_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = ช่วยเหลือตัวเองได้ดี(ขึ้นนั่งและลงจากโถส้วมได้เอง ทำความสะอาดได้เรียบร้อยหลังเสร็จ)</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['toilet_use'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="toilet_use10" value="10" name="toilet_use" oninput="toiletUseCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="toilet_use10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['toilet_use_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="toilet_use_dc10" value="10" name="toilet_use_dc" oninput="toiletUseDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="toilet_use_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="3">&nbsp;<b>5.Bathing การอาบน้ำ</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ต้องมีคนช่วยหรือทำให้</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bathing'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bathing0" value="1" name="bathing" oninput="bathingcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bathing0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bathing_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bathing_dc0" value="1" name="bathing_dc" oninput="bathingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bathing_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = อาบน้ำได้เอง</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bathing'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bathing5" value="5" name="bathing" oninput="bathingcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bathing5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bathing_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bathing_dc5" value="5" name="bathing_dc" oninput="bathingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bathing_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>6.Mobility การเคลื่อนที่ภายในห้องหรือบ้าน</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = เคลื่อนที่ไปไหนไม่ได้</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility0" value="1" name="mobility" oninput="mobilitycheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility0" style="font-size:100%;">0</label>
+                                            </div>
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility_dc0" value="1" name="mobility_dc" oninput="mobilityDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ต้องใช้รถเข็นช่วยตัวเองให้เคลื่อนที่ได้เอง(ไม่ต้องมีคนช่วยเข็น)</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility5" value="5" name="mobility" oninput="mobilitycheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility_dc5" value="5" name="mobility_dc" oninput="mobilityDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = เดินหรือเคลื่อนที่ได้โดยมีคนช่วย เช่น พยุง หรือบอกให้ทำตาม</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility10" value="10" name="mobility" oninput="mobilitycheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility_dc10" value="10" name="mobility_dc" oninput="mobilityDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;15 = เดินหรือเคลื่อนที่ได้เอง</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility'] == '15') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility15" value="15" name="mobility" oninput="mobilitycheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility15" style="font-size:100%;">15</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['mobility_dc'] == '15') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="mobility_dc15" value="15" name="mobility_dc" oninput="mobilityDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="mobility_dc15" style="font-size:100%;">15</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>7.Stairs การขึ้นลงบันได 1 ขั้น</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ไม่สามารถทำได้</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['stairs'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="stairs0" value="1" name="stairs" oninput="stairscheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="stairs0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['stairs_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="stairs_dc0" value="1" name="stairs_dc" oninput="stairsDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="stairs_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ต้องการคนช่วยเหลือ</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['stairs'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="stairs5" value="5" name="stairs" oninput="stairscheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="stairs5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['stairs_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="stairs_dc5" value="5" name="stairs_dc" oninput="stairsDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="stairs_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = ขึ้นลงเองได้ (ถ้าต้องการใช้อุปกรณ์ เช่น walker)</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['stairs'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="stairs10" value="10" name="stairs" oninput="foodcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="stairs10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['stairs_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="stairs_dc10" value="10" name="stairs_dc" oninput="stairsDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="stairs_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>8.Dressing การสวมใส่เสื้อผ้า
+                                            </b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = ต้องมีคนช่วยสวมใส่ให้ ช่วยตัวเองไม่ได้เลยหรือน้อย</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['dressing'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="dressing0" value="1" name="dressing" oninput="dressingcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="dressing0" style="font-size:100%;">0</label>
+                                            </div>
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['dressing_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="dressing_dc0" value="1" name="dressing_dc" oninput="dressingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="dressing_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = ช่วยตัวเองได้ร้อยละ 50 ที่เหลือต้องมีคนช่วย</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['dressing'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="dressing5" value="5" name="dressing" oninput="dressingcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="dressing5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['dressing_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="dressing_dc5" value="5" name="dressing_dc" oninput="dressingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="dressing_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = ช่วยเหลือตัวเองได้ดี (รวมทั้งการติดกระดุม รูดซิป)</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['dressing'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="dressing10" value="10" name="dressing" oninput="dressingcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="dressing10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['dressing_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="dressing_dc10" value="10" name="dressing_dc" oninput="dressingDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="dressing_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>9.Bowel การกลั้นการถ่ายอุจจาระ ใน 1 สัปดาห์ที่ผ่านมา
+                                            </b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = กลั้นไม่ได้ หรือต้องการสวนอุจจาระอยู่เสมอ</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bowel'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bowel0" value="1" name="bowel" oninput="bowelcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bowel0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bowel_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bowel_dc0" value="1" name="bowel_dc" oninput="bowelDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bowel_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = กลั้นไม่ได้เป็นบางครั้ง(ไม่เกิน 1 สัปดาห์ต่อครั้ง)</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bowel'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bowel5" value="5" name="bowel" oninput="bowelcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bowel5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bowel_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bowel_dc5" value="5" name="bowel_dc" oninput="bowelDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bowel_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = กลั้นได้ปกติ</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bowel'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bowel10" value="10" name="bowel" oninput="bowelcheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bowel10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bowel_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bowel_dc10" value="10" name="bowel_dc" oninput="bowelDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bowel_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>10.Bladder การกลั้นปัสสาวะใน 1 สัปดาห์ที่ผ่านมา</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;0 = กลั้นไม่ได้ หรือใส่สายสวนปัสสาวะ และไม่สามารถดูแลตัวเองได้</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bladder'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bladder0" value="1" name="bladder" oninput="bladdercheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bladder0" style="font-size:100%;">0</label>
+                                            </div>
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bladder_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bladder_dc0" value="1" name="bladder_dc" oninput="bladderDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bladder_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;5 = กลั้นไม่ได้เป็นบางครั้ง(ไม่เกินวันละ 1 ครั้ง)</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bladder'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bladder5" value="5" name="bladder" oninput="bladdercheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bladder5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bladder_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bladder_dc5" value="5" name="bladder_dc" oninput="bladderDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bladder_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;10 = กลั้นได้ปกติ</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bladder'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bladder10" value="10" name="bladder" oninput="bladdercheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bladder10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['bladder_dc'] == '10') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="bladder_dc10" value="10" name="bladder_dc" oninput="bladderDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="bladder_dc10" style="font-size:100%;">10</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="2">&nbsp;<b>รวมคะแนน</b></td>
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;</td>
+
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px; font-size: 20px;" width="1%">
+                                            <div>
+                                                <b><?= htmlspecialchars($row['score']) ?></b>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px; font-size: 20px;" width="1%">
+                                            <div>
+                                                <b><?= htmlspecialchars($row['score_dc']) ?></b>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                </table>
+
+                                <br>
+
+                            </div>
+
+                            <hr>
 
                         </div>
 
-                      <!--  <div class="card-group pb-3 ">
+                        <div class="row">
+
+                            <div class="col-12 col-md-12">
+                                <table lass="center" id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" >&nbsp;<b></b></td>  
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%" >&nbsp;<b>THE MODIFIED RANKIN SCALE</b></td>                  
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b>Admit</b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b>D/C</b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b></b></td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;<b></b></td>
+
+
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;0</td>
+
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ไม่มีความผิดปกติเลย</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '9') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale0" value="9" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '9') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc0" value="9" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc0" style="font-size:100%;">0</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <!-- 2 -->
+                                    <tr style="border:1px solid #000;margin: 45px;">
+
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;1</td>
+
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ไม่มีความผิดปกติที่รุนแรง สามารถทำกิจวัตรประจำวันได้ทุกอย่าง ทำงานอาชีพได้</td>
+
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale1" value="1" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale1" style="font-size:100%;">1</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '1') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc1" value="1" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc1" style="font-size:100%;">1</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;2</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;มีความผิดปกติเล็กน้อย สามารถทำกิจวัตรประจำวันได้ทุกอย่าง แต่ทำงานอาชีพไม่ได้</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '2') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale2" value="2" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale2" style="font-size:100%;">2</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '2') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc2" value="2" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc2" style="font-size:100%;">2</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+                                    
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;3</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;มีความผิดปกติพอสมควร สามารถทำกิจวัตรประจำวันได้บางอย่าง เดินได้โดยไม่ต้องมีคนช่วย</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '3') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale3" value="3" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale3" style="font-size:100%;">3</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '3') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc3" value="3" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc3" style="font-size:100%;">3</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;4</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;มีความผิดปกติมาก ไม่สามารถทำกิจวัตรประจำวันเองโดยไม่มีคนช่วยได้ เดินได้แต่ต้องพยุง</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '4') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale4" value="4" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale4" style="font-size:100%;">4</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '4') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc4" value="4" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc4" style="font-size:100%;">4</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;5</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;มีความผิดปกติรุนแรง ต้องนอนบนเตียง ปัสสาวะราด ต้องการการดูแลอย่างใกล้ชิด</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale5" value="5" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '5') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc5" value="5" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc5" style="font-size:100%;">5</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+
+                                    <tr style="border:1px solid #000;margin: 45px;">
+                                    <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%">&nbsp;6</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เสียชีวิต</td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale'] == '6') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale6" value="6" name="rankin_scale" oninput="rankinScaleCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale6" style="font-size:100%;">6</label>
+                                            </div>
+
+                                        </td>
+
+                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                            <div class="custom-control custom-radio col-sm-1">
+                                                <input type="radio" <?php if ($row['rankin_scale_dc'] == '6') {
+                                                                        echo 'checked="checked"';
+                                                                    } ?>class="custom-control-input" id="rankin_scale_dc6" value="6" name="rankin_scale_dc" oninput="rankinScaleDcCheckValue()">
+                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="rankin_scale_dc6" style="font-size:100%;">6</label>
+                                            </div>
+
+                                        </td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="1%">&nbsp;</td>
+
+                                    </tr>
+                                    
+
+
+
+                                </table>
+
+
+                            </div>
+                        </div>
+<br />
+                        <!--  <div class="card-group pb-3 ">
                                 <div class="card">
                                         <div class="card-body" style=" overflow-y: auto;"> -->
-                                                <div class="row">
-                                                        <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
 
 
 
 
 
-                                                                <div class="row">
-                                                                        <div id="show_check_save"></div>
-                                                                        <input type="hidden" id="an" name="an" value="<?= htmlspecialchars($an) ?>">
-                                                                        <input type="hidden" id="hn" name="hn" value="<?= htmlspecialchars($hn) ?>">
-                                                                        <input type="hidden" id="version" name="version" value="<?= htmlspecialchars($row['version']) ?>">
-                                                                        <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($row['id']) ?>">
-                                                                        <input type="hidden" id="create_user" name="create_user" value="<?= htmlspecialchars($_SESSION['name']) ?>">
-                                                                        <input type="hidden" id="create_datetime" name="create_datetime" value="<?= htmlspecialchars($row['create_datetime']) ?>">
-                                                                        <!-- <input type="hidden" id="score_total_result" name="total_sum" value="10">-->
+                                <div class="row">
+                                    <div id="show_check_save"></div>
+                                    <input type="hidden" id="an" name="an" value="<?= htmlspecialchars($an) ?>">
+                                    <input type="hidden" id="version" name="version" value="<?= htmlspecialchars($row['version']) ?>">
+                                    <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($row['id']) ?>">
+                                    <input type="hidden" id="create_user" name="create_user" value="<?= htmlspecialchars($_SESSION['name']) ?>">
+                                    <input type="hidden" id="create_datetime" name="create_datetime" value="<?= htmlspecialchars($row['create_datetime']) ?>">
+                                    <!-- <input type="hidden" id="score_total_result" name="total_sum" value="10">-->
 
 
-                                                                        <div class="col-md-12 text-right">
-                                                                                <?php
-                                                                                if ((
-                                                                                        Session::checkPermission('IPD_NURSE_NOTE', 'ADD')
-                                                                                ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
-                                                                                        <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="form_save()"><i class="fas fa-save"></i> บันทึก</button>
-                                                                                <?php } ?>
-                                                                              <!--  <a href="mental-health3-pdf.php?an=<?php echo $an; ?>&id=<?=$ids?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a> -->
-                                                                        </div>
-                                                                </div>
-                                                        </div>
-                                                </div>
-                                                <br>
+                                    <div class="col-md-12 text-right">
+                                        <?php
+                                        if ((
+                                            Session::checkPermission('PRS_FORM_BARTHEL', 'ADD')
+                                        ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
+                                            <button type="button" class="btn btn-primary" id="btn_lr_report1" onclick="form_save()"><i class="fas fa-save"></i> บันทึก</button>
+                                        <?php } ?>
+                                          <a href="/pdffile/barthel-pdf.php?an=<?php echo $an; ?>&id=<?= $ids ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
 
-                                                <script src="../include/my_function.js"></script>
-                                                <script type="text/javascript">
-                                                        function myFunction() {
-                                                                alert("Page is loaded");
-                                                        }
-
-
-                                                
+                        <script src="../include/my_function.js"></script>
+                        <script type="text/javascript">
+                            function myFunction() {
+                                alert("Page is loaded");
+                            }
 
 
-                                                function display_scoreyellow(sum_score, score_display_id) {
-                                                                if (sum_score === "" || sum_score === null) {
-                                                                        $('#' + score_display_id).html("");
-                                                                } else {
-                                                                        color = 'inherit';
-                                                                        if (sum_score > 0 && sum_score <= 2) {
-                                                                                color = '#e6b728';
-                                                                        } else if (sum_score == 0) {
-                                                                                color = '#45c351';
-                                                                        } else if (sum_score >= '3') {
-                                                                                color = '#e51616';
-                                                                        } 
-                                                                        $('#' + score_display_id).html("<div class='alert text-white text-center font-weight-bold' style='font-size:100%;  background-color: " + color + ";'>" + "</div>");
-                                                                }
-                                                        }
+                            function form_save() {
+                                var chronic_check = $('input[name="chronic_check"]:checked').val();
+                                var type_check = $('input[name="type_check"]:checked').val();
+
+                                if (chronic_check== undefined) {
+                                    $('[name="chronic_check"]').focus();
+                                    alert('Stroke / TBI / SCI');
+                                } 
+                                else if (type_check == undefined) {
+                                    $('[name="type_check"]').focus();
+                                    alert('IMC / Non-IMC');
+                                }
+                                
+
+                                var url_update = "form-barthel-update.php";
+                                var url_save = "form-barthel-save.php";
+                                var id = $("#id").val();
+                                var my_form = $("#my_form").serialize();
+
+                                if (id == "") {
+                                    $.post(url_save, my_form, function(data) {
+                                            $("#show_check_save").html(data);
+                                            // window.history.back();
+                                            // alert("บันทึกข้อมูลสำเร็จ");
+                                            //self.close();
+                                            window.location.reload(true);
+
+                                          /*  if (chronic_check == undefined) {
+                                                window.location.reload(true);
+                                            } else {
+                                                self.close();
+                                            }  */
+
+                                        })
+                                        .fail(function() {
+                                            alert("บันทึกข้อมูลไม่สำเร็จ" + error);
+                                        });
+                                } else {
+                                    $.post(url_update, my_form, function(data) {
+                                            $("#show_check_save").html(data);
 
 
-
-                                                function perceptionCheckValue() {
-                                                        let perception4 = $('input[name="perception4"]:checked').val()?? 0; //0 if nul
-                                                        let perception3 = $('input[name="perception3"]:checked').val()?? 0; //0 if nul
-                                                        let perception2 = $('input[name="perception2"]:checked').val()?? 0; //0 if nul
-                                                        let perception1 = $('input[name="perception1"]:checked').val()?? 0; //0 if nul
-                                                        let sum_score = (parseFloat(perception4)+parseFloat(perception3)+parseFloat(perception2)+parseFloat(perception1))
-                                                        display_scoreyellow(sum_score, "sum_perception");                                                        
-                                                }
+                                        })
+                                        .fail(function() {
+                                            alert("บันทึกข้อมูลไม่สำเร็จ" + error);
+                                            //NotificationMessage('บันทึกข้อมูลไม่สำเร็จ', 'danger');
+                                        });
+                                }
 
 
-                                                function WettingTheSkinCheckValue() {
-                                                        let wetting_the_skin4 = $('input[name="wetting_the_skin4"]:checked').val()?? 0; //0 if nul
-                                                        let wetting_the_skin3 = $('input[name="wetting_the_skin3"]:checked').val()?? 0; //0 if nul
-                                                        let wetting_the_skin2 = $('input[name="wetting_the_skin2"]:checked').val()?? 0; //0 if nul
-                                                        let wetting_the_skin1 = $('input[name="wetting_the_skin1"]:checked').val()?? 0; //0 if nul                                                 
-                                                       // display_scoreyellow(sum_score, "sum_perception");                                                        
-                                                }
+                            }
+                        </script>
 
-                                                function doingCheckValue() {
-                                                        let doing_activities4 = $('input[name="doing_activities4"]:checked').val()?? 0; //0 if nul
-                                                        let doing_activities3 = $('input[name="doing_activities3"]:checked').val()?? 0; //0 if nul
-                                                        let doing_activities2 = $('input[name="doing_activities2"]:checked').val()?? 0; //0 if nul
-                                                        let doing_activities1 = $('input[name="doing_activities1"]:checked').val()?? 0; //0 if nul
-                                                }
-
-                                                function movementCheckValue() {
-                                                        let movement4 = $('input[name="movement4"]:checked').val()?? 0; //0 if nul
-                                                        let movement3 = $('input[name="movement3"]:checked').val()?? 0; //0 if nul
-                                                        let movement2 = $('input[name="movement2"]:checked').val()?? 0; //0 if nul
-                                                        let movement1 = $('input[name="movement1"]:checked').val()?? 0; //0 if nul
-                                                }
-
-                                                function foodCheckValue() {
-                                                        let getting_food4 = $('input[name="getting_food4"]:checked').val()?? 0; //0 if nul
-                                                        let getting_foodt3 = $('input[name="getting_food3"]:checked').val()?? 0; //0 if nul
-                                                        let getting_food2 = $('input[name="getting_food2"]:checked').val()?? 0; //0 if nul
-                                                        let getting_food1 = $('input[name="getting_food1"]:checked').val()?? 0; //0 if nul
-                                                }
-
-
-                                                function sarcasmcheckValue() {
-
-                                                        let sarcasm3 = $('input[name="sarcasm3"]:checked').val()?? 0; //0 if nul
-                                                        let sarcasm2 = $('input[name="sarcasm2"]:checked').val()?? 0; //0 if nul
-                                                        let sarcasm1 = $('input[name="sarcasm1"]:checked').val()?? 0; //0 if nul
-
-                                                }
-
-
-
-
-                                                        function display_score(sum_score, score_display_id) {
-
-                                                                //  console.log(score_display_id)
-                                                                if (sum_score === "" || sum_score === null) {
-                                                                        $('#' + score_display_id).html("");
-                                                                } else {
-
-                                                                        if (sum_score != null) {
-                                                                                let MEWS_COLOR = ['#45c351', '#45c351', '#45c351', '#e6b728', '#e8832a', '#e8832a', '#e51616', '#e51616'];
-                                                                                $('#' + score_display_id).html("<div class='badge text-white mt-1 font-weight-bold' style='class='badge text-white mt-1 font-weight-bold' background-color: " + MEWS_COLOR[sum_score] + ";'>" + sum_score + "</div>");
-                                                                        }
-                                                                }
-                                                        }
-
-                                                        function display_score_total(sum_score, score_display_id) {
-                                                                if (sum_score === "" || sum_score === null) {
-                                                                        $('#' + score_display_id).html("");
-                                                                } else {
-                                                                        color = 'inherit';
-                                                                        if (sum_score > 0 && sum_score <= 36) {
-                                                                                color = '#45c351';
-                                                                        } else if (sum_score >= 37 && sum_score <= 40) {
-                                                                                color = '#e6b728';
-                                                                        } else if (sum_score >= 41) {
-                                                                                color = '#e51616';
-                                                                        }
-                                                                        $('#' + score_display_id).html("<div class='alert text-white text-center font-weight-bold' style='font-size:100%;  background-color: " + color + ";'> ผลรวม : " + sum_score + "</div>");
-                                                                }
-                                                        }
-
-
-                                                        
-                                                        function form_save() {
-
-                                                                var work_shift = $('input[name="work_shift"]:checked').val();
-
-                                                               if (work_shift == undefined) {
-                                                                        $('[name="work_shift"]').focus();
-                                                                        //alert(depart)
-                                                                        alert('work_shift');
-
-                                                                       // window.location.reload(true);
-                                                                }
-
-
-                                                                var url_update = "form-bedscore-update.php";
-                                                                var url_save = "form-bedscore-save.php";
-                                                                var id = $("#id").val();
-                                                                var my_form = $("#my_form").serialize();
-
-                                                                if (id == "") {
-                                                                        $.post(url_save, my_form, function(data) {
-                                                                                        $("#show_check_save").html(data);
-                                                                                        // window.history.back();
-                                                                                        // alert("บันทึกข้อมูลสำเร็จ");
-                                                                                        //self.close();
-                                                                                         window.location.reload(true);
-
-                                                                                         if (work_shift == undefined) { 
-                                                                                                window.location.reload(true);
-                                                                                         }else{
-                                                                                                self.close();  
-                                                                                         }
-
-                                                                                })
-                                                                                .fail(function() {
-                                                                                        alert("บันทึกข้อมูลไม่สำเร็จ" + error);
-                                                                                });
-                                                                } else {
-                                                                        $.post(url_update, my_form, function(data) {
-                                                                                        $("#show_check_save").html(data);
-
-
-                                                                                })
-                                                                                .fail(function() {
-                                                                                        alert("บันทึกข้อมูลไม่สำเร็จ" + error);
-                                                                                        //NotificationMessage('บันทึกข้อมูลไม่สำเร็จ', 'danger');
-                                                                                });
-                                                                }
-
-
-                                                        }
-                                                </script>
-
-                                                <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
-                                                <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">
+                        <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+                        <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">

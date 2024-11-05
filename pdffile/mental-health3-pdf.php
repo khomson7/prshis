@@ -85,12 +85,12 @@ $sql = "select t.*,t2.level_of_consciousness as shift from
 ,if(question4_4 > 0 ,'ด','-') as question4_4,if(question4_5 > 0 ,'ด','-') as question4_5
 ,case when variation4 = 0 then 'ข' when (variation4 > 0 and variation4 <=2) then 'ล' when (variation4 > 2 ) then 'ด' else '' end as variation4
 ,create_user as create_
-FROM prs_mental_health3
+FROM " . DbConstant::KPHIS_DBNAME . ".prs_mental_health3
 WHERE an = :an
 GROUP BY date(create_datetime)
 ORDER BY date ASC
 LIMIT :limit OFFSET :offset)t
-LEFT JOIN prs_mental_health3 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
+LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".prs_mental_health3 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
 ";
 $stmt = $conn->prepare($sql);
 
@@ -116,7 +116,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
 
 // Get total number of days for this AN
-$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM prs_mental_health3 WHERE an = :an";
+$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM " . DbConstant::KPHIS_DBNAME . ".prs_mental_health3 WHERE an = :an";
 $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($query_parameters);
 $totalDays = $countStmt->fetchColumn();
@@ -408,9 +408,9 @@ foreach (['create_'] as $questionIndex  => $questionName) {
         $verticalText3 = implode('<br>', str_split($value3));
 
         // Add the vertical text to the table cells
-        $html .= '<td class="manual-vertical-text">' . $verticalText1 . '</td>';
-        $html .= '<td class="manual-vertical-text">' . $verticalText2 . '</td>';
-        $html .= '<td class="manual-vertical-text">' . $verticalText3 . '</td>';
+        $html .= '<td class="manual-vertical-text" style="font-size:9px;">' . $verticalText1 . '</td>';
+        $html .= '<td class="manual-vertical-text" style="font-size:9px;">' . $verticalText2 . '</td>';
+        $html .= '<td class="manual-vertical-text" style="font-size:9px;">' . $verticalText3 . '</td>';
     }
 
     $html .= '</tr>';  

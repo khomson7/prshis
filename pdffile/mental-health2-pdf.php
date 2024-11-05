@@ -72,12 +72,12 @@ $offset = ($page - 1) * $limit;
 
 $sql = "select t.*,'1' as shift from
 (SELECT *,date(create_datetime) as date,'' as head_
-FROM prs_mental_health2
+FROM " . DbConstant::KPHIS_DBNAME . ".prs_mental_health2
 WHERE an = :an
 GROUP BY date(create_datetime)
 ORDER BY date ASC
 LIMIT :limit OFFSET :offset)t
-LEFT JOIN prs_mental_health2 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
+LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".prs_mental_health2 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
 ";
 $stmt = $conn->prepare($sql);
 
@@ -99,7 +99,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
 
 // Get total number of days for this AN
-$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM prs_mental_health2 WHERE an = :an";
+$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM " . DbConstant::KPHIS_DBNAME . ".prs_mental_health2 WHERE an = :an";
 $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($query_parameters);
 $totalDays = $countStmt->fetchColumn();
