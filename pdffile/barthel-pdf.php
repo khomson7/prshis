@@ -254,18 +254,20 @@ while ($row_item = $stmt_item->fetch()) {
                         $stairss_dc =  $row['stairs_dc'];
                        }
 
-                       $dressings_dc = '-';
+                       $dress_dc = '-';
                        if($row['dressing_dc'] == '1'){
-                        $dressings_dc = 0;
+                        $dress_dc= 0;
                        }else if ($row['dressing_dc'] > '1'){
-                        $dressings_dc =  $row['dressing_dc'];
+                        $dress_dc =  $row['dressing_dc'];
                        }
 
-                       $bowels_dc = '-';
+//echo $dressings_dc;
+                     
+                       $bowelss_dc = '-';
                        if($row['bowel_dc'] == '1'){
-                        $bowels_dc = 0;
+                        $bowelss_dc = 0;
                        }else if ($row['bowel_dc'] > '1'){
-                        $bowels_dc =  $row['bowel_dc'];
+                        $bowelss_dc =  $row['bowel_dc'];
                        }
 
                        $bladders_dc = '-';
@@ -275,11 +277,14 @@ while ($row_item = $stmt_item->fetch()) {
                         $bladders_dc =  $row['bladder_dc'];
                        }
 
-                       $scores_dc = '-';
-                       if($row['score_dc'] >= '0'){                       
+                       $scores_dc = '';
+                       if ($feedings_dc == '-' && $tranfers_dc == '-' && $groomings_dc == '-' && $toilet_uses_dc == '-' && $bathings_dc == '-' 
+                       && $mobilitys_dc == '-' && $stairss_dc == '-' && $dressings_dc = '-' && $bowels_dc = '-' && $bladders_dc = '-') {
+                        $scores_dc = '-';
+                       } else if($row['score_dc'] >= '0'){                       
                         $scores_dc =  $row['score_dc'];
                        }
-
+//echo $scores_dc;
 
                        $rankin_scale = '-';
                        if ($row['rankin_scale'] == '9') {
@@ -544,7 +549,7 @@ $head =
 .'<td style="text-align:left; border:1px solid #000;padding:4px;" rowspan="3"><b>8.Dressing การสวมใส่เสื้อผ้า</b></td>'
 .'<td style="text-align:left; border-top:1px solid #000;padding:4px;">&nbsp;0 = ไม่สามารถทำได้</td>'
 .'<td style="text-align:center; border:1px solid #000;padding:4px;" rowspan="3"><b>'.htmlspecialchars($dressings).'</b></td>'
-.'<td style="text-align:center; border:1px solid #000;padding:4px;" rowspan="3"><b>'.htmlspecialchars($dressings_dc).'</b></td>'
+.'<td style="text-align:center; border:1px solid #000;padding:4px;" rowspan="3"><b>'.htmlspecialchars($dress_dc).'</b></td>'
 .'<td style="text-align:left; border:1px solid #000;padding:4px;" rowspan="3"></td>'
 .'<td style="text-align:left; border:1px solid #000;padding:4px;" rowspan="3"></td>'
 .'</tr>'
@@ -559,7 +564,7 @@ $head =
 .'<td style="text-align:left; border:1px solid #000;padding:4px;" rowspan="3"><b>9.Bowel การกลั้นการถ่ายอุจจาระ ใน 1 สัปดาห์ที่ผ่านมา</b></td>'
 .'<td style="text-align:left; border-top:1px solid #000;padding:4px;">&nbsp;0 = ไม่สามารถทำได้</td>'
 .'<td style="text-align:center; border:1px solid #000;padding:4px;" rowspan="3"><b>'.htmlspecialchars($bowels).'</b></td>'
-.'<td style="text-align:center; border:1px solid #000;padding:4px;" rowspan="3"><b>'.htmlspecialchars($bowels_dc).'</b></td>'
+.'<td style="text-align:center; border:1px solid #000;padding:4px;" rowspan="3"><b>'.htmlspecialchars($bowelss_dc).'</b></td>'
 .'<td style="text-align:left; border:1px solid #000;padding:4px;" rowspan="3"></td>'
 .'<td style="text-align:left; border:1px solid #000;padding:4px;" rowspan="3"></td>'
 .'</tr>'

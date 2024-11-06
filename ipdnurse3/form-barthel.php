@@ -59,6 +59,13 @@ if ($row  = $stmt->fetch()) {
 }
 
 
+if ($row['feeding_dc'] == null && $row['tranfer_dc'] == null  && $row['grooming_dc'] == null  && $row['toilet_use_dc'] == null  && $row['bathing_dc'] == null 
+&& $row['mobility_dc'] == null &&  $row['stairs_dc'] == null  &&  $row['dressing_dc'] == null  && $row['bowel_dc'] == null  && $row['bladder_dc'] == null)
+{
+   $score_dc  = htmlspecialchars('-');
+} else {
+    $score_dc  = htmlspecialchars($row['score_dc']);
+}
 
 if ($id == null || $id != null) {
     $sql_opdscreen = "SELECT opdscreen.vn,opdscreen.hn,opdscreen.cc,opdscreen.hpi,concat(round(opdscreen.bpd,0),'/',round(opdscreen.bps,0)) as bp,
@@ -1313,7 +1320,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                         </td>
                                         <td style="text-align:center; border-right:0.5px solid #000;padding:4px; font-size: 20px;" width="1%">
                                             <div>
-                                                <b><?= htmlspecialchars($row['score_dc']) ?></b>
+                                                <b><?= $score_dc ?></b>
                                             </div>
 
                                         </td>
