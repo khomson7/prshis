@@ -14,7 +14,7 @@ require_once '../mains/main-report.php';
 
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
-$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_BEDSORES', 'VIEW');
+$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_FELLDOWN', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
 require_once '../include/session-modal.php';
 
@@ -30,7 +30,8 @@ $an = $_REQUEST['an']; //รับค่า an
 
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $vn = KphisQueryUtils::getVnByAn($an);
-$menuname = ReportQueryUtils::getLinkMenu(23);
+$menuname = ReportQueryUtils::getLinkMenu(26);
+//echo $menuname;
 ?>
 
 
@@ -45,7 +46,7 @@ $menuname = ReportQueryUtils::getLinkMenu(23);
         </nav>
         <div class="tab-content" id="nav-tabContent">
 
-            <div class="tab-pane fade show active" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'form-bedscore-document.php';?></div>
+            <div class="tab-pane fade show active" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'form-felldown-document.php';?></div>
            
         </div>
     </div>
