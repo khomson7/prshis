@@ -945,11 +945,11 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                             <div class="row">
 
-                                &nbsp;&nbsp;&nbsp;&nbsp;<label>BEE:</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label>อาหารที่ผู้ป่วยได้รับ:</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="bee" id="bee" value="<?= (isset($row['bee']) ? htmlspecialchars($row['bee']) : '') ?>">
-                                </div>TEE:<div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="tee" id="tee" value="<?= (isset($row['tee']) ? htmlspecialchars($row['tee']) : '') ?>">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="XXXXXX" name="pt_food" id="pt_food" value="<?= (isset($row['pt_food']) ? htmlspecialchars($row['pt_food']) : '') ?>">
+                                </div>พลังงานที่ต้องการ:<div class="col-sm-2">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="required_energy" id="required_energy" value="<?= (isset($row['required_energy']) ? htmlspecialchars($row['required_energy']) : '') ?>">
                                 </div>SPENT Nutrition Screening Tool<div class="col-sm-2">
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="spent" id="spent" value="<?= (isset($row['spent']) ? htmlspecialchars($row['spent']) : '') ?>">
                                 </div>/ 4 คะแนน
@@ -1125,7 +1125,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                             </div>
                             <br>
 
-                            <div class="row">
+                           <!-- <div class="row">
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>การมองเห็น: ตา</label>
                                 <div class="custom-control custom-radio col-sm-1">
@@ -1174,7 +1174,7 @@ $check_    = ReportQueryUtils::getProduction($id)
                                     <label class="custom-control-label" for="vision3">ประเมินไม่ได้</label>
                                 </div>
                             </div>
-                            <br>
+                            <br> 
 
                             <div class="row">
 
@@ -1222,8 +1222,7 @@ $check_    = ReportQueryUtils::getProduction($id)
 
 
                             </div>
-
-                            <br>
+                            <br> -->
 
                             <div class="form-group row alert alert-dark text-left">
                                 <B>5.ด้านการทำกิจกรรม (Activity)</B>
