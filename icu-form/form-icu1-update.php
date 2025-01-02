@@ -85,8 +85,10 @@
         $hight =  empty($_REQUEST['hight']) ? null : $_REQUEST['hight'];
         $bmi =  empty($_REQUEST['bmi']) ? null : $_REQUEST['bmi'];
         $alb =  empty($_REQUEST['alb']) ? null : $_REQUEST['alb'];
-        $bee =  empty($_REQUEST['bee']) ? null : $_REQUEST['bee'];
-        $tee =  empty($_REQUEST['tee']) ? null : $_REQUEST['tee'];
+        //$bee =  empty($_REQUEST['bee']) ? null : $_REQUEST['bee'];
+       // $tee =  empty($_REQUEST['tee']) ? null : $_REQUEST['tee'];
+        $pt_food=  empty($_REQUEST['pt_food']) ? null : $_REQUEST['pt_food'];
+        $required_energy=  empty($_REQUEST['required_energy']) ? null : $_REQUEST['required_energy'];
         $spent =  empty($_REQUEST['spent']) ? null : $_REQUEST['spent'];
         $communication_history =  empty($_REQUEST['communication_history']) ? null : $_REQUEST['communication_history'];
         $speaking =  empty($_REQUEST['speaking']) ? null : $_REQUEST['speaking'];
@@ -148,7 +150,7 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_icu_form SET hn=
           ,listen_sound_lungs_clear=:listen_sound_lungs_clear,listen_sound_lungs_crepitation=:listen_sound_lungs_crepitation,listen_sound_lungs_wheezing=:listen_sound_lungs_wheezing
           ,listen_sound_lungs_rhonchi=:listen_sound_lungs_rhonchi,listen_sound_lungs_stridor=:listen_sound_lungs_stridor
           ,cxr=:cxr,sputum=:sputum,abg=:abg,pa_co2=:pa_co2,hco3=:hco3,pao2=:pao2,be=:be,history_of_gastrointestinal=:history_of_gastrointestinal
-          ,bw=:bw,hight=:hight,bmi=:bmi,alb=:alb,bee=:bee,tee=:tee,spent=:spent,communication_history=:communication_history,speaking=:speaking
+          ,bw=:bw,hight=:hight,bmi=:bmi,alb=:alb,required_energy=:required_energy,pt_food=:pt_food,spent=:spent,communication_history=:communication_history,speaking=:speaking
           ,communication=:communication,vision=:vision,listening=:listening,hearing_aids=:hearing_aids,history_affects_activities=:history_affects_activities
           ,daily_activities=:daily_activities,fracture=:fracture,braden_score=:braden_score,mortor_power=:mortor_power,mass=:mass,history_affects_stimulation=:history_affects_stimulation
           ,gcs_e=:gcs_e,gcs_v=:gcs_v,gcs_m=:gcs_m,pupil=:pupil,pupil_rt=:pupil_rt,pupil_lt=:pupil_lt,level_of_consciousness=:level_of_consciousness
@@ -169,7 +171,7 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_icu_form SET hn=
           ,'listen_sound_lungs_clear'=>$listen_sound_lungs_clear,'listen_sound_lungs_crepitation'=>$listen_sound_lungs_crepitation,'listen_sound_lungs_wheezing'=>$listen_sound_lungs_wheezing
           ,'listen_sound_lungs_rhonchi'=>$listen_sound_lungs_rhonchi ,'listen_sound_lungs_stridor'=>$listen_sound_lungs_stridor
           ,'cxr'=>$cxr,'sputum'=>$sputum,'abg'=>$abg,'pa_co2'=>$pa_co2,'hco3'=>$hco3,'pao2'=>$pao2,'be'=>$be,'history_of_gastrointestinal'=>$history_of_gastrointestinal
-          ,'bw'=>$bw,'hight'=>$hight,'bmi'=>$bmi,'alb'=>$alb,'bee'=>$bee,'tee'=>$tee,'spent'=>$spent,'communication_history'=>$communication_history,'speaking'=>$speaking
+          ,'bw'=>$bw,'hight'=>$hight,'bmi'=>$bmi,'alb'=>$alb,'required_energy'=>$required_energy,'pt_food'=>$pt_food,'spent'=>$spent,'communication_history'=>$communication_history,'speaking'=>$speaking
           ,'communication'=>$communication,'vision'=>$vision,'listening'=>$listening,'hearing_aids'=>$hearing_aids,'history_affects_activities'=>$history_affects_activities
           ,'daily_activities'=>$daily_activities,'fracture'=>$fracture,'braden_score'=>$braden_score,'mortor_power'=>$mortor_power,'mass'=>$mass,'history_affects_stimulation'=>$history_affects_stimulation
           ,'gcs_e'=>$gcs_e,'gcs_v'=>$gcs_v,'gcs_m'=>$gcs_m,'pupil'=>$pupil,'pupil_rt'=>$pupil_rt,'pupil_lt'=>$pupil_lt,'level_of_consciousness'=>$level_of_consciousness

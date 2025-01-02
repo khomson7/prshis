@@ -89,8 +89,10 @@ $bw =  empty($_REQUEST['bw']) ? null : $_REQUEST['bw'];
 $hight =  empty($_REQUEST['hight']) ? null : $_REQUEST['hight'];
 $bmi =  empty($_REQUEST['bmi']) ? null : $_REQUEST['bmi'];
 $alb =  empty($_REQUEST['alb']) ? null : $_REQUEST['alb'];
-$bee =  empty($_REQUEST['bee']) ? null : $_REQUEST['bee'];
-$tee =  empty($_REQUEST['tee']) ? null : $_REQUEST['tee'];
+//$bee =  empty($_REQUEST['bee']) ? null : $_REQUEST['bee'];
+//$tee =  empty($_REQUEST['tee']) ? null : $_REQUEST['tee'];
+$pt_food=  empty($_REQUEST['pt_food']) ? null : $_REQUEST['pt_food'];
+$required_energy=  empty($_REQUEST['required_energy']) ? null : $_REQUEST['required_energy'];
 $spent =  empty($_REQUEST['spent']) ? null : $_REQUEST['spent'];
 $communication_history =  empty($_REQUEST['communication_history']) ? null : $_REQUEST['communication_history'];
 $speaking =  empty($_REQUEST['speaking']) ? null : $_REQUEST['speaking'];
@@ -143,7 +145,7 @@ $stimulation =  empty($_REQUEST['stimulation']) ? null : $_REQUEST['stimulation'
     ,heart_disease_history,skin,neck_vien_engorement,listen_to_the_heart,bt,pr,rr,bps,bpd,cbc,hct,hb,plt,pt,ptt,inr
     ,trop_t,ckmb,cpk,echo,ekg,kidney_disease_history,urine_characteristics,io_1,io_2,bun,cr,gfr,e_lyte_na,e_lyte_k,e_lyte_cl,e_lyte_co2,e_lyte_aniengap
     ,ca,po_4,mg,dtx,urine_sr_gr,history_of_lung_disease,o2_sat,et_tube_no,et_tube_no2,o2_hfnc,candular,mark_c_bag,breathing_characteristics
-    ,on_icd,on_icd_2,listen_sound_lungs,cxr,sputum,abg,pa_co2,hco3,pao2,be,history_of_gastrointestinal,bw,hight,bmi,alb,bee,tee,spent
+    ,on_icd,on_icd_2,listen_sound_lungs,cxr,sputum,abg,pa_co2,hco3,pao2,be,history_of_gastrointestinal,bw,hight,bmi,alb,pt_food,required_energy,spent
     ,communication_history,speaking,communication,vision,listening,hearing_aids,history_affects_activities,daily_activities,fracture,braden_score
     ,mortor_power,mass,history_affects_stimulation,gcs_e,gcs_v,gcs_m,pupil,pupil_rt,pupil_lt,level_of_consciousness,ct_brain,pain_score,copt,nrs
     ,summary_of_the_problem,fluid_balance,aeration,nutrition,communication_problem,activity,stimulation,et_other
@@ -152,7 +154,7 @@ $stimulation =  empty($_REQUEST['stimulation']) ? null : $_REQUEST['stimulation'
     ,:heart_disease_history,:skin,:neck_vien_engorement,:listen_to_the_heart,:bt,:pr,:rr,:bps,:bpd,:cbc,:hct,:hb,:plt,:pt,:ptt,:inr
     ,:trop_t,:ckmb,:cpk,:echo,:ekg,:kidney_disease_history,:urine_characteristics,:io_1,:io_2,:bun,:cr,:gfr,:e_lyte_na,:e_lyte_k,:e_lyte_cl,:e_lyte_co2,:e_lyte_aniengap
     ,:ca,:po_4,:mg,:dtx,:urine_sr_gr,:history_of_lung_disease,:o2_sat,:et_tube_no,:et_tube_no2,:o2_hfnc,:candular,:mark_c_bag,:breathing_characteristics
-    ,:on_icd,:on_icd_2,:listen_sound_lungs,:cxr,:sputum,:abg,:pa_co2,:hco3,:pao2,:be,:history_of_gastrointestinal,:bw,:hight,:bmi,:alb,:bee,:tee,:spent
+    ,:on_icd,:on_icd_2,:listen_sound_lungs,:cxr,:sputum,:abg,:pa_co2,:hco3,:pao2,:be,:history_of_gastrointestinal,:bw,:hight,:bmi,:alb,:pt_food,:required_energy,:spent
     ,:communication_history,:speaking,:communication,:vision,:listening,:hearing_aids,:history_affects_activities,:daily_activities,:fracture,:braden_score
     ,:mortor_power,:mass,:history_affects_stimulation,:gcs_e,:gcs_v,:gcs_m,:pupil,:pupil_rt,:pupil_lt,:level_of_consciousness,:ct_brain,:pain_score,:copt,:nrs
     ,:summary_of_the_problem,:fluid_balance,:aeration,:nutrition,:communication_problem,:activity,:stimulation,:et_other
@@ -167,7 +169,7 @@ $stimulation =  empty($_REQUEST['stimulation']) ? null : $_REQUEST['stimulation'
             ,'o2_sat'=>$o2_sat,'et_tube_no'=>$et_tube_no,'et_tube_no2'=>$et_tube_no2,'o2_hfnc'=>$o2_hfnc,'candular'=>$candular,'mark_c_bag'=>$mark_c_bag
             ,'breathing_characteristics'=>$breathing_characteristics,'on_icd'=>$on_icd,'on_icd_2'=>$on_icd_2,'listen_sound_lungs'=>$listen_sound_lungs
             ,'cxr'=>$cxr,'sputum'=>$sputum,'abg'=>$abg,'pa_co2'=>$pa_co2,'hco3'=>$hco3,'pao2'=>$pao2,'be'=>$be,'history_of_gastrointestinal'=>$history_of_gastrointestinal
-            ,'bw'=>$bw,'hight'=>$hight,'bmi'=>$bmi,'alb'=>$alb,'bee'=>$bee,'tee'=>$tee,'spent'=>$spent
+            ,'bw'=>$bw,'hight'=>$hight,'bmi'=>$bmi,'alb'=>$alb,'pt_food'=>$pt_food,'required_energy'=>$required_energy,'spent'=>$spent
             ,'communication_history'=>$communication_history,'speaking'=>$speaking
             ,'communication'=>$communication,'vision'=>$vision,'listening'=>$listening,'hearing_aids'=>$hearing_aids,'history_affects_activities'=>$history_affects_activities
             ,'daily_activities'=>$daily_activities,'fracture'=>$fracture,'braden_score'=>$braden_score,'mortor_power'=>$mortor_power,'mass'=>$mass,'history_affects_stimulation'=>$history_affects_stimulation

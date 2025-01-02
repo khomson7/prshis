@@ -946,10 +946,10 @@ $check_    = ReportQueryUtils::getProduction($id)
                             <div class="row">
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;<label>อาหารที่ผู้ป่วยได้รับ:</label>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="XXXXXX" name="pt_food" id="pt_food" value="<?= (isset($row['pt_food']) ? htmlspecialchars($row['pt_food']) : '') ?>">
-                                </div>พลังงานที่ต้องการ:<div class="col-sm-2">
-                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="required_energy" id="required_energy" value="<?= (isset($row['required_energy']) ? htmlspecialchars($row['required_energy']) : '') ?>">
+                                </div>พลังงานที่ต้องการ:<div class="col-sm-1">
+                                    <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="required_energy" id="required_energy" value="<?= (isset($row['required_energy']) ? htmlspecialchars($row['required_energy']) : '') ?>">(25 - 30 kcal/Kg.)
                                 </div>SPENT Nutrition Screening Tool<div class="col-sm-2">
                                     <input type="text" class="form-control form-control-sm CheckPer_2" placeholder="เฉพาะตัวเลข" name="spent" id="spent" value="<?= (isset($row['spent']) ? htmlspecialchars($row['spent']) : '') ?>">
                                 </div>/ 4 คะแนน
