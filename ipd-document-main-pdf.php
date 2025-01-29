@@ -456,7 +456,7 @@ $head =
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
-            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Special Clinical Report, ( ) NTS, ( ) USG</td>
+            <td  style="border-right:0.5px solid #000;padding:4px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other Special Clinical Report, ( ) NST, ( ) USG</td>
         </tr>
         <tr style="border:1px solid #000;margin: 45px;">
             <td  style="text-align:center; border-right:0.5px solid #000;padding:4px;"></td>
