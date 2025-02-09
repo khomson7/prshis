@@ -37,7 +37,7 @@
         
             <tr>
                
-                    <td><a href="form-felldown.php?an=<?=$an?>&id=<?=$ids?>&loginname=<?=$login?>" target="_blank">แบบประเมินความเสี่ยงต่อการเกิดแผลกดทับ (วันที่ <?=date("d/m/Y", strtotime($create_datetimeAddmissionNurse))?>)</a></td>
+                    <td><a href="form-felldown.php?an=<?=$an?>&id=<?=$ids?>&loginname=<?=$login?>" target="_blank">แบบประเมินภาวะเสี่ยงต่อการพลัดตก หกล้ม (ผู้ป่วยผู้ใหญ่) (วันที่ <?=date("d/m/Y", strtotime($create_datetimeAddmissionNurse))?>)</a></td>
                     
                     <td class='font-weight-bold' style='text-align: center; color: white;  font-size:100%; background-color: gray;'>
                     <?= htmlspecialchars($my_score) ?>
