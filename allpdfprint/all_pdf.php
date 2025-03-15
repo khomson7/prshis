@@ -115,20 +115,80 @@ $head0 = '
 
 // Add the content of the second file here
 require_once '../allpdfprint/ipd-dr-admission-note-pdf.php';
+require_once '../allpdfprint/ipd-dr-newborn-admission-note-pdf.php';
 require_once '../allpdfprint/ipd-nurse-admission-note-pdf.php';
 require_once '../allpdfprint/prs-pre-nursenote-pdf.php';
+require_once '../allpdfprint/lr-report2-pdf.php';
+//require_once '../allpdfprint/ipd-dr-admission-note-pdf.php';
 
-$heads = '
-    <h2 style="text-align:right;font-size:8pt;">FM-ICU-005-00</h2>
-    <h2 style="text-align:center;font-size:11pt;">Form2 FANCAS &nbsp;';
+//$heads = '<h2 style="text-align:right;font-size:8pt;">FM-ICU-005-00</h2>
+//    <h2 style="text-align:center;font-size:11pt;">Form2 FANCAS &nbsp;';
 
 // Set the footer and write the content
 //$mpdf->setFooter(' Page '.'{PAGENO}');
 $mpdf->setFooter(' (พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' ) '.'<br>ผู้ป่วย : (hn : '.$hn_row_ipt.')(an : '.$an.')(ชื่อ - สกุล : '.$pname_row_ipt.' '.$fname_row_ipt.' '.$lname_row_ipt.')'.' ( Page {PAGENO} of {nb} )');
-$mpdf->WriteHTML($head0);
-$mpdf->WriteHTML($head1);
-$mpdf->WriteHTML($head2);
-$mpdf->WriteHTML($head3);
+//$mpdf->WriteHTML($head0);
+//$mpdf->WriteHTML($head1);
+//-------------------Vital Sign
+
+$sql_vs =  "SELECT c_form_type
+            FROM ".DbConstant::KPHIS_DBNAME.".ipd_dr_admission_note
+            WHERE ipd_dr_admission_note.an=:an  LIMIT 1";
+$stmt_vs = $conn->prepare($sql_vs);
+$stmt_vs->execute(['an'=>$an]);
+$row_vs  = $stmt_vs->fetch();
+
+//echo $row_vs['c_form_type'];
+
+if ($row_vs['c_form_type'] == '1'){
+    //$mpdf->WriteHTML($head0);
+   $mpdf->WriteHTML($head11);
+} else if ($row_vs['c_form_type'] === '2'){
+   // $mpdf->WriteHTML($head0);
+   $mpdf->WriteHTML($head1);
+}
+
+$sql2 = "SELECT *
+                FROM `ipd_nurse_admission_note`
+                WHERE an = :an";
+$stmt = $conn->prepare($sql2);
+$stmt->execute(['an'=>$an]);
+if ($row  = $stmt->fetch()) {
+    //$admission_note_id = $row['admission_note_id'];
+    $mpdf->WriteHTML($head2);
+} else {
+   // $admission_note_id = null;
+}
+
+$sql3 = "SELECT *
+                FROM `prs_pre_nursenote`
+                WHERE an = :an";
+$stmt = $conn->prepare($sql3);
+$stmt->execute(['an'=>$an]);
+if ($row  = $stmt->fetch()) {
+    //$admission_note_id = $row['admission_note_id'];
+    $mpdf->WriteHTML($head3);
+} else {
+   // $admission_note_id = null;
+}
+
+$sql4 = "SELECT *
+                FROM `prs_lr_report2`
+                WHERE an = :an";
+$stmt = $conn->prepare($sql4);
+$stmt->execute(['an'=>$an]);
+if ($row  = $stmt->fetch()) {
+    //$admission_note_id = $row['admission_note_id'];
+    $mpdf->WriteHTML($head4);
+} else {
+   // $admission_note_id = null;
+}
+
+
+//$mpdf->WriteHTML($head2);
+//$mpdf->WriteHTML($head3);
+//$mpdf->WriteHTML($head4);
+//$mpdf->WriteHTML($head4);
 // Add a page break or new page if necessary
 //$mpdf->AddPage();
 //$mpdf->WriteHTML($head3);

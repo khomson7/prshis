@@ -642,7 +642,48 @@ $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='che
         $svg_tag = str_replace('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>','',$row['svg_tag']);
         $svg_tag = str_replace('width="700" height="500"',' height="180"',$svg_tag);
 $head1 =
-'<h2 style="text-align:right;font-size:8pt;">KPH-N1.1-Adm</h2>
+
+'<style>
+div.f15 {
+    font-size: 12px; 
+}
+div.line_dotted {
+    text-decoration: underline dotted;  
+    text-decoration-color: rgb(105,42,49); 
+    font-size: 12px;
+    text-decoration-style: dotted;  
+}
+body{
+    font-family: "Garuda";//เรียกใช้font Garuda สำหรับแสดงผล ภาษาไทย
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    height: 80px;
+}
+br {
+    display: block;
+    content: " ";
+    margin: 10px 0;
+    height:10pt;
+    line-height: 150%;
+}
+#show_img_select  {
+    background-image: url("../include/images/allbody.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image-resize:5;
+    height:180px;
+}
+
+
+
+</style>
+
+<h2 style="text-align:right;font-size:8pt;">KPH-N1.1-Adm</h2>
     <h2 style="text-align:center;font-size:11pt;">แบบบันทึกการรับใหม่ผู้ป่วยใน '.htmlspecialchars(DbConstant::HOSPITAL_NAME).'</h2>
 
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">

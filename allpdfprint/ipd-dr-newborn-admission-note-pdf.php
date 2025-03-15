@@ -987,39 +987,48 @@ if ($row['hf_position'] == null || $row['hf_position'] == '') {
 
 $svg_tag = str_replace('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>', '', $row['svg_tag']);
 $svg_tag = str_replace('width="700" height="500"', ' height="180"', $svg_tag);
-$head =
-    '
-    <style>
-        body{
-            font-family: "Garuda";//เรียกใช้font Garuda สำหรับแสดงผล ภาษาไทย
-        }
-        footer {
-            position: fixed;
-            bottom: -60px;
-            left: 0px;
-            right: 0px;
-            height: 70px;
+$head11 ='
+<style>
+    div.f15 {
+        font-size: 12px; 
+    }
+    div.line_dotted {
+        text-decoration: underline dotted;  
+        text-decoration-color: rgb(105,42,49); 
+        font-size: 12px;
+        text-decoration-style: dotted;  
+    }
+    body{
+        font-family: "Garuda";//เรียกใช้font Garuda สำหรับแสดงผล ภาษาไทย
+    }
+    .footer {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        height: 80px;
+    }
+    br {
+        display: block;
+        content: " ";
+        margin: 10px 0;
+        height:10pt;
+        line-height: 150%;
+    }
+    #show_img_select  {
+        background-image: url("../include/images/allbody.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image-resize:5;
+        height:180px;
+    }
 
-            /** Extra personal styles **/
-            line-height: 35px;
-        }
-        br {
-            display: block;
-            content: " ";
-            margin: 10px 0;
-            height:10pt;
-            line-height: 150%;
-        }
-        #show_img_select  {
-            background-image: url("../include/images/allbody.jpg");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-image-resize:5;
-            height:180px;
-        }
+   
+   
     </style>
-
-    <h2 class="page-break" style="text-align:right;font-size:8pt;">KPH-N1.1-Adm</h2>
+    
+<h2 class="page-break" style="text-align:right;font-size:8pt;">KPH-N1.1-Adm</h2>
     <h2 style="text-align:center;font-size:11pt;">History - Physical Examination Of Newborn ' . '</h2>
 
     <table id="bg-table" width="100%" style="border-collapse: collapse;font-size:8pt;margin-top:2px;">
@@ -1204,5 +1213,6 @@ $head =
     </table>
     <h2 style="text-align:right;font-size:8pt;">FM-OBS-007 แก้ไขครั้งที่ 2 ประกาศใช้ 16 พฤศจิกายน 2558</h2>
 ';
-$mpdf->WriteHTML($head);
-$mpdf->Output();
+//$mpdf->WriteHTML($head);
+//$mpdf->Output();
+?>

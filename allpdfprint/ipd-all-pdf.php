@@ -45,7 +45,7 @@ require_once '../include/Session.php';
 
 require_once '../allpdfprint/report1.php';
 
-require_once '../allpdfprint/report2.php';
+//require_once '../allpdfprint/report2.php';
 
 
 
