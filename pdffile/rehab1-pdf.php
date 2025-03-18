@@ -64,7 +64,7 @@ $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='che
 $sql = "SELECT ph.* FROM  ".DbConstant::KPHIS_DBNAME.".prs_rehab_history ph
 WHERE ph.an=:an";
 $stmt = $conn->prepare($sql);
-$stmt->execute($query_parameters);
+$stmt->execute(['an'=>$an]);
 $row  = $stmt->fetch();
 
 
@@ -100,140 +100,7 @@ $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.ln
         $regdatetime = $row_ipt['regdate'].' '.$row_ipt['regtime'];//ใช้ในการดึงข้อมูล ประวัติการผ่าตัด
 //-------------------------Doctor admission note
 
-// Pagination variables
-$limit = 4;  // Show 7 days per page
 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
-
-//echo $page ;
-
-$sql = "select t.*,t2.work_shift as shift from
-(SELECT an,date(create_datetime) as date
-,if(consciousness = 5 ,5,'') as consciousness1
-,if(consciousness = 1 ,0,'') as consciousness2
-,if(slip_and_fall = 2 ,2,'') as slip_and_fall1
-,if(slip_and_fall = 1 ,0,'') as slip_and_fall2
-,if(age_check = 2 ,2,'') as age_check1
-,if(age_check = 1 ,0,'') as age_check2
-,if(get_medicine = 3 ,3,'') as get_medicine1
-,if(get_medicine = 1 ,0,'') as get_medicine2
-,if(body = 3 ,3,'') as body1
-,if(body = 1 ,0,'') as body2
-,if(assessment = 2 ,2,'') as assessment1
-,if(assessment = 1 ,0,'') as assessment2
-,if(excretion = 1,1,'') as excretion1
-,if(excretion = 9 ,0,'') as excretion2
-,if(after_birth = 1 ,1,'') as after_birth1
-,if(after_birth = 9 ,0,'') as after_birth2
-,if(surgery = 1 ,1,'') as surgery1
-,if(surgery = 9 ,0,'') as surgery2
-,score
-,create_user as create_
-FROM " . DbConstant::KPHIS_DBNAME . ".prs_felldown
-WHERE an = :an
-GROUP BY date(create_datetime)
-ORDER BY date ASC
-LIMIT :limit OFFSET :offset)t
-LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".prs_felldown t2 on date(t2.create_datetime) = t.date and t2.an = t.an
-";
-$stmt = $conn->prepare($sql);
-
-// Bind parameters
-$stmt->bindParam(':an', $an); // Assuming $an is defined and contains the Admission Number
-$stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // Bind limit
-$stmt->bindParam(':offset', $offset, PDO::PARAM_INT); // Bind offset
-
-// Execute the statement
-$stmt->execute();
-
-// Fetch all rows for the current page
-$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-foreach ($rows as $row) {
-
-$check1 = '( )';
-if ($row['score'] > 0) {
-    $check1 = '('.$image_check.')';
-    $check1_value  =  htmlspecialchars($row['score']);
-}
-$check2 = '( )';
-if ($row['score'] == 0) {
-    $check2 = '('.$image_check.')';
-    
-}
-
-}
-// Output the results (for debugging or display)
-/*foreach ($rows as $row) {
-    echo "AN: {$row['an']}, Date: {$row['date']}, Shift: {$row['shift']}, Question1: {$row['question1_1']}, Question2: {$row['question1_2']}, Question3: {$row['question1_3']}<br>";
-}
-*/
-
-// Get total number of days for this AN
-$total_colspan = 0;
-$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM " . DbConstant::KPHIS_DBNAME . ".prs_felldown WHERE an = :an";
-$countStmt = $conn->prepare($countQuery);
-$countStmt->execute($query_parameters);
-$totalDays = $countStmt->fetchColumn();
-$totalPages = ceil($totalDays / $limit);
-$total_colspan = ceil($totalDays * 3);
-
-$colspan = 2 + $total_colspan;
-
-
-//echo $totalDays;
-// Group data by date and shift
-$groupedData = [];
-$dates = [];
-
-foreach ($rows as $row) {
-    $date = $row['date'];
-    $shift = $row['shift'];
-    
-    // Store date for headers
-    if (!in_array($date, $dates)) {
-        $dates[] = $date;
-    }
-   // echo $date;
-    // Group data by date and store shift values
-    if (!isset($groupedData[$date])) {
-        $groupedData[$date] = [
-            '1' => ['consciousness1' => '','consciousness2' => '', 'slip_and_fall1' => '','slip_and_fall2' => '', 'age_check1' => '', 'age_check2' => '','get_medicine1' => '','get_medicine2' => '', 'body1' => '', 'body2' => '','create_' =>'-'   
-            ,'assessment1' => '','assessment2' => '', 'excretion1' => '', 'excretion2' => '','after_birth1' => '','after_birth2' => '', 'surgery1' => '','surgery2' => '','score'=>''
-        ],
-            '2' => ['consciousness1' => '','consciousness2' => '', 'slip_and_fall1' => '','slip_and_fall2' => '', 'age_check1' => '', 'age_check2' => '', 'get_medicine1' => '','get_medicine2' => '', 'body1' => '', 'body2' => '','create_' =>'-' 
-            ,'assessment1' => '','assessment2' => '', 'excretion1' => '', 'excretion2' => '','after_birth1' => '','after_birth2' => '', 'surgery1' => '','surgery2' => '','score'=>''
-        ],
-            '3' => ['consciousness1' => '','consciousness2' => '', 'slip_and_fall1' => '','slip_and_fall2' => '', 'age_check1' => '', 'age_check2' => '', 'get_medicine1' => '','get_medicine2' => '', 'body1' => '', 'body2' => '','create_' =>'-'
-            ,'assessment1' => '','assessment2' => '', 'excretion1' => '', 'excretion2' => '', 'after_birth1' => '','after_birth2' => '', 'surgery1' => '','surgery2' => '','score'=>''
-            ]
-        ];
-    }
-    $groupedData[$date][$shift] = [
-        'consciousness1' => $row['consciousness1'],
-        'consciousness2' => $row['consciousness2'],
-        'slip_and_fall1' => $row['slip_and_fall1'],
-        'slip_and_fall2' => $row['slip_and_fall2'],
-        'age_check1' => $row['age_check1'],
-        'age_check2' => $row['age_check2'],
-        'get_medicine1' => $row['get_medicine1'],
-        'get_medicine2' => $row['get_medicine2'],
-        'body1' => $row['body1'],
-        'body2' => $row['body2'],
-        'assessment1' => $row['assessment1'],
-        'assessment2' => $row['assessment2'],
-        'excretion1' => $row['excretion1'],
-        'excretion2' => $row['excretion2'],
-        'after_birth1' => $row['after_birth1'],
-        'after_birth2' => $row['after_birth2'],
-        'surgery1' => $row['surgery1'],
-        'surgery2' => $row['surgery2'],
-        'score' => $row['score'],
-        'create_' => $row['create_']
-    ];
-}
 
 
         $ids = '27'; //Link menu
