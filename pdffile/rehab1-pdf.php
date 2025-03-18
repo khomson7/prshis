@@ -76,6 +76,19 @@ $stmt->execute($query_parameters);
 $row1  = $stmt->fetch();
 
 
+$rxDate = $row['rxdate']; //วันที่ Discharge
+$rxdate = date($rxDate);
+$strDate = ($rxdate);
+
+$GoalDate = $row['goal_date']; 
+$goaldate = date($GoalDate);
+$GoalDate = ($goaldate);
+
+$DueDate = $row['due_date']; 
+$duedate = date($DueDate);
+$DueDate = ($duedate);
+
+
 $sql_ipt = "select patient.sex,patient.hn,patient.pname,patient.fname,patient.lname,patient.drugallergy,
             (select GROUP_CONCAT(concat(opd_allergy.agent,'=',if(opd_allergy.symptom is null,',',opd_allergy.symptom)/*,' [',if(note is null,',',note),']'*/)) as name
                 from ".DbConstant::HOSXP_DBNAME.".opd_allergy
@@ -195,7 +208,7 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สภาพจิตใจและสังคม :&nbsp;'.htmlspecialchars($row['phychosocial'])
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โรคประจำตัว :&nbsp;'.htmlspecialchars($row['disease'])
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การรักษาที่เคยได้รับ :&nbsp;'.htmlspecialchars($row['treatment_received'])
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การตรวจประเมินแรกรับ วัน-เดือน-ปี :&nbsp;'.htmlspecialchars($row['pe_1st'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การตรวจประเมินแรกรับ วัน-เดือน-ปี :&nbsp;'.ShortDateThai($strDate).' '.htmlspecialchars($row['pe_1st'])
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การวินิจฉัยโรคทางกายภาพบำบัด :&nbsp;'.htmlspecialchars($row['diagnosis'])
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>เป้าหมายและการวางแผนการรักษา :</b>&nbsp;'
 .'</div>'
@@ -220,13 +233,13 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
 <tr style="border:1px solid #000;margin: 35px;"> /* ชื่อ-สกุล */
     
     <th style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
-    <label>'.nl2br(htmlspecialchars($row['goal_date'])).'</label>
+    <label>'.ShortDateThai($GoalDate).'</label>
     </th>
     <td style="border-right:0.5px solid #000;margin: 20px;padding:4px;vertical-align:text-top;">
     <label>'.nl2br(htmlspecialchars($row['goal'])).'</label>
     </td>
     <td style="border-right:0.5px solid #000;margin: 20px;padding:4px;vertical-align:text-top;">
-    <label>'.nl2br(htmlspecialchars($row['due_date'])).'</label>
+    <label>'.ShortDateThai($DueDate).'</label>
     </td>
     <td style="border-right:0.5px solid #000;margin: 20px;padding:4px;vertical-align:text-top;">
     <label>'.nl2br(htmlspecialchars($row['treatment_plan'])).'</label>
@@ -266,16 +279,20 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
 
 
         for ($i = 0; $i < count($rows); $i++) {
+
+            $RxDate = $rows[$i]['rxdate']; 
+            $rxdate = date($RxDate);
+            $RxDate = ($rxdate);
        
         // Display phone numbers
         $html .= '<tr>';
-        $html .= '<td rowspan="4">'.  htmlspecialchars($rows[$i]['rxdate']) .'</td>';  // Phone rowspan = 2
+        $html .= '<td rowspan="4">'.  ShortDateThai($RxDate) .'</td>';  // Phone rowspan = 2
         $html .= '<td> PE: ' . htmlspecialchars($rows[$i]['pe']) . '</td>';
 
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td> RX: ' . htmlspecialchars($rows[$i]['rx']) . '</td>';  // Second phone
+        $html .= '<td> RX: ' . htmlspecialchars($rows[$i]['rx']) . ' <span style="text-align: right; font-size: 9pt;"> เวลา: ' . htmlspecialchars($rows[$i]['rx_use_time']) . ' ( ชั่วโมง:นาที:วินาที )</span></td>';  // Second phone
         $html .= '</tr>';
 
         $html .= '<tr>';
