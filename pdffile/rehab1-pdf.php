@@ -330,7 +330,7 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
       }
 
       $summary_of_dc_2 = '( )';
-      if ($row['lsummary_of_dc'] == '2') {$summary_of_dc_2 = '('.$image_check.')';
+      if ($row['summary_of_dc'] == '2') {$summary_of_dc_2 = '('.$image_check.')';
       }
 
       $summary_of_dc_3 = '( )';
