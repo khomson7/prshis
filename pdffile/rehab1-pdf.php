@@ -324,6 +324,49 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
     // Close connection (optional with PDO)
     $conn = null;
 
+      //ระดับความรู้สึกตัว
+      $summary_of_dc_1 = '( )';
+      if ($row['summary_of_dc'] == '1') {$summary_of_dc_1 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_2 = '( )';
+      if ($row['lsummary_of_dc'] == '2') {$summary_of_dc_2 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_3 = '( )';
+      if ($row['summary_of_dc'] == '3') {$summary_of_dc_3 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_4 = '( )';
+      if ($row['summary_of_dc'] == '4') {$summary_of_dc_4 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_5 = '( )';
+      if ($row['summary_of_dc'] == '5') {$summary_of_dc_5 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_6 = '( )';
+      if ($row['summary_of_dc'] == '6') {$summary_of_dc_6 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_7 = '( )';
+      if ($row['summary_of_dc'] == '7') {$summary_of_dc_7 = '('.$image_check.')';
+      }
+
+      $summary_of_dc_8 = '( )';
+      if ($row['summary_of_dc'] == '8') {$summary_of_dc_8 = '('.$image_check.')';
+      }
+
+
+    $SummaryDate = $row['summary_date']; 
+    $summarydate= date($SummaryDate);
+    $SummaryDate = ($summarydate);
+
+    $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สรุปผลการรักษา และการจำหน่ายผู้ป่วย วัน-เดือน-ปี : '.ShortDateThai($SummaryDate).  
+'&nbsp;&nbsp;&nbsp;&nbsp;'.$summary_of_dc_1.'&nbsp;หายแล้ว&nbsp;'.$summary_of_dc_2.'&nbsp;อาการดีขึ้นเป็นที่น่าพอใจ&nbsp;'.$summary_of_dc_3.'&nbsp;ส่งต่อไปทำ PT ที่อื่น&nbsp;'.$summary_of_dc_4.'&nbsp;จำเป็นต้องได้รับการรักษาด้วยวิธีอื่น&nbsp;'
+.$summary_of_dc_5.'&nbsp;ถูกจำหน่ายออกจาก รพ. ก่อนสิ้นสุดการรักษา&nbsp;'.$summary_of_dc_6.'&nbsp;อาการคงเดิมหลังจากได้รับการักษา&nbsp;'.$summary_of_dc_7.'&nbsp;แพทย์ให้หยุดการรักษา&nbsp;'.$summary_of_dc_8.'&nbsp;เสียชีวิต&nbsp;'
+.'</label><br>';
+
 
 //แสดงข้อมุลอยู่ในช่วง ก่อน footer
 $mpdf->setAutoTopMargin = 'stretch';
