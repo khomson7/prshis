@@ -322,14 +322,14 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
 
 '</label><br>'
 
-.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;อาการสำคัญ :&nbsp;'.nl2br(htmlspecialchars($row['cc']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประวัติปัจจุบัน :&nbsp;'.nl2br(htmlspecialchars($row['hpi']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประวัติการเจ็บป่วยในอดีต :&nbsp;'.nl2br(htmlspecialchars($row['past_history']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สภาพจิตใจและสังคม :&nbsp;'.nl2br(htmlspecialchars($row['phychosocial']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โรคประจำตัว :&nbsp;'.nl2br(htmlspecialchars($row['disease']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การรักษาที่เคยได้รับ :&nbsp;'.nl2br(htmlspecialchars($row['treatment_received']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การตรวจประเมินแรกรับ วัน-เดือน-ปี :&nbsp;'.nl2br(htmlspecialchars($row['pe_1st']))
-.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การวินิจฉัยโรคทางกายภาพบำบัด :&nbsp;'.nl2br(htmlspecialchars($row['diagnosis']))
+.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;อาการสำคัญ :&nbsp;'.htmlspecialchars($row['cc'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประวัติปัจจุบัน :&nbsp;'.htmlspecialchars($row['hpi'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประวัติการเจ็บป่วยในอดีต :&nbsp;'.htmlspecialchars($row['past_history'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สภาพจิตใจและสังคม :&nbsp;'.htmlspecialchars($row['phychosocial'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โรคประจำตัว :&nbsp;'.htmlspecialchars($row['disease'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การรักษาที่เคยได้รับ :&nbsp;'.htmlspecialchars($row['treatment_received'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การตรวจประเมินแรกรับ วัน-เดือน-ปี :&nbsp;'.htmlspecialchars($row['pe_1st'])
+.'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การวินิจฉัยโรคทางกายภาพบำบัด :&nbsp;'.htmlspecialchars($row['diagnosis'])
 .'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>เป้าหมายและการวางแผนการรักษา :</b>&nbsp;'
 .'</div>'
 .'<table border="1" cellpadding="10" cellspacing="0">
