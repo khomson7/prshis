@@ -244,8 +244,8 @@ $check_    = ReportQueryUtils::getProduction($id)
     </span>
    
 </div>&nbsp; เวลา &nbsp;<div class="col-sm-2">
-<input type="time" name="rx_use_time" id="myTime" 
-           value="<?= isset($row['rx_use_time']) ? htmlspecialchars($row['rx_use_time']) : '01:00:00' ?>"> ชั่วโมง:นาที
+<input type="number" name="rx_use_time" id="myTime" min="0"
+           value="<?= isset($row['rx_use_time']) ? htmlspecialchars($row['rx_use_time']) : '' ?>"> นาที
                                 </div>
 
 </div>

@@ -292,7 +292,7 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td> RX: ' . htmlspecialchars($rows[$i]['rx']) . ' <span style="text-align: right; font-size: 9pt;"> เวลา: ' . htmlspecialchars($rows[$i]['rx_use_time']) . ' ( ชั่วโมง:นาที:วินาที )</span></td>';  // Second phone
+        $html .= '<td> RX: ' . htmlspecialchars($rows[$i]['rx']) . ' <span style="text-align: right; font-size: 9pt;"> เวลา: ' . htmlspecialchars($rows[$i]['rx_use_time']) . ' นาที</span></td>';  // Second phone
         $html .= '</tr>';
 
         $html .= '<tr>';

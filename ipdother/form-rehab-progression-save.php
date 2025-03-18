@@ -24,6 +24,7 @@
 $rxdate = empty($_REQUEST['rxdate']) ? null : $_REQUEST['rxdate'];
 $pe = empty($_REQUEST['pe']) ? null : $_REQUEST['pe'];
 $rx =  empty($_REQUEST['rx']) ? null : $_REQUEST['rx'];
+$rx_use_time =  empty($_REQUEST['rx_use_time']) ? null : $_REQUEST['rx_use_time'];
 $progress_note=  empty($_REQUEST['progress_note']) ? null : $_REQUEST['progress_note'];
 $home_ward_program=  empty($_REQUEST['home_ward_program']) ? null : $_REQUEST['home_ward_program'];
    
@@ -44,12 +45,12 @@ $update_user = $_SESSION['loginname'];
         if ( $rxdate != '' 
 ) {
 
-            $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_rehab_progression(an,rxdate,pe,rx,progress_note,home_ward_program,create_user
+            $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_rehab_progression(an,rxdate,pe,rx,rx_use_time,progress_note,home_ward_program,create_user
             ,create_datetime,update_user,version,update_datetime)
-            VALUES(:an,:rxdate,:pe,:rx,:progress_note,:home_ward_program,:create_user,:create_datetime,:update_user,:version,:update_datetime)");
+            VALUES(:an,:rxdate,:pe,:rx,:rx_use_time,:progress_note,:home_ward_program,:create_user,:create_datetime,:update_user,:version,:update_datetime)");
     
             $stmt->execute(array('an'=>$an,'rxdate'=>$rxdate
-            ,'pe'=>$pe,'rx'=>$rx,'progress_note'=>$progress_note,'home_ward_program'=>$home_ward_program
+            ,'pe'=>$pe,'rx'=>$rx,'rx_use_time'=>$rx_use_time,'progress_note'=>$progress_note,'home_ward_program'=>$home_ward_program
             ,'create_user'=>$create_user,'create_datetime' => $create_datetime,'update_user'=>$update_user,'version'=>$version,'update_datetime' => $update_datetime));
             $output_error = '<script>
         NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");
