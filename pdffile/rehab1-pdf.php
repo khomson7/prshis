@@ -61,9 +61,8 @@ Session::insertSystemAccessLog(json_encode(array(
 $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 
-$sql = "SELECT *
-        FROM `prs_rehab_history`
-        WHERE an = :an";
+$sql = "SELECT ph.* FROM  ".DbConstant::KPHIS_DBNAME.".prs_rehab_history ph
+WHERE ph.an=:an";
 $stmt = $conn->prepare($sql);
 $stmt->execute($query_parameters);
 $row  = $stmt->fetch();
