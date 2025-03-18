@@ -43,7 +43,7 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_rehab_progressio
           ));
 
             Session::insertSystemAccessLog(json_encode(array(
-                'form'=>'PRE-NURSENOTE-FORM',
+                'form'=>'REHAB-PROGRESSION-FORM',
                 'action'=>'UPDATE',
                 'version'=>$version,
                 'an'=>$an,
