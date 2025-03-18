@@ -46,7 +46,7 @@ require_once '../include/Session.php';
 </buton>
 
 <buton >
-<a class="nav-link" href="/pdffile/felldown-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
+<a class="nav-link" href="/pdffile/rehab1-pdf.php?an=<?php echo $an; ?>&loginname=<?php echo $loginname; ?>" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Print <U>PDF</U> File</a>
 </buton> 
     
 
@@ -75,7 +75,6 @@ require_once '../include/Session.php';
             <thead>
                 <tr class="table-info">
                     <th scope="col">ชื่อเอกสาร</th>
-                    <th class = "center-align" scope="col">คะแนน</th>
                     <th scope="col">วันที่/เวลา (ที่บันทึก)</th>
                     <th scope="col">วันที่/เวลา (ที่แก้ไขล่าสุด)</th>
                 </tr>
@@ -96,7 +95,7 @@ require_once '../include/Session.php';
     check_Table_DocumentEdit();
 
     function check_Table_DocumentEdit(){
-        var url = "form-felldown_Table_DocumentEdit.php";
+        var url = "form-rehab_Table_DocumentEdit.php";
         var an  = <?=json_encode($an)?>;
         $.post(url,{an},function(data){
             $("#Table_DocumentEdit").html(data);

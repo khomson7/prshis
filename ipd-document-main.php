@@ -557,6 +557,8 @@ if((getDocumentSummary==true)){
 
         const getDocumentAddmissionNurse = <?=json_encode(KphisQueryUtils::getDocumentAddmissionNurse($an))?>;
 
+        const getDocumentAddmissionNurse0 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse0($an))?>;
+
         const getDocumentAddmissionNurse1 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse1($an))?>;
 
         const getDocumentAddmissionNurse2 = <?=json_encode(ReportQueryUtils::getDocumentAddmissionNurse2($an))?>;
@@ -572,6 +574,7 @@ if((getDocumentSummary==true)){
             $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
 
             if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse==true){
+                $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
                 $("#AddmissionNurse_pdf").attr({"class":"badge badge-secondary","href":"ipdnurse/ipd-nurse-admission-note-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(1 ปี ขึ้นไป)").css({"cursor":"pointer"});
             } 
             
@@ -579,9 +582,9 @@ if((getDocumentSummary==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-secondary fas fa-square");
         }
 
-        if((getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true || getDocumentAddmissionNurse3==true || getDocumentAddmissionNurseIcu==true)){
+        if((getDocumentAddmissionNurse0==true || getDocumentAddmissionNurse1==true || getDocumentAddmissionNurse2==true || getDocumentAddmissionNurse3==true || getDocumentAddmissionNurseIcu==true)){
             $("#check_countRowData_AddmissionNurse").attr("class","text-success fas fa-check-square");
-            $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");
+            $("#show_text_AddmissionNurse_kphis").attr("class","text-light font-weight-bold badge badge-primary").text(" KPHIS ");        
 
            if(IPD_DOCUMENT_PRINT && getDocumentAddmissionNurse1==true){
                 $("#AddmissionNurse_pdf1").attr({"class":"badge badge-secondary","href":"lr-report1/lr-report1-pdf.php?an="+an,"target":"_blank"}).html("<i class='fas fa-print'></i> PDF(แรกเกิด)").css({"cursor":"pointer"});
