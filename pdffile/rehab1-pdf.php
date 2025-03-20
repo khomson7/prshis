@@ -6,21 +6,37 @@ require_once '../include/Session.php';
    $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
    $loginname = $_SESSION['loginname'];
    $values =['loginname'=>$loginname];
+
+
+   //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if ($login != $loginname) {
+    session_start();
+    session_destroy();
+    require_once '../mains/main-report.php';
+}
+//require_once '../mains/main-report.php';
+
+//Session::checkLoginSessionAndShowMessage(); //เช็ค session
+
+//$permissionCheck = Session::checkPermissionAndShowMessage('FORM_DUE', 'VIEW');
+//$permissionCheckJson = json_encode($permissionCheck);
    
    //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-   if(!$loginname){
+  /* if(!$loginname){
     session_start();
     session_destroy();              
         
   }
-
-  Session::checkLoginSessionAndShowMessage(); //เช็ค session
+*/
+ Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
   if(!(
      Session::checkPermission('DOCUMENT', 'PRINT')
      )){
      return;
  }
+
+ 
 
  /*Session::checkLoginSessionAndShowMessage(); //เช็ค session
 Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
@@ -369,7 +385,7 @@ $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ชื่อ - สกุล 
        $sunmmary_date  =ShortDateThai($SummaryDate);
     }
 
-    $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สรุปผลการรักษา และการจำหน่ายผู้ป่วย วัน-เดือน-ปี : '.$sunmmary_date.  
+    $html .= '<div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>สรุปผลการรักษา และการจำหน่ายผู้ป่วย วัน-เดือน-ปี : </b>'.$sunmmary_date.  
 '&nbsp;&nbsp;&nbsp;&nbsp;'.$summary_of_dc_1.'&nbsp;หายแล้ว&nbsp;'.$summary_of_dc_2.'&nbsp;อาการดีขึ้นเป็นที่น่าพอใจ&nbsp;'.$summary_of_dc_3.'&nbsp;ส่งต่อไปทำ PT ที่อื่น&nbsp;'.$summary_of_dc_4.'&nbsp;จำเป็นต้องได้รับการรักษาด้วยวิธีอื่น&nbsp;'
 .$summary_of_dc_5.'&nbsp;ถูกจำหน่ายออกจาก รพ. ก่อนสิ้นสุดการรักษา&nbsp;'.$summary_of_dc_6.'&nbsp;อาการคงเดิมหลังจากได้รับการักษา&nbsp;'.$summary_of_dc_7.'&nbsp;แพทย์ให้หยุดการรักษา&nbsp;'.$summary_of_dc_8.'&nbsp;เสียชีวิต&nbsp;'
 .'</label><br>';
