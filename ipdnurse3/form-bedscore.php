@@ -670,7 +670,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['doing_activities'] == '2') {
                                                                                                         echo 'checked="checked"';
-                                                                                                } ?>class="custom-control-input" id="doing_activitie2" value="2" name="doing_activities" oninput="doingCheckValue()">
+                                                                                                } ?>class="custom-control-input" id="doing_activities2" value="2" name="doing_activities" oninput="doingCheckValue()">
                                                                         <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities2" style="font-size:100%;">2</label>
                                                                 </div>
 

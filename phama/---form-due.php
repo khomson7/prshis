@@ -14,9 +14,8 @@ require_once '../mains/main-report.php';
 
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
-$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_DUE', 'VIEW');
+$permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_MENTAL_HEALTH3', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
-
 require_once '../include/session-modal.php';
 
 require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
@@ -31,10 +30,6 @@ $an = $_REQUEST['an']; //รับค่า an
 
 $hn = KphisQueryUtils::getHnByAn($an); // function ที่ส่งค่า an เพื่อไปค้นหา hn แล้วส่งค่า hn กลับมา
 $vn = KphisQueryUtils::getVnByAn($an);
-
-//แก้ไข
-$menuname = ReportQueryUtils::getLinkMenu(24);
-//echo $menuname;
 ?>
 
 
@@ -43,13 +38,13 @@ $menuname = ReportQueryUtils::getLinkMenu(24);
     <div class="col-sm-12">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="pills-document-tab" data-toggle="tab" href="#pills-document" role="tab" aria-controls="pills-document" aria-selected="true"><?= htmlspecialchars($menuname) ?></a>
+                <a class="nav-item nav-link active" id="pills-document-tab" data-toggle="tab" href="#pills-document" role="tab" aria-controls="pills-document" aria-selected="true">แบบประเมินอาการทางจิต(Save)</a>
         
             </div> <!-- style="display: none" -->
         </nav>
         <div class="tab-content" id="nav-tabContent">
 
-            <div class="tab-pane fade show active" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'form-due-document.php';?></div>
+            <div class="tab-pane fade show active" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'prs-due-document.php';?></div>
            
         </div>
     </div>

@@ -482,7 +482,7 @@ $history_of_drug_1.'&nbsp;ปฏิเสธ&nbsp;'.$history_of_drug_2.'&nbsp;�
 .'<br>ประวัติการเจ็บป่วยในครอบครัว '.
 $pmh2_1.'&nbsp;ปฏิเสธ&nbsp;'.$pmh2_2.'&nbsp;มีระบุ ระบุ&nbsp;'.$pmh2
 .'<br><B>สัญญาณชีพแรกรับ</B>&emsp;BT&emsp;'.round(($row['bt']),2)
-.'&emsp;°C&emsp;PR&emsp;'.round(($row['hr']),2)
+.'&emsp;°C&emsp;PR&emsp;'.round(($row['pr']),2)
 .'&emsp;/min&emsp;RR&emsp;'.round(($row['rr']),2).'&emsp;/min'
 .'&emsp;BP&emsp;'.round(($row['bps']),2).' / '.round(($row['bpd']),2).'&emsp;mmHg'
 
