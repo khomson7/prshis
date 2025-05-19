@@ -88,12 +88,18 @@ require_once '../include/DbUtils.php';
            /* if (  $create_user != ''
     ) */{
     
-        $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_stroke_fast_track(hn,vn
+        $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_stroke_fast_track(hn,vn,bw
+        ,level_of_consciousness,two_questions,two_commands,best_gaze
+        ,best_visual_field,facial_palsy,best_moter_left_arm,best_moter_right_arm
         ,create_user,version,create_datetime,update_user,update_datetime)
-        VALUES(:hn,:vn
+        VALUES(:hn,:vn,:bw
+        ,:level_of_consciousness,:two_questions,:two_commands,:best_gaze
+        ,:best_visual_field,:facial_palsy,:best_moter_left_arm,:best_moter_right_arm
         ,:create_user,:version,now(),:update_user,now())");
         
-                $stmt->execute(array('hn'=>$hn,'vn'=>$vn
+                $stmt->execute(array('hn'=>$hn,'vn'=>$vn,'bw'=>$bw
+                ,'level_of_consciousness'=>$level_of_consciousness,'two_questions'=>$two_questions,'two_commands'=>$two_commands,'best_gaze'=>$best_gaze
+                ,'best_visual_field'=>$best_visual_field,'facial_palsy'=>$facial_palsy,'best_moter_left_arm'=>$best_moter_left_arm,'best_moter_right_arm'=>$best_moter_right_arm
                 ,'create_user'=>$create_user,'version'=>$version,'update_user'=>$create_user));
     
             /*    $output_error = '<script>
