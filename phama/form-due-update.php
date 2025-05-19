@@ -27,6 +27,7 @@
         $diagnosis =  empty($_REQUEST['diagnosis']) ? null : $_REQUEST['diagnosis'];
         $infected_location =  empty($_REQUEST['infected_location']) ? null : $_REQUEST['infected_location'];
         $found_pathogens = empty($_REQUEST['found_pathogens']) ? null : $_REQUEST['found_pathogens'];
+        $egfr = empty($_REQUEST['egfr']) ? null : $_REQUEST['egfr'];
         $icode = empty($_REQUEST['icode']) ? null : $_REQUEST['icode'];
         
         $update_datetime= date('Y-m-d H:i:s');
@@ -44,7 +45,7 @@ if ( $an != ''/*$physician_approved != '' && $rxtime !='' */
 $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_due_check SET hn=:hn,an=:an,icode=:icode
         ,bw=:bw,age=:age,sex=:sex,creatinine=:creatinine,crcl=:crcl
         ,bun_lab=:bun_lab,diagnosis=:diagnosis,infected_location=:infected_location
-        ,start_medication=:start_medication,found_pathogens=:found_pathogens
+        ,start_medication=:start_medication,found_pathogens=:found_pathogens,egfr=:egfr
         ,specimen=:specimen,indications=:indications
         ,physician_approved=:physician_approved
         ,version=:version,update_user=:update_user,update_datetime=:update_datetime
@@ -54,7 +55,7 @@ $stmt = $conn->prepare("UPDATE ".DbConstant::KPHIS_DBNAME.".prs_due_check SET hn
           $stmt->execute(array('id'=>$id,'hn'=>$hn,'an'=>$an,'icode'=>$icode
           ,'bw'=>$bw,'age'=>$age,'sex'=>$sex,'creatinine'=>$creatinine,'crcl'=>$crcl
            ,'bun_lab'=>$bun_lab,'diagnosis'=>$diagnosis,'infected_location'=>$infected_location
-           ,'start_medication'=>$start_medication,'found_pathogens'=>$found_pathogens
+           ,'start_medication'=>$start_medication,'found_pathogens'=>$found_pathogens,'egfr'=>$egfr
            ,'specimen'=>$specimen,'indications'=>$indications
            ,'physician_approved'=>$physician_approved
            ,'version'=>$version,'update_user'=>$update_user,'update_datetime' => $update_datetime
