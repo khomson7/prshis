@@ -12,7 +12,7 @@ if ($login != $loginname) {
 
 require_once '../mains/main-report.php';
 
-$permissionCheck = Session::checkPermissionAndShowMessage('PRS_MENTAL_HEAL', 'VIEW');
+$permissionCheck = Session::checkPermissionAndShowMessage('PRS_STROKE_FAST_TRACK', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
 require_once '../include/session-modal.php';
 require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ

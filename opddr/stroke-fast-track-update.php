@@ -152,14 +152,14 @@ try {
 */
 
 
-    /*
+   
                 Session::insertSystemAccessLog(json_encode(array(
-                    'form'=>'PRE-ER-DR-ADMISSION-NOTE-FORM',
+                    'form'=>'STROKE-FAST-TRACK-FORM',
                     'action'=>'UPDATE',
-                    'vn'=>$an,
+                    'vn'=>$vn,
                 ),JSON_UNESCAPED_UNICODE));
 
-*/
+
     //  $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
 
 } catch (PDOException  $e) {
