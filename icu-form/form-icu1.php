@@ -2087,12 +2087,6 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                             }
 
-
-
-
-
-
-
                         }
 
 
