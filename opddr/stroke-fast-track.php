@@ -14,9 +14,12 @@ require_once '../mains/main-report.php';
 
 $permissionCheck = Session::checkPermissionAndShowMessage('PRS_STROKE_FAST_TRACK', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
+require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
+require_once '../mains/ipd-show-patient-sticky.php';
+require_once '../include/DbUtils.php';
+require_once '../include/KphisQueryUtils.php';
+require_once '../include/ReportQueryUtils.php';
 require_once '../include/session-modal.php';
-require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
-require_once '../mains/opd-show-patient-main-sticky.php';
 //require_once '../include/DbUtils.php';
 //require_once '../include/KphisQueryUtils.php';
 //require_once '../include/ReportQueryUtils.php';
@@ -3554,8 +3557,8 @@ function uncheckAll2() {
                                                                 if ($id == "") {
                                                                         $.post(url_save, my_form, function(data) {
                                                                                         $("#show_check_save").html(data);
-                                                                                        alert("บันทึกข้อมูลสำเร็จ");
-                                                                                        window.location.reload(true);
+                                                                                       // alert("บันทึกข้อมูลสำเร็จ");
+                                                                                        //window.location.reload(true);
                                                                                         //self.close();
                                                                                 })
                                                                                 .fail(function() {
@@ -3564,8 +3567,8 @@ function uncheckAll2() {
                                                                 } else {
                                                                         $.post(url_update, my_form, function(data) {
                                                                                         $("#show_check_save").html(data);
-                                                                                        alert("บันทึกข้อมูลสำเร็จ");
-                                                                                        window.location.reload(true);
+                                                                                       // alert("บันทึกข้อมูลสำเร็จ");
+                                                                                       // window.location.reload(true);
                                                                                         //self.close();
                                                                                 })
                                                                                 .fail(function() {
@@ -3575,6 +3578,6 @@ function uncheckAll2() {
                                                                 // }
                                                         }
                                                 </script>
-
+                                                <script src="../include/my_function.js"></script>
                                                 <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
                                                 <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">

@@ -68,6 +68,10 @@ $injury = $_REQUEST['injury'];
 $total_sum = $level_of_consciousness+$two_questions+$two_commands+$best_gaze+$best_visual_field+$facial_palsy+$best_moter_left_arm+$best_moter_right_arm+$best_moter_left_leg+$best_moter_right_leg
 +$ataxia+$sensory+$best_language_aphasia+$dysarthria+$neglect;
 
+$total_sum2 = $af_level_of_consciousness+$af_two_questions+$af_two_commands+$af_best_gaze+$af_best_visual_field+$af_facial_palsy+$af_best_moter_left_arm
++$af_best_moter_right_arm+$af_best_moter_left_leg+$af_best_moter_right_leg
++$af_ataxia+$af_sensory+$af_best_language_aphasia+$af_dysarthria+$af_neglect;
+
 
 $create_user = $_SESSION['loginname'];
 
@@ -84,10 +88,7 @@ try {
 
     if ( $vn != '' 
 ) {
-        $output_error = '<script>
-        NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");     
-        </script>';
-
+      
         $stmt = $conn->prepare("UPDATE " . DbConstant::KPHIS_DBNAME . ".prs_stroke_fast_track SET hn=:hn, vn=:vn,bw=:bw
         ,level_of_consciousness=:level_of_consciousness,two_questions=:two_questions,two_commands=:two_commands,best_gaze=:best_gaze
         ,best_visual_field=:best_visual_field,facial_palsy=:facial_palsy,best_moter_left_arm=:best_moter_left_arm,best_moter_right_arm=:best_moter_right_arm
@@ -100,7 +101,7 @@ try {
         ,check_45_onset=:check_45_onset,nihss=:nihss,ct_brain_no_hemo=:ct_brain_no_hemo,unknown_time=:unknown_time,bp=:bp
         ,seizure=:seizure,plasma_glucose=:plasma_glucose,minor=:minor,hx_of_ich=:hx_of_ich,cva=:cva,bleeding=:bleeding,surgery=:surgery
         ,puncture=:puncture,noacs=:noacs,enoxaparin=:enoxaparin,inr=:inr,infective_endocarditis=:infective_endocarditis,aortic_dissection=:aortic_dissection
-        ,ich=:ich,injury=:injury,total_sum=:total_sum 
+        ,ich=:ich,injury=:injury,total_sum=:total_sum,total_sum2=:total_sum2  
         ,update_user=:update_user,version=:version,update_datetime = NOW()
                 WHERE id=:id");
         $stmt->execute(array('id' => $id,'hn' => $hn,'vn' => $vn,'vn' => $vn, 'bw' =>$bw
@@ -115,9 +116,14 @@ try {
         ,'check_45_onset'=>$check_45_onset,'nihss'=>$nihss,'ct_brain_no_hemo'=>$ct_brain_no_hemo,'unknown_time'=>$unknown_time,'bp'=>$bp
         ,'seizure'=>$seizure,'plasma_glucose'=>$plasma_glucose,'minor'=>$minor,'hx_of_ich'=>$hx_of_ich,'cva'=>$cva,'bleeding'=>$bleeding,'surgery'=>$surgery
         ,'puncture'=>$puncture,'noacs'=>$noacs,'enoxaparin'=>$enoxaparin,'inr'=>$inr,'infective_endocarditis'=>$infective_endocarditis,'aortic_dissection'=>$aortic_dissection
-        ,'ich'=>$ich,'injury'=>$injury,'total_sum'=>$total_sum
+        ,'ich'=>$ich,'injury'=>$injury,'total_sum'=>$total_sum,'total_sum2'=>$total_sum2
         ,'update_user' => $update_user,'version' => $version
         ));
+
+        $output_error = '<script>
+        NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");     
+        </script>';
+
     } else {
 
 

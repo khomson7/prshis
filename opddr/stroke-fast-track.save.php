@@ -12,21 +12,21 @@ require_once '../include/DbUtils.php';
     $hn = KphisQueryUtils::getHnByVn($vn);
     
     $bw = $_REQUEST['bw'];
-    $level_of_consciousness = $_REQUEST['level_of_consciousness'];
-    $two_questions = $_REQUEST['two_questions'];
-    $two_commands = $_REQUEST['two_commands'];
-    $best_gaze = $_REQUEST['best_gaze'];
-    $best_visual_field= $_REQUEST['best_visual_field'];
-    $facial_palsy= $_REQUEST['facial_palsy'];
-    $best_moter_left_arm= $_REQUEST['best_moter_left_arm'];
-    $best_moter_right_arm = $_REQUEST['best_moter_right_arm'];
-    $best_moter_left_leg = $_REQUEST['best_moter_left_leg'];
-    $best_moter_right_leg = $_REQUEST['best_moter_right_leg'];
-    $ataxia = $_REQUEST['ataxia'];
-    $sensory = $_REQUEST['sensory'];
-    $best_language_aphasia = $_REQUEST['best_language_aphasia'];
-    $dysarthria = $_REQUEST['dysarthria'];
-    $neglect = $_REQUEST['neglect'];
+    $level_of_consciousness = empty($_REQUEST['level_of_consciousness'])? 0 : $_REQUEST['level_of_consciousness'];
+    $two_questions = empty($_REQUEST['two_questions'])? 0 :$_REQUEST['two_questions'];
+    $two_commands = empty($_REQUEST['two_commands'])? 0 :$_REQUEST['two_commands'];
+    $best_gaze = empty($_REQUEST['best_gaze'])? 0 :$_REQUEST['best_gaze'];
+    $best_visual_field= empty($_REQUEST['best_visual_field'])? 0 :$_REQUEST['best_visual_field'];
+    $facial_palsy= empty($_REQUEST['facial_palsy'])? 0 :$_REQUEST['facial_palsy'];
+    $best_moter_left_arm= empty($_REQUEST['best_moter_left_arm'])? 0 :$_REQUEST['best_moter_left_arm'];
+    $best_moter_right_arm = empty($_REQUEST['best_moter_right_arm'])? 0 :$_REQUEST['best_moter_right_arm'];
+    $best_moter_left_leg = empty($_REQUEST['best_moter_left_leg'])? 0 :$_REQUEST['best_moter_left_leg'];
+    $best_moter_right_leg = empty($_REQUEST['best_moter_right_leg'])? 0 :$_REQUEST['best_moter_right_leg'];
+    $ataxia = empty($_REQUEST['ataxia'])? 0 :$_REQUEST['ataxia'];
+    $sensory = empty($_REQUEST['sensory'])? 0 :$_REQUEST['sensory'];
+    $best_language_aphasia = empty($_REQUEST['best_language_aphasia'])? 0 :$_REQUEST['best_language_aphasia'];
+    $dysarthria = empty($_REQUEST['dysarthria'])? 0 :$_REQUEST['dysarthria'];
+    $neglect = empty($_REQUEST['neglect'])? 0 :$_REQUEST['neglect'];
     $af_level_of_consciousness = $_REQUEST['af_level_of_consciousness'];
     $af_two_questions = $_REQUEST['af_two_questions'];
     $af_two_commands = $_REQUEST['af_two_commands'];
@@ -67,6 +67,10 @@ require_once '../include/DbUtils.php';
     $total_sum = $level_of_consciousness+$two_questions+$two_commands+$best_gaze+$best_visual_field+$facial_palsy+$best_moter_left_arm+$best_moter_right_arm+$best_moter_left_leg+$best_moter_right_leg
     +$ataxia+$sensory+$best_language_aphasia+$dysarthria+$neglect;
 
+    $total_sum2 = $af_level_of_consciousness+$af_two_questions+$af_two_commands+$af_best_gaze+$af_best_visual_field+$af_facial_palsy+$af_best_moter_left_arm
+    +$af_best_moter_right_arm+$af_best_moter_left_leg+$af_best_moter_right_leg
+    +$af_ataxia+$af_sensory+$af_best_language_aphasia+$af_dysarthria+$af_neglect;
+
 
         
        
@@ -89,25 +93,36 @@ require_once '../include/DbUtils.php';
     ) */{
     
         $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_stroke_fast_track(hn,vn,bw
-        ,level_of_consciousness,two_questions,two_commands,best_gaze
-        ,best_visual_field,facial_palsy,best_moter_left_arm,best_moter_right_arm
-        ,best_moter_left_leg,best_moter_right_leg,ataxia,sensory
+        ,level_of_consciousness,two_questions,two_commands,best_gaze,best_visual_field,facial_palsy,best_moter_left_arm,best_moter_right_arm
+        ,best_moter_left_leg,best_moter_right_leg,ataxia,sensory,best_language_aphasia,dysarthria,neglect,total_sum,af_level_of_consciousness,af_two_questions,af_two_commands
+        ,af_best_gaze,af_best_visual_field,af_facial_palsy,af_best_moter_left_arm,af_best_moter_right_arm,af_best_moter_left_leg,af_best_moter_right_leg,af_ataxia
+        ,af_sensory,af_best_language_aphasia,af_dysarthria,af_neglect,check_age_18,check_45_onset,nihss,ct_brain_no_hemo,unknown_time,bp,seizure,plasma_glucose
+        ,minor,hx_of_ich,cva,bleeding,surgery,puncture,noacs,enoxaparin,inr,infective_endocarditis,aortic_dissection,ich,injury,total_sum2
         ,create_user,version,create_datetime,update_user,update_datetime)
         VALUES(:hn,:vn,:bw
-        ,:level_of_consciousness,:two_questions,:two_commands,:best_gaze
-        ,:best_visual_field,:facial_palsy,:best_moter_left_arm,:best_moter_right_arm
-        ,:best_moter_left_leg,:best_moter_right_leg,:ataxia,:sensory
+        ,:level_of_consciousness,:two_questions,:two_commands,:best_gaze,:best_visual_field,:facial_palsy,:best_moter_left_arm,:best_moter_right_arm
+        ,:best_moter_left_leg,:best_moter_right_leg,:ataxia,:sensory,:best_language_aphasia,:dysarthria,:neglect,:total_sum,:af_level_of_consciousness,:af_two_questions,:af_two_commands
+       ,:af_best_gaze,:af_best_visual_field,:af_facial_palsy,:af_best_moter_left_arm,:af_best_moter_right_arm,:af_best_moter_left_leg,:af_best_moter_right_leg,:af_ataxia
+       ,:af_sensory,:af_best_language_aphasia,:af_dysarthria,:af_neglect,:check_age_18,:check_45_onset,:nihss,:ct_brain_no_hemo,:unknown_time,:bp,:seizure,:plasma_glucose
+       ,:minor,:hx_of_ich,:cva,:bleeding,:surgery,:puncture,:noacs,:enoxaparin,:inr,:infective_endocarditis,:aortic_dissection,:ich,:injury,:total_sum2
         ,:create_user,:version,now(),:update_user,now())");
         
                 $stmt->execute(array('hn'=>$hn,'vn'=>$vn,'bw'=>$bw
                 ,'level_of_consciousness'=>$level_of_consciousness,'two_questions'=>$two_questions,'two_commands'=>$two_commands,'best_gaze'=>$best_gaze
                 ,'best_visual_field'=>$best_visual_field,'facial_palsy'=>$facial_palsy,'best_moter_left_arm'=>$best_moter_left_arm,'best_moter_right_arm'=>$best_moter_right_arm
-                ,'best_moter_left_leg'=>$best_moter_left_leg,'best_moter_right_leg'=>$best_moter_right_leg,'ataxia'=>$ataxia,'sensory'=>$sensory
+                ,'best_moter_left_leg'=>$best_moter_left_leg,'best_moter_right_leg'=>$best_moter_right_leg,'ataxia'=>$ataxia,'sensory'=>$sensory,'best_language_aphasia'=>$best_language_aphasia
+                ,'dysarthria'=>$dysarthria,'neglect'=>$neglect,'total_sum'=>$total_sum,'af_level_of_consciousness'=>$af_level_of_consciousness,'af_two_questions'=>$af_two_questions,'af_two_commands'=>$af_two_commands
+                ,'af_best_gaze'=>$af_best_gaze,'af_best_visual_field'=>$af_best_visual_field,'af_facial_palsy'=>$af_facial_palsy,'af_best_moter_left_arm'=>$af_best_moter_left_arm
+                ,'af_best_moter_right_arm'=>$af_best_moter_right_arm,'af_best_moter_left_leg'=>$af_best_moter_left_leg,'af_best_moter_right_leg'=>$af_best_moter_right_leg,'af_ataxia'=>$af_ataxia
+                ,'af_sensory'=>$af_sensory,'af_best_language_aphasia'=>$af_best_language_aphasia,'af_dysarthria'=>$af_dysarthria,'af_neglect'=>$af_neglect,'check_age_18'=>$check_age_18
+                ,'check_45_onset'=>$check_45_onset,'nihss'=>$nihss,'ct_brain_no_hemo'=>$ct_brain_no_hemo,'unknown_time'=>$unknown_time,'bp'=>$bp,'seizure'=>$seizure,'plasma_glucose'=>$plasma_glucose
+                ,'minor'=>$minor,'hx_of_ich'=>$hx_of_ich,'cva'=>$cva,'bleeding'=>$bleeding,'surgery'=>$surgery,'puncture'=>$puncture,'noacs'=>$noacs,'enoxaparin'=>$enoxaparin,'inr'=>$inr
+                ,'infective_endocarditis'=>$infective_endocarditis,'aortic_dissection'=>$aortic_dissection,'ich'=>$ich,'injury'=>$injury,'total_sum2'=>$total_sum2
                 ,'create_user'=>$create_user,'version'=>$version,'update_user'=>$create_user));
     
-            /*    $output_error = '<script>
+                $output_error = '<script>
             NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");
-            </script>';*/
+            </script>';
     
     
     
