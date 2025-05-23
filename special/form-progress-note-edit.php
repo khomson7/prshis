@@ -164,7 +164,7 @@ if ($row  = $stmt->fetch()) {
                             <div class="col-md-12 text-right">
                             <?php
                                     if((
-                                        Session::checkPermission('PRS_FORM_ICU1','EDIT')
+                                        Session::checkPermission('PPRS_PROGRESS_NOTE_EDIT','EDIT')
                                     ) && (ReportQueryUtils::checkReadOnly($an))) { ?>
                                     <button type="button" class="btn btn-primary" id="btn_progress_note" onclick="form_save()"><i class="fas fa-save"></i> บันทึก</button>
                                 <?php } ?>
