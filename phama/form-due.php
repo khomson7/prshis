@@ -291,18 +291,7 @@ $check_    = ReportQueryUtils::getProduction($id)
 
 
                                 <div class="form-group row alert alert-dark text-left">
-                                    <B>ส่วนที่ 1</B>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <?php
-                                    $excluded_users = DbConstant::DUE_SUPER;
-
-                                    if (!empty($loginname) && in_array($loginname, $excluded_users)) { ?>
-                                    <div class="custom-control custom-checkbox col-sm-1">
-                                <input type="checkbox"  <?php if ($row['cancle_status'] == 'Y') {
-                                                                echo 'checked="checked"';
-                                                            } ?> class="custom-control-input" id="cancle_status" value="Y" name="cancle_status">
-                                <label class="custom-control-label" for="cancle_status"><font color="red">ยกเลิกรายการ</font></label>
-                            </div>
-                                      <?php } ?>
+                                    <B>ส่วนที่ 1</B>
                                 </div>
 
 
