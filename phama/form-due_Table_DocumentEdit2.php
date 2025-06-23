@@ -6,7 +6,7 @@
         $getDoc = 'getDocument';
         $getData = 'getData';
 
-        $getreport = 'Due';
+        $getreport = 'Due2';
         $docmain = $getDoc.$getreport;
         $docmain2 = '$'.$docmain ;
         $data = $getData.$getreport;
@@ -55,7 +55,7 @@
 
             ?>  <tr>
                
-                    <td><a href="form-due.php?an=<?=$an?>&id=<?=$ids?>&loginname=<?=$login?>" target="_blank">แบบประเมินDue (วันที่ <?=date("d/m/Y", strtotime($create_datetimeAddmissionNurse))?>)</a></td>
+                    <td><a href="form-due-edit.php?an=<?=$an?>&id=<?=$ids?>&loginname=<?=$login?>" target="_blank">แบบประเมินDue (วันที่ <?=date("d/m/Y", strtotime($create_datetimeAddmissionNurse))?>)</a></td>
                     <td><div class='badge text-white mt-1 font-weight-bold' style="font-size:100%; background-color: <?= htmlspecialchars($bg_color) ?>;">
    <?= htmlspecialchars($drugname) ?>  
 </div>

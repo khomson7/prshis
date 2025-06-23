@@ -44,12 +44,16 @@ $menuname = ReportQueryUtils::getLinkMenu(24);
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="pills-document-tab" data-toggle="tab" href="#pills-document" role="tab" aria-controls="pills-document" aria-selected="true"><?= htmlspecialchars($menuname) ?></a>
-        
+
+                <a class="nav-link" id="pills-edit-tab" data-toggle="pill" href="#pills-edit" role="tab" aria-controls="pills-edit" aria-selected="false">Edit</a>
+
             </div> <!-- style="display: none" -->
         </nav>
         <div class="tab-content" id="nav-tabContent">
 
             <div class="tab-pane fade show active" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'form-due-document.php';?></div>
+            <div class="tab-pane fade" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab"><?php require_once 'nav-profile.php';?></div>
+            
            
         </div>
     </div>

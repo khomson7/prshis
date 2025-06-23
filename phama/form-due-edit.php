@@ -905,41 +905,9 @@ $('#physician_approved').select2({
 
                         function form_save() {
 
-                           var diagnosis = $.trim($('[name="diagnosis"]').val());
-                           var specimen = $.trim($('[name="specimen"]').val());
-                           var indications = $.trim($('[name="indications"]').val());
-                           var icode = $.trim($('[name="icode"]').val());
-                           var physician_approved = $.trim($('[name="physician_approved"]').val());
-                           // var rxtime = $.trim($('[name="rxtime"]').val());
+                       
 
-                          /* if (diagnosis == "") {
-                                $('[name="diagnosis"]').focus();
-                                alert('กรุณาระบุสิ่งส่งตรวจ');
-                            }
-
-                           else*/ if (specimen == "") {
-                                $('[name="specimen"]').focus();
-                                alert('กรุณาระบุสิ่งส่งตรวจ');
-                            }
-
-                           else if (indications == "") {
-                                $('[name="indications"]').focus();
-                                alert('กรุณาระบุข้อบ่งชี้:');
-                            } 
-                            else if (icode == "") {
-                                $('[name="icode"]').focus();
-                                alert('กรุณาระบุข้อบ่งชี้:');
-                            } else if (physician_approved == "") {
-                                $('[name="physician_approved"]').focus();
-                                alert('กรุณาระบุแพทย์ผู้อนุมัติการสั่งใช้:');
-                            } /*else if (rxtime == "") {
-
-                                $('[name="rxtime"]').focus();
-                                alert('เลือกเวลา');
-                            } */
-
-
-                            var url_update = "form-due-update.php";
+                            var url_update = "form-due-edit-update.php";
                             var url_save = "form-due-save.php";
                             var id = $("#id").val();
                             var my_form = $("#my_form").serialize();
@@ -959,7 +927,7 @@ $('#physician_approved').select2({
                                 $.post(url_update, my_form, function(data) {
                                         $("#show_check_save").html(data);
 
-
+                                        self.close();
                                     })
                                     .fail(function() {
                                         alert("บันทึกข้อมูลไม่สำเร็จ" + error);

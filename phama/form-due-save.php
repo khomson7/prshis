@@ -24,6 +24,8 @@
         $infected_location =  empty($_REQUEST['infected_location']) ? null : $_REQUEST['infected_location'];
         $found_pathogens = empty($_REQUEST['found_pathogens']) ? null : $_REQUEST['found_pathogens'];
         $icode = empty($_REQUEST['icode']) ? null : $_REQUEST['icode'];
+        $cancle_status = empty($_REQUEST['cancle_status']) ? null : $_REQUEST['cancle_status'];
+
     //$create_datetime = ใช้ NOW()
     $create_datetime =  date('Y-m-d H:i:s');
     $create_user  = $_SESSION['loginname'];
@@ -35,16 +37,16 @@
 
     try {
 
-        if ( $physician_approved != '' /*&& $rxtime !='' */
+        if ( $diagnosis != '' && $indications != '' && $icode != '' && $physician_approved != '' && $cancle_status != '' /*&& $rxtime !='' */
 ) {
 
     $stmt = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_due_check(hn,an,icode
     ,bw,age,sex,creatinine,crcl,bun_lab,diagnosis,infected_location
-    ,start_medication,found_pathogens,specimen,indications,physician_approved
+    ,start_medication,found_pathogens,specimen,indications,physician_approved,cancle_status
     ,create_user,version,create_datetime,update_user,update_datetime)
     VALUES(:hn,:an,:icode
     ,:bw,:age,:sex,:creatinine,:crcl,:bun_lab,:diagnosis,:infected_location
-    ,:start_medication,:found_pathogens,:specimen,:indications,:physician_approved
+    ,:start_medication,:found_pathogens,:specimen,:indications,:physician_approved,:cancle_status
     ,:create_user,:version,:create_datetime,:update_user,:update_datetime)");
     
             $stmt->execute(array('hn'=>$hn,'an'=>$an,'icode'=>$icode
@@ -52,7 +54,7 @@
           ,'bun_lab'=>$bun_lab,'diagnosis'=>$diagnosis,'infected_location'=>$infected_location
           ,'start_medication'=>$start_medication,'found_pathogens'=>$found_pathogens
           ,'specimen'=>$specimen,'indications'=>$indications
-          ,'physician_approved'=>$physician_approved
+          ,'physician_approved'=>$physician_approved,'cancle_status'=>$cancle_status
             ,'create_user'=>$create_user,'version'=>$version,'create_datetime' => $create_datetime,'update_user'=>$create_user,'update_datetime' => $create_datetime));
 
             $output_error = '<script>

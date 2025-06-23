@@ -38,7 +38,7 @@
 
         try {
           //เรียกใช้งาน sql update
-if ( $diagnosis != '' && $indications != '' && $icode != '' && $physician_approved != '' /*$physician_approved != '' && $rxtime !='' */
+if ( $an != '' /*$physician_approved != '' && $rxtime !='' */
 ) {
         $output_error = '<script>
         NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");     
