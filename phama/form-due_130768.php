@@ -373,11 +373,13 @@ $check_    = ReportQueryUtils::getProduction($id)
                                 <br>
 
                                 <div class="row">
-    &nbsp;&nbsp;&nbsp;&nbsp;<label class="col-form-label" for="specimen">สิ่งส่งตรวจ:&nbsp;</label>
-    <div class="col-sm-5">
-        <select class="form-control" id="specimen" name="specimen"></select>
-    </div>
-</div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<label class="col-form-label" for="specimen">สิ่งส่งตรวจ:&nbsp;</label>
+                                    <div class="col-sm-5">
+                                    <select class="form-control" id="specimen" name="specimen">
+                                        <option value=""></option>
+                                    </select>
+                                    </div>
+                                </div>
 
                                 <br>
 
@@ -503,62 +505,8 @@ $( document ).ready(function() {
 
 function initSpecimenSelect2(){
 
-    $('#specimen').select2({
-        allowClear: true,
-        tags: true,
-    placeholder: "",
-    minimumInputLength: 1,
-    ajax: {
-        url: './specimen-data.php',
-        dataType: 'json',
-        delay: 250,
-        data: function (params) {
-            return {
-                search: params.term,
-                page: params.page || 1
-            };
-        },
-        processResults: function (data, params) {
-            params.page = params.page || 1;
-            return {
-                results: data.results,
-                pagination: {
-                    more: data.pagination.more
-                }
-            };
-        },
-        cache: true
-    },
-    createTag: function (params) {
-        return {
-            id: params.term,
-            text: params.term,
-            newOption: true
-        };
-    },
-    insertTag: function (data, tag) {
-        data.push(tag);
-    }
-});
 
-
-$('#specimen').on('select2:select', function (e) {
-    var data = e.params.data;
-    if (data.newOption) {
-        $.ajax({
-            type: "POST",
-            url: "save_specimen.php",
-            data: { specimen: data.text },
-            success: function (response) {
-                console.log("บันทึกสำเร็จ: " + data.text);
-            }
-        });
-    }
-});
-
-
-
-       /* $('#specimen').select2({
+        $('#specimen').select2({
             allowClear: true,
             placeholder: "",
             minimumInputLength: 1,
@@ -591,7 +539,6 @@ $('#specimen').on('select2:select', function (e) {
                 return html_result;
             },
         });
-        */
         //$('#specimen').empty().trigger('change');
     }
 
