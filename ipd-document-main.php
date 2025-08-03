@@ -77,6 +77,18 @@ if ($row  = $stmt->fetch()) {
 }
 
 
+$sql2 = "SELECT *
+                FROM `prs_nurse_signature`
+                WHERE an = :an and doctor = :doctor";
+$stmt = $conn->prepare($sql2);
+$stmt->execute($params);
+if ($row2  = $stmt->fetch()) {
+    $admission_note_id = $row2['id'];
+} else {
+    $admission_note_id = null;
+}
+
+
 
 $sql_item = "SELECT dr_adm_item.id,
                     dr_adm_item.doctor,
@@ -128,11 +140,12 @@ while ($row_item = $stmt_item->fetch()) {
             <input type="hidden" id="an" name="an" value="<?= htmlspecialchars($an) ?>">
             <input type="hidden" id="version" name="version" value="<?= htmlspecialchars($row['version']) ?>">
             <input type="hidden" id="id" name="id" value="<?= htmlspecialchars($row['id']) ?>">
+            <input type="hidden" id="id2" name="id2" value="<?= htmlspecialchars($row2['id']) ?>">
             <input type="hidden" id="create_user" name="create_user" value="<?= htmlspecialchars($_SESSION['name']) ?>">
 
         </div>
 
-        <div class="form-row">
+  <!--      <div class="form-row">
             <div class="col-md-4">
                 <div class="form-group text-right">
                     <label for="action-person-dr-admission">พยาบาล Audit</label>
@@ -150,9 +163,9 @@ while ($row_item = $stmt_item->fetch()) {
 
 
                             <?php
-                            if (/*(
+                            if ((
         Session::checkPermission('PRS_PRE_NURSENOTE','ADD')
-    ) && */(ReportQueryUtils::checkReadOnly($an))) { ?>
+    ) /*&& (ReportQueryUtils::checkReadOnly($an)) */) { ?>
                                 <button type="button" class="btn btn-primary" id="btn_save_report" onclick="form_nurse_save()"><i class="fas fa-save"></i> บันทึก</button>
                             <?php } ?>
 
@@ -170,11 +183,11 @@ while ($row_item = $stmt_item->fetch()) {
                         } ?>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="col-md-4">
                 <div class="form-group text-right">
-                    <label for="action-person-dr-admission">แพทย์ Audit</label>
+                    <label for="action-person-dr-admission">แพทย์ / พยาบาล Audit</label>
                     <button type="button" class="btn btn-secondary btn-sm mb-2" onclick="AddDoctorSignature()"><i class="fas fa-plus"></i> ลงชื่อ</button>
                     <div id="dr-admission-group-input-div">
                         <template id="template_dr_admission_input_div">
@@ -218,7 +231,7 @@ while ($row_item = $stmt_item->fetch()) {
         <script>
             function form_save() {
 
-                var url_update = "signature-update2.php";
+               var url_update = "signature-update2.php";
                 var url_save = "signature-save.php";
                 var id = $("#id").val();
                 var my_form = $("#my_form").serialize();
@@ -252,13 +265,14 @@ while ($row_item = $stmt_item->fetch()) {
 
                 var url_update = "signature-update.php";
                 var url_save = "signature-nurse-save.php";
-                var id = $("#id").val();
+                var id2 = $("#id2").val();
+                //var id = $("#id").val();
                 var my_form = $("#my_form").serialize();
 
 
 
 
-                if (id == "") {
+                if (id2 == "") {
                     $.post(url_save, my_form, function(data) {
                             $("#show_check_save").html(data);
                             //console.log(doctorcode_check)

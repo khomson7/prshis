@@ -15,7 +15,7 @@
 //$attending_physician = $_REQUEST['attending_physician'];
 //$return_checkdoctorSignature = $_REQUEST['return_checkdoctorSignature'];
 
-//$doctor0 = $_REQUEST['doctor'];
+$doctor = $_REQUEST['doctor'];
 //$doctor0 = $_REQUEST['nurse'];
 
     //$create_datetime = ใช้ NOW()
@@ -37,20 +37,21 @@
         NotificationMessage("บันทึกข้อมูลสำเร็จ", "success");
         </script>';
 
-        $pre_nursenote_id = $conn->lastInsertId();
+        $id = $conn->lastInsertId();
 //echo $pre_nursenote_id ;
        // echo $_REQUEST['doctor'];
-      if(!empty($_REQUEST['doctor']) || !empty($_REQUEST['nurse'])){
+      if(!empty($_REQUEST['doctor']) ){
             foreach($_REQUEST['doctor'] as $doctor){ /*
                 $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_signature(an,create_user,create_datetime,update_user,update_datetime,version)
                 VALUES (:an,:create_user,now(),:update_user,now(),:version)");
                 $stmt_item->execute(array('an'=>$an,'doctor'=>$doctor
                 ,'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version
                 )); */
-                $stmt_item = $conn->prepare("INSERT INTO ".DbConstant::KPHIS_DBNAME.".prs_nurse_signature(an,nurse,doctor,create_user,create_datetime,version )
-                VALUES (:an,:nurse,:doctor,:create_user,now(),:version )");
-                $stmt_item->execute(array('an'=>$an,'nurse'=>$nurse,'doctor'=>$doctor,'create_user'=>$create_user,'version'=>$version
-                ));
+
+               $stmt_item = $conn->prepare("INSERT IGNORE INTO ".DbConstant::KPHIS_DBNAME.".prs_nurse_signature(an,doctor,create_user,create_datetime )
+                VALUES (:an,:doctor,:create_user,now() )");
+                $stmt_item->execute(array('an'=>$an,'doctor'=>$doctor,'create_user'=>$create_user
+                )); 
 
                // print_r($doctor);
             }
