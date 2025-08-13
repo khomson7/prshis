@@ -359,6 +359,16 @@ $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='che
                         <label> '.$family_medical.'</label>';
             }
         }
+
+               /* ประวัติการเจ็บปวยในครอบครัว */
+               $review_system1 = '( )';
+               if ($row['review_of_system'] == 'ปกติ' || $row['review_of_system'] == null) {$review_system1  = '('.$image_check.')';}
+               $review_system2 = '( )';
+               if ($row['review_of_system'] != 'ปกติ' && $row['review_of_system'] != null) {$review_system2  = '('.$image_check.')';
+                $textbox_review_system = htmlspecialchars($row['review_of_system']);
+               }
+
+
         if($row_period != null){
             /* ประจำเดือน */
             $style_period = '';
@@ -692,7 +702,11 @@ $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='che
         if($row['hf_position'] == null || $row['hf_position'] == ''){ $style_hf_position = 'display: none;';}
 
         $svg_tag = str_replace('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>','',$row['svg_tag']);
-        $svg_tag = str_replace('width="700" height="500"',' height="180"',$svg_tag);
+        $svg_tag = str_replace('width="700" height="500"',' height="180"',$svg_tag); 
+
+
+
+
 $head =
 '
     <style>
@@ -933,6 +947,13 @@ $head =
                     <label>'.$checkbox_inpatient_history1.' ไม่เคย</label>
                     <label>'.$checkbox_inpatient_history2.' เคย</label>
                     <label> ครั้งสุดท้ายเมื่อ '.htmlspecialchars($row['inpatient_last_date']).' รพ '.htmlspecialchars($row['inpatient_location']).' เนื่องจาก '.htmlspecialchars($row['inpatient_because']).' </label>
+                </p>
+
+                <p><br>
+                Review Of System&nbsp;
+                <label>'.$review_system1.' ปกติ</label>
+                <label>'.$review_system2.' ผิดปกติ(ระบุ)</label>
+                '.$textbox_review_system.'
                 </p>
             </td>
         </tr>
