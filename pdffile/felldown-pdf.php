@@ -160,7 +160,7 @@ if ($row['score'] == 0) {
 
 // Get total number of days for this AN
 $total_colspan = 0;
-$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM " . DbConstant::KPHIS_DBNAME . ".prs_felldown WHERE an = :an";
+$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM " . DbConstant::KPHIS_DBNAME . ".prs_child_felldown WHERE an = :an";
 $countStmt = $conn->prepare($countQuery);
 $countStmt->execute($query_parameters);
 $totalDays = $countStmt->fetchColumn();

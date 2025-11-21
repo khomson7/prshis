@@ -97,32 +97,36 @@ $offset = ($page - 1) * $limit;
 
 $sql = "select t.*,t2.work_shift as shift from
 (SELECT an,date(create_datetime) as date
-,if(consciousness = 5 ,5,'') as consciousness1
-,if(consciousness = 1 ,0,'') as consciousness2
-,if(slip_and_fall = 2 ,2,'') as slip_and_fall1
-,if(slip_and_fall = 1 ,0,'') as slip_and_fall2
-,if(age_check = 2 ,2,'') as age_check1
-,if(age_check = 1 ,0,'') as age_check2
-,if(get_medicine = 3 ,3,'') as get_medicine1
-,if(get_medicine = 1 ,0,'') as get_medicine2
-,if(body = 3 ,3,'') as body1
-,if(body = 1 ,0,'') as body2
-,if(assessment = 2 ,2,'') as assessment1
-,if(assessment = 1 ,0,'') as assessment2
-,if(excretion = 1,1,'') as excretion1
-,if(excretion = 9 ,0,'') as excretion2
-,if(after_birth = 1 ,1,'') as after_birth1
-,if(after_birth = 9 ,0,'') as after_birth2
-,if(surgery = 1 ,1,'') as surgery1
-,if(surgery = 9 ,0,'') as surgery2
-,score
+,if(age_check = 4 ,4,'') as age_check4
+,if(age_check = 3 ,3,'') as age_check3
+,if(age_check = 2 ,2,'') as age_check2
+,if(age_check = 1 ,1,'') as age_check1
+,if(sex = 2 ,2,'') as sex2
+,if(sex = 1 ,1,'') as sex1
+,if(diag = 4 ,4,'') as diag4
+,if(diag = 3 ,3,'') as diag3
+,if(diag = 2 ,2,'') as diag2
+,if(diag = 1 ,1,'') as diag1
+,if(knowledge = 3 ,3,'') as knowledge3
+,if(knowledge = 2 ,2,'') as knowledge2
+,if(knowledge = 1 ,1,'') as knowledge1
+,if(environmental = 4 ,4,'') as environmental4
+,if(environmental = 3 ,3,'') as environmental3
+,if(environmental = 2 ,2,'') as environmental2
+,if(environmental = 1 ,1,'') as environmental1
+,if(after_surgery = 3 ,3,'') as after_surgery3
+,if(after_surgery = 2 ,2,'') as after_surgery2
+,if(after_surgery = 1 ,1,'') as after_surgery1
+,if(drug_use = 3 ,3,'') as drug_use3
+,if(drug_use = 2 ,2,'') as drug_use2
+,if(drug_use = 1 ,1,'') as drug_use1,score
 ,create_user as create_
-FROM " . DbConstant::KPHIS_DBNAME . ".prs_felldown
+FROM " . DbConstant::KPHIS_DBNAME . ".prs_child_felldown
 WHERE an = :an
 GROUP BY date(create_datetime)
 ORDER BY date ASC
 LIMIT :limit OFFSET :offset)t
-LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".prs_felldown t2 on date(t2.create_datetime) = t.date and t2.an = t.an
+LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".prs_child_felldown t2 on date(t2.create_datetime) = t.date and t2.an = t.an
 ";
 $stmt = $conn->prepare($sql);
 
@@ -187,43 +191,54 @@ foreach ($rows as $row) {
     // Group data by date and store shift values
     if (!isset($groupedData[$date])) {
         $groupedData[$date] = [
-            '1' => ['consciousness1' => '','consciousness2' => '', 'slip_and_fall1' => '','slip_and_fall2' => '', 'age_check1' => '', 'age_check2' => '','get_medicine1' => '','get_medicine2' => '', 'body1' => '', 'body2' => '','create_' =>'-'   
-            ,'assessment1' => '','assessment2' => '', 'excretion1' => '', 'excretion2' => '','after_birth1' => '','after_birth2' => '', 'surgery1' => '','surgery2' => '','score'=>''
+            '1' => ['age_check4' => '','age_check3' => '','age_check2' => '','age_check1' => ''
+            ,'sex2' => '','sex1' => '' ,'diag4' => '','diag3' => '' ,'diag2' => '','diag1' => ''
+            ,'knowledge3'=>'','knowledge2'=>'','knowledge1'=>'','environmental4'=>'','environmental3'=>'','environmental2'=>'','environmental1'=>''
+            ,'after_surgery3'=>'','after_surgery2'=>'','after_surgery1'=>'','drug_use3'=>'','drug_use2'=>'','drug_use1'=>'','score'=>''
         ],
-            '2' => ['consciousness1' => '','consciousness2' => '', 'slip_and_fall1' => '','slip_and_fall2' => '', 'age_check1' => '', 'age_check2' => '', 'get_medicine1' => '','get_medicine2' => '', 'body1' => '', 'body2' => '','create_' =>'-' 
-            ,'assessment1' => '','assessment2' => '', 'excretion1' => '', 'excretion2' => '','after_birth1' => '','after_birth2' => '', 'surgery1' => '','surgery2' => '','score'=>''
+            '2' => ['age_check4' => '','age_check3' => '','age_check2' => '','age_check1' => ''
+            ,'sex2' => '','sex1' => '' ,'diag4' => '','diag3' => '' ,'diag2' => '','diag1' => ''
+            ,'knowledge3'=>'','knowledge2'=>'','knowledge1'=>'','environmental4'=>'','environmental3'=>'','environmental2'=>'','environmental1'=>''
+            ,'after_surgery3'=>'','after_surgery2'=>'','after_surgery1'=>'','drug_use3'=>'','drug_use2'=>'','drug_use1'=>'','score'=>''
         ],
-            '3' => ['consciousness1' => '','consciousness2' => '', 'slip_and_fall1' => '','slip_and_fall2' => '', 'age_check1' => '', 'age_check2' => '', 'get_medicine1' => '','get_medicine2' => '', 'body1' => '', 'body2' => '','create_' =>'-'
-            ,'assessment1' => '','assessment2' => '', 'excretion1' => '', 'excretion2' => '', 'after_birth1' => '','after_birth2' => '', 'surgery1' => '','surgery2' => '','score'=>''
+            '3' => ['age_check4' => '','age_check3' => '','age_check2' => '','age_check1' => ''
+            ,'sex2' => '','sex1' => '' ,'diag4' => '','diag3' => '' ,'diag2' => '','diag1' => ''
+            ,'knowledge3'=>'','knowledge2'=>'','knowledge1'=>'','environmental4'=>'','environmental3'=>'','environmental2'=>'','environmental1'=>''
+            ,'after_surgery3'=>'','after_surgery2'=>'','after_surgery1'=>'','drug_use3'=>'','drug_use2'=>'','drug_use1'=>'','score'=>''
             ]
         ];
     }
     $groupedData[$date][$shift] = [
-        'consciousness1' => $row['consciousness1'],
-        'consciousness2' => $row['consciousness2'],
-        'slip_and_fall1' => $row['slip_and_fall1'],
-        'slip_and_fall2' => $row['slip_and_fall2'],
-        'age_check1' => $row['age_check1'],
+        'age_check4' => $row['age_check4'],
+        'age_check3' => $row['age_check3'],
         'age_check2' => $row['age_check2'],
-        'get_medicine1' => $row['get_medicine1'],
-        'get_medicine2' => $row['get_medicine2'],
-        'body1' => $row['body1'],
-        'body2' => $row['body2'],
-        'assessment1' => $row['assessment1'],
-        'assessment2' => $row['assessment2'],
-        'excretion1' => $row['excretion1'],
-        'excretion2' => $row['excretion2'],
-        'after_birth1' => $row['after_birth1'],
-        'after_birth2' => $row['after_birth2'],
-        'surgery1' => $row['surgery1'],
-        'surgery2' => $row['surgery2'],
+        'age_check1' => $row['age_check1'],
+        'sex1' => $row['sex1'],
+        'sex2' => $row['sex2'],
+        'diag4' => $row['diag4'],
+        'diag3' => $row['diag3'],
+        'diag2' => $row['diag2'],
+        'diag1' => $row['diag1'],
+        'knowledge3' => $row['knowledge3'],
+        'knowledge2' => $row['knowledge2'],
+        'knowledge1' => $row['knowledge1'],
+        'environmental4' => $row['environmental4'],
+        'environmental3' => $row['environmental3'],
+        'environmental2' => $row['environmental2'],
+        'environmental1' => $row['environmental1'],
+        'after_surgery3' => $row['after_surgery3'],
+        'after_surgery2' => $row['after_surgery2'],
+        'after_surgery1' => $row['after_surgery1'],
+        'drug_use3' => $row['drug_use3'],
+        'drug_use2' => $row['drug_use2'],
+        'drug_use1' => $row['drug_use1'],
         'score' => $row['score'],
         'create_' => $row['create_']
     ];
 }
 
 
-        $ids = '26'; //Link menu
+        $ids = '33'; //Link menu
         $check_    = ReportQueryUtils::getProduction($ids);
 
         $check_report = '( )';
@@ -324,7 +339,7 @@ $html .= '</tr></thead><tbody>';
 
 $html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>1. อายุ</b></td>';
 // Table body
-foreach (['consciousness1', 'consciousness2'] as $questionIndex => $questionName) {
+foreach (['age_check4', 'age_check3', 'age_check2', 'age_check1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
@@ -341,13 +356,13 @@ foreach (['consciousness1', 'consciousness2'] as $questionIndex => $questionName
 
 
     if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">5</td>'; // Adjust level as needed
+        $html .= '<td style="text-align:center;">4</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
-    }elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
-    }elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
+        $html .= '<td style="text-align:center;">3</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td style="text-align:center;">2</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td style="text-align:center;">1</td>';
     }
 
     foreach ($dates as $date) {
@@ -360,22 +375,22 @@ foreach (['consciousness1', 'consciousness2'] as $questionIndex => $questionName
 
 }
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>2. ประวัติชัก/ลื่นล้ม/ตกเตียง</b></td>';
+$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>2. เพศ</b></td>';
 // Table body
-foreach (['slip_and_fall1', 'slip_and_fall2'] as $questionIndex => $questionName) {
+foreach (['sex2', 'sex1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>มีประวัติชัก/ลื่นล้ม/ตกเตียงภายใน 1 ปี</td>'; // Adjust level as needed
+        $html .= '<td>ชาย</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>ไม่มีประวัติชัก/ลื่นล้ม/ตกเตียงภายใน 1 ปี</td>';
+        $html .= '<td>หญิง</td>';
     }
 
 
     if ($questionIndex === 0) {
         $html .= '<td style="text-align:center;">2</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
+        $html .= '<td style="text-align:center;">1</td>';
     }
 
     foreach ($dates as $date) {
@@ -389,22 +404,32 @@ foreach (['slip_and_fall1', 'slip_and_fall2'] as $questionIndex => $questionName
 }
 
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>3. อายุ</b></td>';
+$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>3. การวินิจฉัยโรค</b></td>';
 // Table body
-foreach (['age_check1', 'age_check2'] as $questionIndex => $questionName) {
+foreach (['diag4', 'diag3', 'diag2', 'diag1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>อายุ 65 ปี หรือมากกว่า/ผู้ป่วยเด็กและทารก</td>'; // Adjust level as needed
+        $html .= '<td>ผู้ป่วยที่มีโรค/อาการทางระบบประสาท หรือมีปัญหาด้านการมองเห็นการรับพัง และการเคลื่อนไหว</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>อายุ 15 - 65 ปี</td>';
+        $html .= '<td>ผู้ป่วยพร่องการได้รับออกซิเจน เช่น มีปัญหาทางระบบทางเดินหายใจ การขาดน้ำ เกลือแร่ ซีด นอนไม่หลับ เป็นลม มึนงง</td>';
+    }
+    elseif ($questionIndex === 2) {
+        $html .= '<td>ผู้ป่วยที่เจ็บป่วยทางจิตหรือมีความเปลี่ยนแปลงด้านพฤติกรรม</td>';
+    }
+    elseif ($questionIndex === 3) {
+        $html .= '<td>โรคอื่น ๆ</td>';
     }
 
 
     if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">2</td>'; // Adjust level as needed
+        $html .= '<td style="text-align:center;">4</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
+        $html .= '<td style="text-align:center;">3</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td style="text-align:center;">2</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td style="text-align:center;">1</td>';
     }
 
     foreach ($dates as $date) {
@@ -419,44 +444,17 @@ foreach (['age_check1', 'age_check2'] as $questionIndex => $questionName) {
 
 
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>4. การได้รับยา</b></td>';
+$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>4. ความสามารถในการรับรู้</b></td>';
 // Table body
-foreach (['get_medicine1', 'get_medicine2'] as $questionIndex => $questionName) {
+foreach (['knowledge3', 'knowledge2','knowledge1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>ได้รับยาที่มีผลต่อความดันโลหิต ระดับความรู้สึกตัวมีผลทำให้ง่วง ซึม</td>'; // Adjust level as needed
+        $html .= '<td>การรับรู้บกพร่องหรือประเมินความสามารถตนเองไม่เหมาะสม รวมถึงทารก</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>ไม่ได้รับยาที่มีผลต่อความดันโลหิต ระดับความรู้สึกตัวมีผลทำให้ง่วง ซึม</td>';
-    }
-
-
-    if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">3</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
-    }
-
-    foreach ($dates as $date) {
-        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
-    }
-
-    $html .= '</tr>';  
-
-}
-
-
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>5. มีสภาพการทำงานของร่างกาย</b></td>';
-// Table body
-foreach (['body1', 'body2'] as $questionIndex => $questionName) {
- 
-    $html .= '<tr>';
-   if ($questionIndex === 0) {
-        $html .= '<td>กล้ามเนื้ออ่อนแรง การทรงตัวไม่ดี ซีดจาก (Hct Hb) ต่ำ อ่อนเพลีย อีเล็กโตรไลท์ผิดปกติ มีปัญหาด้านสายตา มีปัญหาการเคลื่อนไหวรวมถึง การใช้อุปกรณ์ช่วยเดิน</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td>ผู้ป่วยมีการเคลื่อนไหวปกติ สติสัมปชัญญะปกติ</td>';
+        $html .= '<td>รับรู้และไม่ปฏิบัติตามคำแนะนำ</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>รับรู้และปฏิบัติตามคำแนะนำ</td>';
     }
 
 
@@ -464,6 +462,8 @@ foreach (['body1', 'body2'] as $questionIndex => $questionName) {
         $html .= '<td style="text-align:center;">3</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
         $html .= '<td style="text-align:center;">0</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td style="text-align:center;">0</td>';
     }
 
     foreach ($dates as $date) {
@@ -477,22 +477,34 @@ foreach (['body1', 'body2'] as $questionIndex => $questionName) {
 }
 
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>6. การประเมินตนเอง</b></td>';
+$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>5. ปัจจัยและสิ่งแวดล้อม</b></td>';
 // Table body
-foreach (['assessment1', 'assessment2'] as $questionIndex => $questionName) {
+foreach (['environmental4', 'environmental3','environmental2','environmental1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>ประเมินตนเองไม่เหมาะสม/ไม่อยู่บนเตียง ตามคำแนะนำ</td>'; // Adjust level as needed
+        $html .= '<td>ผู้ป่วยที่มีประวัติพลัดตกหกลัม หรือทารก-วัยหัดเดินที่ต้องนอนบนเตียง</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>ประเมินตนเองเหมาะสม/อยู่บนเตียง ตามคำแนะนำ</td>';
+        $html .= '<td>ผู้ป่วยที่ต้องใช้กายอุปกรณ์ช่วยเหลือหรือผู้ป่วยที่ต้องคาสายท่อระบายต่าง ๆ</td>';
+    }
+    elseif ($questionIndex === 2) {
+        $html .= '<td>ผู้ป่วยที่นอนกับเตียง</td>';
+    }
+    elseif ($questionIndex === 3) {
+        $html .= '<td>ผู้ป่วยที่สามารถเดินไป - มาได้ด้วยตนเอง</td>';
     }
 
+
     if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">2</td>'; // Adjust level as needed
+        $html .= '<td style="text-align:center;">4</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
+        $html .= '<td style="text-align:center;">3</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td style="text-align:center;">2</td>';
+    }elseif ($questionIndex === 3) {
+        $html .= '<td style="text-align:center;">1</td>';
     }
+
     foreach ($dates as $date) {
         $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
         $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
@@ -504,21 +516,25 @@ foreach (['assessment1', 'assessment2'] as $questionIndex => $questionName) {
 }
 
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>7. การขับถ่าย</b></td>';
+$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>6. หลังผ่าตัด</b></td>';
 // Table body
-foreach (['excretion1', 'excretion2'] as $questionIndex => $questionName) {
+foreach (['after_surgery3', 'after_surgery2','after_surgery1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>มีความต้องการการช่วยเหลือในการขับถ่าย</td>'; // Adjust level as needed
+        $html .= '<td>ผู้ป่วยหลังผ่าตัดใน 24 ชั่วโมง</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>ช่วยเหลือตนเองเกี่ยวกับการขับถ่ายได้ดี</td>';
+        $html .= '<td>ภายใน 48 ชั่วโมง</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>มากกว่า 48 ชั่วโมงหรือไม่ได้รับการผ่าตัด</td>';
     }
 
     if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">1</td>'; // Adjust level as needed
+        $html .= '<td style="text-align:center;">3</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
+        $html .= '<td style="text-align:center;">2</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td style="text-align:center;">1</td>';
     }
     foreach ($dates as $date) {
         $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
@@ -530,21 +546,29 @@ foreach (['excretion1', 'excretion2'] as $questionIndex => $questionName) {
 
 }
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>8. หลังคลอด</b></td>';
+
+$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>7. การได้รับยาและขนาดของยา หมายถึงการใด้รับยาที่มีผลต่อความดันโลหิต</b>
+<br><div style="font-size:9pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ระดับความรู้สึกตัวและมีผลทำให้ง่วงซึม เช่น ยาในกลุ่ม Sedative, DiureticsTranquilizer (Psychotherapeutic) Antihypertensive drugs,
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anticonvulsants, Cardiovascular drugs, Hypotonic, Barbiturates, Phenothiazine, Antidepressants, Laxative, Narcotics</div>
+</td>';
 // Table body
-foreach (['after_birth1', 'after_birth2'] as $questionIndex => $questionName) {
+foreach (['drug_use3', 'drug_use2','drug_use1'] as $questionIndex => $questionName) {
  
     $html .= '<tr>';
    if ($questionIndex === 0) {
-        $html .= '<td>อยู่ในภาวะหลังคลอดภายใน 4 - 6 ชั่วโมง</td>'; // Adjust level as needed
+        $html .= '<td>ผู้ป่วยได้รับยาข้างต้นมากกว่า 1 ชนิด</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td>หลังคลอดมากกว่า 6 ชั่วโมง</td>';
+        $html .= '<td>ผู้ป่วยได้รับยาข้างต้น 1 ชนิด</td>';
+    }elseif ($questionIndex === 2) {
+        $html .= '<td>ผู้ป่วยได้รับยาชนิดอื่นนอกเหนือจากยาข้างต้นหรือไม่ได้รับยา</td>';
     }
 
     if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">1</td>'; // Adjust level as needed
+        $html .= '<td style="text-align:center;">3</td>'; // Adjust level as needed
     } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
+        $html .= '<td style="text-align:center;">2</td>';
+    } elseif ($questionIndex === 2) {
+        $html .= '<td style="text-align:center;">1</td>';
     }
     foreach ($dates as $date) {
         $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
@@ -556,31 +580,9 @@ foreach (['after_birth1', 'after_birth2'] as $questionIndex => $questionName) {
 
 }
 
-$html.=' <tr><td colspan="'.htmlspecialchars($colspan).'">&nbsp;<b>9. หลังผ่าตัด</b></td>';
-// Table body
-foreach (['surgery1', 'surgery2'] as $questionIndex => $questionName) {
- 
-    $html .= '<tr>';
-   if ($questionIndex === 0) {
-        $html .= '<td>อยู่ในภาวะหลังผ่าตัดภายใน 24 ชั่วโมง</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td>หลังผ่าตัดมากกว่า 24 ชั่วโมง</td>';
-    }
 
-    if ($questionIndex === 0) {
-        $html .= '<td style="text-align:center;">1</td>'; // Adjust level as needed
-    } elseif ($questionIndex === 1) {
-        $html .= '<td style="text-align:center;">0</td>';
-    }
-    foreach ($dates as $date) {
-        $html .= '<td>' . $groupedData[$date]['1'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['2'][$questionName] . '</td>';
-        $html .= '<td>' . $groupedData[$date]['3'][$questionName] . '</td>';
-    }
 
-    $html .= '</tr>';  
 
-}
 
 foreach (['score'] as $questionIndex  => $questionName) {
     $html .= '<tr>';
@@ -647,10 +649,12 @@ $html .= '</tbody></table>';
 
 
 $html .= '
-<div> คะแนน 0 - 1 = ไม่มีปัจจัยเสี่ยง (no risk) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   คะแนน 2 - 4 = มีปัจจัยเสี่ยงต่ำ (low risk)   
-        </div>
-        <div> คะแนน 2 5 = มีปัจจัยเสี่ยงสูง (high risk)  
-        </div>
+<div class="col-md-12 text-left">
+<b style="font-size: 12px;">หมายเหตุ :</b><span style="font-size: 12px;"> แบบประเมินนี้ ใช้กับผู้ป่วยทารกและเด็ก ตั้งแต่แรกเกิดถึงอายุ 15 ปี</span><br>
+<b style="font-size: 12px;">การแปลผล</b><span style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ความเสี่ยงต่ำ 7-11 คะแนน </span><br>
+<b style="font-size: 12px;"></b><span style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ความเสี่ยงปานกลาง 12-16 คะแนน </span><br>
+<b style="font-size: 12px;"></b><span style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ความเสี่ยงสูง >= 17 คะแนน </span>
+</div>
 <tr style="border:1px solid #000;margin: 35px;">
 
             <td  colspan="3" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
