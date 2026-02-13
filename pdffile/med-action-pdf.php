@@ -6,18 +6,10 @@ $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
-    require_once '../mains/main-report.php';
-}
-
-/*
 if (!$loginname) {
     session_start();
     session_destroy();
 }
-*/
 
 Session::checkLoginSessionAndShowMessage();
 
@@ -54,17 +46,17 @@ Session::insertSystemAccessLog(json_encode(array(
 // 1. ดึงข้อมูลการบริหารยา
 // =====================================================
 $sql = "SELECT di.sticker_short_name, io.order_item_detail, act.action_date, act.action_time,
-               d.name AS dname1, d2.name AS dname2
-               FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
-                INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_plan ap ON ap.plan_id = act.plan_id
-                INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_order_item io ON io.order_item_id = ap.order_item_id
-                LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = act.action_person_1
-                LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d2 ON d2.code = act.action_person_2
-                LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
-        WHERE act.an = :an 
-          AND act.action_time IS NOT NULL AND act.action_time != ''
-        GROUP BY io.order_item_detail, act.action_time
-        ORDER BY io.order_item_detail, act.action_date, act.action_time";
+d.name AS dname1, d2.name AS dname2
+FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
+ INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_plan ap ON ap.plan_id = act.plan_id
+ INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_order_item io ON io.order_item_id = ap.order_item_id
+ LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = act.action_person_1
+ LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d2 ON d2.code = act.action_person_2
+ LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
+WHERE act.an = :an 
+AND act.action_time IS NOT NULL AND act.action_time != ''
+GROUP BY io.order_item_detail, act.action_date, act.action_time
+ORDER BY io.order_item_detail, act.action_date, act.action_time";
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':an', $an);
@@ -80,8 +72,7 @@ $drugData = [];       // [order_item_detail => ['name'=>..., 'detail'=>..., 'tim
 foreach ($rows as $row) {
     $date = $row['action_date'];
     $detail = $row['order_item_detail'] ?? '';
-   // $drugName = $row['sticker_short_name'] ?? $detail;
-   $drugName = $row['sticker_short_name'] ?? '';
+    $drugName = !empty($row['sticker_short_name']) ? $row['sticker_short_name'] : '';
 
     // เก็บวันที่ทั้งหมด
     if (!in_array($date, $allDates)) {
@@ -130,7 +121,7 @@ foreach ($drugData as $detail => $info) {
 // =====================================================
 // 4. Pagination - แบ่งหน้าตามจำนวนวัน
 // =====================================================
-$daysPerPage = 4; // จำนวนวันต่อหน้า (ปรับได้)
+$daysPerPage = 1; // จำนวนวันต่อหน้า (ปรับได้)
 $totalDates = count($allDates);
 $totalPages = max(1, ceil($totalDates / $daysPerPage));
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -193,7 +184,7 @@ $html = '
     }
 </style>';
 
-$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา โรงพยาบาลปราสาท</h2>';
+$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา</h2>';
 
 // ข้อมูลผู้ป่วย
 $html .= '<div class="header-info">';
@@ -257,7 +248,7 @@ foreach ($drugData as $detailKey => $info) {
         }
     }
 
-     // =====================================================
+    // =====================================================
     // สร้างแถวตาม maxRowsForDrug
     // =====================================================
     for ($rowIdx = 0; $rowIdx < $maxRowsForDrug; $rowIdx++) {
@@ -266,16 +257,13 @@ foreach ($drugData as $detailKey => $info) {
         // คอลัมน์ ลำดับ + ชื่อยา (rowspan ในแถวแรก)
         if ($rowIdx === 0) {
             $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
-           // $drugNameSub = !empty($info['name']) ? '<br><span style="font-size:10px; font-weight:bold; color:#0000CC;">(' . htmlspecialchars($info['name']) . ')</span>' : '';
-           // $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . $drugNameSub . '</td>';
-           if (!empty($info['name'])) {
-            $drugDetailSub = '<br><span style="font-size:10px; ...">' . $info['detail'] . '</span>';
-            $html .= '<td ...>' . $info['name'] . $drugDetailSub . '</td>';
-        } else {
-            // sticker_short_name ว่าง → แสดงแค่ order_item_detail
-            $html .= '<td ...>' . $info['detail'] . '</td>';
-        }
-        
+            // sticker_short_name อยู่บน, order_item_detail อยู่ล่าง
+            if (!empty($info['name'])) {
+                $drugDetailSub = '<br><span style="font-size:8px; font-weight:normal; color:#333;">' . htmlspecialchars($info['detail']) . '</span>';
+                $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['name']) . $drugDetailSub . '</td>';
+            } else {
+                $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . '</td>';
+            }
         }
 
         // แต่ละวัน
