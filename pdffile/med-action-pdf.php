@@ -6,10 +6,18 @@ $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
+if ($login != $loginname) {
+    session_start();
+    session_destroy();
+    require_once '../mains/main-report.php';
+}
+
+/*
 if (!$loginname) {
     session_start();
     session_destroy();
 }
+*/
 
 Session::checkLoginSessionAndShowMessage();
 
@@ -258,8 +266,16 @@ foreach ($drugData as $detailKey => $info) {
         // คอลัมน์ ลำดับ + ชื่อยา (rowspan ในแถวแรก)
         if ($rowIdx === 0) {
             $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
-            $drugNameSub = !empty($info['name']) ? '<br><span style="font-size:10px; font-weight:bold; color:#0000CC;">(' . htmlspecialchars($info['name']) . ')</span>' : '';
-            $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . $drugNameSub . '</td>';
+           // $drugNameSub = !empty($info['name']) ? '<br><span style="font-size:10px; font-weight:bold; color:#0000CC;">(' . htmlspecialchars($info['name']) . ')</span>' : '';
+           // $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . $drugNameSub . '</td>';
+           if (!empty($info['name'])) {
+            $drugDetailSub = '<br><span style="font-size:10px; ...">' . $info['detail'] . '</span>';
+            $html .= '<td ...>' . $info['name'] . $drugDetailSub . '</td>';
+        } else {
+            // sticker_short_name ว่าง → แสดงแค่ order_item_detail
+            $html .= '<td ...>' . $info['detail'] . '</td>';
+        }
+        
         }
 
         // แต่ละวัน
