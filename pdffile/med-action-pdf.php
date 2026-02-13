@@ -184,7 +184,7 @@ $html = '
     }
 </style>';
 
-$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา</h2>';
+$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา โรงพยาบาลปราสาท</h2>';
 
 // ข้อมูลผู้ป่วย
 $html .= '<div class="header-info">';
