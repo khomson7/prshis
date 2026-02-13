@@ -72,7 +72,8 @@ $drugData = [];       // [order_item_detail => ['name'=>..., 'detail'=>..., 'tim
 foreach ($rows as $row) {
     $date = $row['action_date'];
     $detail = $row['order_item_detail'] ?? '';
-    $drugName = $row['sticker_short_name'] ?? $detail;
+   // $drugName = $row['sticker_short_name'] ?? $detail;
+   $drugName = $row['sticker_short_name'] ?? '';
 
     // เก็บวันที่ทั้งหมด
     if (!in_array($date, $allDates)) {
@@ -248,7 +249,7 @@ foreach ($drugData as $detailKey => $info) {
         }
     }
 
-    // =====================================================
+     // =====================================================
     // สร้างแถวตาม maxRowsForDrug
     // =====================================================
     for ($rowIdx = 0; $rowIdx < $maxRowsForDrug; $rowIdx++) {
@@ -257,7 +258,8 @@ foreach ($drugData as $detailKey => $info) {
         // คอลัมน์ ลำดับ + ชื่อยา (rowspan ในแถวแรก)
         if ($rowIdx === 0) {
             $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
-            $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . '</td>';
+            $drugNameSub = !empty($info['name']) ? '<br><span style="font-size:10px; font-weight:bold; color:#0000CC;">(' . htmlspecialchars($info['name']) . ')</span>' : '';
+            $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . $drugNameSub . '</td>';
         }
 
         // แต่ละวัน
