@@ -16,6 +16,7 @@ Session::checkLoginSessionAndShowMessage();
 if (!(Session::checkPermission('DOCUMENT', 'PRINT'))) {
     return;
 }
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
@@ -44,7 +45,7 @@ Session::insertSystemAccessLog(json_encode(array(
 // =====================================================
 // 1. ดึงข้อมูลการบริหารยา
 // =====================================================
-$sql = "SELECT io.icode, di.sticker_short_name, io.order_item_detail, act.action_date, act.action_time,
+$sql = "SELECT di.sticker_short_name, io.order_item_detail, act.action_date, act.action_time,
                d.name AS dname1, d2.name AS dname2
                FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
                 INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_plan ap ON ap.plan_id = act.plan_id
@@ -52,10 +53,10 @@ $sql = "SELECT io.icode, di.sticker_short_name, io.order_item_detail, act.action
                 LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = act.action_person_1
                 LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d2 ON d2.code = act.action_person_2
                 LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
-        WHERE act.an = :an AND io.icode IS NOT NULL
+        WHERE act.an = :an 
           AND act.action_time IS NOT NULL AND act.action_time != ''
-        GROUP BY io.icode, act.action_time
-        ORDER BY di.sticker_short_name, act.action_date, act.action_time";
+        GROUP BY io.order_item_detail, act.action_time
+        ORDER BY io.order_item_detail, act.action_date, act.action_time";
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':an', $an);
@@ -63,35 +64,35 @@ $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // =====================================================
-// 2. จัดกลุ่มข้อมูล: รวบรวมวันที่ทั้งหมด และจัดกลุ่มตามยา
+// 2. จัดกลุ่มข้อมูล: รวบรวมวันที่ทั้งหมด และจัดกลุ่มตาม order_item_detail
 // =====================================================
 $allDates = [];       // วันที่ทั้งหมดที่มีการบริหารยา (unique, sorted)
-$drugData = [];       // [icode => ['name'=>..., 'times'=>[date => [['time'=>..,'d1'=>..,'d2'=>..], ...]]]]
+$drugData = [];       // [order_item_detail => ['name'=>..., 'detail'=>..., 'times'=>[date => [...]]]]
 
 foreach ($rows as $row) {
     $date = $row['action_date'];
-    $icode = $row['icode'];
-    $drugName = $row['sticker_short_name'] ?? $icode;
+    $detail = $row['order_item_detail'] ?? '';
+    $drugName = $row['sticker_short_name'] ?? $detail;
 
     // เก็บวันที่ทั้งหมด
     if (!in_array($date, $allDates)) {
         $allDates[] = $date;
     }
 
-    // จัดกลุ่มตาม icode
-    if (!isset($drugData[$icode])) {
-        $drugData[$icode] = [
+    // จัดกลุ่มตาม order_item_detail
+    if (!isset($drugData[$detail])) {
+        $drugData[$detail] = [
             'name' => $drugName,
-            'detail' => $row['order_item_detail'] ?? '',
+            'detail' => $detail,
             'times' => []
         ];
     }
 
-    if (!isset($drugData[$icode]['times'][$date])) {
-        $drugData[$icode]['times'][$date] = [];
+    if (!isset($drugData[$detail]['times'][$date])) {
+        $drugData[$detail]['times'][$date] = [];
     }
 
-    $drugData[$icode]['times'][$date][] = [
+    $drugData[$detail]['times'][$date][] = [
         'time' => substr($row['action_time'], 0, 5), // HH:MM
         'dname1' => $row['dname1'] ?? '',
         'dname2' => $row['dname2'] ?? '',
@@ -104,15 +105,7 @@ sort($allDates); // เรียงวันที่
 // 3. หาจำนวน row สูงสุดต่อยาแต่ละตัว (จำนวนเวลาที่มากที่สุดในแต่ละวัน)
 // =====================================================
 $drugMaxRows = [];
-foreach ($drugData as $icode => $info) {
-    $maxRows = 0;
-    foreach ($allDates as $date) {
-        $count = isset($info['times'][$date]) ? count($info['times'][$date]) : 0;
-        if ($count > $maxRows) {
-            $maxRows = $count;
-        }
-    }
-    // ใช้จำนวน unique time ทั้งหมดของยาตัวนี้แทน เพื่อแสดงทุกเวลาที่มี
+foreach ($drugData as $detail => $info) {
     $allTimesForDrug = [];
     foreach ($info['times'] as $date => $entries) {
         foreach ($entries as $entry) {
@@ -122,13 +115,13 @@ foreach ($drugData as $icode => $info) {
         }
     }
     sort($allTimesForDrug);
-    $drugMaxRows[$icode] = $allTimesForDrug; // เก็บ list เวลาที่ unique
+    $drugMaxRows[$detail] = $allTimesForDrug;
 }
 
 // =====================================================
 // 4. Pagination - แบ่งหน้าตามจำนวนวัน
 // =====================================================
-$daysPerPage = 10; // จำนวนวันต่อหน้า (ปรับได้)
+$daysPerPage = 4; // จำนวนวันต่อหน้า (ปรับได้)
 $totalDates = count($allDates);
 $totalPages = max(1, ceil($totalDates / $daysPerPage));
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -191,7 +184,7 @@ $html = '
     }
 </style>';
 
-$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา โรงพยาบาลปราสาท</h2>';
+$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา</h2>';
 
 // ข้อมูลผู้ป่วย
 $html .= '<div class="header-info">';
@@ -229,7 +222,7 @@ $html .= '</thead>';
 $html .= '<tbody>';
 $seq = 0;
 
-foreach ($drugData as $icode => $info) {
+foreach ($drugData as $detailKey => $info) {
     // ตรวจสอบว่ายาตัวนี้มีเวลาบริหารยาในหน้าปัจจุบันหรือไม่
     $hasDataInPage = false;
     foreach ($pageDates as $date) {
@@ -264,8 +257,7 @@ foreach ($drugData as $icode => $info) {
         // คอลัมน์ ลำดับ + ชื่อยา (rowspan ในแถวแรก)
         if ($rowIdx === 0) {
             $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
-            $drugDetail = !empty($info['detail']) ? '<br><span style="font-size:8px; font-weight:normal; color:#333;">' . htmlspecialchars($info['detail']) . '</span>' : '';
-            $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['name']) . $drugDetail . '</td>';
+            $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . '</td>';
         }
 
         // แต่ละวัน
