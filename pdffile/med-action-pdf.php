@@ -121,7 +121,7 @@ foreach ($drugData as $detail => $info) {
 // =====================================================
 // 4. Pagination - แบ่งหน้าตามจำนวนวัน
 // =====================================================
-$daysPerPage = 1; // จำนวนวันต่อหน้า (ปรับได้)
+$daysPerPage = 10; // จำนวนวันต่อหน้า (ปรับได้)
 $totalDates = count($allDates);
 $totalPages = max(1, ceil($totalDates / $daysPerPage));
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
