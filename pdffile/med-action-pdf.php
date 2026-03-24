@@ -54,7 +54,7 @@ FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d2 ON d2.code = act.action_person_2
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
 WHERE act.an = :an 
-AND act.action_time IS NOT NULL AND act.action_time != ''
+AND act.action_time IS NOT NULL AND act.action_time != '' and io.order_item_type in('med')
 GROUP BY io.order_item_detail, act.action_date, act.action_time
 ORDER BY io.order_item_detail, act.action_date, act.action_time";
 
