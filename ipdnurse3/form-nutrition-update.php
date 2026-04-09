@@ -83,51 +83,32 @@ try {
             'an' => $an,
         ), JSON_UNESCAPED_UNICODE));
 
-        // Logic to check for "Severe" status or BMI < 16 for automated Progress Note
-        $is_severe = false;
-        // BMI Severe check (< 16)
-        if ($bmi != null && (float) $bmi < 16) {
-            $is_severe = true;
-        } else {
-            // Check weight loss percentages against "Severe" thresholds
-            if ($percen_1week != null && (float) $percen_1week > 2)
-                $is_severe = true;
-            if ($percen_2_3week != null && (float) $percen_2_3week > 3)
-                $is_severe = true;
-            if ($percen_1month != null && (float) $percen_1month > 5)
-                $is_severe = true;
-            if ($percen_3month != null && (float) $percen_3month > 8)
-                $is_severe = true;
-            if ($percen_5month != null && (float) $percen_5month > 10)
-                $is_severe = true;
-        }
+        // --- NEW Logic for automated Progress Note (Moderate or Severe) ---
+        $evaluation_message = empty($_REQUEST['evaluation_message']) ? null : $_REQUEST['evaluation_message'];
 
-        if ($is_severe) {
+        if ($evaluation_message) {
             // Check if progress note with the same detail already exists for this AN
-            // Using progress_note_item_detail as a unique marker for this automated note
             $sql_check_note = "SELECT COUNT(*) FROM " . DbConstant::KPHIS_DBNAME . ".ipd_progress_note_item
-                                   WHERE an = :an AND progress_note_item_detail = 'ประเมิน Nutrition ผล Serve'";
+                                   WHERE an = :an AND progress_note_item_detail = :detail";
             $stmt_check_note = $conn->prepare($sql_check_note);
-            $stmt_check_note->execute(['an' => $an]);
+            $stmt_check_note->execute(['an' => $an, 'detail' => $evaluation_message]);
 
             if ($stmt_check_note->fetchColumn() == 0) {
                 // 1. Insert into ipd_progress_note (Parent)
                 $progress_note_date = date('Y-m-d');
                 $progress_note_time = date('H:i:s');
-                $groupname = $_SESSION['groupname'];
+                $groupname = isset($_SESSION['groupname']) ? $_SESSION['groupname'] : '';
                 $progress_note_owner_type = 'nurse'; // Default
                 if (strpos($groupname, 'แพทย์') !== false) {
                     $progress_note_owner_type = 'doctor';
                 } else if (strpos($groupname, 'พยาบาล') !== false) {
                     $progress_note_owner_type = 'nurse';
                 }
-                $progress_note_doctor = $_SESSION['doctorcode'];
+                $progress_note_doctor = isset($_SESSION['doctorcode']) ? $_SESSION['doctorcode'] : null;
 
                 $stmt_pn = $conn->prepare("INSERT INTO " . DbConstant::KPHIS_DBNAME . ".ipd_progress_note
-                        (an, progress_note_date, progress_note_time, progress_note_owner_type, progress_note_doctor, create_user,
-                         create_datetime, update_user, update_datetime, version)
-                        VALUES (:an, :progress_note_date, :progress_note_time, :progress_note_owner_type, :progress_note_doctor, :create_user, 
-                        :create_datetime, :update_user, :update_datetime, :version)");
+                        (an, progress_note_date, progress_note_time, progress_note_owner_type, progress_note_doctor, create_user, create_datetime, update_user, update_datetime, version)
+                        VALUES (:an, :progress_note_date, :progress_note_time, :progress_note_owner_type, :progress_note_doctor, :create_user, :create_datetime, :update_user, :update_datetime, :version)");
                 $stmt_pn->execute([
                     'an' => $an,
                     'progress_note_date' => $progress_note_date,
@@ -145,10 +126,11 @@ try {
                 // 2. Insert into ipd_progress_note_item (Child)
                 $stmt_pni = $conn->prepare("INSERT INTO " . DbConstant::KPHIS_DBNAME . ".ipd_progress_note_item
                         (progress_note_id, an, progress_note_item_type, progress_note_item_detail, create_user, create_datetime, update_user, update_datetime, version)
-                        VALUES (:progress_note_id, :an, 'note', 'ประเมิน Nutrition ผล Serve', :create_user, :create_datetime, :update_user, :update_datetime, :version)");
+                        VALUES (:progress_note_id, :an, 'note', :detail, :create_user, :create_datetime, :update_user, :update_datetime, :version)");
                 $stmt_pni->execute([
                     'progress_note_id' => $progress_note_id,
                     'an' => $an,
+                    'detail' => $evaluation_message,
                     'create_user' => $update_user,
                     'create_datetime' => $update_datetime,
                     'update_user' => $update_user,
