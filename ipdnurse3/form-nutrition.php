@@ -468,7 +468,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                         <div id="show_check_save" class="col-12"></div>
                         <div class="col-md-12 text-right">
                             <?php if (
-                                Session::checkPermission('IPD_NURSE_NOTE', 'ADD')
+                                Session::checkPermission('PRS_FORM_NUTRITION', 'ADD')
                                 && ReportQueryUtils::checkReadOnly($an)
                             ): ?>
                                 <button type="button" class="btn btn-primary px-5" onclick="form_save()">
