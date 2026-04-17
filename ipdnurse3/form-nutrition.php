@@ -205,7 +205,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                 <div class="card-body">
                     <div class="d-flex gap-3 flex-wrap">
                         <div class="flex-fill">
-                            <b>เกณฑ์การวินิจฉัย SCG</b><br>
+                            <b>เกณฑ์การวินิจฉัย</b><br>
                             <b>&nbsp; มีหลักฐานข้อใดข้อหนึ่ง ต่อไปนี้</b><br>
                             <b>&nbsp;&nbsp;&nbsp;1.Body Mass Index [BMI] น้อยกว่า 18.5</b><br>
                             <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เริ่มตั้งแต่ 17.00 - 18.49 เรียกว่า Mild protein-energy
@@ -215,8 +215,8 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                             <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt; 16.00 เรียกว่า Severe protein-energy nutrition</b><br>
                             <b>&nbsp;&nbsp;&nbsp;2.น้ำหนักลดลงจากเดิม ตามเกณฑ์ความรุนแรงของภาวะทุพโภชนาการ
                                 [ตาราง]</b><br>
-                            <b>&nbsp;มีการดูแลรักษา เช่น อาหารที่มีโปรตีนสูง เพิ่มไข่ขาว รวมทั้ง Enter nutrition หรือ
-                                Parenteral nutrition</b><br>
+                            <!--<b>&nbsp;มีการดูแลรักษา เช่น อาหารที่มีโปรตีนสูง เพิ่มไข่ขาว รวมทั้ง Enter nutrition หรือ
+                                Parenteral nutrition</b><br> -->
                         </div>
                         <div class="flex-fill">
                             <table class="table table-bordered table-sm text-center" style="font-size:0.85rem;">
@@ -631,7 +631,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
 
         if (wl_severity > 0) {
             var sev_label = wl_severity == 2 ? "Severe" : "Moderate";
-            wl_text = "ประเมินภาวะ Malnutrition น้ำหนักลดลง " + max_pct.toFixed(2) + "% ในเวลา " + max_label + " ตามค่าความรุนแรง วินิจฉัย " + sev_label + " Malnutrition Nutrition";
+            wl_text = "ประเมินภาวะ Malnutrition น้ำหนักลดลง " + max_pct.toFixed(2) + "% ในเวลา " + max_label + "  วินิจฉัย " + sev_label + " Malnutrition Nutrition";
         }
 
         var final_message = "";
@@ -646,11 +646,11 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         }
 
         if (final_message != "") {
-            $('#evaluation_summary_display').html('<i class="fas fa-exclamation-triangle"></i> ชุดข้อความสรุปการประเมิน: ' + final_message);
+            $('#evaluation_summary_display').html('<i class="fas fa-exclamation-triangle"></i> สรุปการประเมิน: ' + final_message);
             $('#evaluation_message').val(final_message);
             $('#evaluation_summary_display').show();
         } else {
-            $('#evaluation_summary_display').html('<i class="fas fa-info-circle"></i> ชุดข้อความสรุปการประเมิน: -');
+            $('#evaluation_summary_display').html('<i class="fas fa-info-circle"></i> สรุปการประเมิน: -');
             $('#evaluation_message').val('');
             // Optional: hide if empty, but keeping it visible with "-" looks more consistent
         }
