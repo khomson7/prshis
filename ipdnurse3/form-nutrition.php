@@ -460,6 +460,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                                 <i class="fas fa-exclamation-triangle"></i> ชุดข้อความสรุปการประเมิน: -
                             </div>
                             <input type="hidden" id="evaluation_message" name="evaluation_message" value="">
+                            <input type="hidden" id="level_of_check" name="level_of_check" value="<?= htmlspecialchars($row ? ($row['level_of_check'] ?? '') : '') ?>">
                         </div>
                     </div>
 
@@ -583,10 +584,10 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         if (bmi > 0) {
             if (bmi < 16) {
                 bmi_severity = 2;
-                bmi_text = "ผลการประเมิน BMI: Severe (" + bmi.toFixed(2) + ")";
+                bmi_text = "ผลการประเมิน BMI " + bmi.toFixed(2) + " kg/m\u00B2: วินิจฉัย Severe malnutrition";
             } else if (bmi < 17) {
                 bmi_severity = 1;
-                bmi_text = "ผลการประเมิน BMI: Moderate (" + bmi.toFixed(2) + ")";
+                bmi_text = "ผลการประเมิน BMI " + bmi.toFixed(2) + " kg/m\u00B2: วินิจฉัย Moderate malnutrition";
             }
         }
 
@@ -594,6 +595,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         var wl_text = "";
         var max_pct = 0;
         var max_label = "";
+        var max_prev_bw = 0; // น้ำหนักก่อนหน้า (ของ period ที่ได้ severity สูงสุด)
 
         var periods = [
             { id: 'bw_1week', label: '1 สัปดาห์', mod: [1.1, 2], sev: 2 },
@@ -623,6 +625,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                             wl_severity = current_p_sev;
                             max_pct = pct;
                             max_label = p.label;
+                            max_prev_bw = prev; // เก็บ น้ำหนักเก่าไว้แสดง
                         }
                     }
                 }
@@ -631,8 +634,49 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
 
         if (wl_severity > 0) {
             var sev_label = wl_severity == 2 ? "Severe" : "Moderate";
-            wl_text = "ประเมินภาวะ Malnutrition น้ำหนักลดลง " + max_pct.toFixed(2) + "% ในเวลา " + max_label + "  วินิจฉัย " + sev_label + " Malnutrition Nutrition";
+            // แสดง: น้ำหนักลดลงจาก X kg เป็น Y kg คิดเป็น Z%
+            wl_text = "ประเมินภาวะ Malnutrition น้ำหนักลดลงจาก " + max_prev_bw.toFixed(2) +
+                      " kg เป็น " + bw_now.toFixed(2) +
+                      " kg คิดเป็น " + max_pct.toFixed(2) + "% ในเวลา " + max_label +
+                      " วินิจฉัย " + sev_label + " Malnutrition";
         }
+
+        // --- คำนวณ overall severity สูงสุด (BMI vs Weight Loss) ---
+        var overall_severity = Math.max(bmi_severity, wl_severity);
+        // map severity number -> level_of_check: 0=ไม่มี, 1=Mild→A, 2=Moderate→B... รอก่อน
+        // *** ตรรกะ: ถ้า bmi_severity==2 หรือ wl_severity==2 → C (Severe)
+        //            ถ้า bmi_severity==1 หรือ wl_severity==1 → B (Moderate)  ← แต่ Mild จาก BMI ไม่มีใน severity scale
+        //            Mild weight-loss (current_p_sev ไม่ถึง 1) แต่ %>=mild_threshold → A
+        // NOTE: severity scale นี้: 0=None, 1=Moderate, 2=Severe (Mild ไม่ถูก set)
+        // ดังนั้น level_of_check ต้องตรวจ Mild แยก
+        var level_of_check = '';
+        if (overall_severity >= 2) {
+            level_of_check = 'C'; // Severe
+        } else if (overall_severity == 1) {
+            level_of_check = 'B'; // Moderate
+        } else {
+            // ตรวจ Mild: BMI 17-18.49 หรือ %ลดลงในระดับ Mild
+            var isMild = false;
+            if (bmi > 17 && bmi < 18.5) isMild = true;
+            if (!isMild && bw_now > 0) {
+                var mildThresholds = [
+                    { id: 'bw_1week',   mild: 1   },
+                    { id: 'bw_2_3week', mild: 2   },
+                    { id: 'bw_1month',  mild: 4   },
+                    { id: 'bw_3month',  mild: 7   },
+                    { id: 'bw_5month',  mild: 8   }
+                ];
+                mildThresholds.forEach(function(m) {
+                    var prev = parseFloat($('#' + m.id).val());
+                    if (prev > 0) {
+                        var pct = ((prev - bw_now) / prev) * 100;
+                        if (pct >= m.mild) isMild = true;
+                    }
+                });
+            }
+            if (isMild) level_of_check = 'A'; // Mild
+        }
+        $('#level_of_check').val(level_of_check);
 
         var final_message = "";
         if (bmi_severity > 0 || wl_severity > 0) {
@@ -652,7 +696,6 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         } else {
             $('#evaluation_summary_display').html('<i class="fas fa-info-circle"></i> สรุปการประเมิน: -');
             $('#evaluation_message').val('');
-            // Optional: hide if empty, but keeping it visible with "-" looks more consistent
         }
     }
 

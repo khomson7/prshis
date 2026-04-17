@@ -25,6 +25,7 @@ $percen_2_3week = empty($_REQUEST['percen_2_3week']) ? null : $_REQUEST['percen_
 $percen_1month = empty($_REQUEST['percen_1month']) ? null : $_REQUEST['percen_1month'];
 $percen_3month = empty($_REQUEST['percen_3month']) ? null : $_REQUEST['percen_3month'];
 $percen_5month = empty($_REQUEST['percen_5month']) ? null : $_REQUEST['percen_5month'];
+$level_of_check = empty($_REQUEST['level_of_check']) ? null : $_REQUEST['level_of_check'];
 
 $create_datetime = date('Y-m-d H:i:s');
 $create_user = $_SESSION['loginname'];
@@ -38,11 +39,13 @@ try {
                 an, hn, vstdate, height, bw, bmi, age_y, check_bmi,
                 bw_1week, bw_2_3week, bw_1month, bw_3month, bw_5month,
                 percen_1week, percen_2_3week, percen_1month, percen_3month, percen_5month,
+                level_of_check,
                 create_user, create_datetime, update_user, version, update_datetime)
                 VALUES(
                 :an, :hn, :vstdate, :height, :bw, :bmi, :age_y, :check_bmi,
                 :bw_1week, :bw_2_3week, :bw_1month, :bw_3month, :bw_5month,
                 :percen_1week, :percen_2_3week, :percen_1month, :percen_3month, :percen_5month,
+                :level_of_check,
                 :create_user, :create_datetime, :update_user, :version, :update_datetime)");
 
         $stmt->execute(array(
@@ -64,6 +67,7 @@ try {
             'percen_1month' => $percen_1month,
             'percen_3month' => $percen_3month,
             'percen_5month' => $percen_5month,
+            'level_of_check' => $level_of_check,
             'create_user' => $create_user,
             'create_datetime' => $create_datetime,
             'update_user' => $update_user,

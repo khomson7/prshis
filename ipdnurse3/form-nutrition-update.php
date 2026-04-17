@@ -28,6 +28,7 @@ $percen_2_3week = empty($_REQUEST['percen_2_3week']) ? null : $_REQUEST['percen_
 $percen_1month = empty($_REQUEST['percen_1month']) ? null : $_REQUEST['percen_1month'];
 $percen_3month = empty($_REQUEST['percen_3month']) ? null : $_REQUEST['percen_3month'];
 $percen_5month = empty($_REQUEST['percen_5month']) ? null : $_REQUEST['percen_5month'];
+$level_of_check = empty($_REQUEST['level_of_check']) ? null : $_REQUEST['level_of_check'];
 
 $update_datetime = date('Y-m-d H:i:s');
 $update_user = $_SESSION['loginname'];
@@ -47,6 +48,7 @@ try {
                 bw_1month=:bw_1month, bw_3month=:bw_3month, bw_5month=:bw_5month,
                 percen_1week=:percen_1week, percen_2_3week=:percen_2_3week,
                 percen_1month=:percen_1month, percen_3month=:percen_3month, percen_5month=:percen_5month,
+                level_of_check=:level_of_check,
                 update_user=:update_user, version=:version, update_datetime=:update_datetime,status_action=:status_action
                 WHERE id=:id");
 
@@ -70,6 +72,7 @@ try {
             'percen_1month' => $percen_1month,
             'percen_3month' => $percen_3month,
             'percen_5month' => $percen_5month,
+            'level_of_check' => $level_of_check,
             'update_user' => $update_user,
             'version' => $version,
             'update_datetime' => $update_datetime,
