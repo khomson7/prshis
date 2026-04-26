@@ -92,8 +92,8 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
     }
 
     .nutrition-input:not([readonly]):not([disabled]) {
-        background-color: #fff9e6;
-        border-color: #f0a500;
+        background-color: #fff;
+        border-color: var(--bright-blue);
     }
 
     .nutrition-input[disabled] {
@@ -103,8 +103,8 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
     }
 
     .percen-box {
-        background: #f0fff4;
-        border: 1px solid #b2dfdb;
+        background: var(--bright-blue-light);
+        border: 1px solid var(--bright-blue);
         border-radius: 4px;
         padding: 4px 8px;
         font-size: 0.85rem;
@@ -115,7 +115,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
     }
 
     .bmi-result-box {
-        background: #e6f3ff;
+        background: var(--bright-blue-light);
         border-radius: 6px;
         padding: 5px 10px;
         font-weight: bold;
@@ -124,7 +124,8 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
     }
 
     .section-label {
-        background-color: #d9edf7;
+        background-color: var(--bright-blue-light);
+        color: var(--bright-blue);
         font-weight: bold;
         padding: 5px 10px;
         border-radius: 4px;
@@ -158,13 +159,13 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
     }
 
     .evaluation-summary-box {
-        background: #fff3e0;
-        border: 2px solid #ffb74d;
+        background: var(--bright-blue-light);
+        border: 2px solid var(--bright-blue);
         border-radius: 8px;
         padding: 12px;
         margin-top: 10px;
         font-weight: bold;
-        color: #e65100;
+        color: var(--bright-blue);
         min-height: 50px;
     }
 </style>

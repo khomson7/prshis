@@ -140,14 +140,14 @@ $check_    = ReportQueryUtils::getProduction($_id)
 
 <style>
         .main {
-                border: 1px solid #4287f5;
+                border: 1px solid var(--bright-blue);
                 height: 180px;
                 width: 500px;
                 position: relative;
         }
 
         .column1 {
-                color: #4287f5;
+                color: var(--bright-blue);
                 text-align: center;
         }
 
@@ -469,7 +469,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                         } else if ($id == null || $row['age_check'] == null) {
                                                                                                 echo $age_y03_checked;
                                                                                         } ?>class="custom-control-input" id="age_y4" value="4" name="age_check" oninput="ageCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="age_y4" style="font-size:100%;">4</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="age_y4" style="font-size:100%;">4</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
@@ -487,7 +487,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                         } else if ($id == null || $row['age_check'] == null) {
                                                                                                 echo $age_y37_checked;
                                                                                         } ?>class="custom-control-input" id="age_check3" value="3" name="age_check" oninput="ageCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="age_check3" style="font-size:100%;">3</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="age_check3" style="font-size:100%;">3</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -504,7 +504,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                         } else if ($id == null || $row['age_check'] == null) {
                                                                                                 echo $age_y713_checked;
                                                                                         } ?>class="custom-control-input" id="age_check2" value="2" name="age_check" oninput="ageCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="age_check2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="age_check2" style="font-size:100%;">2</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -524,7 +524,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                         } else if ($id == null || $row['age_check'] == null) {
                                                                                                 echo $age_y713_checked;
                                                                                         } ?>class="custom-control-input" id="age_check1" value="1" name="age_check" oninput="ageCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="age_check1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="age_check1" style="font-size:100%;">1</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -552,11 +552,11 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                 } 
                                                 ?>
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" rowspan="3">&nbsp;<b>2.เพศ</b></td>
                                                                         </tr>
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;เพศชาย</td>
 
@@ -569,7 +569,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                         } else if ($id == null || $row['sex']== null) {
                                                                                                 echo $sex2_checked;
                                                                                         } ?>class="custom-control-input" id="sex2" value="2" name="sex" oninput="SexCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sex2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="sex2" style="font-size:100%;">2</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -577,7 +577,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                         </tr>
 
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;เพศหญิง</td>
 
@@ -590,7 +590,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                         } else if ($id == null || $row['sex']== null) {
                                                                                                 echo $sex1_checked;
                                                                                         } ?>class="custom-control-input" id="sex1" value="1" name="sex" oninput="SexCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sex1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="sex1" style="font-size:100%;">1</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -617,7 +617,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['diag'] == '4') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="diag4" value="4" name="diag" oninput="diagCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="diag4" style="font-size:100%;">4</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="diag4" style="font-size:100%;">4</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -641,7 +641,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['diag'] == '3') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="diag3" value="3" name="diag" oninput="diagCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="diag3" style="font-size:100%;">3</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="diag3" style="font-size:100%;">3</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -659,7 +659,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['diag'] == '2') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="diag2" value="2" name="diag" oninput="diagCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="diag2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="diag2" style="font-size:100%;">2</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -677,7 +677,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['diag'] == '1') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="diag1" value="1" name="diag" oninput="diagCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="diag1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="diag1" style="font-size:100%;">1</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -685,11 +685,11 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                         </tr>
 
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" rowspan="4">&nbsp;<b>4. ความสามารถในการรับรู้</b></td>
                                                                         </tr>
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;การรับรู้บกพร่องหรือประเมินความสามารถตนเองไม่เหมาะสม รวมถึงทารก</td>
 
@@ -700,7 +700,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['knowledge'] == '3') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="knowledge3" value="3" name="knowledge" oninput="knowledgeCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="knowledge3" style="font-size:100%;">3</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="knowledge3" style="font-size:100%;">3</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -708,7 +708,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                         </tr>
 
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;รับรู้และไม่ปฏิบัติตามคำแนะนำ</td>
 
@@ -719,14 +719,14 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['knowledge'] == '2') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="knowledge2" value="2" name="knowledge" oninput="knowledgeCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="knowledge2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="knowledge2" style="font-size:100%;">2</label>
                                                                                         </div>
 
                                                                                 </td>
 
                                                                         </tr>
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;รับรู้และปฏิบัติตามคำแนะนำ</td>
 
@@ -737,7 +737,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['knowledge'] == '1') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="knowledge1" value="1" name="knowledge" oninput="knowledgeCheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="knowledge1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="knowledge1" style="font-size:100%;">1</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -757,7 +757,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['environmental'] == '4') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="environmental4" value="4" name="environmental" oninput="environmentalcheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="environmental4" style="font-size:100%;">4</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="environmental4" style="font-size:100%;">4</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
@@ -771,7 +771,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['environmental'] == '3') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="environmental3" value="3" name="environmental" oninput="environmentalcheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="environmental3" style="font-size:100%;">3</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="environmental3" style="font-size:100%;">3</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
@@ -784,7 +784,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['environmental'] == '2') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="environmental2" value="2" name="environmental" oninput="environmentalcheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="environmental2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="environmental2" style="font-size:100%;">2</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
@@ -798,18 +798,18 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['environmental'] == '1') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="environmental1" value="1" name="environmental" oninput="environmentalcheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="environmental1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="environmental1" style="font-size:100%;">1</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
 
 
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" rowspan="4">&nbsp;<b>6. หลังผ่าตัด</b></td>
                                                                         </tr>
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;ผู้ป่วยหลังผ่าตัดใน 24 ชั่วโมง</td>
 
@@ -820,13 +820,13 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['after_surgery'] == '3') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="after_surgery3" value="3" name="after_surgery" oninput="aftersurgerycheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="after_surgery3" style="font-size:100%;">3</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="after_surgery3" style="font-size:100%;">3</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
 
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;ภายใน 48 ชั่วโมง</td>
 
@@ -837,12 +837,12 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['after_surgery'] == '2') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="after_surgery2" value="2" name="after_surgery" oninput="aftersurgerycheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="after_surgery2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="after_surgery2" style="font-size:100%;">2</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
 
-                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                                        <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                                                 <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;มากกว่า 48 ชั่วโมงหรือไม่ได้รับการผ่าตัด</td>
 
@@ -853,7 +853,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['after_surgery'] == '1') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="after_surgery1" value="1" name="after_surgery" oninput="aftersurgerycheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="after_surgery1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="after_surgery1" style="font-size:100%;">1</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
@@ -877,7 +877,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['drug_use'] == '3') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="drug_use3" value="3" name="drug_use" oninput="drugusecheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="drug_use3" style="font-size:100%;">3</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="drug_use3" style="font-size:100%;">3</label>
                                                                                         </div>
 
                                                                                 </td>
@@ -896,7 +896,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['drug_use'] == '2') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="drug_use2" value="2" name="drug_use" oninput="drugusecheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="drug_use2" style="font-size:100%;">2</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="drug_use2" style="font-size:100%;">2</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>
@@ -912,7 +912,7 @@ $check_    = ReportQueryUtils::getProduction($_id)
                                                                                                 <input type="radio" <?php if ($row['drug_use'] == '1') {
                                                                                                                                 echo 'checked="checked"';
                                                                                                                         } ?>class="custom-control-input" id="drug_use1" value="1" name="drug_use" oninput="drugusecheckValue()">
-                                                                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="drug_use1" style="font-size:100%;">1</label>
+                                                                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="drug_use1" style="font-size:100%;">1</label>
                                                                                         </div>
                                                                                 </td>
                                                                         </tr>

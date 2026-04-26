@@ -213,18 +213,18 @@ $check_ = ReportQueryUtils::getProduction(26);
     }
 
     .audit-table thead th {
-        background-color: #2c6e49;
+        background-color: var(--bright-blue);
         color: #fff;
         text-align: center;
         font-weight: bold;
     }
 
     .audit-table tbody tr:nth-child(even) {
-        background-color: #f0f7f0;
+        background-color: var(--bright-blue-light);
     }
 
     .audit-table tbody tr:hover {
-        background-color: #e0f0e0;
+        background-color: #B3E5FC;
     }
 
     .text-center { text-align: center; }
@@ -248,11 +248,11 @@ $check_ = ReportQueryUtils::getProduction(26);
         cursor: pointer;
         width: 18px;
         height: 18px;
-        accent-color: #2c6e49;
+        accent-color: var(--bright-blue);
     }
 
     .score-header {
-        background-color: #2c6e49 !important;
+        background-color: var(--bright-blue) !important;
         color: #fff;
         font-size: 1rem;
         min-width: 80px;
@@ -272,8 +272,8 @@ $check_ = ReportQueryUtils::getProduction(26);
     .total-score-box {
         font-size: 2rem;
         font-weight: bold;
-        color: #2c6e49;
-        border: 3px solid #2c6e49;
+        color: var(--bright-blue);
+        border: 3px solid var(--bright-blue);
         border-radius: 50%;
         width: 70px;
         height: 70px;
@@ -377,7 +377,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                             </td>
                             <?php endforeach; ?>
                             <td class="text-center font-weight-bold" rowspan="3">
-                                <span id="score_display_<?= $qn ?>" class="badge badge-success" style="font-size:1rem; padding:6px 10px;">
+                                <span id="score_display_<?= $qn ?>" class="bg-theme-blue" style="font-size:1rem; padding:6px 10px; border-radius: 4px;">
                                     <?= ($saved_score !== null) ? $saved_score : '-' ?>
                                 </span>
                                 <input type="hidden" name="q[<?= $qn ?>][computed]" id="score_val_<?= $qn ?>"
@@ -403,7 +403,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                         <!-- Visible sub-label rows (separate rows with no radio, just labels) -->
                         <tr style="background: #f8f8f8;">
                             <td style="padding: 4px 10px; font-size:0.8rem; color:#444;">
-                                <i class="fas fa-circle" style="color:#2c6e49; font-size:0.6rem;"></i>
+                                <i class="fas fa-circle" style="color:var(--bright-blue); font-size:0.6rem;"></i>
                                 <b>ดื่มมาตรฐาน:</b>
                             </td>
                             <?php foreach ($q['options_std'] as $score => $label): ?>
@@ -411,9 +411,9 @@ $check_ = ReportQueryUtils::getProduction(26);
                             <?php endforeach; ?>
                             <td></td>
                         </tr>
-                        <tr style="background: #f0f7f0;">
+                        <tr style="background: var(--bright-blue-light);">
                             <td style="padding: 4px 10px; font-size:0.8rem; color:#444;">
-                                <i class="fas fa-circle" style="color:#2c6e49; font-size:0.6rem;"></i>
+                                <i class="fas fa-circle" style="color:var(--bright-blue); font-size:0.6rem;"></i>
                                 <b>เบียร์ (กระป๋อง/ขวด):</b>
                             </td>
                             <?php foreach ($q['options_beer'] as $score => $label): ?>
@@ -423,7 +423,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                         </tr>
                         <tr style="background: #f8f8f8;">
                             <td style="padding: 4px 10px; font-size:0.8rem; color:#444;">
-                                <i class="fas fa-circle" style="color:#2c6e49; font-size:0.6rem;"></i>
+                                <i class="fas fa-circle" style="color:var(--bright-blue); font-size:0.6rem;"></i>
                                 <b>เหล้า (เหล้าขาว 40°):</b>
                             </td>
                             <?php foreach ($q['options_liq'] as $score => $label): ?>
@@ -465,7 +465,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                                 <label for="q<?= $qn ?>s4"><?= $q['options'][4] ?></label>
                             </td>
                             <td class="text-center font-weight-bold">
-                                <span id="score_display_<?= $qn ?>" class="badge badge-success" style="font-size:1rem; padding:6px 10px;">
+                                <span id="score_display_<?= $qn ?>" class="bg-theme-blue" style="font-size:1rem; padding:6px 10px; border-radius: 4px;">
                                     <?= ($saved_score !== null) ? $saved_score : '-' ?>
                                 </span>
                                 <input type="hidden" name="q[<?= $qn ?>][computed]" id="score_val_<?= $qn ?>"
@@ -489,7 +489,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                             </td>
                             <?php endforeach; ?>
                             <td class="text-center font-weight-bold">
-                                <span id="score_display_<?= $qn ?>" class="badge badge-success" style="font-size:1rem; padding:6px 10px;">
+                                <span id="score_display_<?= $qn ?>" class="bg-theme-blue" style="font-size:1rem; padding:6px 10px; border-radius: 4px;">
                                     <?= ($saved_score !== null) ? $saved_score : '-' ?>
                                 </span>
                                 <input type="hidden" name="q[<?= $qn ?>][computed]" id="score_val_<?= $qn ?>"
@@ -501,7 +501,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
-                        <tr style="background:#e8f5e9;">
+                        <tr style="background:#E1F5FE;">
                             <td colspan="6" class="text-right font-weight-bold" style="padding: 10px;">
                                 <span style="font-size:1rem;">คะแนนรวม AUDIT (0-40):</span>
                             </td>
@@ -519,13 +519,13 @@ $check_ = ReportQueryUtils::getProduction(26);
 
             <!-- Score Interpretation -->
             <div class="card mt-3" id="score_result_card">
-                <div class="card-header font-weight-bold" style="background:#2c6e49; color:#fff;">
+                <div class="card-header font-weight-bold" style="background:var(--bright-blue); color:#fff;">
                     <i class="fas fa-chart-bar"></i> การแปลผลคะแนน AUDIT
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-2">
-                            <div class="result-card result-low <?= (!isset($audit_row['sum_score']) || $audit_row['sum_score'] <= 7) ? 'border-success' : '' ?>">
+                            <div class="result-card result-low <?= (!isset($audit_row['sum_score']) || $audit_row['sum_score'] <= 7) ? 'border-theme-blue' : '' ?>">
                                 <b>0-7 คะแนน</b><br>
                                 <span>ผู้ดื่มแบบเสี่ยงต่ำ</span><br>
                                 <small><i>Low risk drinker</i></small>
@@ -559,7 +559,7 @@ $check_ = ReportQueryUtils::getProduction(26);
 
             <div class="row mt-4 mb-5">
                 <div class="col text-center">
-                    <button type="submit" class="btn btn-success btn-lg px-5 shadow"><i class="fas fa-save"></i>
+                    <button type="submit" class="btn btn-primary btn-lg px-5 shadow"><i class="fas fa-save"></i>
                         บันทึกข้อมูล</button>
                 </div>
             </div>
@@ -582,7 +582,8 @@ $check_ = ReportQueryUtils::getProduction(26);
             var hidden  = document.getElementById('score_val_' + qn);
             if (display) {
                 display.textContent = (scoreVal !== null) ? scoreVal : '-';
-                display.className = 'badge ' + (scoreVal !== null ? 'badge-success' : 'badge-secondary');
+                display.className = 'bg-theme-blue';
+                display.style.borderRadius = '4px';
             }
             if (hidden) {
                 hidden.value = (scoreVal !== null) ? scoreVal : '';

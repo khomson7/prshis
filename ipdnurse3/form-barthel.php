@@ -142,14 +142,14 @@ $check_ = ReportQueryUtils::getProduction($_id)
 
 <style>
     .main {
-        border: 1px solid #4287f5;
+        border: 1px solid var(--bright-blue);
         height: 180px;
         width: 500px;
         position: relative;
     }
 
     .column1 {
-        color: #4287f5;
+        color: var(--bright-blue);
         text-align: center;
     }
 
@@ -537,14 +537,14 @@ $check_ = ReportQueryUtils::getProduction($_id)
 
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="5%" rowspan="5">&nbsp;<b>2.Transfer
                                                 ลุกนั่งจากที่นอนหรือจากเตียงไปยังเก้าอี้
                                             </b></td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;0 = ไม่สามารถนั่งได้ (นั่งแล้วจะล้มเสมอ)หรือต้องใช้คน 2
@@ -584,7 +584,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;5 = ต้องการความช่วยเหลืออย่างมากจึงจะนั่งได้ เช่น
@@ -626,7 +626,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;10 = ต้องการความช่วยเหลือบ้าง เช่น
@@ -665,7 +665,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;15 = ทำเองได้</td>
@@ -789,12 +789,12 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="5%" rowspan="4">&nbsp;<b>4.Toilet use การใช้ห้องน้ำ</b></td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;0 = ช่วยตัวเองไม่ได้</td>
@@ -809,7 +809,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="toilet_use0" value="1" name="toilet_use"
                                                     oninput="toiletUseCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="toilet_use0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -822,7 +822,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="toilet_use_dc0" value="1" name="toilet_use_dc"
                                                     oninput="toiletUseDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="toilet_use_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -835,7 +835,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;5 = ทำได้เอง (ต้องการความช่วยเหลือในบางสิ่ง)</td>
@@ -850,7 +850,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="toilet_use5" value="5" name="toilet_use"
                                                     oninput="toiletUseCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="toilet_use5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -863,7 +863,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="toilet_use_dc5" value="5" name="toilet_use_dc"
                                                     oninput="toiletUseDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="toilet_use_dc5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -876,7 +876,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;10 = ช่วยเหลือตัวเองได้ดี(ขึ้นนั่งและลงจากโถส้วมได้เอง
@@ -890,7 +890,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="toilet_use10" value="10" name="toilet_use"
                                                     oninput="toiletUseCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="toilet_use10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -903,7 +903,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="toilet_use_dc10" value="10" name="toilet_use_dc"
                                                     oninput="toiletUseDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="toilet_use_dc10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -934,7 +934,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bathing0"
                                                     value="1" name="bathing" oninput="bathingcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bathing0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -947,7 +947,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="bathing_dc0" value="1" name="bathing_dc"
                                                     oninput="bathingDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bathing_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -973,7 +973,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bathing5"
                                                     value="5" name="bathing" oninput="bathingcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bathing5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -986,7 +986,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="bathing_dc5" value="5" name="bathing_dc"
                                                     oninput="bathingDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bathing_dc5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1000,13 +1000,13 @@ $check_ = ReportQueryUtils::getProduction($_id)
 
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="5%" rowspan="5">&nbsp;<b>6.Mobility
                                                 การเคลื่อนที่ภายในห้องหรือบ้าน</b></td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;0 = เคลื่อนที่ไปไหนไม่ได้</td>
@@ -1020,7 +1020,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="mobility0"
                                                     value="1" name="mobility" oninput="mobilitycheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility0" style="font-size:100%;">0</label>
                                             </div>
                                         </td>
@@ -1032,7 +1032,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="mobility_dc0" value="1" name="mobility_dc"
                                                     oninput="mobilityDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1044,7 +1044,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;5 =
@@ -1059,7 +1059,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="mobility5"
                                                     value="5" name="mobility" oninput="mobilitycheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1072,7 +1072,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="mobility_dc5" value="5" name="mobility_dc"
                                                     oninput="mobilityDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility_dc5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1085,7 +1085,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;10 = เดินหรือเคลื่อนที่ได้โดยมีคนช่วย เช่น พยุง
@@ -1099,7 +1099,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="mobility10" value="10" name="mobility"
                                                     oninput="mobilitycheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1112,7 +1112,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="mobility_dc10" value="10" name="mobility_dc"
                                                     oninput="mobilityDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility_dc10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1124,7 +1124,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
 
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;15 = เดินหรือเคลื่อนที่ได้เอง</td>
@@ -1137,7 +1137,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="mobility15" value="15" name="mobility"
                                                     oninput="mobilitycheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility15" style="font-size:100%;">15</label>
                                             </div>
 
@@ -1150,7 +1150,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="mobility_dc15" value="15" name="mobility_dc"
                                                     oninput="mobilityDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="mobility_dc15" style="font-size:100%;">15</label>
                                             </div>
 
@@ -1181,7 +1181,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="stairs0"
                                                     value="1" name="stairs" oninput="stairscheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="stairs0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1194,7 +1194,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="stairs_dc0" value="1" name="stairs_dc"
                                                     oninput="stairsDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="stairs_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1220,7 +1220,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="stairs5"
                                                     value="5" name="stairs" oninput="stairscheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="stairs5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1233,7 +1233,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="stairs_dc5" value="5" name="stairs_dc"
                                                     oninput="stairsDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="stairs_dc5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1256,7 +1256,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="stairs10"
                                                     value="10" name="stairs" oninput="foodcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="stairs10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1269,7 +1269,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="stairs_dc10" value="10" name="stairs_dc"
                                                     oninput="stairsDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="stairs_dc10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1282,13 +1282,13 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="5%" rowspan="4">&nbsp;<b>8.Dressing การสวมใส่เสื้อผ้า
                                             </b></td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;0 = ต้องมีคนช่วยสวมใส่ให้ ช่วยตัวเองไม่ได้เลยหรือน้อย</td>
@@ -1302,7 +1302,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="dressing0"
                                                     value="1" name="dressing" oninput="dressingcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="dressing0" style="font-size:100%;">0</label>
                                             </div>
                                         </td>
@@ -1314,7 +1314,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="dressing_dc0" value="1" name="dressing_dc"
                                                     oninput="dressingDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="dressing_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1325,7 +1325,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                             width="1%">&nbsp;</td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;5 = ช่วยตัวเองได้ร้อยละ 50 ที่เหลือต้องมีคนช่วย</td>
@@ -1339,7 +1339,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="dressing5"
                                                     value="5" name="dressing" oninput="dressingcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="dressing5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1352,7 +1352,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="dressing_dc5" value="5" name="dressing_dc"
                                                     oninput="dressingDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="dressing_dc5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1365,7 +1365,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;10 = ช่วยเหลือตัวเองได้ดี (รวมทั้งการติดกระดุม รูดซิป)
@@ -1379,7 +1379,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="dressing10" value="10" name="dressing"
                                                     oninput="dressingcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="dressing10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1392,7 +1392,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="dressing_dc10" value="10" name="dressing_dc"
                                                     oninput="dressingDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="dressing_dc10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1425,7 +1425,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bowel0"
                                                     value="1" name="bowel" oninput="bowelcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bowel0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1437,7 +1437,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bowel_dc0"
                                                     value="1" name="bowel_dc" oninput="bowelDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bowel_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1464,7 +1464,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bowel5"
                                                     value="5" name="bowel" oninput="bowelcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bowel5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1476,7 +1476,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bowel_dc5"
                                                     value="5" name="bowel_dc" oninput="bowelDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bowel_dc5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1501,7 +1501,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bowel10"
                                                     value="10" name="bowel" oninput="bowelcheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bowel10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1514,7 +1514,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="bowel_dc10" value="10" name="bowel_dc"
                                                     oninput="bowelDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bowel_dc10" style="font-size:100%;">10</label>
                                             </div>
 
@@ -1526,13 +1526,13 @@ $check_ = ReportQueryUtils::getProduction($_id)
 
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="5%" rowspan="4">&nbsp;<b>10.Bladder การกลั้นปัสสาวะใน 1
                                                 สัปดาห์ที่ผ่านมา</b></td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;0 = กลั้นไม่ได้ หรือใส่สายสวนปัสสาวะ
@@ -1547,7 +1547,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bladder0"
                                                     value="1" name="bladder" oninput="bladdercheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bladder0" style="font-size:100%;">0</label>
                                             </div>
                                         </td>
@@ -1559,7 +1559,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                 } ?>class="custom-control-input"
                                                     id="bladder_dc0" value="1" name="bladder_dc"
                                                     oninput="bladderDcCheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bladder_dc0" style="font-size:100%;">0</label>
                                             </div>
 
@@ -1570,7 +1570,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                             width="1%">&nbsp;</td>
                                     </tr>
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;5 = กลั้นไม่ได้เป็นบางครั้ง(ไม่เกินวันละ 1 ครั้ง)</td>
@@ -1584,7 +1584,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                                     echo 'checked="checked"';
                                                 } ?>class="custom-control-input" id="bladder5"
                                                     value="5" name="bladder" oninput="bladdercheckValue()">
-                                                <label class="custom-control-label badge text-red mt-1 font-weight-bold"
+                                                <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold"
                                                     for="bladder5" style="font-size:100%;">5</label>
                                             </div>
 
@@ -1610,7 +1610,7 @@ $check_ = ReportQueryUtils::getProduction($_id)
                                     </tr>
 
 
-                                    <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                    <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"
                                             width="10%">&nbsp;10 = กลั้นได้ปกติ</td>

@@ -118,7 +118,7 @@ $check_ = ReportQueryUtils::getProduction(26);
     }
 
     .bg-light-blue {
-        background-color: #e6f3ff;
+        background-color: var(--bright-blue-light);
     }
 </style>
 
@@ -251,7 +251,7 @@ $check_ = ReportQueryUtils::getProduction(26);
                         <tr class="font-weight-bold">
                             <td colspan="15" class="text-right">คะแนนที่ได้ (Sum score):</td>
                             <td class="text-center"><input type="number" name="sum_score" id="sum_score"
-                                    class="form-control form-control-sm text-center font-weight-bold text-primary"
+                                    class="form-control form-control-sm text-center font-weight-bold text-theme-blue"
                                     style="font-size: 1.2rem;"
                                     value="<?= isset($audit_row['sum_score']) ? $audit_row['sum_score'] : 0 ?>"
                                     readonly></td>
@@ -303,7 +303,7 @@ $check_ = ReportQueryUtils::getProduction(26);
 
             <div class="row mt-4 mb-5">
                 <div class="col text-center">
-                    <button type="submit" class="btn btn-success btn-lg px-5 shadow"><i class="fas fa-save"></i>
+                    <button type="submit" class="btn btn-primary btn-lg px-5 shadow"><i class="fas fa-save"></i>
                         บันทึกข้อมูล</button>
                 </div>
             </div>

@@ -156,14 +156,14 @@ $check_    = ReportQueryUtils::getProduction($_id)
 
 <style>
         .main {
-                border: 1px solid #4287f5;
+                border: 1px solid var(--bright-blue);
                 height: 180px;
                 width: 500px;
                 position: relative;
         }
 
         .column1 {
-                color: #4287f5;
+                color: var(--bright-blue);
                 text-align: center;
         }
 
@@ -470,7 +470,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['perception'] == '4') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="perception4" value="4" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception4" style="font-size:100%;">4</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="perception4" style="font-size:100%;">4</label>
                                                                 </div>
 
                                                         </td>
@@ -493,7 +493,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                       <input type="radio" <?php if ($row['perception'] == '3') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="perception3" value="3" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception3" style="font-size:100%;">3</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="perception3" style="font-size:100%;">3</label>
                                                                 </div>
 
                                                         </td>
@@ -510,7 +510,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['perception'] == '2') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="perception2" value="2" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception2" style="font-size:100%;">2</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="perception2" style="font-size:100%;">2</label>
                                                                 </div>
 
                                                         </td>
@@ -527,7 +527,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['perception'] == '1') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="perception1" value="1" name="perception" oninput="perceptionCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="perception1" style="font-size:100%;">1</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="perception1" style="font-size:100%;">1</label>
                                                                 </div>
 
                                                         </td>
@@ -536,11 +536,11 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 
 
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                                         <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การเปียกชุ่มของผิวหนัง</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
 
@@ -551,7 +551,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['wetting_the_skin'] == '4') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="wetting_the_skin4" value="4" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin4" style="font-size:100%;">4</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="wetting_the_skin4" style="font-size:100%;">4</label>
                                                                 </div>
 
                                                         </td>
@@ -563,7 +563,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปียกชุ่มบางครั้ง</td>
 
@@ -574,7 +574,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['wetting_the_skin'] == '3') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="wetting_the_skin3" value="3" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin3" style="font-size:100%;">3</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="wetting_the_skin3" style="font-size:100%;">3</label>
                                                                 </div>
 
                                                         </td>
@@ -582,7 +582,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปียกชุ่มบ่อยครั้ง</td>
 
@@ -591,7 +591,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['wetting_the_skin'] == '2') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="wetting_the_skin2" value="2" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin2" style="font-size:100%;">2</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="wetting_the_skin2" style="font-size:100%;">2</label>
                                                                 </div>
 
                                                         </td>
@@ -599,7 +599,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปียกชุ่มตลอดเวลา</td>
 
@@ -608,7 +608,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['wetting_the_skin'] == '1') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="wetting_the_skin1" value="1" name="wetting_the_skin" oninput="WettingTheSkinCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="wetting_the_skin1" style="font-size:100%;">1</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="wetting_the_skin1" style="font-size:100%;">1</label>
                                                                 </div>
 
                                                         </td>
@@ -631,7 +631,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['doing_activities'] == '4') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="doing_activities4" value="4" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities4" style="font-size:100%;">4</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="doing_activities4" style="font-size:100%;">4</label>
                                                                 </div>
 
                                                         </td>
@@ -654,7 +654,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['doing_activities'] == '3') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="doing_activities3" value="3" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities3" style="font-size:100%;">3</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="doing_activities3" style="font-size:100%;">3</label>
                                                                 </div>
 
                                                         </td>
@@ -671,7 +671,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['doing_activities'] == '2') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="doing_activities2" value="2" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities2" style="font-size:100%;">2</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="doing_activities2" style="font-size:100%;">2</label>
                                                                 </div>
 
                                                         </td>
@@ -688,7 +688,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['doing_activities'] == '1') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="doing_activities1" value="1" name="doing_activities" oninput="doingCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="doing_activities1" style="font-size:100%;">1</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="doing_activities1" style="font-size:100%;">1</label>
                                                                 </div>
 
                                                         </td>
@@ -698,11 +698,11 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 
                                             
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                                         <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="5">&nbsp;<b>การเคลื่อนไหว</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ปกติ</td>
 
@@ -713,7 +713,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['movement'] == '4') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="movement4" value="4" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement4" style="font-size:100%;">4</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="movement4" style="font-size:100%;">4</label>
                                                                 </div>
 
                                                         </td>
@@ -721,7 +721,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปลี่ยนท่าได้บ่อยครั้ง</td>
 
@@ -732,7 +732,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['movement'] == '3') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="movement3" value="3" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement3" style="font-size:100%;">3</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="movement3" style="font-size:100%;">3</label>
                                                                 </div>
 
                                                         </td>
@@ -740,7 +740,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปลี่ยนท่าได้บางครั้ง</td>
 
@@ -749,7 +749,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['movement'] == '2') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="movement2" value="2" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement2" style="font-size:100%;">2</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="movement2" style="font-size:100%;">2</label>
                                                                 </div>
 
                                                         </td>
@@ -757,7 +757,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เปลี่ยนท่าไม่ได้</td>
 
@@ -766,7 +766,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['movement'] == '1') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="movement1" value="1" name="movement" oninput="movementCheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="movement1" style="font-size:100%;">1</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="movement1" style="font-size:100%;">1</label>
                                                                 </div>
 
                                                         </td>
@@ -789,7 +789,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['getting_food'] == '4') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="getting_food4" value="4" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food4" style="font-size:100%;">4</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="getting_food4" style="font-size:100%;">4</label>
                                                                 </div>
 
                                                         </td>
@@ -812,7 +812,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['getting_food'] == '3') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="getting_food3" value="3" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food3" style="font-size:100%;">3</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="getting_food3" style="font-size:100%;">3</label>
                                                                 </div>
 
                                                         </td>
@@ -829,7 +829,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['getting_food'] == '2') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="getting_food2" value="2" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food2" style="font-size:100%;">2</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="getting_food2" style="font-size:100%;">2</label>
                                                                 </div>
                                                         </td>
 
@@ -845,7 +845,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['getting_food'] == '1') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="getting_food1" value="1" name="getting_food" oninput="foodcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="getting_food1" style="font-size:100%;">1</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="getting_food1" style="font-size:100%;">1</label>
                                                                 </div>
 
                                                         </td>
@@ -855,11 +855,11 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 
 
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
                                                         <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="4">&nbsp;<b>การเสียดสี</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;ไม่มีปัญหา</td>
 
@@ -870,7 +870,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['sarcasm'] == '3') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="sarcasm3" value="3" name="sarcasm" oninput="sarcasmcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sarcasm3" style="font-size:100%;">3</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="sarcasm3" style="font-size:100%;">3</label>
                                                                 </div>
                                                         </td>
 
@@ -881,7 +881,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;เสียดสี / ลื่นไถลได้</td>
 
@@ -892,7 +892,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['sarcasm'] == '2') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="sarcasm2" value="2" name="sarcasm" oninput="sarcasmcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sarcasm2" style="font-size:100%;">2</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="sarcasm2" style="font-size:100%;">2</label>
                                                                 </div>
 
                                                         </td>
@@ -900,7 +900,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:#d4fbfb">
+                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
 
                                                         <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;กล้ามเนื้อหดเกร็ง</td>
 
@@ -909,7 +909,7 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                                         <input type="radio" <?php if ($row['sarcasm'] == '1') {
                                                                                                         echo 'checked="checked"';
                                                                                                 } ?>class="custom-control-input" id="sarcasm1" value="1" name="sarcasm" oninput="sarcasmcheckValue()">
-                                                                        <label class="custom-control-label badge text-red mt-1 font-weight-bold" for="sarcasm1" style="font-size:100%;">1</label>
+                                                                        <label class="custom-control-label badge text-theme-blue mt-1 font-weight-bold" for="sarcasm1" style="font-size:100%;">1</label>
                                                                 </div>
 
                                                         </td>

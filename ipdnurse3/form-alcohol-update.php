@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $conn = DbUtils::get_hosxp_connection();
 
 function auditEvaluationMessage(int $sum_score): string {
-    if ($sum_score <= 7)      return 'ประเมินปัญหาการดื่มสุรา [ผู้ดื่มแบบเสี่ยงต่ำ] ' . $sum_score . ' คะแนน วินิจฉัย Low risk drinker';
-    elseif ($sum_score <= 15) return 'ประเมินปัญหาการดื่มสุรา [ผู้ดื่มแบบเสี่ยง] ' . $sum_score . ' คะแนน วินิจฉัย Hazardous drinker';
-    elseif ($sum_score <= 20) return 'ประเมินปัญหาการดื่มสุรา [ผู้ดื่มแบบอันตราย] ' . $sum_score . ' คะแนน วินิจฉัย Harmful use';
-    else                      return 'ประเมินปัญหาการดื่มสุรา [ผู่ดื่มแบบติด] ' . $sum_score . ' คะแนน วินิจฉัย Alcohol dependence';
+    if ($sum_score <= 7)      return 'ประเมินปัญหาการดื่มสุรา (AUDIT score) = ' . $sum_score . ' คะแนน วินิจฉัย Low risk drinker';
+    elseif ($sum_score <= 15) return 'ปประเมินปัญหาการดื่มสุรา (AUDIT score) = ' . $sum_score . ' คะแนน วินิจฉัย Hazardous drinker';
+    elseif ($sum_score <= 20) return 'ประเมินปัญหาการดื่มสุรา (AUDIT score) = ' . $sum_score . ' คะแนน วินิจฉัย Harmful use';
+    else                      return 'ประเมินปัญหาการดื่มสุรา (AUDIT score) = ' . $sum_score . ' คะแนน วินิจฉัย Alcohol dependence';
 }
 
 try {
