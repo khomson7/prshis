@@ -291,7 +291,7 @@ $html .= '
   <tr>
     <td style="width:15%;"></td>
     <td style="width:70%; text-align:center;">
-      <span style="font-size:13px; font-weight:bold; letter-spacing:1px;">NURSING FOCUS CHARTTING</span>
+      <span style="font-size:13px; font-weight:bold; letter-spacing:1px;">NURSING FOCUS CHARTHING</span>
     </td>
     <td style="width:15%; text-align:right; vertical-align:middle;">
       <span style="border:1px solid #555; padding:2px 5px; font-size:10px;">FM-NSO-ANE-006-07</span>

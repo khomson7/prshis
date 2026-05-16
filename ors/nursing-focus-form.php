@@ -195,7 +195,7 @@ function rad($rec, $key, $val)
                 </div>
                 <div class="col">
                     <h5 class="mb-0">
-                        <b>NURSING FOCUS CHARTTING</b>
+                        <b>NURSING FOCUS CHARTHING</b>
                         <small class="text-muted ml-2" style="font-size:0.8rem;">FM-NSO-ANE-006-07</small>
                         <?php if ($ids): ?>
                             <span class="badge badge-secondary ml-1" style="font-size:0.72rem;">ID: <?= $ids ?></span>

@@ -88,7 +88,7 @@ $canEdit = Session::checkPermission('ORS_NURSING_FOCUS', 'EDIT');
     <!-- Header -->
     <div class="nfm-header">
         <div>
-            <h5><i class="fas fa-notes-medical mr-2"></i>NURSING FOCUS CHARTTING</h5>
+            <h5><i class="fas fa-notes-medical mr-2"></i>NURSING FOCUS CHARTHING</h5>
             <small>FM-NSO-ANE-006-07 &nbsp;|&nbsp; AN: <?= htmlspecialchars($an) ?></small>
         </div>
         <div>
