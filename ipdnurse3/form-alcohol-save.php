@@ -51,13 +51,14 @@ try {
         $conn->prepare("DELETE FROM prs_alcohol_item WHERE alcohol_id = :alcohol_id")
              ->execute(['alcohol_id' => $alcohol_id]);
     } else {
-        $conn->prepare("INSERT INTO prs_alcohol (an, sum_score, audit_date, audit_by, created_by)
-                        VALUES (:an, :sum_score, :audit_date, :audit_by, :created_by)")
+        $conn->prepare("INSERT INTO prs_alcohol (an, sum_score, audit_date, audit_by, created_at, created_by)
+                        VALUES (:an, :sum_score, :audit_date, :audit_by, :created_at, :created_by)")
              ->execute([
                 'an'         => $an,
                 'sum_score'  => $sum_score,
                 'audit_date' => $audit_date,
                 'audit_by'   => $loginname,
+                'created_at' => $now,
                 'created_by' => $loginname,
              ]);
         $alcohol_id = $conn->lastInsertId();

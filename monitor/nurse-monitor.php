@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurse Drug Monitor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- font fallback — ไม่พึ่ง Google Fonts -->
+    <style>
+        @font-face { font-family: 'Prompt'; src: local('Sarabun'), local('Tahoma'), local('Arial Unicode MS'); }
+        @font-face { font-family: 'JetBrains Mono'; src: local('Consolas'), local('Courier New'), local('monospace'); }
+    </style>
     <style>
         :root {
             --bg-primary: #0a0e1a;

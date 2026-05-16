@@ -1,4 +1,4 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="../vendor/components/jquery/jquery.min.js"></script>
 <form action="result.php" method="post">
   Answer 1 <input type="radio" name="ans" value="ans1" /><br />
   Answer 2 <input type="radio" name="ans" value="ans2"  /><br />

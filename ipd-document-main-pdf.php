@@ -538,7 +538,7 @@ $head =
     </table>
     <p style="text-align:right; font-size: 10pt;">(พิมพ์โดย '.$_SESSION['name'].' วันที่พิมพ์ '.date('d/m/Y H:i').' ) </p>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"> </script>
+    <script src="./include/js/qrcode.js"></script>
     <script src="./include/js/script.js"> </script>
 ';
 $mpdf->WriteHTML($head);

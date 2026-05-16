@@ -40,7 +40,7 @@ session_start();
     <link rel="stylesheet" type="text/css" href="../vendor/datatables/datatables/media/css/dataTables.bootstrap4.min.css"/>
     <script type="text/javascript" src="../vendor/datatables/datatables/media/js/dataTables.bootstrap4.min.js"></script>
 
-    <script src="../vendor/moment/moment/min/moment-with-locales.min.js"></script>
+    <script src="../include/moment-with-locales.min.js"></script>
     <script src="../vendor/nnnick/chartjs/dist/Chart.min.js"></script>
     <script src="../vendor/nnnick/chartjs/samples/utils.js"></script>
     <script src="../node_modules/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js"></script>
