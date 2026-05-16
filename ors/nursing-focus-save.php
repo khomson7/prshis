@@ -113,7 +113,7 @@ try {
         'focus_text'          => p('focus_text'),
         'remark'              => p('remark'),
         'visit_nurse'         => $visit_nurse,
-        'nurse_position'      => isset($_SESSION['position']) ? $_SESSION['position'] : '',
+        'nurse_position'      => isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : '',
         'created_by'          => $loginname,
     ));
     $new_id = $conn->lastInsertId();

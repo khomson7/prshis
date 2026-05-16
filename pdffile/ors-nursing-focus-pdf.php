@@ -233,12 +233,13 @@ $fluid_html = '
 $aldrete = nv($rec, 'aldrete_score', '-');
 $pain = nv($rec, 'pain_score', '-');
 $sedation = nv($rec, 'sedation_score', '-');
-$scores_row = 'Modified\'s Aldrete Scoring System :-&nbsp;'
-  . '<span class="score-box">' . htmlspecialchars($aldrete) . '</span>&nbsp;คะแนน<br>'
-  . 'Pain Score :-&nbsp;'
-  . '<span class="score-box">' . htmlspecialchars($pain) . '</span>&nbsp;คะแนน,'
-  . '&nbsp;&nbsp;Sedation Score :-&nbsp;'
-  . '<span class="score-box">' . htmlspecialchars($sedation) . '</span>&nbsp;คะแนน';
+$scores_row = 'Modified\'s Aldrete Scoring System :&nbsp;'
+  . '<span>' . htmlspecialchars($aldrete) . '</span>&nbsp;คะแนน<br>'
+  . 'Pain Score :&nbsp;'
+  . '<span>' . htmlspecialchars($pain) . '</span>&nbsp;คะแนน,'
+  . '&nbsp;&nbsp;Sedation Score :&nbsp;'
+  .'<span>' . htmlspecialchars($sedation) . '</span>&nbsp;คะแนน';
+ // . '<span class="score-box">' . htmlspecialchars($sedation) . '</span>&nbsp;คะแนน';
 
 // ===== RESPIRATORY =====
 $o2_txt = nv($rec, 'resp_o2_with');

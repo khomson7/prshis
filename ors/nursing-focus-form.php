@@ -541,7 +541,7 @@ function rad($rec, $key, $val)
                 : (isset($_SESSION['name']) ? $_SESSION['name'] : $loginname);
             $display_pos = (isset($rec['nurse_position']) && $rec['nurse_position'] !== '')
                 ? $rec['nurse_position']
-                : (isset($_SESSION['position']) ? $_SESSION['position'] : '');
+                : (isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : '');
             ?>
             <div class="nf-card">
                 <div class="nf-section-title"><i class="fas fa-user-nurse mr-1"></i> ผู้บันทึก</div>
