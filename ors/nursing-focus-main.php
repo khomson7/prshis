@@ -160,7 +160,7 @@ $canEdit = Session::checkPermission('ORS_NURSING_FOCUS', 'EDIT');
                                    class="btn btn-xs btn-outline-danger mt-1" style="font-size:0.78rem; padding:2px 8px;">
                                     <i class="fas fa-file-pdf"></i> PDF
                                 </a>
-                                <?php if ($canEdit && \ReportQueryUtils::checkReadOnly($an)): ?>
+                                <?php if ($canEdit && \ReportQueryUtils::checkReadOnly($an) && $row['created_by'] === $loginname): ?>
                                 <button type="button" onclick="deleteRecord(<?= $row['id'] ?>, '<?= date('d/m/Y', strtotime($row['visit_date'] ?: 'now')) ?> <?= htmlspecialchars($row['shift'] ?: '') ?>')"
                                         class="btn btn-xs btn-outline-secondary mt-1" style="font-size:0.78rem; padding:2px 8px; color:#dc3545; border-color:#dc3545;">
                                     <i class="fas fa-trash-alt"></i>

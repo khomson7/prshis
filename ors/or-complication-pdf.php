@@ -458,13 +458,8 @@ ob_start();
 
         <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="3%"><B>43</B></td>
         <td width="25%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;">
-
             <B>ใช้ยา</B>&nbsp;
-            <B style="text-decoration: underline;"> <?= htmlspecialchars($row['no43_text']) ?></B>&nbsp; <br>
-
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B
-                style="text-decoration: underline;"> <?= htmlspecialchars($row['no43_tet']) ?></B>&nbsp;
-
+            <B style="text-decoration: underline;"> <?= htmlspecialchars($row['no43_text']) ?></B>&nbsp;
         </td>
         <td style="border-right:0.5px solid #000;padding:2px;" width="4%">
             <?= $no43 ?>&nbsp; 1
