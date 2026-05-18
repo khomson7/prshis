@@ -55,7 +55,7 @@ FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
 WHERE act.an = :an 
 AND act.action_time IS NOT NULL AND act.action_time != '' and act.check_print = 'Y'
-GROUP BY io.order_item_detail, act.action_date, act.action_time
+GROUP BY concat(io.icode,io.order_item_detail), act.action_date, act.action_time
 ORDER BY io.order_item_detail, act.action_date, act.action_time";
 
 $stmt = $conn->prepare($sql);

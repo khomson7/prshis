@@ -50,7 +50,7 @@ try {
     $conn = DbUtils::get_hosxp_connection();
 
     // ตรวจสิทธิ์: อนุญาตเฉพาะผู้บันทึกเท่านั้น
-    $stmt_owner = $conn->prepare("SELECT created_by FROM prs_image_annot WHERE id = :id AND an = :an AND is_deleted = 0");
+    $stmt_owner = $conn->prepare("SELECT created_by FROM prs_opnote WHERE id = :id AND an = :an AND is_deleted = 0");
     $stmt_owner->execute(['id' => $id, 'an' => $an]);
     $owner = $stmt_owner->fetchColumn();
     if ($owner === false) {
@@ -63,7 +63,7 @@ try {
     $conn->beginTransaction();
 
     // UPDATE master
-    $stmt_m = $conn->prepare("UPDATE prs_image_annot
+    $stmt_m = $conn->prepare("UPDATE prs_opnote
                                  SET note = :note, combined_data = :combined_data,
                                      updated_by = :updated_by, updated_at = :updated_at
                                WHERE id = :id AND an = :an");
@@ -76,18 +76,18 @@ try {
     $stmt_m->execute();
 
     // ดึง existing item IDs
-    $stmt_ex = $conn->prepare("SELECT id FROM prs_image_annot_item WHERE annot_id = :annot_id");
+    $stmt_ex = $conn->prepare("SELECT id FROM prs_opnote_item WHERE annot_id = :annot_id");
     $stmt_ex->execute(['annot_id' => $id]);
     $existingIds = $stmt_ex->fetchAll(PDO::FETCH_COLUMN);
 
     // แยก items ที่มี itemId (update) และ itemId = null (insert ใหม่)
     $keepIds   = [];
-    $stmt_upd  = $conn->prepare("UPDATE prs_image_annot_item
+    $stmt_upd  = $conn->prepare("UPDATE prs_opnote_item
                                     SET sort_order = :sort_order, svg_data = :svg_data,
                                         annotated_data = :annotated_data,
                                         canvas_w = :canvas_w, canvas_h = :canvas_h
                                   WHERE id = :item_id AND annot_id = :annot_id");
-    $stmt_ins  = $conn->prepare("INSERT INTO prs_image_annot_item
+    $stmt_ins  = $conn->prepare("INSERT INTO prs_opnote_item
                                      (annot_id, an, sort_order, image_data, annotated_data,
                                       image_type, original_name, canvas_w, canvas_h, svg_data)
                                  VALUES
@@ -142,7 +142,7 @@ try {
     $deleteIds = array_diff($existingIds, $keepIds);
     if (!empty($deleteIds)) {
         $placeholders = implode(',', array_fill(0, count($deleteIds), '?'));
-        $stmt_del = $conn->prepare("DELETE FROM prs_image_annot_item WHERE id IN ($placeholders) AND annot_id = ?");
+        $stmt_del = $conn->prepare("DELETE FROM prs_opnote_item WHERE id IN ($placeholders) AND annot_id = ?");
         $params   = array_merge(array_values($deleteIds), [$id]);
         $stmt_del->execute($params);
     }

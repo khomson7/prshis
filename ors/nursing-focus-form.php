@@ -56,6 +56,24 @@ function rad($rec, $key, $val)
 {
     return isset($rec[$key]) && $rec[$key] == $val ? 'checked' : '';
 }
+
+// คำนวณลักษณะแผลจาก boolean เดิม → radio value
+$wound_condition = '';
+if ($rec) {
+    if ($rec['wound_dry']  == 1) $wound_condition = 'แผลแห้ง';
+    elseif ($rec['wound_wet']  == 1) $wound_condition = 'แผลซึม';
+    elseif ($rec['not_wound']  == 1) $wound_condition = 'ไม่มีแผล';
+}
+
+// FOCUS preset options
+$focus_presets = [
+    'มีโอกาสเกิดภาวะแทรกซ้อนหลังการให้ยาระดับความรู้สึกภายใน   24 - 48 ชั่วโมง'
+];
+$saved_focus     = v($rec, 'focus_text');
+// ถ้าเป็น record ใหม่ (ไม่มี $rec) ให้ default = preset แรก
+if ($saved_focus === '' && !$rec) $saved_focus = $focus_presets[0];
+$focus_is_preset = in_array($saved_focus, $focus_presets);
+$focus_custom    = (!$focus_is_preset && $saved_focus !== '') ? $saved_focus : '';
 ?>
 <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">
@@ -176,6 +194,36 @@ function rad($rec, $key, $val)
         border-color: #dc3545 !important;
         box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, .2) !important;
     }
+
+    /* FOCUS preset options */
+    .focus-option label {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 7px 10px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.88rem;
+        background: #fff;
+        transition: .15s;
+        margin-bottom: 5px;
+    }
+
+    .focus-option label:hover {
+        background: #f0faf4;
+        border-color: #1a6b3a;
+    }
+
+    .focus-option input[type="radio"]:checked+span {
+        color: #1a6b3a;
+        font-weight: 600;
+    }
+
+    .focus-option label:has(input:checked) {
+        background: #f0faf4;
+        border-color: #1a6b3a;
+    }
 </style>
 
 <div id="formContainer">
@@ -218,14 +266,22 @@ function rad($rec, $key, $val)
             <div class="nf-card">
                 <div class="nf-section-title"><i class="fas fa-calendar-alt mr-1"></i> DATE / SHIFT / TIME</div>
                 <div class="nf-body">
-                    <div class="row">
+                    <!-- แถว 1: วันเวลาผ่าตัด -->
+                    <div class="row mb-1">
+                        <div class="col-12">
+                            <small class="text-muted" style="font-size:0.78rem;">
+                                <i class="fas fa-scalpel mr-1"></i><b>วันเวลาผ่าตัด</b>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-3">
-                            <div class="form-label-sm">วันที่ (DATE)</div>
+                            <div class="form-label-sm">วันที่ผ่าตัด (DATE) <span class="text-danger">*</span></div>
                             <input type="date" name="visit_date" class="form-control form-control-sm"
                                 value="<?= v($rec, 'visit_date', date('Y-m-d')) ?>">
                         </div>
                         <div class="col-md-3">
-                            <div class="form-label-sm">กะ (SHIFT)</div>
+                            <div class="form-label-sm">กะ (SHIFT) <span class="text-danger">*</span></div>
                             <select name="shift" class="form-control form-control-sm">
                                 <option value="">-- เลือกกะ --</option>
                                 <option value="เช้า" <?= sel($rec, 'shift', 'เช้า') ?>>เช้า (08:00-16:00)</option>
@@ -234,9 +290,31 @@ function rad($rec, $key, $val)
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-label-sm">เวลา (TIME)</div>
+                            <div class="form-label-sm">เวลาผ่าตัด (TIME) <span class="text-danger">*</span></div>
                             <input type="time" name="visit_time" class="form-control form-control-sm"
                                 value="<?= v($rec, 'visit_time', date('H:i')) ?>">
+                        </div>
+                    </div>
+                    <!-- เส้นคั่น -->
+                    <hr class="my-2">
+                    <!-- แถว 2: วันเวลาเยี่ยมผู้ป่วย -->
+                    <div class="row mb-1">
+                        <div class="col-12">
+                            <small class="text-muted" style="font-size:0.78rem;">
+                                <i class="fas fa-user-nurse mr-1"></i><b>วันเวลาเยี่ยมผู้ป่วย</b>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-label-sm">วันที่เยี่ยมผู้ป่วย</div>
+                            <input type="date" name="patient_visit_date" class="form-control form-control-sm"
+                                value="<?= v($rec, 'patient_visit_date') ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-label-sm">เวลาเยี่ยมผู้ป่วย</div>
+                            <input type="time" name="patient_visit_time" class="form-control form-control-sm"
+                                value="<?= v($rec, 'patient_visit_time') ?>">
                         </div>
                     </div>
                 </div>
@@ -246,9 +324,12 @@ function rad($rec, $key, $val)
             <div class="nf-card">
                 <div class="nf-section-title"><i class="fas fa-crosshairs mr-1"></i> FOCUS</div>
                 <div class="nf-body">
-                    <div class="form-label-sm mb-1">ข้อความ FOCUS ที่ต้องการแสดงในตาราง PDF</div>
-                    <textarea name="focus_text" id="focus_text" class="form-control form-control-sm" rows="3"
-                        placeholder="ระบุ FOCUS เช่น มีโอกาสเกิดภาวะแทรกซ้อนหลังการให้ยาระดับความรู้สึกภายใน 24-48 ชั่วโมง..."><?= htmlspecialchars(v($rec, 'focus_text')) ?></textarea>
+                    <div class="form-label-sm mb-1">ข้อความ FOCUS ที่แสดงในตาราง PDF</div>
+                    <input type="text" name="focus_text" class="form-control form-control-sm"
+                           readonly
+                           value="<?= htmlspecialchars($saved_focus) ?>"
+                           style="background:#f8f9fa; color:#333; cursor:default;"
+                           title="<?= htmlspecialchars($saved_focus) ?>">
                 </div>
             </div>
 
@@ -266,7 +347,7 @@ function rad($rec, $key, $val)
                             <input type="checkbox" name="anes_other_chk" id="anes_other_chk" value="1"
                                 <?= (v($rec, 'anes_other') !== '') ? 'checked' : '' ?>
                                 onchange="toggleOther(this,'anes_other_text')">
-                            Other:
+                            Combine:
                         </label>
                         <input type="text" name="anes_other" id="anes_other_text"
                             class="form-control form-control-sm d-inline-block"
@@ -281,7 +362,7 @@ function rad($rec, $key, $val)
                 <div class="nf-section-title"><i class="fas fa-procedures mr-1"></i> Post Operation</div>
                 <div class="nf-body">
 
-                 <div class="row mt-2">
+                    <div class="row mt-2">
                         <div class="col-12">
                             <div class="form-label-sm">ข้อความเพิ่มเติม Post Operation</div>
                             <textarea name="post_op_note" class="form-control form-control-sm" rows="2"
@@ -298,16 +379,27 @@ function rad($rec, $key, $val)
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-label-sm">ลักษณะแผล</div>
+                            <div class="form-label-sm">ลักษณะแผล <small class="text-muted">(เลือก 1)</small></div>
                             <div class="chk-group">
-                                <label><input type="checkbox" name="wound_dry" value="1" <?= chk($rec, 'wound_dry') ?>>
-                                    แผลแห้ง</label>
-                                <label><input type="checkbox" name="wound_wet" value="1" <?= chk($rec, 'wound_wet') ?>>
-                                    แผลซึม</label>
+                                <label>
+                                    <input type="radio" name="wound_condition" value="แผลแห้ง"
+                                        <?= ($wound_condition === 'แผลแห้ง') ? 'checked' : '' ?>>
+                                    แผลแห้ง
+                                </label>
+                                <label>
+                                    <input type="radio" name="wound_condition" value="แผลซึม"
+                                        <?= ($wound_condition === 'แผลซึม') ? 'checked' : '' ?>>
+                                    แผลซึม
+                                </label>
+                                <label>
+                                    <input type="radio" name="wound_condition" value="ไม่มีแผล"
+                                        <?= ($wound_condition === 'ไม่มีแผล') ? 'checked' : '' ?>>
+                                    ไม่มีแผล
+                                </label>
                             </div>
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
 
@@ -487,14 +579,24 @@ function rad($rec, $key, $val)
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-2">
+                   
+                </div>
+            </div>
+
+
+                 <!-- ===== E: Complications ===== -->
+                 <div class="nf-card">
+                <div class="nf-section-title"><i class="fas fa-exclamation-triangle mr-1"></i> I: ประเมินผู้ป่วยหลังการให้ยาระยะ ระดับความรู้สึกภายใน 24-48 ชั่วโมง</div>
+                <div class="nf-body">
+                   
+                <div class="row mt-2">
                         <div class="col-12">
-                            <div class="form-label-sm">ประเมินผู้ป่วยหลังการให้ยาระยะ ระดับความรู้สึกภายใน 24-48 ชั่วโมง
-                            </div>
+                          
                             <textarea name="assess_note" class="form-control form-control-sm" rows="2"
                                 placeholder="บันทึกการประเมิน..."><?= htmlspecialchars(v($rec, 'assess_note')) ?></textarea>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -534,31 +636,94 @@ function rad($rec, $key, $val)
                 </div>
             </div>
 
-            <!-- ===== Visit Info — ดึงจาก session อัตโนมัติ ===== -->
+            <!-- ===== Sign / ผู้บันทึก ===== -->
             <?php
-            $display_nurse = (isset($rec['visit_nurse']) && $rec['visit_nurse'] !== '')
-                ? $rec['visit_nurse']
-                : (isset($_SESSION['name']) ? $_SESSION['name'] : $loginname);
-            $display_pos = (isset($rec['nurse_position']) && $rec['nurse_position'] !== '')
-                ? $rec['nurse_position']
-                : (isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : '');
+            // ผู้บันทึก (creator) — อิงจาก created_by
+            $creator_name = v($rec, 'created_name',
+                isset($_SESSION['name']) ? $_SESSION['name'] : $loginname);
+            $creator_pos  = v($rec, 'created_position',
+                isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : '');
+
+            // Visit Nurse (ผู้เยี่ยม) — กด SIGN เพื่อบันทึก
+            $visit_nurse_val = v($rec, 'visit_nurse');
+            $visit_pos_val   = v($rec, 'nurse_position');
+
+            // ค่า session สำหรับ auto-fill ปุ่ม SIGN
+            $session_name = isset($_SESSION['name'])          ? $_SESSION['name']          : $loginname;
+            $session_pos  = isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : '';
             ?>
             <div class="nf-card">
-                <div class="nf-section-title"><i class="fas fa-user-nurse mr-1"></i> ผู้บันทึก</div>
+                <div class="nf-section-title"><i class="fas fa-pen-nib mr-1"></i> ลายเซ็น / ผู้บันทึก</div>
                 <div class="nf-body">
-                    <div class="row align-items-center">
+
+                    <!-- ผู้บันทึก (readonly) -->
+                    <div class="form-label-sm mb-1">ผู้บันทึก</div>
+                    <div class="row mb-3">
                         <div class="col-md-4">
-                            <span class="form-label-sm">Visit Nurse: </span>
-                            <strong><?= htmlspecialchars($display_nurse) ?></strong>
+                            <input type="text" class="form-control form-control-sm" readonly
+                                   value="<?= htmlspecialchars($creator_name) ?>"
+                                   style="background:#f8f9fa; color:#333;"
+                                   placeholder="ชื่อผู้บันทึก">
+                            <input type="hidden" name="created_name"     value="<?= htmlspecialchars($creator_name) ?>">
                         </div>
                         <div class="col-md-4">
-                            <span class="form-label-sm">ตำแหน่ง: </span>
-                            <span><?= htmlspecialchars($display_pos) ?></span>
+                            <input type="text" class="form-control form-control-sm" readonly
+                                   value="<?= htmlspecialchars($creator_pos) ?>"
+                                   style="background:#f8f9fa; color:#333;"
+                                   placeholder="ตำแหน่ง">
+                            <input type="hidden" name="created_position"  value="<?= htmlspecialchars($creator_pos) ?>">
                         </div>
-                        <div class="col-md-4 text-muted small">
-                            <i class="fas fa-info-circle"></i> ดึงจาก session ผู้ login อัตโนมัติ
+                        <div class="col-md-4 d-flex align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                บันทึกโดย: <b><?= htmlspecialchars($loginname) ?></b>
+                            </small>
                         </div>
                     </div>
+
+                    <hr class="my-2">
+
+                    <!-- Visit Nurse (กด SIGN) -->
+                    <div class="form-label-sm mb-1">Visit Nurse <small class="text-muted">(กดปุ่ม SIGN เพื่อลงชื่อเยี่ยม)</small></div>
+                    <div class="row align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label-sm mb-1">ชื่อผู้เยี่ยม</label>
+                            <input type="text" name="visit_nurse" id="visit_nurse"
+                                   class="form-control form-control-sm"
+                                   value="<?= htmlspecialchars($visit_nurse_val) ?>"
+                                   placeholder="ชื่อ Visit Nurse">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label-sm mb-1">ตำแหน่ง</label>
+                            <input type="text" name="nurse_position" id="nurse_position"
+                                   class="form-control form-control-sm"
+                                   value="<?= htmlspecialchars($visit_pos_val) ?>"
+                                   placeholder="ตำแหน่ง">
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-success btn-sm px-3"
+                                    onclick="signVisit()"
+                                    title="ลงชื่อผู้เยี่ยมอัตโนมัติจาก session ปัจจุบัน">
+                                <i class="fas fa-signature mr-1"></i> SIGN
+                            </button>
+                            <?php if ($visit_nurse_val): ?>
+                            <button type="button" class="btn btn-outline-secondary btn-sm ml-1"
+                                    onclick="clearSign()" title="ล้างลายเซ็น">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php if ($visit_nurse_val): ?>
+                    <div class="mt-2">
+                        <span class="badge badge-success px-2 py-1" style="font-size:0.78rem;">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            ลงชื่อแล้ว: <?= htmlspecialchars($visit_nurse_val) ?>
+                            <?= $visit_pos_val ? '(' . htmlspecialchars($visit_pos_val) . ')' : '' ?>
+                        </span>
+                    </div>
+                    <?php endif; ?>
+
                 </div>
             </div>
 
@@ -584,6 +749,65 @@ function rad($rec, $key, $val)
         el.style.display = chk.checked ? '' : 'none';
         if (!chk.checked) el.value = '';
     }
+
+    // ---- SIGN handler ----
+    var _sessionName = <?= json_encode($session_name) ?>;
+    var _sessionPos  = <?= json_encode($session_pos) ?>;
+
+    function signVisit() {
+        var nameEl = document.getElementById('visit_nurse');
+        var posEl  = document.getElementById('nurse_position');
+        // ถ้ายังว่างอยู่ → auto-fill จาก session; ถ้ามีอยู่แล้ว → ไม่ทับ
+        if (!nameEl.value.trim()) nameEl.value = _sessionName;
+        if (!posEl.value.trim())  posEl.value  = _sessionPos;
+        Swal.fire({
+            toast: true, position: 'top-end', icon: 'success',
+            title: 'ลงชื่อเยี่ยมแล้ว — ' + nameEl.value,
+            showConfirmButton: false, timer: 2000
+        });
+    }
+
+    function clearSign() {
+        Swal.fire({
+            title: 'ล้างลายเซ็นผู้เยี่ยม?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'ล้าง',
+            cancelButtonText: 'ยกเลิก'
+        }).then(function(r) {
+            if (r.isConfirmed) {
+                document.getElementById('visit_nurse').value    = '';
+                document.getElementById('nurse_position').value = '';
+            }
+        });
+    }
+
+    // ---- FOCUS choice handler ----
+    function onFocusChoice(radio) {
+        var wrap = document.getElementById('focus_custom_wrap');
+        var input = document.getElementById('focus_custom_input');
+        var hidden = document.getElementById('focus_text');
+        if (radio.value === '__other__') {
+            wrap.style.display = '';
+            input.focus();
+            hidden.value = input.value;
+        } else {
+            wrap.style.display = 'none';
+            hidden.value = radio.value;
+        }
+    }
+
+    // sync custom text → hidden field on input
+    document.addEventListener('DOMContentLoaded', function() {
+        var customInput = document.getElementById('focus_custom_input');
+        var hidden = document.getElementById('focus_text');
+        if (customInput) {
+            customInput.addEventListener('input', function() {
+                hidden.value = this.value;
+            });
+        }
+    });
 
     // ---- Validation ----
     function validateForm() {
@@ -618,31 +842,34 @@ function rad($rec, $key, $val)
     }
 
     // Clear invalid highlight on change
-    $('[name="visit_date"], [name="shift"], [name="visit_time"]').on('change input', function () {
+    $('[name="visit_date"], [name="shift"], [name="visit_time"]').on('change input', function() {
         $(this).removeClass('is-invalid');
     });
 
-    $("#ors_nursing_form").on("submit", function (e) {
+    $("#ors_nursing_form").on("submit", function(e) {
         e.preventDefault();
 
         if (!validateForm()) return;
 
         var formData = $(this).serialize();
-        var isNew = !$("#rec_id").val();   // true = บันทึกครั้งแรก
+        var isNew = !$("#rec_id").val(); // true = บันทึกครั้งแรก
         var url = isNew ? "nursing-focus-save.php" : "nursing-focus-update.php";
         var an = '<?= addslashes($an) ?>';
         var loginname = '<?= addslashes($loginname) ?>';
 
         Swal.fire({
-            title: 'กำลังบันทึก...', allowOutsideClick: false,
-            didOpen: function () { Swal.showLoading(); }
+            title: 'กำลังบันทึก...',
+            allowOutsideClick: false,
+            didOpen: function() {
+                Swal.showLoading();
+            }
         });
 
         $.ajax({
             url: url,
             type: "POST",
             data: formData,
-            success: function (resp) {
+            success: function(resp) {
                 try {
                     var data = (typeof resp === 'string') ? JSON.parse(resp) : resp;
                     if (data.status === "success") {
@@ -654,7 +881,7 @@ function rad($rec, $key, $val)
                                 icon: 'success',
                                 timer: 1500,
                                 showConfirmButton: false
-                            }).then(function () {
+                            }).then(function() {
                                 window.location.href = 'nursing-focus-main.php?an=' +
                                     encodeURIComponent(an) +
                                     '&loginname=' + encodeURIComponent(loginname) +
@@ -668,7 +895,7 @@ function rad($rec, $key, $val)
                                 icon: 'success',
                                 timer: 1500,
                                 showConfirmButton: false
-                            }).then(function () {
+                            }).then(function() {
                                 window.location.reload(true);
                             });
                         }
@@ -679,7 +906,7 @@ function rad($rec, $key, $val)
                     Swal.fire("ข้อผิดพลาด", "ไม่สามารถอ่านผลลัพธ์จากเซิร์ฟเวอร์", "error");
                 }
             },
-            error: function () {
+            error: function() {
                 Swal.fire("ข้อผิดพลาด", "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้", "error");
             }
         });

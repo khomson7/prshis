@@ -40,10 +40,18 @@ try {
 
     if (!$id || !$an) throw new Exception('ข้อมูลไม่ครบถ้วน');
 
+    // map wound_condition radio → boolean fields เดิม
+    $wc = isset($_POST['wound_condition']) ? trim($_POST['wound_condition']) : '';
+    $_POST['wound_dry'] = ($wc === 'แผลแห้ง') ? '1' : '0';
+    $_POST['wound_wet'] = ($wc === 'แผลซึม')  ? '1' : '0';
+    $_POST['not_wound'] = ($wc === 'ไม่มีแผล') ? '1' : '0';
+
     $sql = "UPDATE prs_ors_nursing_focus SET
                 visit_date          = :visit_date,
                 shift               = :shift,
                 visit_time          = :visit_time,
+                patient_visit_date  = :patient_visit_date,
+                patient_visit_time  = :patient_visit_time,
                 anes_ga             = :anes_ga,
                 anes_tiva           = :anes_tiva,
                 anes_ra             = :anes_ra,
@@ -53,6 +61,7 @@ try {
                 wound_left          = :wound_left,
                 wound_dry           = :wound_dry,
                 wound_wet           = :wound_wet,
+                not_wound           = :not_wound,
                 post_op_note        = :post_op_note,
                 in_crystalloid_io   = :in_crystalloid_io,
                 in_colloid_io       = :in_colloid_io,
@@ -85,6 +94,10 @@ try {
                 complication_detail = :complication_detail,
                 focus_text          = :focus_text,
                 remark              = :remark,
+                visit_nurse         = :visit_nurse,
+                nurse_position      = :nurse_position,
+                created_name        = :created_name,
+                created_position    = :created_position,
                 updated_by          = :updated_by,
                 updated_at          = :updated_at
             WHERE id = :id AND an = :an";
@@ -94,6 +107,8 @@ try {
         'visit_date'          => p('visit_date', date('Y-m-d')),
         'shift'               => p('shift'),
         'visit_time'          => p('visit_time'),
+        'patient_visit_date'  => p('patient_visit_date'),
+        'patient_visit_time'  => p('patient_visit_time'),
         'anes_ga'             => pb('anes_ga'),
         'anes_tiva'           => pb('anes_tiva'),
         'anes_ra'             => pb('anes_ra'),
@@ -103,6 +118,7 @@ try {
         'wound_left'          => pb('wound_left'),
         'wound_dry'           => pb('wound_dry'),
         'wound_wet'           => pb('wound_wet'),
+        'not_wound'           => pb('not_wound'),
         'post_op_note'        => p('post_op_note'),
         'in_crystalloid_io'   => pf('in_crystalloid_io'),
         'in_colloid_io'       => pf('in_colloid_io'),
@@ -135,6 +151,10 @@ try {
         'complication_detail' => p('complication_detail'),
         'focus_text'          => p('focus_text'),
         'remark'              => p('remark'),
+        'visit_nurse'         => p('visit_nurse'),
+        'nurse_position'      => p('nurse_position'),
+        'created_name'        => p('created_name'),
+        'created_position'    => p('created_position'),
         'updated_by'          => $loginname,
         'updated_at'          => $now,
         'id'                  => $id,

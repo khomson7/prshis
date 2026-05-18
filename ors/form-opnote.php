@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
 
 require_once '../mains/main-report.php';
-$permissionCheck     = Session::checkPermissionAndShowMessage('IMAGE_ANNOT', 'VIEW');
+$permissionCheck     = Session::checkPermissionAndShowMessage('OPNOTE', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
 
 require_once '../mains/ipd-show-patient-main.php';
@@ -19,7 +19,7 @@ $an   = isset($_REQUEST['an']) ? trim($_REQUEST['an']) : '';
 $hn   = KphisQueryUtils::getHnByAn($an);
 
 Session::insertSystemAccessLog(json_encode([
-    'form' => 'IMAGE-ANNOT-FORM',
+    'form' => 'OPNOTE-FORM',
     'an'   => $an,
 ], JSON_UNESCAPED_UNICODE));
 
@@ -35,7 +35,7 @@ $created_by = '';
 $canEdit    = true;   // new record = แก้ไขได้เสมอ
 
 if ($ids) {
-    $stmt_m = $conn->prepare("SELECT * FROM prs_image_annot WHERE id = :id AND an = :an AND is_deleted = 0");
+    $stmt_m = $conn->prepare("SELECT * FROM prs_opnote WHERE id = :id AND an = :an AND is_deleted = 0");
     $stmt_m->execute(['id' => $ids, 'an' => $an]);
     $rec = $stmt_m->fetch(PDO::FETCH_ASSOC);
     if (!$rec) {
@@ -49,7 +49,7 @@ if ($ids) {
         // โหลด items — ดึง image_data ด้วยเพื่อ embed base64 ลงหน้า (แก้ปัญหา canvas tainted)
         $stmt_i = $conn->prepare("SELECT id, sort_order, image_type, original_name,
                                           canvas_w, canvas_h, svg_data, image_data
-                                    FROM prs_image_annot_item
+                                    FROM prs_opnote_item
                                    WHERE annot_id = :annot_id
                                    ORDER BY sort_order ASC");
         $stmt_i->execute(['annot_id' => $ids]);
@@ -143,7 +143,7 @@ if ($ids) {
 </style>
 
 <div id="formContainer">
-<form id="image_annot_form">
+<form id="opnote_form">
     <input type="hidden" name="an" value="<?= htmlspecialchars($an) ?>">
     <input type="hidden" name="id" id="rec_id" value="<?= htmlspecialchars($ids ?? '') ?>">
 
@@ -152,14 +152,14 @@ if ($ids) {
         <!-- ---- Top bar ---- -->
         <div class="row align-items-center mb-3">
             <div class="col-auto">
-                <a href="form-image-annot-main.php?an=<?= urlencode($an) ?>&loginname=<?= urlencode($loginname) ?>"
+                <a href="form-opnote-main.php?an=<?= urlencode($an) ?>&loginname=<?= urlencode($loginname) ?>"
                    class="btn btn-sm btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> กลับหน้าหลัก
                 </a>
             </div>
             <div class="col">
                 <h5 class="mb-0">
-                    <b>บันทึกภาพและ Annotation</b>
+                    <b>บันทึกข้อมูล Opnote</b>
                     <?php if ($ids): ?>
                     <span class="badge badge-secondary ml-1" style="font-size:0.75rem;">#<?= $ids ?></span>
                     <?php else: ?>
@@ -169,7 +169,7 @@ if ($ids) {
             </div>
             <div class="col-auto">
                 <?php if ($ids): ?>
-                <a href="../pdffile/image-annot-pdf.php?an=<?= urlencode($an) ?>&id=<?= $ids ?>&loginname=<?= urlencode($loginname) ?>"
+                <a href="../pdffile/opnote-pdf.php?an=<?= urlencode($an) ?>&id=<?= $ids ?>&loginname=<?= urlencode($loginname) ?>"
                    target="_blank" class="btn btn-sm btn-info px-3 shadow-sm">
                     <i class="fas fa-file-pdf"></i> พิมพ์ PDF
                 </a>
@@ -302,7 +302,7 @@ if ($ids) {
         <!-- ---- Save button ---- -->
         <div class="row mb-5">
             <div class="col text-center">
-                <?php if ($canEdit && Session::checkPermission('IMAGE_ANNOT', 'EDIT') && ReportQueryUtils::checkReadOnly($an)): ?>
+                <?php if ($canEdit && Session::checkPermission('OPNOTE', 'EDIT') && ReportQueryUtils::checkReadOnly($an)): ?>
                 <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
                     <i class="fas fa-save"></i> บันทึกข้อมูล
                 </button>
@@ -794,7 +794,7 @@ function combineAllImages(callback) {
 // ============================================================
 // Submit
 // ============================================================
-$('#image_annot_form').on('submit', function(e) {
+$('#opnote_form').on('submit', function(e) {
     e.preventDefault();
 
     if (imageList.length === 0) {
@@ -825,7 +825,7 @@ $('#image_annot_form').on('submit', function(e) {
         });
 
         var id  = $('#rec_id').val();
-        var url = id ? 'form-image-annot-update.php' : 'form-image-annot-save.php';
+        var url = id ? 'form-opnote-update.php' : 'form-opnote-save.php';
 
         var postData = {
             an:          $('[name="an"]').val(),
@@ -852,7 +852,7 @@ $('#image_annot_form').on('submit', function(e) {
                             // INSERT ใหม่ → กลับหน้า main พร้อม highlight
                             var an = $('[name="an"]').val();
                             var loginname = '<?= addslashes($loginname) ?>';
-                            window.location.href = 'form-image-annot-main.php?an=' +
+                            window.location.href = 'form-opnote-main.php?an=' +
                                 encodeURIComponent(an) + '&new_id=' + data.id +
                                 '&loginname=' + encodeURIComponent(loginname);
                         } else {

@@ -46,7 +46,7 @@ try {
     $combined_bin = decodeB64($combinedB64);
 
     // INSERT master (พร้อม combined_data)
-    $stmt_m = $conn->prepare("INSERT INTO prs_image_annot (an, note, combined_data, created_by)
+    $stmt_m = $conn->prepare("INSERT INTO prs_opnote (an, note, combined_data, created_by)
                                VALUES (:an, :note, :combined_data, :created_by)");
     $stmt_m->bindParam(':an',            $an);
     $stmt_m->bindParam(':note',          $note);
@@ -56,7 +56,7 @@ try {
     $annot_id = $conn->lastInsertId();
 
     // INSERT items
-    $stmt_item = $conn->prepare("INSERT INTO prs_image_annot_item
+    $stmt_item = $conn->prepare("INSERT INTO prs_opnote_item
                                      (annot_id, an, sort_order, image_data, annotated_data,
                                       image_type, original_name, canvas_w, canvas_h, svg_data)
                                  VALUES

@@ -1,6 +1,6 @@
 <?php
 /**
- * image-annot-pdf.php
+ * opnote-pdf.php
  * พิมพ์ภาพ Annotation ทั้งหมดของ AN เป็น PDF A4
  */
 require_once '../mains/datethai.php';
@@ -20,7 +20,7 @@ $id   = (int)($_REQUEST['id'] ?? 0);
 if (!$an || !$id) die('ไม่พบข้อมูล');
 
 // ---- Master ----
-$stmt_m = $conn->prepare("SELECT * FROM prs_image_annot WHERE id = :id AND an = :an AND is_deleted = 0");
+$stmt_m = $conn->prepare("SELECT * FROM prs_opnote WHERE id = :id AND an = :an AND is_deleted = 0");
 $stmt_m->execute(['id'=>$id,'an'=>$an]);
 $rec = $stmt_m->fetch(PDO::FETCH_ASSOC);
 if (!$rec) die('ไม่พบข้อมูล');
@@ -28,7 +28,7 @@ if (!$rec) die('ไม่พบข้อมูล');
 // ---- Items (fallback only) ----
 $stmt_i = $conn->prepare("SELECT id, sort_order, image_type, original_name,
                                   annotated_data, image_data
-                             FROM prs_image_annot_item
+                             FROM prs_opnote_item
                             WHERE annot_id = :annot_id
                             ORDER BY sort_order ASC");
 $stmt_i->execute(['annot_id' => $id]);

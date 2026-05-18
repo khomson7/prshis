@@ -34,13 +34,19 @@ try {
     $conn = DbUtils::get_hosxp_connection();
     $conn->beginTransaction();
 
-    $an          = trim(isset($_POST['an']) ? $_POST['an'] : '');
-    $visit_nurse = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
+    $an = trim(isset($_POST['an']) ? $_POST['an'] : '');
+
+    // map wound_condition radio → boolean fields เดิม
+    $wc = isset($_POST['wound_condition']) ? trim($_POST['wound_condition']) : '';
+    $_POST['wound_dry'] = ($wc === 'แผลแห้ง') ? '1' : '0';
+    $_POST['wound_wet'] = ($wc === 'แผลซึม')  ? '1' : '0';
+    $_POST['not_wound'] = ($wc === 'ไม่มีแผล') ? '1' : '0';
 
     $sql = "INSERT INTO prs_ors_nursing_focus (
                 an, visit_date, shift, visit_time,
+                patient_visit_date, patient_visit_time,
                 anes_ga, anes_tiva, anes_ra, anes_mac, anes_other,
-                wound_right, wound_left, wound_dry, wound_wet, post_op_note,
+                wound_right, wound_left, wound_dry, wound_wet, not_wound, post_op_note,
                 in_crystalloid_io, in_colloid_io, in_prc_io, in_ffp_io, in_other_io,
                 in_crystalloid_pacu, in_colloid_pacu, in_prc_pacu, in_ffp_pacu, in_other_pacu,
                 out_bloodloss_io, out_drain_io, out_urine_io, out_other_io,
@@ -49,11 +55,14 @@ try {
                 resp_room_air, resp_o2_with,
                 discharge_to, transfer_by, assess_note,
                 no_complication, has_complication, complication_detail,
-                focus_text, remark, visit_nurse, nurse_position, created_by
+                focus_text, remark,
+                visit_nurse, nurse_position,
+                created_name, created_position, created_by
             ) VALUES (
                 :an, :visit_date, :shift, :visit_time,
+                :patient_visit_date, :patient_visit_time,
                 :anes_ga, :anes_tiva, :anes_ra, :anes_mac, :anes_other,
-                :wound_right, :wound_left, :wound_dry, :wound_wet, :post_op_note,
+                :wound_right, :wound_left, :wound_dry, :wound_wet, :not_wound, :post_op_note,
                 :in_crystalloid_io, :in_colloid_io, :in_prc_io, :in_ffp_io, :in_other_io,
                 :in_crystalloid_pacu, :in_colloid_pacu, :in_prc_pacu, :in_ffp_pacu, :in_other_pacu,
                 :out_bloodloss_io, :out_drain_io, :out_urine_io, :out_other_io,
@@ -62,7 +71,9 @@ try {
                 :resp_room_air, :resp_o2_with,
                 :discharge_to, :transfer_by, :assess_note,
                 :no_complication, :has_complication, :complication_detail,
-                :focus_text, :remark, :visit_nurse, :nurse_position, :created_by
+                :focus_text, :remark,
+                :visit_nurse, :nurse_position,
+                :created_name, :created_position, :created_by
             )";
 
     $stmt = $conn->prepare($sql);
@@ -71,6 +82,8 @@ try {
         'visit_date'          => p('visit_date', date('Y-m-d')),
         'shift'               => p('shift'),
         'visit_time'          => p('visit_time'),
+        'patient_visit_date'  => p('patient_visit_date'),
+        'patient_visit_time'  => p('patient_visit_time'),
         'anes_ga'             => pb('anes_ga'),
         'anes_tiva'           => pb('anes_tiva'),
         'anes_ra'             => pb('anes_ra'),
@@ -80,6 +93,7 @@ try {
         'wound_left'          => pb('wound_left'),
         'wound_dry'           => pb('wound_dry'),
         'wound_wet'           => pb('wound_wet'),
+        'not_wound'           => pb('not_wound'),
         'post_op_note'        => p('post_op_note'),
         'in_crystalloid_io'   => pf('in_crystalloid_io'),
         'in_colloid_io'       => pf('in_colloid_io'),
@@ -112,8 +126,10 @@ try {
         'complication_detail' => p('complication_detail'),
         'focus_text'          => p('focus_text'),
         'remark'              => p('remark'),
-        'visit_nurse'         => $visit_nurse,
-        'nurse_position'      => isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : '',
+        'visit_nurse'         => p('visit_nurse'),
+        'nurse_position'      => p('nurse_position'),
+        'created_name'        => p('created_name', isset($_SESSION['name'])          ? $_SESSION['name']          : $loginname),
+        'created_position'    => p('created_position', isset($_SESSION['entryposition']) ? $_SESSION['entryposition'] : ''),
         'created_by'          => $loginname,
     ));
     $new_id = $conn->lastInsertId();
