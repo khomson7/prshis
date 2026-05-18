@@ -4,6 +4,9 @@ $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : '';
 if (!$loginname) { header('Location: ../login.php'); exit; }
 
 require_once '../mains/main-report.php';
+$permissionCheck = Session::checkPermissionAndShowMessage('PDF-UPLOAD', 'VIEW');
+$permissionCheckJson = json_encode($permissionCheck);
+
 require_once '../mains/ipd-show-patient-main.php';
 require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
