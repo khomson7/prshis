@@ -80,6 +80,10 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
 ?>
 
 <style>
+    :root {
+        --bright-blue: #007bff;
+        --bright-blue-light: #e6f2ff;
+    }
     .nutrition-input {
         border: 1px solid #aaa;
         border-radius: 4px;
