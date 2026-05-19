@@ -728,11 +728,43 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
             cancelButtonText: 'ยกเลิก',
         }).then(function (result) {
             if (result.isConfirmed) {
-                $.post('form-nutrition-sp.php', { an: an }, function (data) {
-                    $('#show_check_save').html(data);
-                    setTimeout(function () { window.location.reload(true); }, 1500);
-                }).fail(function () {
-                    Swal.fire('ผิดพลาด', 'ไม่สามารถเรียก stored procedure ได้', 'error');
+                // แสดง loading overlay ระหว่างรอ SP ทำงาน
+                Swal.fire({
+                    title: 'กำลังประมวลผล...',
+                    html: '<div class="mb-2">กรุณารอสักครู่</div><small class="text-muted">AN: ' + an + '</small>',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: function () { Swal.showLoading(); }
+                });
+
+                $.ajax({
+                    url: 'form-nutrition-sp.php',
+                    type: 'POST',
+                    data: { an: an },
+                    dataType: 'json',
+                    timeout: 90000, // 90 วินาที timeout
+                    success: function (resp) {
+                        if (resp.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'สำเร็จ',
+                                html: resp.message,
+                                showConfirmButton: false,
+                                timer: 1500,
+                            }).then(function () {
+                                window.location.reload(true);
+                            });
+                        } else {
+                            Swal.fire('ผิดพลาด', resp.message || 'ประมวลผลไม่สำเร็จ', 'error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        var msg = status === 'timeout'
+                            ? 'ประมวลผลใช้เวลานานเกินไป (timeout 90 วินาที) กรุณาลองใหม่'
+                            : 'ไม่สามารถเรียก stored procedure ได้: ' + error;
+                        Swal.fire('ผิดพลาด', msg, 'error');
+                    }
                 });
             }
         });
