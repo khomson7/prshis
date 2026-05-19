@@ -56,6 +56,10 @@ try {
     echo '<div class="alert alert-danger" style="margin:20px;">Database Error: ' . htmlspecialchars($e->getMessage()) . '</div>';
 }
 
+// ปุ่มบันทึก active ได้ก็ต่อเมื่อมี record ใน prs_check_vitalsign แล้วเท่านั้น
+// (แสดงว่าเคยกด ประมวลผล sp_update_bw_all แล้ว)
+$hasVitalsignRecord = !empty($ids);
+
 // Values from DB
 $f_vstdate = $row ? $row['vstdate'] : date('Y-m-d');
 $f_height = $row ? $row['height'] : '';
@@ -468,16 +472,28 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                     <!-- Save row -->
                     <div class="row mt-2">
                         <div id="show_check_save" class="col-12"></div>
+                        <?php if (
+                            Session::checkPermission('PRS_FORM_NUTRITION', 'ADD')
+                            && ReportQueryUtils::checkReadOnly($an)
+                        ): ?>
                         <div class="col-md-12 text-right">
-                            <?php if (
-                                Session::checkPermission('PRS_FORM_NUTRITION', 'ADD')
-                                && ReportQueryUtils::checkReadOnly($an)
-                            ): ?>
+                            <?php if (!$hasVitalsignRecord): ?>
+                                <div class="alert alert-warning d-inline-flex align-items-center py-2 px-3 mb-2" style="font-size:0.88rem;">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    กรุณากด <b class="mx-1">ประมวลผล sp_update_bw_all</b> ก่อนบันทึก
+                                </div>
+                                <br>
+                                <button type="button" class="btn btn-primary px-5" disabled
+                                        title="กรุณากด ประมวลผล sp_update_bw_all ก่อน">
+                                    <i class="fas fa-save"></i> บันทึก
+                                </button>
+                            <?php else: ?>
                                 <button type="button" class="btn btn-primary px-5" onclick="form_save()">
                                     <i class="fas fa-save"></i> บันทึก
                                 </button>
                             <?php endif; ?>
                         </div>
+                        <?php endif; ?>
                     </div>
 
                 </div><!-- /card-body -->
@@ -738,13 +754,34 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
 
         if (id == "") {
             $.post(url_save, my_form, function (data) {
-                $("#show_check_save").html(data);
-                setTimeout(function () { window.location.reload(true); }, 1200);
-            }).fail(function () { alert("บันทึกข้อมูลไม่สำเร็จ"); });
+                try {
+                    var resp = (typeof data === 'string') ? JSON.parse(data) : data;
+                    if (resp.status === 'success') {
+                        Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ', showConfirmButton: false, timer: 1200 })
+                            .then(function () { window.close(); });
+                    } else {
+                        Swal.fire('ข้อผิดพลาด', resp.message || 'บันทึกไม่สำเร็จ', 'error');
+                    }
+                } catch (e) {
+                    $("#show_check_save").html(data);
+                    setTimeout(function () { window.close(); }, 1200);
+                }
+            }).fail(function () { Swal.fire('ข้อผิดพลาด', 'บันทึกข้อมูลไม่สำเร็จ', 'error'); });
         } else {
             $.post(url_update, my_form, function (data) {
-                $("#show_check_save").html(data);
-            }).fail(function () { alert("บันทึกข้อมูลไม่สำเร็จ"); });
+                try {
+                    var resp = (typeof data === 'string') ? JSON.parse(data) : data;
+                    if (resp.status === 'success') {
+                        Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ', showConfirmButton: false, timer: 1200 })
+                            .then(function () { window.close(); });
+                    } else {
+                        Swal.fire('ข้อผิดพลาด', resp.message || 'บันทึกไม่สำเร็จ', 'error');
+                    }
+                } catch (e) {
+                    $("#show_check_save").html(data);
+                    setTimeout(function () { window.close(); }, 1200);
+                }
+            }).fail(function () { Swal.fire('ข้อผิดพลาด', 'บันทึกข้อมูลไม่สำเร็จ', 'error'); });
         }
     }
 
