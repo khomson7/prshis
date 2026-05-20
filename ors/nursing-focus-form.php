@@ -132,13 +132,14 @@ $focus_custom    = (!$focus_is_preset && $saved_focus !== '') ? $saved_focus : '
         width: 130px;
     }
 
-    .fluid-table input[type="number"] {
+    .fluid-table input[type="number"],
+    .fluid-table input[type="text"] {
         width: 100%;
         min-width: 80px;
         border: 1px solid #ced4da;
         border-radius: 4px;
         padding: 3px 6px;
-        text-align: right;
+        text-align: left;
         font-size: 0.85rem;
         background: #fff;
         box-sizing: border-box;
@@ -478,16 +479,16 @@ $focus_custom    = (!$focus_is_preset && $saved_focus !== '') ? $saved_focus : '
                                 </tr>
                                 <tr>
                                     <td class="row-label">Urine</td>
-                                    <td><input type="number" name="out_urine_io" step="0.1" min="0" placeholder="0"
+                                    <td><input type="text" name="out_urine_io"  placeholder="กรอกข้อมูล"
                                             value="<?= v($rec, 'out_urine_io') ?>"></td>
-                                    <td><input type="number" name="out_urine_pacu" step="0.1" min="0" placeholder="0"
+                                    <td><input type="text" name="out_urine_pacu"  placeholder="กรอกข้อมูล"
                                             value="<?= v($rec, 'out_urine_pacu') ?>"></td>
                                 </tr>
                                 <tr>
-                                    <td class="row-label">สิ่งสาระ</td>
-                                    <td><input type="number" name="out_other_io" step="0.1" min="0" placeholder="0"
+                                    <td class="row-label">สีปัสสาวะ</td>
+                                    <td><input type="text" name="out_other_io"   placeholder="กรอกข้อมูล"
                                             value="<?= v($rec, 'out_other_io') ?>"></td>
-                                    <td><input type="number" name="out_other_pacu" step="0.1" min="0" placeholder="0"
+                                    <td><input type="text" name="out_other_pacu"   placeholder="กรอกข้อมูล"
                                             value="<?= v($rec, 'out_other_pacu') ?>"></td>
                                 </tr>
                             </tbody>
