@@ -45,18 +45,20 @@ Session::insertSystemAccessLog(json_encode(array(
 // =====================================================
 // 1. ดึงข้อมูลการบริหารยา
 // =====================================================
-$sql = "SELECT di.sticker_short_name, io.order_item_detail, act.action_date, act.action_time,
-d.name AS dname1, d2.name AS dname2
+$sql = "SELECT di.sticker_short_name, io.order_item_detail,
+       concat(COALESCE(di.sticker_short_name,''), io.order_item_detail) AS drug_group_key,
+       act.action_date, act.action_time,
+       d.name AS dname1, d2.name AS dname2
 FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
  INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_plan ap ON ap.plan_id = act.plan_id
  INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_order_item io ON io.order_item_id = ap.order_item_id
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = act.action_person_1
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d2 ON d2.code = act.action_person_2
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
-WHERE act.an = :an 
+WHERE act.an = :an
 AND act.action_time IS NOT NULL AND act.action_time != '' and act.check_print = 'Y'
-GROUP BY concat(io.icode,io.order_item_detail), act.action_date, act.action_time
-ORDER BY io.order_item_detail, act.action_date, act.action_time";
+GROUP BY concat(COALESCE(di.sticker_short_name,''), io.order_item_detail), act.action_date, act.action_time
+ORDER BY concat(COALESCE(di.sticker_short_name,''), io.order_item_detail), act.action_date, act.action_time";
 
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':an', $an);
@@ -70,30 +72,31 @@ $allDates = [];       // วันที่ทั้งหมดที่มี�
 $drugData = [];       // [order_item_detail => ['name'=>..., 'detail'=>..., 'times'=>[date => [...]]]]
 
 foreach ($rows as $row) {
-    $date = $row['action_date'];
-    $detail = $row['order_item_detail'] ?? '';
-    $drugName = !empty($row['sticker_short_name']) ? $row['sticker_short_name'] : '';
+    $date       = $row['action_date'];
+    $detail     = $row['order_item_detail'] ?? '';
+    $drugName   = !empty($row['sticker_short_name']) ? $row['sticker_short_name'] : '';
+    $groupKey   = $row['drug_group_key'] ?? ($drugName . $detail); // concat(sticker_short_name, order_item_detail)
 
     // เก็บวันที่ทั้งหมด
     if (!in_array($date, $allDates)) {
         $allDates[] = $date;
     }
 
-    // จัดกลุ่มตาม order_item_detail
-    if (!isset($drugData[$detail])) {
-        $drugData[$detail] = [
-            'name' => $drugName,
+    // จัดกลุ่มตาม concat(sticker_short_name, order_item_detail)
+    if (!isset($drugData[$groupKey])) {
+        $drugData[$groupKey] = [
+            'name'   => $drugName,
             'detail' => $detail,
-            'times' => []
+            'times'  => []
         ];
     }
 
-    if (!isset($drugData[$detail]['times'][$date])) {
-        $drugData[$detail]['times'][$date] = [];
+    if (!isset($drugData[$groupKey]['times'][$date])) {
+        $drugData[$groupKey]['times'][$date] = [];
     }
 
-    $drugData[$detail]['times'][$date][] = [
-        'time' => substr($row['action_time'], 0, 5), // HH:MM
+    $drugData[$groupKey]['times'][$date][] = [
+        'time'   => substr($row['action_time'], 0, 5), // HH:MM
         'dname1' => $row['dname1'] ?? '',
         'dname2' => $row['dname2'] ?? '',
     ];
@@ -105,7 +108,7 @@ sort($allDates); // เรียงวันที่
 // 3. หาจำนวน row สูงสุดต่อยาแต่ละตัว (จำนวนเวลาที่มากที่สุดในแต่ละวัน)
 // =====================================================
 $drugMaxRows = [];
-foreach ($drugData as $detail => $info) {
+foreach ($drugData as $groupKey => $info) {
     $allTimesForDrug = [];
     foreach ($info['times'] as $date => $entries) {
         foreach ($entries as $entry) {
@@ -115,7 +118,7 @@ foreach ($drugData as $detail => $info) {
         }
     }
     sort($allTimesForDrug);
-    $drugMaxRows[$detail] = $allTimesForDrug;
+    $drugMaxRows[$groupKey] = $allTimesForDrug;
 }
 
 // =====================================================
@@ -222,7 +225,7 @@ $html .= '</thead>';
 $html .= '<tbody>';
 $seq = 0;
 
-foreach ($drugData as $detailKey => $info) {
+foreach ($drugData as $groupKey => $info) {
     // ตรวจสอบว่ายาตัวนี้มีเวลาบริหารยาในหน้าปัจจุบันหรือไม่
     $hasDataInPage = false;
     foreach ($pageDates as $date) {
