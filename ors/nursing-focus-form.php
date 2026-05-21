@@ -277,7 +277,7 @@ $focus_custom    = (!$focus_is_preset && $saved_focus !== '') ? $saved_focus : '
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <div class="form-label-sm">วันที่ผ่าตัด (DATE) <span class="text-danger">*</span></div>
+                            <div class="form-label-sm">วันที่เข้าห้องพักฟื้น (DATE) <span class="text-danger">*</span></div>
                             <input type="date" name="visit_date" class="form-control form-control-sm"
                                 value="<?= v($rec, 'visit_date', date('Y-m-d')) ?>">
                         </div>
@@ -291,7 +291,7 @@ $focus_custom    = (!$focus_is_preset && $saved_focus !== '') ? $saved_focus : '
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-label-sm">เวลาผ่าตัด (TIME) <span class="text-danger">*</span></div>
+                            <div class="form-label-sm">เวลาที่เข้าห้องพักฟื้น (TIME) <span class="text-danger">*</span></div>
                             <input type="time" name="visit_time" class="form-control form-control-sm"
                                 value="<?= v($rec, 'visit_time', date('H:i')) ?>">
                         </div>
