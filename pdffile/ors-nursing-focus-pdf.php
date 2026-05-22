@@ -298,14 +298,16 @@ $remark_html = '<span style="font-weight:bold;">REMARK:</span><br>' . (nl2br(htm
 // ===== VISIT INFO =====
 $v_nurse    = nv($rec, 'visit_nurse');
 $v_pos      = nv($rec, 'nurse_position');
-$v_date     = thDate(nv($rec, 'visit_date'));
-$v_time     = nv($rec, 'visit_time');
+$v_date     = thDate(nv($rec, 'patient_visit_date'));
+$v_time     = nv($rec, 'patient_visit_time');
 
 // ผู้บันทึก
 $cr_name    = nv($rec, 'created_name',     nv($rec, 'created_by'));
 $cr_pos     = nv($rec, 'created_position', '');
-$cr_date    = thDate(substr(nv($rec, 'created_at'), 0, 10));
-$cr_time    = substr(nv($rec, 'created_at'), 11, 5);
+$cr_date    = thDate(substr(nv($rec, 'visit_date'), 0, 10));
+$cr_time    = nv($rec, 'visit_time', '');
+$cr2_date    = thDate(substr(nv($rec, 'patient_visit_date'), 0, 10));
+$cr2_time    = nv($rec, 'patient_visit_time', '');
 
 // ===== BUILD HTML =====
 $html = $css;
