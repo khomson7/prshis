@@ -24,15 +24,7 @@ $hn = KphisQueryUtils::getHnByAn($an);// function ที่ส่งค่า an
 
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
-$sql = "SELECT count(*) AS count_row, id FROM " . DbConstant::KPHIS_DBNAME . ".prs_or_complication WHERE an = :an ";
-$id = null;
-$parameters['an'] = $an;
-$stmt = $conn->prepare($sql);
-$stmt->execute($parameters);
-$row = $stmt->fetch();
-if ($row['count_row'] > 0) {
-    $id = $row['id'];
-}
+$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 
 date_default_timezone_set('asia/bangkok');
@@ -1849,8 +1841,21 @@ date_default_timezone_set('asia/bangkok');
         $("#btn_or_complication").attr('disabled', 'disabled');
         if (id == "") {
             $.post(url_save, $("#or_complication_form").serialize(), function (data_save) {
-                $("#data_or_complication_save").html(data_save);
-                window.location.reload(true);
+                try {
+                    var resp = (typeof data_save === 'object') ? data_save : JSON.parse(data_save);
+                    if(resp.status === 'success'){
+                        if(window.opener && !window.opener.closed) {
+                            window.opener.location.reload(true);
+                        }
+                        window.close();
+                    } else {
+                        alert("Error: " + resp.message);
+                        $("#btn_or_complication").removeAttr("disabled");
+                    }
+                } catch(e) {
+                    $("#data_or_complication_save").html(data_save);
+                    window.location.reload(true);
+                }
             })
                 .fail(function () {
                     alert("บันทึกข้อมูลไม่สำเร็จ");
@@ -1858,8 +1863,21 @@ date_default_timezone_set('asia/bangkok');
                 });
         } else {
             $.post(url_update, $("#or_complication_form").serialize(), function (data_update) {
-                $("#data_or_complication_update").html(data_update);
-                window.location.reload(true);
+                try {
+                    var resp = (typeof data_update === 'object') ? data_update : JSON.parse(data_update);
+                    if(resp.status === 'success'){
+                        if(window.opener && !window.opener.closed) {
+                            window.opener.location.reload(true);
+                        }
+                        window.close();
+                    } else {
+                        alert("Error: " + resp.message);
+                        $("#btn_or_complication").removeAttr("disabled");
+                    }
+                } catch(e) {
+                    $("#data_or_complication_update").html(data_update);
+                    window.location.reload(true);
+                }
             })
                 .fail(function () {
                     alert("บันทึกข้อมูลไม่สำเร็จ");

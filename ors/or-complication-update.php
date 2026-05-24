@@ -1,4 +1,5 @@
 <?php
+        ob_start();
         //เวลาตาม timezone
         date_default_timezone_set("Asia/Bangkok");
         require_once '../include/Session.php';
@@ -275,13 +276,13 @@
                     )); 
 
 
-               
-            $output_error = '<div class="alert alert-success">บันทึกข้อมูลเรียบร้อยแล้วคะ</div>';
+            ob_end_clean();
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'success']);
 
         } catch (PDOException  $e) {
-            echo $e->getMessage();
-            $output_error = '<div class="alert alert-danger">ERROR !!FOCUS LIST</div>';
+            ob_end_clean();
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
-
-        echo $output_error;
 ?>

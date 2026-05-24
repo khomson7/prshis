@@ -1,4 +1,5 @@
 <?php
+    ob_start();
     require_once '../include/DbUtils.php';
     require_once '../include/KphisQueryUtils.php';
     require_once '../include/Session.php';
@@ -261,10 +262,13 @@
         ,'no48_2'=>$no48_2,'no48_3'=>$no48_3,'no49'=>$no49,'no49_2'=>$no49_2,'no49_3'=>$no49_3,'no50'=>$no50,'no50_2'=>$no50_2,'no50_3'=>$no50_3,'no51'=>$no51
         ,'no51_text'=>$no51_text,'nurse_name' =>$nurse_name,'nurse_name2' =>$nurse_name2,'nurse_name3' =>$nurse_name3,'an'=>$an,'create_user'=>$create_user, 'update_user'=>$update_user, 'version'=>$version , 'create_datetime' =>$create_datetime ));
 
-        $output_error = '<div class="alert alert-success">บันทึกข้อมูลสำเร็จ</div>';
+        $new_id = $conn->lastInsertId();
+        ob_end_clean();
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['status' => 'success', 'id' => $new_id]);
     }catch (PDOException  $e) {
-        echo $e->getMessage();
-        $output_error = '<div class="alert alert-danger">ERROR !!</div>';
+        ob_end_clean();
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
-    echo $output_error;
 ?>

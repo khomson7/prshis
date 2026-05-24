@@ -19,7 +19,7 @@
                                 ':id' => $id,
                                 ':an' => $an
                             ];
-        $sql = "SELECT * FROM ".DbConstant::KPHIS_DBNAME.".prs_or_complication WHERE an = :an AND id = :id";
+        $sql = "SELECT * FROM ".DbConstant::KPHIS_DBNAME.".prs_or_complication WHERE an = :an AND id = :id AND (is_deleted = 0 OR is_deleted IS NULL)";
         $stmt = $conn->prepare($sql);
         $stmt->execute($query_parameters);
         $rowCount = 0;

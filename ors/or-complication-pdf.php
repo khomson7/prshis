@@ -67,12 +67,23 @@ $strDate = date("Y-m-d H:i:s");
 $mpdf->setFooter(' (พิมพ์โดย ' . $_SESSION['name'] . ' วันที่พิมพ์ ' . DateThai($strDate) . ' ) ' . '<br>ผู้ป่วย : (hn : ' . $hn_row_ipt . ')(an : ' . $an . ')(ชื่อ - สกุล : ' . $pname_row_ipt . ' ' . $fname_row_ipt . ' ' . $lname_row_ipt . ')' . ' ( Page {PAGENO} of {nb} )');
 $mpdf->WriteHTML('');
 //----------------------select ข้อมูล จากฐานข้อมูลเพื่อค้นหา ชื่อ - สกุล
+$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+
 //----------------------ipd_nurse_admission_note
-$sql = "SELECT t.* ,opduser.name AS name_full, entryposition
-                FROM " . DbConstant::KPHIS_DBNAME . ".prs_or_complication t
-                LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".opduser ON t.update_user = opduser.loginname
-                WHERE an=:an";
-$parameters['an'] = $an;
+if ($id) {
+    $sql = "SELECT t.* ,opduser.name AS name_full, entryposition
+                    FROM " . DbConstant::KPHIS_DBNAME . ".prs_or_complication t
+                    LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".opduser ON t.update_user = opduser.loginname
+                    WHERE an=:an AND t.id=:id AND (t.is_deleted = 0 OR t.is_deleted IS NULL)";
+    $parameters['an'] = $an;
+    $parameters['id'] = $id;
+} else {
+    $sql = "SELECT t.* ,opduser.name AS name_full, entryposition
+                    FROM " . DbConstant::KPHIS_DBNAME . ".prs_or_complication t
+                    LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".opduser ON t.update_user = opduser.loginname
+                    WHERE an=:an AND (t.is_deleted = 0 OR t.is_deleted IS NULL)";
+    $parameters['an'] = $an;
+}
 $stmt = $conn->prepare($sql);
 $stmt->execute($parameters);
 $row = $stmt->fetch();
