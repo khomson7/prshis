@@ -1,7 +1,14 @@
 <?php
 require_once '../include/Session.php';
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : '';
-if (!$loginname) { header('Location: ../login.php'); exit; }
+if (!$loginname) {
+    $redirect = 'pdfupload/index.php';
+    if (!empty($_REQUEST['an'])) {
+        $redirect .= '?an=' . urlencode($_REQUEST['an']);
+    }
+    header('Location: ../login.php?redirect=' . urlencode($redirect));
+    exit;
+}
 
 require_once '../mains/main-report.php';
 $permissionCheck = Session::checkPermissionAndShowMessage('PDF-UPLOAD', 'VIEW');

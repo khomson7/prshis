@@ -27,6 +27,10 @@
           <!-- <img src="project\images\logo kph 800.png" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt=""> -->
           <img src="picture/favicon/icon17.svg" style="width: 100%" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="">
           <form action="checklogin.php" method="post">
+            <?php
+              $redirect = isset($_GET['redirect']) ? htmlspecialchars($_GET['redirect']) : '';
+            ?>
+            <input type="hidden" name="redirect" value="<?= $redirect ?>">
             <div class="form-row">
               <div class="col-md-12">
                 <input type="text" name="username" class="form-control form-control-lg" placeholder="username" autofocus>
