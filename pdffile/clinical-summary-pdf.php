@@ -347,7 +347,7 @@ $html .= '<div class="section-content">' . nl2br(htmlspecialchars($follow_up)) .
 
 // --- DX (Diagnosis) ---
 //$html .= '<div class="section-title">DX (การวินิจฉัยโรค)</div>';
-if (!empty($diagnosis)) {
+/*if (!empty($diagnosis)) {
     $html .= '<div class="section-content">' . nl2br(htmlspecialchars($diagnosis)) . '</div>';
 }
 if (!empty($icdRows)) {
@@ -376,7 +376,7 @@ if (!empty($icdRows)) {
     if (empty($diagnosis)) {
         $html .= '<div class="section-content">&nbsp;</div>';
     }
-}
+}*/
 
 // --- Operation ---
 //$html .= '<div class="section-title">Operation</div>';
