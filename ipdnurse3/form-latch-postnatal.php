@@ -42,9 +42,9 @@ $check_ = ReportQueryUtils::getProduction(26);
 <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">
 <style>
 .latch-ref th,.latch-ref td{border:1px solid #aaa;padding:5px 4px;vertical-align:middle;font-size:0.82rem;}
-.latch-ref thead th{background:var(--bright-blue);color:#fff;text-align:center;}
+.latch-ref thead th{background:#007bff;color:#fff;text-align:center;}
 .latch-grid th,.latch-grid td{border:1px solid #aaa;padding:3px 2px;vertical-align:middle;font-size:0.78rem;text-align:center;}
-.latch-grid thead th{background:var(--bright-blue);color:#fff;}
+.latch-grid thead th{background:#007bff;color:#fff;}
 .latch-grid .row-label{text-align:left;font-weight:bold;padding:4px 6px;background:#e3f2fd;white-space:nowrap;}
 .latch-grid .day-header{background:#1565c0;color:#fff;font-weight:bold;}
 .latch-grid .time-header{background:#1976d2;color:#fff;}
@@ -52,10 +52,10 @@ $check_ = ReportQueryUtils::getProduction(26);
 .r-grp{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;}
 .r-grp label{display:flex;flex-direction:column;align-items:center;font-size:0.7rem;cursor:pointer;padding:2px 4px;border-radius:3px;border:1px solid #ccc;min-width:28px;}
 .r-grp label:hover{background:#bbdefb;}
-.r-grp input[type=radio]:checked+span{font-weight:bold;color:var(--bright-blue);}
-.score-badge{display:inline-block;min-width:28px;text-align:center;padding:1px 6px;border-radius:12px;font-weight:bold;background:var(--bright-blue);color:#fff;font-size:0.85rem;}
+.r-grp input[type=radio]:checked+span{font-weight:bold;color:#007bff;}
+.score-badge{display:inline-block;min-width:28px;text-align:center;padding:1px 6px;border-radius:12px;font-weight:bold;background:#007bff;color:#fff;font-size:0.85rem;}
 .t-input{width:72px;font-size:0.78rem;}
-.section-header{background:var(--bright-blue);color:#fff;padding:7px 12px;border-radius:6px 6px 0 0;font-weight:bold;}
+.section-header{background:#007bff;color:#fff;padding:7px 12px;border-radius:6px 6px 0 0;font-weight:bold;}
 .stress-table th,.stress-table td{border:1px solid #aaa;padding:5px;vertical-align:middle;font-size:0.84rem;}
 .stress-table thead th{background:#5c6bc0;color:#fff;text-align:center;}
 .yn-radio label{margin-right:14px;cursor:pointer;}
