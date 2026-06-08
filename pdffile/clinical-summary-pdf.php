@@ -6,9 +6,11 @@ $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
-if (!$loginname) {
+//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
+if ($login != $loginname) {
     session_start();
     session_destroy();
+    require_once '../mains/main-report.php';
 }
 
 Session::checkLoginSessionAndShowMessage();
