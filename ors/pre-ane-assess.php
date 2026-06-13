@@ -649,7 +649,7 @@ function printPDF() {
     var id = $("input[name=id]").val();
     var loginname = <?= json_encode($loginname) ?>;
     if (id) {
-        window.open('pre-ane-assess-pdf.php?an=' + encodeURIComponent(an) + '&id=' + encodeURIComponent(id) + '&loginname=' + encodeURIComponent(loginname), '_blank');
+        window.open('/pdffile/pre-ane-assess-pdf.php?an=' + encodeURIComponent(an) + '&id=' + encodeURIComponent(id) + '&loginname=' + encodeURIComponent(loginname), '_blank');
     } else {
         Swal.fire('ข้อความ', 'กรุณาบันทึกข้อมูลก่อนพิมพ์ PDF', 'warning');
     }
