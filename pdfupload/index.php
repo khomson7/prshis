@@ -1,5 +1,33 @@
 <?php
 require_once '../include/Session.php';
+
+// =====================================================
+// ป้องกันการเรียกผ่าน GET (บังคับใช้ POST เท่านั้น)
+// =====================================================
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    echo "<script>window.close();</script>";
+    exit;
+}
+
+// =====================================================
+// ระบบ Single Sign-On (SSO) ข้าม Port/Server (แบบ POST)
+// =====================================================
+if (isset($_POST['hash']) && isset($_POST['loginuser']) && isset($_POST['t']) && isset($_POST['an'])) {
+    $secret_key = "PRSHIS_SECRET_2026"; 
+    
+    // ขยายเวลาเป็น 1 ชั่วโมง (3600 วิ) และใช้ abs() เพื่อแก้ปัญหาเวลา 2 เซิร์ฟเวอร์เดินไม่เท่ากัน
+    if (abs(time() - $_POST['t']) <= 3600) {
+        $expected_hash = md5($_POST['loginuser'] . $_POST['t'] . $_POST['an'] . $secret_key);
+        
+        if ($_POST['hash'] === $expected_hash) {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['loginname'] = $_POST['loginuser'];
+        }
+    }
+}
+
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : '';
 if (!$loginname) {
     $redirect = 'pdfupload/index.php';

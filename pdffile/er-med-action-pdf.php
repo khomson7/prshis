@@ -1,4 +1,8 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 require_once '../mains/datethai.php';
 require_once '../include/Session.php';
 
@@ -59,6 +63,7 @@ date_default_timezone_set('asia/bangkok');
 
 $conn = DbUtils::get_hosxp_connection();
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']); // Landscape for wide table
+$mpdf->shrink_tables_to_fit = 0; // ปิดการย่อขนาดตารางอัตโนมัติ
 $mpdf->AddPageByArray([
     'margin-left' => 6,
     'margin-right' => 6,
@@ -67,33 +72,48 @@ $mpdf->AddPageByArray([
 ]);
 
 $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
-$hn = KphisQueryUtils::getHnByAn($an);
+
+// ดึง vn จาก ovst ด้วย an แล้วหา opd_er_order_master_id จาก opd_er_order_master
+$masterSql = "SELECT ovst.vn, ovst.an, ovst.hn, om.opd_er_order_master_id
+  FROM " . DbConstant::HOSXP_DBNAME . ".ovst
+  LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".opd_er_order_master om ON om.vn = ovst.vn
+  WHERE ovst.an = :an
+  ORDER BY om.opd_er_order_master_id DESC
+  LIMIT 1";
+$masterStmt = $conn->prepare($masterSql);
+$masterStmt->bindParam(':an', $an);
+$masterStmt->execute();
+$masterRow = $masterStmt->fetch(PDO::FETCH_ASSOC);
+
+$vn = $masterRow['vn'] ?? '';
+$hn = $masterRow['hn'] ?? '';
+$opd_er_order_master_id = $masterRow['opd_er_order_master_id'] ?? '';
 
 Session::insertSystemAccessLog(json_encode(array(
-    'report' => 'DRUG-ADMIN-REPORT-PDF',
+    'report' => 'ER-DRUG-ADMIN-REPORT-PDF',
     'an' => $an,
+    'vn' => $vn,
+    'opd_er_order_master_id' => $opd_er_order_master_id,
 ), JSON_UNESCAPED_UNICODE));
 
 // =====================================================
-// 1. ดึงข้อมูลการบริหารยา
+// 1. ดึงข้อมูลการบริหารยา (ER)
 // =====================================================
 $sql = "SELECT di.sticker_short_name, io.order_item_detail,
-       concat(COALESCE(di.sticker_short_name,''), io.order_item_detail) AS drug_group_key,
        act.action_date, act.action_time,
        d.name AS dname1, d2.name AS dname2
-FROM " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_action act
- INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_nurse_index_plan ap ON ap.plan_id = act.plan_id
- INNER JOIN " . DbConstant::KPHIS_DBNAME . ".ipd_order_item io ON io.order_item_id = ap.order_item_id
+FROM " . DbConstant::KPHIS_DBNAME . ".opd_er_nurse_index_action act
+ INNER JOIN " . DbConstant::KPHIS_DBNAME . ".opd_er_nurse_index_plan ap ON ap.plan_id = act.plan_id
+ INNER JOIN " . DbConstant::KPHIS_DBNAME . ".opd_er_order_item io ON io.order_item_id = ap.order_item_id
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = act.action_person_1
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d2 ON d2.code = act.action_person_2
  LEFT OUTER JOIN " . DbConstant::HOSXP_DBNAME . ".drugitems di ON di.icode = io.icode
-WHERE act.an = :an
-AND act.action_time IS NOT NULL AND act.action_time != '' and act.check_print = 'Y'
-GROUP BY concat(COALESCE(di.sticker_short_name,''), io.order_item_detail), act.action_date, act.action_time
-ORDER BY concat(COALESCE(di.sticker_short_name,''), io.order_item_detail), act.action_date, act.action_time";
+WHERE act.opd_er_order_master_id = :opd_er_order_master_id
+AND act.action_time IS NOT NULL AND act.action_time != ''
+ORDER BY io.order_item_detail, act.action_date, act.action_time";
 
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(':an', $an);
+$stmt->bindParam(':opd_er_order_master_id', $opd_er_order_master_id);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -101,13 +121,13 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // 2. จัดกลุ่มข้อมูล: รวบรวมวันที่ทั้งหมด และจัดกลุ่มตาม order_item_detail
 // =====================================================
 $allDates = [];       // วันที่ทั้งหมดที่มีการบริหารยา (unique, sorted)
-$drugData = [];       // [order_item_detail => ['name'=>..., 'detail'=>..., 'times'=>[date => [...]]]]
+$drugData = [];       // [drug_group_key => ['name'=>..., 'detail'=>..., 'times'=>[date => [...]]]]
 
 foreach ($rows as $row) {
-    $date       = $row['action_date'];
-    $detail     = $row['order_item_detail'] ?? '';
-    $drugName   = !empty($row['sticker_short_name']) ? $row['sticker_short_name'] : '';
-    $groupKey   = $row['drug_group_key'] ?? ($drugName . $detail); // concat(sticker_short_name, order_item_detail)
+    $date = $row['action_date'];
+    $detail = $row['order_item_detail'] ?? '';
+    $drugName = !empty($row['sticker_short_name']) ? $row['sticker_short_name'] : '';
+    $groupKey = $drugName . $detail;
 
     // เก็บวันที่ทั้งหมด
     if (!in_array($date, $allDates)) {
@@ -117,9 +137,9 @@ foreach ($rows as $row) {
     // จัดกลุ่มตาม concat(sticker_short_name, order_item_detail)
     if (!isset($drugData[$groupKey])) {
         $drugData[$groupKey] = [
-            'name'   => $drugName,
+            'name' => $drugName,
             'detail' => $detail,
-            'times'  => []
+            'times' => []
         ];
     }
 
@@ -128,7 +148,7 @@ foreach ($rows as $row) {
     }
 
     $drugData[$groupKey]['times'][$date][] = [
-        'time'   => substr($row['action_time'], 0, 5), // HH:MM
+        'time' => substr($row['action_time'], 0, 5), // HH:MM
         'dname1' => $row['dname1'] ?? '',
         'dname2' => $row['dname2'] ?? '',
     ];
@@ -156,12 +176,14 @@ foreach ($drugData as $groupKey => $info) {
 // =====================================================
 // 4. Pagination - แบ่งหน้าตามจำนวนวัน
 // =====================================================
-$daysPerPage = 10; // จำนวนวันต่อหน้า (ปรับได้)
+$daysPerPage = 4; // จำนวนวันต่อหน้า (ปรับได้)
 $totalDates = count($allDates);
 $totalPages = max(1, ceil($totalDates / $daysPerPage));
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) $page = 1;
-if ($page > $totalPages) $page = $totalPages;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($page < 1)
+    $page = 1;
+if ($page > $totalPages)
+    $page = $totalPages;
 
 $offset = ($page - 1) * $daysPerPage;
 $pageDates = array_slice($allDates, $offset, $daysPerPage);
@@ -171,22 +193,24 @@ $colCount = count($pageDates);
 // 5. สร้าง HTML
 // =====================================================
 
-// --- ข้อมูลผู้ป่วย ---
-$patientSql = "SELECT p.pname, p.fname, p.lname, i.an, i.hn, i.regdate, i.dchdate, w.name AS ward_name
-FROM " . DbConstant::HOSXP_DBNAME . ".ipt i
-LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".patient p ON p.hn = i.hn
-LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".ward w ON w.ward = i.ward
-WHERE i.an = :an LIMIT 1";
+// --- ข้อมูลผู้ป่วย (ER) ดึงจาก ovst เชื่อม vn → an ---
+$patientSql = "SELECT p.pname, p.fname, p.lname, o.vn, o.an, o.hn, o.vstdate, o.vsttime
+FROM " . DbConstant::HOSXP_DBNAME . ".ovst o
+LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".patient p ON p.hn = o.hn
+WHERE o.vn = :vn LIMIT 1";
 $patientStmt = $conn->prepare($patientSql);
-$patientStmt->bindParam(':an', $an);
+$patientStmt->bindParam(':vn', $vn);
 $patientStmt->execute();
 $patient = $patientStmt->fetch(PDO::FETCH_ASSOC);
 
 $patientName = '';
-$wardName = '';
+$vstDate = '';
 if ($patient) {
     $patientName = ($patient['pname'] ?? '') . ($patient['fname'] ?? '') . ' ' . ($patient['lname'] ?? '');
-    $wardName = $patient['ward_name'] ?? '';
+    $vstDate = !empty($patient['vstdate']) ? date('d/m/', strtotime($patient['vstdate'])) . (date('Y', strtotime($patient['vstdate'])) + 543) : '';
+    // อัปเดต an จาก ovst ถ้ายังว่าง
+    if (empty($an))
+        $an = $patient['an'] ?? '';
 }
 
 $html = '
@@ -197,13 +221,14 @@ $html = '
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 10px;
+        font-size: 14px;
     }
     th, td {
         border: 1px solid #000;
-        padding: 3px 4px;
+        padding: 5px 7px;
         text-align: center;
         vertical-align: middle;
+        font-size: 14px;
     }
     th {
         background-color: #f0f0f0;
@@ -211,22 +236,25 @@ $html = '
     td.drug-name {
         text-align: left;
         font-weight: bold;
-        white-space: nowrap;
+        word-wrap: break-word;
     }
     .header-info {
-        font-size: 11px;
+        font-size: 12px;
         margin-bottom: 5px;
     }
 </style>';
 
-$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา โรงพยาบาลปราสาท</h2>';
+$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา (ER) โรงพยาบาลปราสาท</h2>';
 
 // ข้อมูลผู้ป่วย
 $html .= '<div class="header-info">';
 $html .= 'ชื่อผู้ป่วย: <b>' . htmlspecialchars($patientName) . '</b>';
 $html .= ' &nbsp;&nbsp; HN: <b>' . htmlspecialchars($hn) . '</b>';
-$html .= ' &nbsp;&nbsp; AN: <b>' . htmlspecialchars($an) . '</b>';
-$html .= ' &nbsp;&nbsp; หอผู้ป่วย: <b>' . htmlspecialchars($wardName) . '</b>';
+$html .= ' &nbsp;&nbsp; VN: <b>' . htmlspecialchars($vn) . '</b>';
+if (!empty($an)) {
+    $html .= ' &nbsp;&nbsp; AN: <b>' . htmlspecialchars($an) . '</b>';
+}
+$html .= ' &nbsp;&nbsp; วันที่ Visit: <b>' . htmlspecialchars($vstDate) . '</b>';
 $html .= '</div>';
 
 // =====================================================
@@ -248,7 +276,7 @@ $html .= '</tr>';
 // --- Header Row 2: (ใต้วันที่ อาจเขียนว่า เวลา/ผู้ให้ยา) ---
 $html .= '<tr>';
 foreach ($pageDates as $date) {
-    $html .= '<th style="font-size:8px;">เวลา / ผู้บริหารยา</th>';
+    $html .= '<th style="font-size:12px;">เวลา / ผู้บริหารยา</th>';
 }
 $html .= '</tr>';
 $html .= '</thead>';
@@ -294,7 +322,7 @@ foreach ($drugData as $groupKey => $info) {
             $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
             // sticker_short_name อยู่บน, order_item_detail อยู่ล่าง
             if (!empty($info['name'])) {
-                $drugDetailSub = '<br><span style="font-size:8px; font-weight:normal; color:#333;">' . htmlspecialchars($info['detail']) . '</span>';
+                $drugDetailSub = '<br><span style="font-size:12px; font-weight:normal; color:#333;">' . htmlspecialchars($info['detail']) . '</span>';
                 $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['name']) . $drugDetailSub . '</td>';
             } else {
                 $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . '</td>';
@@ -314,24 +342,28 @@ foreach ($drugData as $groupKey => $info) {
                 // แถวอื่นไม่ต้องเขียน td (ถูก merge แล้ว)
             } elseif ($dateCount === $maxRowsForDrug) {
                 // จำนวนเท่ากับ maxRows → แสดง 1 entry ต่อ 1 แถวพอดี
-                $entry = $entries[$rowIdx];
+                $entry       = $entries[$rowIdx];
                 $displayText = $entry['time'];
-                $names = [];
-                if (!empty($entry['dname1'])) $names[] = $entry['dname1'];
-                if (!empty($entry['dname2'])) $names[] = $entry['dname2'];
+                $names       = [];
+                if (!empty($entry['dname1']))
+                    $names[] = $entry['dname1'];
+                if (!empty($entry['dname2']))
+                    $names[] = $entry['dname2'];
                 if (!empty($names)) {
                     $displayText .= ' ' . implode(',', $names);
                 }
-                $html .= '<td style="font-size:9px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                $html .= '<td style="font-size:14px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
             } else {
                 // dateCount < maxRowsForDrug → แสดง entries แล้ว merge แถวที่เหลือ
                 if ($rowIdx < $dateCount) {
                     // แถวที่มีข้อมูล
-                    $entry = $entries[$rowIdx];
+                    $entry       = $entries[$rowIdx];
                     $displayText = $entry['time'];
-                    $names = [];
-                    if (!empty($entry['dname1'])) $names[] = $entry['dname1'];
-                    if (!empty($entry['dname2'])) $names[] = $entry['dname2'];
+                    $names       = [];
+                    if (!empty($entry['dname1']))
+                        $names[] = $entry['dname1'];
+                    if (!empty($entry['dname2']))
+                        $names[] = $entry['dname2'];
                     if (!empty($names)) {
                         $displayText .= ' ' . implode(',', $names);
                     }
@@ -339,9 +371,9 @@ foreach ($drugData as $groupKey => $info) {
                     // ถ้าเป็น entry สุดท้ายของวันนี้ → merge แถวที่เหลือ
                     if ($rowIdx === $dateCount - 1) {
                         $remainingRows = $maxRowsForDrug - $dateCount;
-                        $html .= '<td rowspan="' . ($remainingRows + 1) . '" style="font-size:9px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                        $html .= '<td rowspan="' . ($remainingRows + 1) . '" style="font-size:14px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
                     } else {
-                        $html .= '<td style="font-size:9px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                        $html .= '<td style="font-size:14px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
                     }
                 }
                 // แถวที่ถูก merge แล้วไม่ต้องเขียน td
@@ -359,11 +391,11 @@ $html .= '</tbody></table>';
 // =====================================================
 $html .= '<div style="text-align: center; margin-top: 10px; font-size:10px;">';
 if ($page > 1) {
-    $html .= '<a href="med-action-pdf.php?an=' . $an . '&page=' . ($page - 1) . '">หน้าก่อน</a> | ';
+    $html .= '<a href="er-med-action-pdf.php?an=' . $an . '&page=' . ($page - 1) . '">หน้าก่อน</a> | ';
 }
 $html .= 'หน้า ' . $page . ' จาก ' . $totalPages;
 if ($page < $totalPages) {
-    $html .= ' | <a href="med-action-pdf.php?an=' . $an . '&page=' . ($page + 1) . '">หน้าถัดไป</a>';
+    $html .= ' | <a href="er-med-action-pdf.php?an=' . $an . '&page=' . ($page + 1) . '">หน้าถัดไป</a>';
 }
 $html .= '</div>';
 
@@ -372,6 +404,6 @@ $html .= '</div>';
 // =====================================================
 $mpdf->setAutoTopMargin = 'stretch';
 $mpdf->setAutoBottomMargin = 'stretch';
-$mpdf->setFooter('HN: ' . htmlspecialchars($hn) . ' AN: ' . htmlspecialchars($an) . ' หน้า ' . $page);
+$mpdf->setFooter('HN: ' . htmlspecialchars($hn) . ' AN: ' . htmlspecialchars($an) . ' VN: ' . htmlspecialchars($vn) . ' หน้า ' . $page);
 $mpdf->WriteHTML($html);
-$mpdf->Output('Drug_Admin_Report_AN_' . $an . '_Page_' . $page . '.pdf', 'I');
+$mpdf->Output('ER_Drug_Admin_Report_AN_' . $an . '_Page_' . $page . '.pdf', 'I');
