@@ -750,14 +750,74 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                     timeout: 90000, // 90 วินาที timeout
                     success: function (resp) {
                         if (resp.status === 'success') {
+                            // อัพเดท UI จาก JSON data — ไม่ต้อง reload ทั้งหน้า
+                            if (resp.data) {
+                                var d = resp.data;
+                                $('#id').val(d.id || '');
+                                $('#vstdate').val(d.vstdate || '');
+                                $('#height').val(d.height || '');
+                                $('#bw').val(d.bw || '');
+                                $('#bmi').val(d.bmi || '');
+                                $('#age_y').val(d.age_y || '');
+                                $('#check_bmi').val(d.check_bmi || '');
+                                CURRENT_BW = parseFloat(d.bw) || 0;
+
+                                // อัพเดท BMI result display
+                                var bmiV = parseFloat(d.bmi) || 0;
+                                var bmiHtml = '';
+                                if (bmiV > 0) {
+                                    if (bmiV < 16)
+                                        bmiHtml = '<span style="color:#dc3545;">Severe (' + bmiV.toFixed(2) + ')</span>';
+                                    else if (bmiV < 17)
+                                        bmiHtml = '<span style="color:#fd7e14;">Moderate (' + bmiV.toFixed(2) + ')</span>';
+                                    else if (bmiV < 18.5)
+                                        bmiHtml = '<span style="color:#e0a000;">Mild (' + bmiV.toFixed(2) + ')</span>';
+                                    else
+                                        bmiHtml = '<span style="color:#28a745;">Normal (' + bmiV.toFixed(2) + ')</span>';
+                                }
+                                $('#bmi_result_display').html(bmiHtml);
+
+                                // อัพเดท BW history fields
+                                var bwFields = {
+                                    'bw_1week': d.bw_1week,
+                                    'bw_2_3week': d.bw_2_3week,
+                                    'bw_1month': d.bw_1month,
+                                    'bw_3month': d.bw_3month,
+                                    'bw_5month': d.bw_5month
+                                };
+                                $.each(bwFields, function(fid, val) {
+                                    if (val !== null && val !== '') {
+                                        $('#' + fid).val(parseFloat(val).toFixed(2));
+                                    } else {
+                                        $('#' + fid).val('');
+                                    }
+                                });
+
+                                // คำนวณ % ทุก period ใหม่
+                                var periodMap = [
+                                    ['bw_1week', 'percen_1week'],
+                                    ['bw_2_3week', 'percen_2_3week'],
+                                    ['bw_1month', 'percen_1month'],
+                                    ['bw_3month', 'percen_3month'],
+                                    ['bw_5month', 'percen_5month']
+                                ];
+                                periodMap.forEach(function(p) {
+                                    calcPercent(p[0], p[1]);
+                                });
+
+                                // Enable save button
+                                $('.btn-primary[disabled]').prop('disabled', false)
+                                    .attr('onclick', 'form_save()')
+                                    .removeAttr('title');
+                                $('.alert-warning').fadeOut(300);
+                            }
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'สำเร็จ',
                                 html: resp.message,
                                 showConfirmButton: false,
                                 timer: 1500,
-                            }).then(function () {
-                                window.location.reload(true);
                             });
                         } else {
                             Swal.fire('ผิดพลาด', resp.message || 'ประมวลผลไม่สำเร็จ', 'error');
