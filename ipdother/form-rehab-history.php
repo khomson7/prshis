@@ -1,28 +1,54 @@
-<?php  // require_once './project/function/Session.php';
+<?php
 require_once '../include/Session.php';
-//ตรวจสอบว่า session login ตรงกันหรือไม่
-$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-$loginname = $_SESSION['loginname'];
-$values = ['loginname' => $loginname];
 
-//หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
+// =====================================================
+// ป้องกันการเรียกผ่าน GET (บังคับใช้ POST เท่านั้น)
+// =====================================================
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    echo "<script>window.close();</script>";
+    exit;
 }
+
+// =====================================================
+// ระบบ Single Sign-On (SSO) ข้าม Port/Server (แบบ POST)
+// =====================================================
+if (isset($_POST['hash']) && isset($_POST['loginuser']) && isset($_POST['t']) && isset($_POST['an'])) {
+    $secret_key = "PRSHIS_SECRET_2026"; 
+    
+    // ขยายเวลาเป็น 1 ชั่วโมง (3600 วิ) และใช้ abs() เพื่อแก้ปัญหาเวลา 2 เซิร์ฟเวอร์เดินไม่เท่ากัน
+    if (abs(time() - $_POST['t']) <= 3600) {
+        $expected_hash = md5($_POST['loginuser'] . $_POST['t'] . $_POST['an'] . $secret_key);
+        
+        if ($_POST['hash'] === $expected_hash) {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['loginname'] = $_POST['loginuser'];
+        }
+    }
+}
+
+$loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : '';
+if (!$loginname) {
+    $redirect = 'ipdother/form-rehab-history.php';
+    if (!empty($_REQUEST['an'])) {
+        $redirect .= '?an=' . urlencode($_REQUEST['an']);
+    }
+    header('Location: ../login.php?redirect=' . urlencode($redirect));
+    exit;
+}
+
 require_once '../mains/main-report.php';
-
-//Session::checkLoginSessionAndShowMessage(); //เช็ค session
-
 $permissionCheck = Session::checkPermissionAndShowMessage('PRS_FORM_REHAB', 'VIEW');
 $permissionCheckJson = json_encode($permissionCheck);
-require_once '../include/session-modal.php';
-require_once '../mains/ipd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
-require_once '../mains/ipd-show-patient-sticky.php';
 
+require_once '../mains/ipd-show-patient-main.php';
+require_once '../mains/ipd-show-patient-sticky.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
+require_once '../include/session-modal.php';
+
 
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 $an = empty($_REQUEST['an']) ? null : $_REQUEST['an'];
@@ -39,18 +65,6 @@ Session::insertSystemAccessLog(json_encode(array(
 ), JSON_UNESCAPED_UNICODE));
 
 
-
-/*$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
-$loginname = $_SESSION['loginname'];
-$values = ['loginname' => $loginname];
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
-}*/
-
-
-
-//echo $_SESSION['name']; 
 
 //----------------------เช็คว่า an นี้ มีข้อมูลหรือไม่
 $sql = "SELECT *
