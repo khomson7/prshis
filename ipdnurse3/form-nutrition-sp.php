@@ -30,15 +30,15 @@ $startTime = microtime(true);
 
 try {
     // =====================================================
-    // 1. เชื่อมต่อ DB — แยก Read / Write
+    // 1. เชื่อมต่อ DB — ใช้ server หลักตัวเดียว (อ่าน+เขียน)
     // =====================================================
-    $conn_kphis = DbUtils::get_hosxp_connection();  // kphis (Master) — สำหรับเขียน
-    $conn_slave = DbUtils::get_slave_connection();   // Slave — สำหรับอ่าน HOSxP
+    $conn = DbUtils::get_hosxp_connection();  // server หลัก (kphis DB, cross-query hos.*)
+    $hosDb = DbConstant::HOSXP_DBNAME;
 
     // =====================================================
     // 2. Early Exit — ตรวจข้อมูลซ้ำก่อน (query เบาบน kphis)
     // =====================================================
-    $stmt_check = $conn_kphis->prepare(
+    $stmt_check = $conn->prepare(
         "SELECT 1 FROM prs_check_vitalsign WHERE an = :an LIMIT 1"
     );
     $stmt_check->execute(['an' => $an]);
@@ -50,7 +50,7 @@ try {
     $stmt_check->closeCursor();
 
     // =====================================================
-    // 3. ดึงข้อมูลหลักจาก Slave (opdscreen + ovst + an_stat)
+    // 3. ดึงข้อมูลหลักจาก hos (opdscreen + ovst + an_stat)
     //    ลด JOIN จาก 3 ตาราง → 2 ตาราง (ไม่ JOIN ipt)
     //    ใช้ ovst.an กรอง → opdscreen.hn ใช้ index
     // =====================================================
@@ -69,9 +69,9 @@ try {
                 WHEN o.bmi < 16.00                      THEN 'Severe'
                 ELSE NULL
             END AS check_bmi
-        FROM opdscreen o
-        INNER JOIN ovst ov ON ov.vn = o.vn AND ov.an = :an
-        INNER JOIN an_stat ans ON ans.an = :an2
+        FROM {$hosDb}.opdscreen o
+        INNER JOIN {$hosDb}.ovst ov ON ov.vn = o.vn AND ov.an = :an
+        INNER JOIN {$hosDb}.an_stat ans ON ans.an = :an2
         WHERE o.bmi    > 0
           AND o.bw     > 0
           AND o.height > 0
@@ -79,7 +79,7 @@ try {
         LIMIT 1
     ";
 
-    $stmt_main = $conn_slave->prepare($sql_main);
+    $stmt_main = $conn->prepare($sql_main);
     $stmt_main->execute(['an' => $an, 'an2' => $an]);
     $main = $stmt_main->fetch(PDO::FETCH_ASSOC);
     $stmt_main->closeCursor();
@@ -94,7 +94,7 @@ try {
     $vstdate = $main['vstdate'];
 
     // =====================================================
-    // 4. ดึงประวัติน้ำหนักย้อนหลัง 12 เดือน (Slave)
+    // 4. ดึงประวัติน้ำหนักย้อนหลัง 12 เดือน
     //    ใช้ CASE WHEN + MAX → ดึง 6 ช่วงเวลาใน 1 query
     //    ✅ แก้ bug เดิม: SP ดึงแค่ 1 เดือน (bw_3month, bw_5month = NULL)
     // =====================================================
@@ -130,14 +130,14 @@ try {
                  AND o.vstdate <  DATE_SUB(:vd12, INTERVAL 5 MONTH)
                 THEN o.bw END) AS bw_12month
 
-        FROM opdscreen o
+        FROM {$hosDb}.opdscreen o
         WHERE o.hn      = :hn
           AND o.bw      > 0
           AND o.vstdate >= DATE_SUB(:vd13, INTERVAL 12 MONTH)
           AND o.vstdate <  :vd14
     ";
 
-    $stmt_hist = $conn_slave->prepare($sql_hist);
+    $stmt_hist = $conn->prepare($sql_hist);
     $hist_params = ['hn' => $hn];
     for ($i = 1; $i <= 14; $i++) {
         $hist_params["vd{$i}"] = $vstdate;
@@ -162,7 +162,7 @@ try {
         )
     ";
 
-    $stmt_insert = $conn_kphis->prepare($sql_insert);
+    $stmt_insert = $conn->prepare($sql_insert);
     $stmt_insert->execute([
         'an' => $main['an'],
         'hn' => $main['hn'],
@@ -180,7 +180,7 @@ try {
         'bw_12month' => $hist['bw_12month'] ?? null,
     ]);
 
-    $insertedId = $conn_kphis->lastInsertId();
+    $insertedId = $conn->lastInsertId();
 
     $elapsed = round(microtime(true) - $startTime, 2);
 
