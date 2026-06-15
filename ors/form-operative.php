@@ -186,86 +186,7 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
         </div>
         <?php endif; ?>
 
-        <!-- ---- Upload zone ---- -->
-        <div class="card mb-3">
-            <div class="card-header font-weight-bold py-2">
-                <i class="fas fa-images"></i> ภาพที่บันทึก
-            </div>
-            <div class="card-body">
-                <div id="thumb-strip">
-                    <span id="thumb-empty" class="text-muted small" style="align-self:center">
-                        ยังไม่มีภาพ — กด "เพิ่มภาพ" หรือลากไฟล์มาวาง
-                    </span>
-                </div>
-                <?php if ($canEdit): ?>
-                <div id="drop-zone" onclick="document.getElementById('file-input').click()">
-                    <i class="fas fa-camera fa-lg mr-1"></i>
-                    คลิกหรือลากไฟล์ภาพมาวางที่นี่ (เพิ่มได้ครั้งละหลายภาพ)<br>
-                    <small class="text-muted">PNG, JPG, WEBP | แต่ละภาพไม่เกิน 10 MB</small>
-                </div>
-                <input type="file" id="file-input" accept="image/*" multiple style="display:none">
-                <?php else: ?>
-                <div class="text-muted small mt-1">
-                    <i class="fas fa-eye mr-1"></i> โหมดดูอย่างเดียว (View only)
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
 
-        <!-- ---- Canvas Editor ---- -->
-        <div class="card mb-3" id="editor-card" style="display:none">
-            <div class="card-header font-weight-bold py-2 d-flex align-items-center">
-                <i class="fas fa-paint-brush mr-2"></i>
-                <?= $canEdit ? 'วาด Annotation' : 'ดูภาพ' ?> — ภาพที่ <span id="editing-num">1</span>
-                <span id="editing-name" class="text-muted small ml-2"></span>
-            </div>
-            <div class="card-body">
-                <div id="draw-toolbar" <?= !$canEdit ? 'style="display:none"' : '' ?>>
-                    <button type="button" class="tb-btn active" id="btn-pen" onclick="setTool('pen')" title="ปากกาวาดอิสระ">
-                        <i class="fas fa-pen"></i> ปากกา
-                    </button>
-                    <button type="button" class="tb-btn" id="btn-line" onclick="setTool('line')" title="เส้นตรง">
-                        <i class="fas fa-minus"></i> เส้น
-                    </button>
-                    <button type="button" class="tb-btn" id="btn-arrow" onclick="setTool('arrow')" title="ลูกศร">
-                        &#10148; ลูกศร
-                    </button>
-                    <button type="button" class="tb-btn" id="btn-rect" onclick="setTool('rect')" title="สี่เหลี่ยม">
-                        <i class="far fa-square"></i> กล่อง
-                    </button>
-                    <button type="button" class="tb-btn" id="btn-circle" onclick="setTool('circle')" title="วงรี">
-                        <i class="far fa-circle"></i> วงกลม
-                    </button>
-                    <button type="button" class="tb-btn" id="btn-text" onclick="setTool('text')" title="พิมพ์ข้อความ (ดับเบิ้ลคลิก)">
-                        <i class="fas fa-font"></i> ข้อความ
-                    </button>
-                    <div class="tb-sep"></div>
-                    <label class="tb-btn" style="cursor:pointer" title="สี">
-                        <i class="fas fa-palette"></i>
-                        <input type="color" id="colorPicker" value="#e63946" style="width:24px;height:22px;border:none;padding:0;cursor:pointer">
-                    </label>
-                    <label class="tb-btn" title="ขนาดเส้น" style="gap:6px">
-                        <i class="fas fa-sliders-h"></i>
-                        <input type="range" id="strokeWidth" min="1" max="20" value="3" style="width:65px">
-                        <span id="strokeVal">3</span>
-                    </label>
-                    <div class="tb-sep"></div>
-                    <button type="button" class="tb-btn" onclick="undoCanvas()" title="Undo">
-                        <i class="fas fa-undo"></i> Undo
-                    </button>
-                    <button type="button" class="tb-btn" onclick="clearCanvas()" title="ล้างการวาดทั้งหมด">
-                        <i class="fas fa-eraser"></i> Clear
-                    </button>
-                </div>
-                <div id="canvas-wrap">
-                    <div id="canvas-placeholder">เลือกภาพจาก thumbnail ด้านบนเพื่อเริ่มวาด</div>
-                    <canvas id="c"></canvas>
-                </div>
-                <div class="text-muted small mt-1">
-                    <i class="fas fa-info-circle"></i> เลือก tool "ข้อความ" แล้ว <b>ดับเบิ้ลคลิก</b> บนภาพเพื่อพิมพ์ข้อความ
-                </div>
-            </div>
-        </div>
 
         <div class="card mb-3">
             <div class="card-header font-weight-bold py-2">
@@ -380,8 +301,22 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
 
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="form-label">Operation</label>
-                        <textarea class="form-control" name="operation_name" rows="2" <?= !$canEdit ? 'readonly' : '' ?>><?= htmlspecialchars($rec['operation_name'] ?? '') ?></textarea>
+                        <div class="d-flex justify-content-between align-items-end mb-1">
+                            <label class="form-label mb-0">Operation</label>
+                            <?php if ($canEdit): ?>
+                            <button type="button" class="btn btn-sm btn-outline-info" onclick="openTemplateModal()">
+                                <i class="fas fa-cog"></i> ตั้งค่า Template
+                            </button>
+                            <?php endif; ?>
+                        </div>
+                        <select class="form-control" name="operation_name" id="inp_operation_name" <?= !$canEdit ? 'disabled' : '' ?> style="width:100%">
+                            <?php if (!empty($rec['operation_name'])): ?>
+                                <option value="<?= htmlspecialchars($rec['operation_name']) ?>" selected><?= htmlspecialchars($rec['operation_name']) ?></option>
+                            <?php endif; ?>
+                        </select>
+                        <?php if (!$canEdit): ?>
+                            <input type="hidden" name="operation_name" value="<?= htmlspecialchars($rec['operation_name'] ?? '') ?>">
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -405,6 +340,88 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
                 <i class="fas fa-notes-medical"></i> DESCRIPTIVE OF OPERATION
             </div>
             <div class="card-body">
+
+                <!-- ---- Upload zone ---- -->
+                <div class="card mb-3" style="border: 1px dashed #ced4da; box-shadow: none;">
+                    <div class="card-header bg-light font-weight-bold py-2">
+                        <i class="fas fa-images"></i> ภาพการผ่าตัด
+                    </div>
+                    <div class="card-body">
+                        <div id="thumb-strip">
+                            <span id="thumb-empty" class="text-muted small" style="align-self:center">
+                                ยังไม่มีภาพ — เลือกรายการผ่าตัดเพื่อดึง Template หรือเพิ่มภาพเอง
+                            </span>
+                        </div>
+                        <?php if ($canEdit): ?>
+                        <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-camera fa-lg mr-1"></i>
+                            คลิกหรือลากไฟล์ภาพมาวางที่นี่ (เพิ่มได้ครั้งละหลายภาพ)<br>
+                            <small class="text-muted">PNG, JPG, WEBP | แต่ละภาพไม่เกิน 10 MB</small>
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" multiple style="display:none">
+                        <?php else: ?>
+                        <div class="text-muted small mt-1">
+                            <i class="fas fa-eye mr-1"></i> โหมดดูอย่างเดียว (View only)
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- ---- Canvas Editor ---- -->
+                <div class="card mb-3" id="editor-card" style="display:none; border: 1px dashed #ced4da; box-shadow: none;">
+                    <div class="card-header bg-light font-weight-bold py-2 d-flex align-items-center">
+                        <i class="fas fa-paint-brush mr-2"></i>
+                        <?= $canEdit ? 'วาด Annotation' : 'ดูภาพ' ?> — ภาพที่ <span id="editing-num">1</span>
+                        <span id="editing-name" class="text-muted small ml-2"></span>
+                    </div>
+                    <div class="card-body">
+                        <div id="draw-toolbar" <?= !$canEdit ? 'style="display:none"' : '' ?>>
+                            <button type="button" class="tb-btn active" id="btn-pen" onclick="setTool('pen')" title="ปากกาวาดอิสระ">
+                                <i class="fas fa-pen"></i> ปากกา
+                            </button>
+                            <button type="button" class="tb-btn" id="btn-line" onclick="setTool('line')" title="เส้นตรง">
+                                <i class="fas fa-minus"></i> เส้น
+                            </button>
+                            <button type="button" class="tb-btn" id="btn-arrow" onclick="setTool('arrow')" title="ลูกศร">
+                                &#10148; ลูกศร
+                            </button>
+                            <button type="button" class="tb-btn" id="btn-rect" onclick="setTool('rect')" title="สี่เหลี่ยม">
+                                <i class="far fa-square"></i> กล่อง
+                            </button>
+                            <button type="button" class="tb-btn" id="btn-circle" onclick="setTool('circle')" title="วงรี">
+                                <i class="far fa-circle"></i> วงกลม
+                            </button>
+                            <button type="button" class="tb-btn" id="btn-text" onclick="setTool('text')" title="พิมพ์ข้อความ (ดับเบิ้ลคลิก)">
+                                <i class="fas fa-font"></i> ข้อความ
+                            </button>
+                            <div class="tb-sep"></div>
+                            <label class="tb-btn" style="cursor:pointer" title="สี">
+                                <i class="fas fa-palette"></i>
+                                <input type="color" id="colorPicker" value="#e63946" style="width:24px;height:22px;border:none;padding:0;cursor:pointer">
+                            </label>
+                            <label class="tb-btn" title="ขนาดเส้น" style="gap:6px">
+                                <i class="fas fa-sliders-h"></i>
+                                <input type="range" id="strokeWidth" min="1" max="20" value="3" style="width:65px">
+                                <span id="strokeVal">3</span>
+                            </label>
+                            <div class="tb-sep"></div>
+                            <button type="button" class="tb-btn" onclick="undoCanvas()" title="Undo">
+                                <i class="fas fa-undo"></i> Undo
+                            </button>
+                            <button type="button" class="tb-btn" onclick="clearCanvas()" title="ล้างการวาดทั้งหมด">
+                                <i class="fas fa-eraser"></i> Clear
+                            </button>
+                        </div>
+                        <div id="canvas-wrap">
+                            <div id="canvas-placeholder">เลือกภาพจาก thumbnail ด้านบนเพื่อเริ่มวาด</div>
+                            <canvas id="c"></canvas>
+                        </div>
+                        <div class="text-muted small mt-1">
+                            <i class="fas fa-info-circle"></i> เลือก tool "ข้อความ" แล้ว <b>ดับเบิ้ลคลิก</b> บนภาพเพื่อพิมพ์ข้อความ
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <label class="form-label">Position</label>
@@ -499,6 +516,45 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
 
     </div>
 </form>
+    </div>
+</form>
+</div>
+
+<!-- Template Modal -->
+<div class="modal fade" id="templateModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="fas fa-cog"></i> ตั้งค่า Template ภาพผ่าตัด</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="templateForm">
+                    <div class="form-group">
+                        <label>ชื่อรายการผ่าตัด</label>
+                        <input type="text" class="form-control" id="tpl_operation_name" required placeholder="ระบุชื่อการผ่าตัดเพื่อใช้คู่กับ Template นี้">
+                    </div>
+                    <div class="form-group">
+                        <label>เลือกไฟล์รูปภาพ (Template)</label>
+                        <input type="file" class="form-control-file" id="tpl_image" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> บันทึก Template</button>
+                </form>
+                <hr>
+                <h6>รายการ Template ของคุณ</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="bg-light">
+                            <tr><th>ชื่อการผ่าตัด</th><th>วันที่สร้าง</th><th width="100">จัดการ</th></tr>
+                        </thead>
+                        <tbody id="templateListTbody">
+                            <!-- Data -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -910,4 +966,168 @@ $('#operative_form').on('submit', function(e) {
         });
     });
 });
+
+window._templatesData = [];
+function loadTemplateList(cb) {
+    $.get('form-operative-template-api.php?action=list', function(res) {
+        if(res.success) {
+            window._templatesData = res.data;
+            if(cb) cb(res.data);
+        }
+    }, 'json');
+}
+
+function initSelect2Templates() {
+    loadTemplateList(function(data) {
+        var opSelect = $('#inp_operation_name');
+        var currentVal = opSelect.val();
+        opSelect.empty();
+        
+        var hasCurrent = false;
+        opSelect.append('<option value="">-- พิมพ์หรือเลือกรายการ --</option>');
+        if(data && data.length > 0) {
+            data.forEach(function(item) {
+                var selected = (item.operation_name == currentVal) ? 'selected' : '';
+                if(selected) hasCurrent = true;
+                opSelect.append('<option value="'+item.operation_name+'" '+selected+'>'+item.operation_name+'</option>');
+            });
+        }
+        
+        if(currentVal && !hasCurrent) {
+            opSelect.append('<option value="'+currentVal+'" selected>'+currentVal+'</option>');
+        }
+
+        opSelect.select2({
+            tags: true,
+            theme: 'bootstrap4',
+            placeholder: '-- พิมพ์หรือเลือกรายการ --',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+}
+
+$(function() {
+    initSelect2Templates();
+
+    // Handle change event to load template
+    $('#inp_operation_name').on('change', function() {
+        var opName = $(this).val();
+        if(!opName || !_canEdit) return;
+        
+        // Find if template exists
+        var tpl = window._templatesData.find(t => t.operation_name === opName);
+        if (!tpl) return;
+        
+        // Load template if canvas is empty
+        if (imageList.length === 0) {
+            fetchTemplateImage(tpl.id, opName);
+        } else {
+            // Check if we already have this template
+            var exists = imageList.find(img => img.name === 'Template: ' + opName);
+            if(!exists) {
+                Swal.fire({
+                    title: 'ดึง Template ภาพไหม?',
+                    text: 'ต้องการเพิ่มภาพ Template ของรายการผ่าตัดนี้เข้าไปหรือไม่?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'ตกลง',
+                    cancelButtonText: 'ไม่เป็นไร'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetchTemplateImage(tpl.id, opName);
+                    }
+                });
+            }
+        }
+    });
+});
+
+function fetchTemplateImage(id, opName) {
+    $.get('form-operative-template-api.php?action=get&id=' + id, function(res) {
+        if(res.success && res.b64) {
+            imageList.push({ b64: res.b64, svgData: '', name: 'Template: ' + opName, itemId: null });
+            renderThumbs();
+            selectImage(imageList.length - 1);
+        }
+    }, 'json');
+}
+
+function openTemplateModal() {
+    refreshTemplateTable();
+    $('#templateModal').modal('show');
+}
+
+function refreshTemplateTable() {
+    loadTemplateList(function(data) {
+        var tbody = $('#templateListTbody');
+        tbody.empty();
+        if(data.length === 0) {
+            tbody.append('<tr><td colspan="3" class="text-center text-muted">ยังไม่มีข้อมูล Template</td></tr>');
+            return;
+        }
+        data.forEach(function(item) {
+            tbody.append(`
+                <tr>
+                    <td>${item.operation_name}</td>
+                    <td>${item.create_datetime}</td>
+                    <td><button type="button" class="btn btn-sm btn-danger py-0 px-2" onclick="deleteTemplate(${item.id})"><i class="fas fa-trash"></i> ลบ</button></td>
+                </tr>
+            `);
+        });
+    });
+}
+
+$('#templateForm').on('submit', function(e) {
+    e.preventDefault();
+    var fd = new FormData();
+    fd.append('operation_name', $('#tpl_operation_name').val());
+    fd.append('template_image', $('#tpl_image')[0].files[0]);
+    
+    var btn = $(this).find('button[type="submit"]');
+    var orgHtml = btn.html();
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> บันทึก...');
+
+    $.ajax({
+        url: 'form-operative-template-api.php?action=save',
+        type: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(res) {
+            if(res.success) {
+                Swal.fire({title: 'สำเร็จ', text: 'บันทึก Template แล้ว', icon: 'success', timer: 1500, showConfirmButton: false});
+                $('#templateForm')[0].reset();
+                refreshTemplateTable();
+                initSelect2Templates();
+            } else {
+                Swal.fire('ข้อผิดพลาด', res.message, 'error');
+            }
+        },
+        complete: function() {
+            btn.prop('disabled', false).html(orgHtml);
+        }
+    });
+});
+
+function deleteTemplate(id) {
+    Swal.fire({
+        title: 'ยืนยันการลบ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: '#dc3545'
+    }).then((result) => {
+        if(result.isConfirmed) {
+            $.post('form-operative-template-api.php?action=delete', {id: id}, function(res) {
+                if(res.success) {
+                    refreshTemplateTable();
+                    initSelect2Templates();
+                }
+            }, 'json');
+        }
+    });
+}
 </script>

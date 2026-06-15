@@ -51,105 +51,16 @@ $age_y     = $pt['birthday'] ? date_diff(date_create($pt['birthday']), date_crea
 $reg_date  = thaiDate($pt['regdate'] ?? '');
 $print_dt  = thaiDate(date('Y-m-d')).' '.date('H:i');
 
-$html = '
-<style>
-  body      { font-family: garuda, sans-serif; font-size: 14px; }
-  .hdr      { width:100%; border-collapse:collapse; border-bottom:2px solid #333; margin-bottom:15px; padding-bottom:5px; }
-  .hdr td   { padding:2px; vertical-align:top; }
-  .pt-name  { font-size:16px; font-weight:bold; }
-  .title    { text-align:center; font-size:18px; font-weight:bold; margin-bottom:15px; }
-  .sec      { font-size:14px; font-weight:bold; background:#e9ecef; border:1px solid #ccc; padding:4px 8px; margin:10px 0 5px 0; }
-  .row-tb   { width:100%; border-collapse:collapse; margin-bottom:5px; }
-  .row-tb td { padding:2px 5px; vertical-align:top; }
-  .label    { font-weight:bold; color:#444; width:150px; }
-  .val      { border-bottom:1px dotted #888; }
-  .box      { border:1px solid #ccc; padding:8px; min-height:40px; white-space:pre-wrap; font-size:13px; margin-bottom:10px; }
-  .img-wrap { text-align:center; margin-bottom:15px; page-break-inside:avoid; }
-  .img-wrap img { max-width:100%; height:auto; }
-  .footer   { font-size:11px; color:#666; text-align:right; margin-top:15px; border-top:1px solid #ccc; padding-top:5px; }
-</style>
-
-<table class="hdr">
-  <tr>
-    <td width="70%">
-      <div class="pt-name">' . htmlspecialchars($pt_name) . '</div>
-      HN: <b>' . htmlspecialchars($hn) . '</b> &nbsp;&nbsp; AN: <b>' . htmlspecialchars($an) . '</b> &nbsp;&nbsp; อายุ: ' . $age_y . ' ปี<br>
-      Ward: ' . htmlspecialchars($ward_name) . ' &nbsp; วันที่ Admit: ' . $reg_date . '
-    </td>
-  </tr>
-</table>
-
-<div class="title">OPERATIVE NOTE</div>
-
-<table class="row-tb">
-  <tr>
-    <td class="label" style="width:120px">Date of operation:</td><td class="val">' . thaiDate($rec['operation_date']) . '</td>
-    <td class="label" style="width:100px">Time started:</td><td class="val">' . substr($rec['time_started']??'',0,5) . '</td>
-    <td class="label" style="width:100px">Time ended:</td><td class="val">' . substr($rec['time_ended']??'',0,5) . '</td>
-  </tr>
-</table>
-<table class="row-tb">
-  <tr><td class="label">Surgeon:</td><td class="val">' . htmlspecialchars($rec['surgeon']??'') . '</td></tr>
-  <tr><td class="label">First assistant:</td><td class="val">' . htmlspecialchars($rec['first_assistant']??'') . '</td></tr>
-  <tr><td class="label">Second assistant:</td><td class="val">' . htmlspecialchars($rec['second_assistant']??'') . '</td></tr>
-  <tr><td class="label">Surgical nurse:</td><td class="val">' . htmlspecialchars($rec['surgical_nurse']??'') . '</td></tr>
-</table>
-
-<div class="sec">Diagnosis & Operation</div>
-<table class="row-tb">
-  <tr><td class="label">Clinical diagnosis:</td><td class="val">' . htmlspecialchars($rec['clinical_diagnosis']??'') . '</td></tr>
-  <tr><td class="label">Post op diagnosis:</td><td class="val">' . htmlspecialchars($rec['post_op_diagnosis']??'') . '</td></tr>
-  <tr><td class="label">Operation:</td><td class="val">' . htmlspecialchars($rec['operation_name']??'') . '</td></tr>
-</table>
-<table class="row-tb">
-  <tr>
-    <td class="label">Anesthetic techniques:</td><td class="val">' . htmlspecialchars($rec['anesthetic_technique']??'') . '</td>
-    <td class="label" style="width:120px">Anesthesiologist:</td><td class="val">' . htmlspecialchars($rec['anesthesiologist']??'') . '</td>
-  </tr>
-</table>
-
-<div class="sec">Descriptive of Operation</div>
-<table class="row-tb">
-  <tr><td class="label">Position:</td><td class="val">' . htmlspecialchars($rec['op_position']??'') . '</td></tr>
-  <tr><td class="label">Incision:</td><td class="val">' . htmlspecialchars($rec['incision']??'') . '</td></tr>
-</table>
-<div style="font-weight:bold; margin-top:5px;">Finding:</div>
-<div class="box">' . htmlspecialchars($rec['finding']??'') . '</div>
-<div style="font-weight:bold; margin-top:5px;">Procedure:</div>
-<div class="box">' . htmlspecialchars($rec['procedure_detail']??'') . '</div>
-
-<table class="row-tb" style="margin-top:10px;">
-  <tr>
-    <td class="label">Estimate blood loss:</td><td class="val">' . htmlspecialchars($rec['estimate_blood_loss']??'') . ' ml</td>
-    <td class="label" style="width:100px">Urine output:</td><td class="val">' . htmlspecialchars($rec['urine_output']??'') . ' ml</td>
-  </tr>
-</table>
-<table class="row-tb">
-  <tr>
-    <td class="label">ส่ง Patho:</td><td class="val">' . htmlspecialchars($rec['patho_status']??'') . '</td>
-    <td class="label" style="width:100px">Wound type:</td><td class="val">' . htmlspecialchars($rec['wound_type']??'') . '</td>
-  </tr>
-</table>
-
-<div style="text-align:right; margin-top:30px; margin-right:30px;">
-  (ลงชื่อ)........................................................................<br>
-  (' . htmlspecialchars($rec['surgeon']??'') . ')
-</div>
-';
-
+// Image generation block first
+$combined_b64 = '';
 $combined_bin = $rec['combined_data'] ?? null;
 if (is_resource($combined_bin)) $combined_bin = stream_get_contents($combined_bin);
 
 if ($combined_bin && strlen($combined_bin) > 0) {
     $combined_b64 = 'data:image/png;base64,' . base64_encode($combined_bin);
-    $html .= '<div style="page-break-before:always;"></div>';
-    $html .= '<div class="title">ภาพประกอบการผ่าตัด</div>';
-    $html .= '
-    <div class="img-wrap">
-      <img src="' . $combined_b64 . '" style="max-width:100%; height:auto;" />
-    </div>';
 } else {
-    $MAX_W = 1200; $GAP = 8; $COLS = 2;
+    // Generate combined image if not available
+    $MAX_W = 500; $GAP = 8; $COLS = 1;
     $gd_images = [];
     foreach ($items as $item) {
         $bin = $item['annotated_data'];
@@ -165,8 +76,6 @@ if ($combined_bin && strlen($combined_bin) > 0) {
     $useGD = function_exists('imagecreatefromstring') && !empty($gd_images);
     if ($useGD) {
         $count = count($gd_images);
-        if ($count === 1) $COLS = 1;
-
         $col_w = (int)(($MAX_W - ($COLS - 1) * $GAP) / $COLS);
         $cells = [];
 
@@ -194,37 +103,172 @@ if ($combined_bin && strlen($combined_bin) > 0) {
         }
         $canvas_w = $COLS === 1 ? ($cells[0][0]['w'] ?? $MAX_W) : ($col_w * $COLS + $GAP * ($COLS - 1));
 
-        $combined = imagecreatetruecolor(max(1, $canvas_w), max(1, $total_h));
-        $white = imagecolorallocate($combined, 255, 255, 255);
-        imagefill($combined, 0, 0, $white);
+        if ($total_h > 0 && $canvas_w > 0) {
+            $combined = imagecreatetruecolor(max(1, $canvas_w), max(1, $total_h));
+            $white = imagecolorallocate($combined, 255, 255, 255);
+            imagefill($combined, 0, 0, $white);
 
-        $y = 0;
-        foreach ($cells as $r => $cols_arr) {
-            foreach ($cols_arr as $c => $cell) {
-                $x = $c * ($col_w + $GAP);
-                imagecopy($combined, $cell['img'], $x, $y, 0, 0, $cell['w'], $cell['h']);
-                imagedestroy($cell['img']);
+            $y = 0;
+            foreach ($cells as $r => $cols_arr) {
+                foreach ($cols_arr as $c => $cell) {
+                    $x = $c * ($col_w + $GAP);
+                    imagecopy($combined, $cell['img'], $x, $y, 0, 0, $cell['w'], $cell['h']);
+                    imagedestroy($cell['img']);
+                }
+                $y += $row_heights[$r] + $GAP;
             }
-            $y += $row_heights[$r] + $GAP;
-        }
 
-        ob_start(); imagepng($combined); $combined_png = ob_get_clean(); imagedestroy($combined);
-        $combined_b64 = 'data:image/png;base64,' . base64_encode($combined_png);
-        $html .= '<div style="page-break-before:always;"></div><div class="title">ภาพประกอบการผ่าตัด</div>';
-        $html .= '<div class="img-wrap"><img src="' . $combined_b64 . '" style="max-width:100%; height:auto;" /></div>';
-    } else {
-        $first = true;
-        foreach ($gd_images as $idx => $imgData) {
-            if ($first) { $html .= '<div style="page-break-before:always;"></div><div class="title">ภาพประกอบการผ่าตัด</div>'; $first = false; }
-            $final_b64 = 'data:image/png;base64,' . base64_encode($imgData['bin']);
-            $html .= '<div class="img-wrap"><img src="' . $final_b64 . '" style="max-width:100%; height:auto;" /></div>';
+            ob_start(); imagepng($combined); $combined_png = ob_get_clean(); imagedestroy($combined);
+            $combined_b64 = 'data:image/png;base64,' . base64_encode($combined_png);
         }
+    } elseif (!empty($gd_images)) {
+        // Fallback to first image
+        $combined_b64 = 'data:image/png;base64,' . base64_encode($gd_images[0]['bin']);
     }
 }
 
-$html .= '<div class="footer">พิมพ์โดย: ' . htmlspecialchars($loginname) . ' | วันเวลาพิมพ์: ' . $print_dt . '</div>';
+$img_html = '';
+if ($combined_b64) {
+    // Explicit width inside fixed table layout helps mPDF scaling
+    $img_html = '<div style="width: 100%; overflow: hidden;"><img src="' . $combined_b64 . '" style="width:100%; max-height:280px;" /></div>';
+}
+
+$chk_patho_y = (strpos(strtolower($rec['patho_status']??''), 'ส่ง')!==false && strpos(strtolower($rec['patho_status']??''), 'ไม่')===false) ? '☑' : '☐';
+$chk_patho_n = (strpos(strtolower($rec['patho_status']??''), 'ไม่')!==false) ? '☑' : '☐';
+
+$chk_w_clean = ($rec['wound_type']=='Clean wound') ? '☑' : '☐';
+$chk_w_contam = ($rec['wound_type']=='Contaminate wound') ? '☑' : '☐';
+$chk_w_clean_contam = ($rec['wound_type']=='Clean contaminate wound') ? '☑' : '☐';
+$chk_w_dirty = ($rec['wound_type']=='Dirty wound') ? '☑' : '☐';
+
+$html = '
+<style>
+  body { font-family: garuda, sans-serif; font-size: 13px; }
+  .doc-header { width: 100%; margin-bottom: 2px; border-collapse: collapse; }
+  .doc-title { text-align: center; font-size: 16px; font-weight: bold; }
+  .doc-form-no { text-align: right; font-size: 13px; font-weight: bold; }
+  .main-box { border: 1.5px solid #000; padding: 6px; width: 100%; box-sizing: border-box; }
+  .row-tb { width: 100%; border-collapse: collapse; margin-bottom: 3px; }
+  .row-tb td { padding: 1px 2px; vertical-align: top; }
+  .lbl { font-size: 13px; white-space: nowrap; }
+  .val { border-bottom: 1px dotted #000; font-weight: bold; font-size: 13px; }
+  
+  .desc-title { text-align: center; font-size: 13px; font-weight: bold; text-decoration: underline; margin: 8px 0 5px 0; }
+  
+  .desc-layout { width: 100%; border-collapse: collapse; margin-bottom: 5px; table-layout: fixed; }
+  .desc-left { width: 65%; vertical-align: top; padding-right: 5px; font-size: 13px; overflow-wrap: break-word; }
+  .desc-right { width: 35%; vertical-align: top; text-align: center; overflow: hidden; }
+  
+  .desc-lbl { margin-top: 4px; }
+  
+  .chk-tb { width: 100%; margin: 8px 0; font-size: 13px; border-collapse: collapse; }
+  .chk-tb td { vertical-align: top; }
+  .chk-box { font-family: "DejaVu Sans", sans-serif; font-size: 16px; margin-right: 3px; }
+  
+  .footer-tb { width: 100%; border-collapse: collapse; border: 1.5px solid #000; margin-top: 10px; }
+  .footer-tb td { border: 1.5px solid #000; padding: 4px; vertical-align: top; font-size: 13px; }
+  .doc-footer { text-align: right; font-size: 11px; margin-top: 2px; font-weight: bold; }
+</style>
+
+<table class="doc-header">
+  <tr>
+    <td width="20%"></td>
+    <td width="60%" class="doc-title">แบบบันทึกการผ่าตัด</td>
+    <td width="20%" class="doc-form-no">แบบ ร.บ.02 ต.05</td>
+  </tr>
+</table>
+
+<div class="main-box">
+  <table class="row-tb">
+    <tr>
+      <td class="lbl" style="width:120px">Date of operation</td><td class="val" style="width:30%">' . thaiDate($rec['operation_date']) . '</td>
+      <td class="lbl" style="width:80px">Time started</td><td class="val" style="width:20%">' . substr($rec['time_started']??'',0,5) . '</td>
+      <td class="lbl" style="width:60px">Time end</td><td class="val">' . substr($rec['time_ended']??'',0,5) . '</td>
+    </tr>
+  </table>
+  <table class="row-tb">
+    <tr>
+      <td class="lbl" style="width:60px">Surgeon</td><td class="val" style="width:40%">' . htmlspecialchars($rec['surgeon']??'') . '</td>
+      <td class="lbl" style="width:90px">First assistant</td><td class="val">' . htmlspecialchars($rec['first_assistant']??'') . '</td>
+    </tr>
+    <tr>
+      <td class="lbl" style="width:110px">Second assistant</td><td class="val" style="width:35%">' . htmlspecialchars($rec['second_assistant']??'') . '</td>
+      <td class="lbl" style="width:90px">Surgical nurse</td><td class="val">' . htmlspecialchars($rec['surgical_nurse']??'') . '</td>
+    </tr>
+  </table>
+  <table class="row-tb">
+    <tr><td class="lbl" style="width:110px">Clinical diagnosis</td><td class="val">' . htmlspecialchars($rec['clinical_diagnosis']??'') . '</td></tr>
+    <tr><td class="lbl" style="width:160px">Post operation diagnosis</td><td class="val">' . htmlspecialchars($rec['post_op_diagnosis']??'') . '</td></tr>
+    <tr><td class="lbl" style="width:70px">Operation</td><td class="val">' . htmlspecialchars($rec['operation_name']??'') . '</td></tr>
+  </table>
+  <table class="row-tb">
+    <tr>
+      <td class="lbl" style="width:150px">Anesthetic techniques</td><td class="val" style="width:30%">' . htmlspecialchars($rec['anesthetic_technique']??'') . '</td>
+      <td class="lbl" style="width:110px">Anesthesiologist</td><td class="val">' . htmlspecialchars($rec['anesthesiologist']??'') . '</td>
+    </tr>
+  </table>
+
+  <div class="desc-title">DESCRIPTIVE OF OPERATION</div>
+  
+  <table class="desc-layout">
+    <tr>
+      <td class="desc-left">
+        <div><span class="desc-lbl">Position:</span> <b>' . htmlspecialchars($rec['op_position']??'') . '</b></div>
+        <div style="margin-top:10px"><span class="desc-lbl">Incision:</span> <b>' . htmlspecialchars($rec['incision']??'') . '</b></div>
+        <div style="margin-top:10px"><span class="desc-lbl">Finding:</span> <b>' . nl2br(htmlspecialchars($rec['finding']??'')) . '</b></div>
+        <div style="margin-top:10px"><span class="desc-lbl">Procedure:</span><br><br><b>' . nl2br(htmlspecialchars($rec['procedure_detail']??'')) . '</b></div>
+      </td>
+      <td class="desc-right">
+        ' . $img_html . '
+      </td>
+    </tr>
+  </table>
+
+  <table class="row-tb" style="margin-top:20px; width: 70%;">
+    <tr>
+      <td class="lbl" style="width:130px">Estimate blood loss</td><td class="val">' . htmlspecialchars($rec['estimate_blood_loss']??'') . '</td><td class="lbl" style="width:30px">ml</td>
+      <td class="lbl" style="width:80px">Urine output</td><td class="val">' . htmlspecialchars($rec['urine_output']??'') . '</td><td class="lbl" style="width:30px">ml</td>
+    </tr>
+  </table>
+
+  <table class="chk-tb">
+    <tr>
+      <td width="20%">
+        <span class="chk-box">' . $chk_patho_y . '</span> ส่ง Patho
+      </td>
+      <td width="25%">
+        <span class="chk-box">' . $chk_patho_n . '</span> ไม่ส่ง Patho
+      </td>
+      <td width="25%">
+        <div style="margin-bottom:8px"><span class="chk-box">' . $chk_w_clean . '</span> Clean wound</div>
+        <div><span class="chk-box">' . $chk_w_contam . '</span> Contaminate wound</div>
+      </td>
+      <td width="30%">
+        <div style="margin-bottom:8px"><span class="chk-box">' . $chk_w_clean_contam . '</span> Clean contaminate wound</div>
+        <div><span class="chk-box">' . $chk_w_dirty . '</span> Dirty wound</div>
+      </td>
+    </tr>
+  </table>
+
+  <table class="footer-tb">
+    <tr>
+      <td width="40%">Name <br><br><b>' . htmlspecialchars($pt_name) . '</b></td>
+      <td width="20%">Age <br><br><b>' . $age_y . ' ปี</b></td>
+      <td width="40%">Hospital number <br><br><b>' . htmlspecialchars($hn) . '</b></td>
+    </tr>
+    <tr>
+      <td>Department <br><br><b>ศัลยกรรม</b></td>
+      <td>Ward <br><br><b>' . htmlspecialchars($ward_name) . '</b></td>
+      <td>Signature <br><br><b>' . htmlspecialchars($rec['surgeon']??'') . '</b></td>
+    </tr>
+  </table>
+
+</div>
+<div class="doc-footer">FM-OPR-01 แก้ไขครั้งที่ 01 วันที่ 7 สิงหาคม 2548</div>
+';
 
 $mpdf = new \Mpdf\Mpdf(['mode'=>'utf-8','format'=>'A4']);
+$mpdf->shrink_tables_to_fit = 0;
 $mpdf->AddPageByArray(['margin-left'=>15,'margin-right'=>15,'margin-top'=>15,'margin-bottom'=>15]);
 $mpdf->WriteHTML($html);
 $mpdf->Output('OPERATIVE_NOTE_' . $an . '_' . $id . '_' . date('Ymd') . '.pdf', 'I');
