@@ -112,6 +112,7 @@ try {
         
         $watermarkedData = $mpdf->Output('', 'S');
     } catch (\Exception $e) {
+        @file_put_contents(__DIR__ . '/debug_log.txt', date('Y-m-d H:i:s') . " - EXCEPTION 1: " . $e->getMessage() . "\n", FILE_APPEND);
         // Fallback: If PDF uses unsupported compression (PDF 1.5+), try using qpdf to decompress
         $tmp_in = sys_get_temp_dir() . '/' . uniqid('pdf_in_') . '.pdf';
         $tmp_out = sys_get_temp_dir() . '/' . uniqid('pdf_out_') . '.pdf';
@@ -120,7 +121,7 @@ try {
         exec("qpdf --stream-data=uncompress --object-streams=disable " . escapeshellarg($tmp_in) . " " . escapeshellarg($tmp_out) . " 2>&1", $output, $return_var);
         
         // --- เพิ่ม Log ชั่วคราวเพื่อหาสาเหตุ ---
-        @file_put_contents(sys_get_temp_dir() . '/qpdf_debug.txt', date('Y-m-d H:i:s') . "\nReturn Var: $return_var\nOutput: " . print_r($output, true) . "\n");
+        @file_put_contents(__DIR__ . '/debug_log.txt', date('Y-m-d H:i:s') . "\nReturn Var: $return_var\nOutput: " . print_r($output, true) . "\n", FILE_APPEND);
         
         if ($return_var === 0 && file_exists($tmp_out)) {
             $uncompressed_data = file_get_contents($tmp_out);
@@ -138,9 +139,11 @@ try {
                 $mpdf2->SetProtection(['print']);
                 $watermarkedData = $mpdf2->Output('', 'S');
             } catch (\Exception $e2) {
+                @file_put_contents(__DIR__ . '/debug_log.txt', date('Y-m-d H:i:s') . " - EXCEPTION 2: " . $e2->getMessage() . "\n", FILE_APPEND);
                 $watermarkedData = $file_data; // Ultimate fallback
             }
         } else {
+            @file_put_contents(__DIR__ . '/debug_log.txt', date('Y-m-d H:i:s') . " - QPDF FAILED: return_var=$return_var, tmp_out_exists=" . (file_exists($tmp_out)?'1':'0') . "\n", FILE_APPEND);
             $watermarkedData = $file_data; // qpdf failed, ultimate fallback
         }
         
