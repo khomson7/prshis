@@ -1,4 +1,7 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 require_once '../include/Session.php';
 require_once '../include/DbUtils.php';
 
@@ -110,6 +113,7 @@ try {
         // Protect PDF: only print allowed
         $mpdf->SetProtection(['print']);
         
+        error_log("PRS-HIS-DEBUG: MPDF 1 SUCCESS");
         $watermarkedData = $mpdf->Output('', 'S');
     } catch (\Exception $e) {
         error_log("PRS-HIS-DEBUG EXCEPTION 1: " . $e->getMessage());
@@ -137,6 +141,7 @@ try {
                 $mpdf2->watermark_font = 'Garuda';
                 $mpdf2->showWatermarkText = true;
                 $mpdf2->SetProtection(['print']);
+                error_log("PRS-HIS-DEBUG: MPDF 2 SUCCESS");
                 $watermarkedData = $mpdf2->Output('', 'S');
             } catch (\Exception $e2) {
                 error_log("PRS-HIS-DEBUG EXCEPTION 2: " . $e2->getMessage());
