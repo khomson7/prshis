@@ -176,22 +176,12 @@ foreach ($drugData as $groupKey => $info) {
 // =====================================================
 // 4. Pagination - แบ่งหน้าตามจำนวนวัน
 // =====================================================
-$daysPerPage = 4; // จำนวนวันต่อหน้า (ปรับได้)
+// =====================================================
+// 4. Pagination - แบ่งหน้าตามจำนวนวัน เพื่อแสดงหลายๆ แผ่นใน PDF เดียว
+// =====================================================
+$daysPerPage = 3; // จำนวนวันต่อหน้า (ปรับลดลงเพื่อให้ตัวอักษรใหญ่ขึ้น)
 $totalDates = count($allDates);
 $totalPages = max(1, ceil($totalDates / $daysPerPage));
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-if ($page < 1)
-    $page = 1;
-if ($page > $totalPages)
-    $page = $totalPages;
-
-$offset = ($page - 1) * $daysPerPage;
-$pageDates = array_slice($allDates, $offset, $daysPerPage);
-$colCount = count($pageDates);
-
-// =====================================================
-// 5. สร้าง HTML
-// =====================================================
 
 // --- ข้อมูลผู้ป่วย (ER) ดึงจาก ovst เชื่อม vn → an ---
 $patientSql = "SELECT p.pname, p.fname, p.lname, o.vn, o.an, o.hn, o.vstdate, o.vsttime
@@ -221,14 +211,14 @@ $html = '
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 14px;
+        font-size: 16px;
     }
     th, td {
         border: 1px solid #000;
-        padding: 5px 7px;
+        padding: 6px 8px;
         text-align: center;
         vertical-align: middle;
-        font-size: 14px;
+        font-size: 16px;
     }
     th {
         background-color: #f0f0f0;
@@ -239,124 +229,110 @@ $html = '
         word-wrap: break-word;
     }
     .header-info {
-        font-size: 12px;
+        font-size: 14px;
         margin-bottom: 5px;
     }
 </style>';
 
-$html .= '<h2 style="text-align:center; font-size:14pt; margin-bottom:5px;">ใบแจ้งการให้ยา (ER) โรงพยาบาลปราสาท</h2>';
-
-// ข้อมูลผู้ป่วย
-$html .= '<div class="header-info">';
-$html .= 'ชื่อผู้ป่วย: <b>' . htmlspecialchars($patientName) . '</b>';
-$html .= ' &nbsp;&nbsp; HN: <b>' . htmlspecialchars($hn) . '</b>';
-$html .= ' &nbsp;&nbsp; VN: <b>' . htmlspecialchars($vn) . '</b>';
-if (!empty($an)) {
-    $html .= ' &nbsp;&nbsp; AN: <b>' . htmlspecialchars($an) . '</b>';
-}
-$html .= ' &nbsp;&nbsp; วันที่ Visit: <b>' . htmlspecialchars($vstDate) . '</b>';
-$html .= '</div>';
-
 // =====================================================
-// 6. สร้างตาราง
+// Loop สร้างตารางทีละหน้า แล้วนำมาต่อกัน
 // =====================================================
-$html .= '<table border="1" cellpadding="3" cellspacing="0">';
+for ($page = 1; $page <= $totalPages; $page++) {
+    $offset = ($page - 1) * $daysPerPage;
+    $pageDates = array_slice($allDates, $offset, $daysPerPage);
+    
+    if ($page > 1) {
+        $html .= '<pagebreak />';
+    }
 
-// --- Header Row 1: ชื่อคอลัมน์ + วันที่ ---
-$html .= '<thead>';
-$html .= '<tr>';
-$html .= '<th rowspan="2" style="width:5%;">ลำดับ</th>';
-$html .= '<th rowspan="2" style="width:15%;">ยา</th>';
-foreach ($pageDates as $date) {
-    $dateFormatted = date('d/m/', strtotime($date)) . (date('Y', strtotime($date)) + 543);
-    $html .= '<th colspan="1">' . $dateFormatted . '</th>';
-}
-$html .= '</tr>';
+    $html .= '<h2 style="text-align:center; font-size:16pt; margin-bottom:5px;">ใบแจ้งการให้ยา (ER) โรงพยาบาลปราสาท</h2>';
 
-// --- Header Row 2: (ใต้วันที่ อาจเขียนว่า เวลา/ผู้ให้ยา) ---
-$html .= '<tr>';
-foreach ($pageDates as $date) {
-    $html .= '<th style="font-size:12px;">เวลา / ผู้บริหารยา</th>';
-}
-$html .= '</tr>';
-$html .= '</thead>';
+    // ข้อมูลผู้ป่วย
+    $html .= '<div class="header-info">';
+    $html .= 'ชื่อผู้ป่วย: <b>' . htmlspecialchars($patientName) . '</b>';
+    $html .= ' &nbsp;&nbsp; HN: <b>' . htmlspecialchars($hn) . '</b>';
+    $html .= ' &nbsp;&nbsp; VN: <b>' . htmlspecialchars($vn) . '</b>';
+    if (!empty($an)) {
+        $html .= ' &nbsp;&nbsp; AN: <b>' . htmlspecialchars($an) . '</b>';
+    }
+    $html .= ' &nbsp;&nbsp; วันที่ Visit: <b>' . htmlspecialchars($vstDate) . '</b>';
+    $html .= ' &nbsp;&nbsp; แผ่นที่: <b>' . $page . '/' . $totalPages . '</b>';
+    $html .= '</div>';
 
-// --- Body ---
-$html .= '<tbody>';
-$seq = 0;
+    $html .= '<table border="1" cellpadding="3" cellspacing="0">';
 
-foreach ($drugData as $groupKey => $info) {
-    // ตรวจสอบว่ายาตัวนี้มีเวลาบริหารยาในหน้าปัจจุบันหรือไม่
-    $hasDataInPage = false;
+    // --- Header Row 1: ชื่อคอลัมน์ + วันที่ ---
+    $html .= '<thead>';
+    $html .= '<tr>';
+    $html .= '<th rowspan="2" style="width:5%;">ลำดับ</th>';
+    $html .= '<th rowspan="2" style="width:15%;">ยา</th>';
     foreach ($pageDates as $date) {
-        if (isset($info['times'][$date]) && count($info['times'][$date]) > 0) {
-            $hasDataInPage = true;
-            break;
-        }
+        $dateFormatted = date('d/m/', strtotime($date)) . (date('Y', strtotime($date)) + 543);
+        $html .= '<th colspan="1">' . $dateFormatted . '</th>';
     }
-    if (!$hasDataInPage) {
-        continue; // ข้ามยาที่ไม่มีข้อมูลในหน้านี้
-    }
+    $html .= '</tr>';
 
-    $seq++;
-
-    // =====================================================
-    // คำนวณจำนวนแถวสูงสุดของยาตัวนี้ (max entries ในทุกวันของหน้านี้)
-    // =====================================================
-    $maxRowsForDrug = 1; // อย่างน้อย 1 แถว
+    // --- Header Row 2: (ใต้วันที่ อาจเขียนว่า เวลา/ผู้ให้ยา) ---
+    $html .= '<tr>';
     foreach ($pageDates as $date) {
-        $count = isset($info['times'][$date]) ? count($info['times'][$date]) : 0;
-        if ($count > $maxRowsForDrug) {
-            $maxRowsForDrug = $count;
-        }
+        $html .= '<th style="font-size:14px;">เวลา / ผู้บริหารยา</th>';
     }
+    $html .= '</tr>';
+    $html .= '</thead>';
 
-    // =====================================================
-    // สร้างแถวตาม maxRowsForDrug
-    // =====================================================
-    for ($rowIdx = 0; $rowIdx < $maxRowsForDrug; $rowIdx++) {
-        $html .= '<tr>';
+    // --- Body ---
+    $html .= '<tbody>';
+    $seq = 0;
 
-        // คอลัมน์ ลำดับ + ชื่อยา (rowspan ในแถวแรก)
-        if ($rowIdx === 0) {
-            $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
-            // sticker_short_name อยู่บน, order_item_detail อยู่ล่าง
-            if (!empty($info['name'])) {
-                $drugDetailSub = '<br><span style="font-size:12px; font-weight:normal; color:#333;">' . htmlspecialchars($info['detail']) . '</span>';
-                $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['name']) . $drugDetailSub . '</td>';
-            } else {
-                $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . '</td>';
+    foreach ($drugData as $groupKey => $info) {
+        // ตรวจสอบว่ายาตัวนี้มีเวลาบริหารยาในหน้าปัจจุบันหรือไม่
+        $hasDataInPage = false;
+        foreach ($pageDates as $date) {
+            if (isset($info['times'][$date]) && count($info['times'][$date]) > 0) {
+                $hasDataInPage = true;
+                break;
+            }
+        }
+        if (!$hasDataInPage) {
+            continue; // ข้ามยาที่ไม่มีข้อมูลในหน้านี้
+        }
+
+        $seq++;
+
+        // คำนวณจำนวนแถวสูงสุดของยาตัวนี้ในหน้านี้
+        $maxRowsForDrug = 1;
+        foreach ($pageDates as $date) {
+            $count = isset($info['times'][$date]) ? count($info['times'][$date]) : 0;
+            if ($count > $maxRowsForDrug) {
+                $maxRowsForDrug = $count;
             }
         }
 
-        // แต่ละวัน
-        foreach ($pageDates as $date) {
-            $entries = isset($info['times'][$date]) ? $info['times'][$date] : [];
-            $dateCount = count($entries);
+        // สร้างแถวตาม maxRowsForDrug
+        for ($rowIdx = 0; $rowIdx < $maxRowsForDrug; $rowIdx++) {
+            $html .= '<tr>';
 
-            if ($dateCount === 0) {
-                // วันนี้ไม่มีข้อมูลเลย → merge ทั้งหมดในแถวแรก
-                if ($rowIdx === 0) {
-                    $html .= '<td rowspan="' . $maxRowsForDrug . '"></td>';
+            // คอลัมน์ ลำดับ + ชื่อยา
+            if ($rowIdx === 0) {
+                $html .= '<td rowspan="' . $maxRowsForDrug . '" style="vertical-align:middle;">' . $seq . '</td>';
+                if (!empty($info['name'])) {
+                    $drugDetailSub = '<br><span style="font-size:14px; font-weight:normal; color:#333;">' . htmlspecialchars($info['detail']) . '</span>';
+                    $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['name']) . $drugDetailSub . '</td>';
+                } else {
+                    $html .= '<td rowspan="' . $maxRowsForDrug . '" class="drug-name" style="vertical-align:middle;">' . htmlspecialchars($info['detail']) . '</td>';
                 }
-                // แถวอื่นไม่ต้องเขียน td (ถูก merge แล้ว)
-            } elseif ($dateCount === $maxRowsForDrug) {
-                // จำนวนเท่ากับ maxRows → แสดง 1 entry ต่อ 1 แถวพอดี
-                $entry       = $entries[$rowIdx];
-                $displayText = $entry['time'];
-                $names       = [];
-                if (!empty($entry['dname1']))
-                    $names[] = $entry['dname1'];
-                if (!empty($entry['dname2']))
-                    $names[] = $entry['dname2'];
-                if (!empty($names)) {
-                    $displayText .= ' ' . implode(',', $names);
-                }
-                $html .= '<td style="font-size:14px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
-            } else {
-                // dateCount < maxRowsForDrug → แสดง entries แล้ว merge แถวที่เหลือ
-                if ($rowIdx < $dateCount) {
-                    // แถวที่มีข้อมูล
+            }
+
+            // แต่ละวัน
+            foreach ($pageDates as $date) {
+                $entries = isset($info['times'][$date]) ? $info['times'][$date] : [];
+                $dateCount = count($entries);
+
+                if ($dateCount === 0) {
+                    if ($rowIdx === 0) {
+                        $html .= '<td rowspan="' . $maxRowsForDrug . '"></td>';
+                    }
+                } elseif ($dateCount === $maxRowsForDrug) {
                     $entry       = $entries[$rowIdx];
                     $displayText = $entry['time'];
                     $names       = [];
@@ -367,43 +343,42 @@ foreach ($drugData as $groupKey => $info) {
                     if (!empty($names)) {
                         $displayText .= ' ' . implode(',', $names);
                     }
+                    $html .= '<td style="font-size:15px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                } else {
+                    if ($rowIdx < $dateCount) {
+                        $entry       = $entries[$rowIdx];
+                        $displayText = $entry['time'];
+                        $names       = [];
+                        if (!empty($entry['dname1']))
+                            $names[] = $entry['dname1'];
+                        if (!empty($entry['dname2']))
+                            $names[] = $entry['dname2'];
+                        if (!empty($names)) {
+                            $displayText .= ' ' . implode(',', $names);
+                        }
 
-                    // ถ้าเป็น entry สุดท้ายของวันนี้ → merge แถวที่เหลือ
-                    if ($rowIdx === $dateCount - 1) {
-                        $remainingRows = $maxRowsForDrug - $dateCount;
-                        $html .= '<td rowspan="' . ($remainingRows + 1) . '" style="font-size:14px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
-                    } else {
-                        $html .= '<td style="font-size:14px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                        if ($rowIdx === $dateCount - 1) {
+                            $remainingRows = $maxRowsForDrug - $dateCount;
+                            $html .= '<td rowspan="' . ($remainingRows + 1) . '" style="font-size:15px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                        } else {
+                            $html .= '<td style="font-size:15px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
+                        }
                     }
                 }
-                // แถวที่ถูก merge แล้วไม่ต้องเขียน td
             }
+
+            $html .= '</tr>';
         }
-
-        $html .= '</tr>';
     }
-}
 
-$html .= '</tbody></table>';
-
-// =====================================================
-// 7. Pagination
-// =====================================================
-$html .= '<div style="text-align: center; margin-top: 10px; font-size:10px;">';
-if ($page > 1) {
-    $html .= '<a href="er-med-action-pdf.php?an=' . $an . '&page=' . ($page - 1) . '">หน้าก่อน</a> | ';
+    $html .= '</tbody></table>';
 }
-$html .= 'หน้า ' . $page . ' จาก ' . $totalPages;
-if ($page < $totalPages) {
-    $html .= ' | <a href="er-med-action-pdf.php?an=' . $an . '&page=' . ($page + 1) . '">หน้าถัดไป</a>';
-}
-$html .= '</div>';
 
 // =====================================================
 // 8. Output PDF
 // =====================================================
 $mpdf->setAutoTopMargin = 'stretch';
 $mpdf->setAutoBottomMargin = 'stretch';
-$mpdf->setFooter('HN: ' . htmlspecialchars($hn) . ' AN: ' . htmlspecialchars($an) . ' VN: ' . htmlspecialchars($vn) . ' หน้า ' . $page);
+$mpdf->setFooter('HN: ' . htmlspecialchars($hn) . ' AN: ' . htmlspecialchars($an) . ' VN: ' . htmlspecialchars($vn) . ' หน้า {PAGENO}/{nbpg}');
 $mpdf->WriteHTML($html);
-$mpdf->Output('ER_Drug_Admin_Report_AN_' . $an . '_Page_' . $page . '.pdf', 'I');
+$mpdf->Output('ER_Drug_Admin_Report_AN_' . $an . '.pdf', 'I');

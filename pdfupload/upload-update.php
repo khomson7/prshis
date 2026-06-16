@@ -51,9 +51,11 @@ try {
         $file_ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $mime_type = mime_content_type($file['tmp_name']);
 
-        if ($file_ext !== 'pdf' || $mime_type !== 'application/pdf') {
-            echo json_encode(['status' => 'error', 'message' => 'รองรับเฉพาะไฟล์ PDF เท่านั้น']);
-            exit;
+        if ($file_ext !== 'pdf' || !in_array($mime_type, ['application/pdf', 'application/x-pdf', 'application/acrobat', 'applications/vnd.pdf', 'text/pdf', 'text/x-pdf'])) {
+            if ($file_ext !== 'pdf' || (strpos($mime_type, 'pdf') === false && $mime_type !== 'application/octet-stream')) {
+                echo json_encode(['status' => 'error', 'message' => 'ผิดพลาด รองรับเฉพาะไฟล์ PDF เท่านั้น']);
+                exit;
+            }
         }
 
         if ($file['size'] > 20 * 1024 * 1024) {

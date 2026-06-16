@@ -154,11 +154,7 @@ Session::insertSystemAccessLog(json_encode([
             <div class="ml-2 text-nowrap">
                 <a href="view.php?an=<?= urlencode($an) ?>&id=<?= $f['id'] ?>" target="_blank"
                    class="btn btn-sm btn-info btn-action">
-                    <i class="fas fa-eye"></i> ดู
-                </a>
-                <a href="view.php?an=<?= urlencode($an) ?>&id=<?= $f['id'] ?>&download=1" 
-                   class="btn btn-sm btn-secondary btn-action">
-                    <i class="fas fa-download"></i>
+                    <i class="fas fa-eye"></i> ดูและพิมพ์
                 </a>
                 <?php if ($is_owner): ?>
                 <button class="btn btn-sm btn-warning btn-action"
