@@ -106,9 +106,8 @@ try {
             $mpdf->UseTemplate($tplId);
         }
         
-        // Add watermark (Use base64 to avoid TIS-620/UTF-8 encoding issues in source file)
-        $mpdf->SetWatermarkText(base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX'));
-        $mpdf->watermark_font = 'Garuda';
+        // Add watermark
+        $mpdf->SetWatermarkText('VIEW ONLY / COPY');
         $mpdf->showWatermarkText = true;
         // Protect PDF: only print allowed
         $mpdf->SetProtection(['print']);
@@ -137,8 +136,7 @@ try {
                     $tplId = $mpdf2->ImportPage($i);
                     $mpdf2->UseTemplate($tplId);
                 }
-                $mpdf2->SetWatermarkText(base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX'));
-                $mpdf2->watermark_font = 'Garuda';
+                $mpdf2->SetWatermarkText('VIEW ONLY / COPY');
                 $mpdf2->showWatermarkText = true;
                 $mpdf2->SetProtection(['print']);
                 error_log("PRS-HIS-DEBUG: MPDF 2 SUCCESS");
