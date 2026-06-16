@@ -143,11 +143,11 @@ try {
                 $watermarkedData = $mpdf2->Output('', 'S');
             } catch (\Exception $e2) {
                 error_log("PRS-HIS-DEBUG EXCEPTION 2: " . $e2->getMessage());
-                $watermarkedData = $file_data; // Ultimate fallback
+                exit("ERROR: mPDF failed to process decompressed PDF: " . $e2->getMessage());
             }
         } else {
             error_log("PRS-HIS-DEBUG QPDF FAILED: return_var=$return_var, tmp_out_exists=" . (file_exists($tmp_out)?'1':'0'));
-            $watermarkedData = $file_data; // qpdf failed, ultimate fallback
+            exit("ERROR: qpdf is missing or failed to run. Return code: $return_var");
         }
         
         if (file_exists($tmp_in)) @unlink($tmp_in);
