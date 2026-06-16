@@ -104,11 +104,17 @@ try {
             $mpdf->AddPage();
             $tplId = $mpdf->ImportPage($i);
             $mpdf->UseTemplate($tplId);
+
+            // --- Overlay Watermark (On top of scanned images) ---
+            $mpdf->SetFont('Garuda');
+            $mpdf->SetAlpha(0.2); // ความโปร่งใส 20%
+            $mpdf->StartTransform();
+            $mpdf->TransformRotate(45, 105, 148); // หมุน 45 องศา ตรงกลางหน้า A4
+            $mpdf->WriteFixedPosHTML('<div style="text-align:center; width:210mm; font-size:45pt; font-weight:bold; color:#000000;">' . base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX') . '</div>', 0, 140, 210, 50);
+            $mpdf->StopTransform();
+            $mpdf->SetAlpha(1);
         }
         
-        // Add watermark
-        $mpdf->SetWatermarkText('VIEW ONLY / COPY');
-        $mpdf->showWatermarkText = true;
         // Protect PDF: only print allowed
         $mpdf->SetProtection(['print']);
         
@@ -135,9 +141,16 @@ try {
                     $mpdf2->AddPage();
                     $tplId = $mpdf2->ImportPage($i);
                     $mpdf2->UseTemplate($tplId);
+
+                    // --- Overlay Watermark (On top of scanned images) ---
+                    $mpdf2->SetFont('Garuda');
+                    $mpdf2->SetAlpha(0.2); // ความโปร่งใส 20%
+                    $mpdf2->StartTransform();
+                    $mpdf2->TransformRotate(45, 105, 148);
+                    $mpdf2->WriteFixedPosHTML('<div style="text-align:center; width:210mm; font-size:45pt; font-weight:bold; color:#000000;">' . base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX') . '</div>', 0, 140, 210, 50);
+                    $mpdf2->StopTransform();
+                    $mpdf2->SetAlpha(1);
                 }
-                $mpdf2->SetWatermarkText('VIEW ONLY / COPY');
-                $mpdf2->showWatermarkText = true;
                 $mpdf2->SetProtection(['print']);
                 error_log("PRS-HIS-DEBUG: MPDF 2 SUCCESS");
                 $watermarkedData = $mpdf2->Output('', 'S');
