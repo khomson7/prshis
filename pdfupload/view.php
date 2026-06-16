@@ -105,6 +105,7 @@ try {
         
         // Add watermark
         $mpdf->SetWatermarkText('โรงพยาบาลปราสาท');
+        $mpdf->watermark_font = 'Garuda';
         $mpdf->showWatermarkText = true;
         // Protect PDF: only print allowed
         $mpdf->SetProtection(['print']);
@@ -116,7 +117,10 @@ try {
         $tmp_out = sys_get_temp_dir() . '/' . uniqid('pdf_out_') . '.pdf';
         
         file_put_contents($tmp_in, $file_data);
-        exec("qpdf --stream-data=uncompress --object-streams=disable " . escapeshellarg($tmp_in) . " " . escapeshellarg($tmp_out), $output, $return_var);
+        exec("qpdf --stream-data=uncompress --object-streams=disable " . escapeshellarg($tmp_in) . " " . escapeshellarg($tmp_out) . " 2>&1", $output, $return_var);
+        
+        // --- เพิ่ม Log ชั่วคราวเพื่อหาสาเหตุ ---
+        @file_put_contents(sys_get_temp_dir() . '/qpdf_debug.txt', date('Y-m-d H:i:s') . "\nReturn Var: $return_var\nOutput: " . print_r($output, true) . "\n");
         
         if ($return_var === 0 && file_exists($tmp_out)) {
             $uncompressed_data = file_get_contents($tmp_out);
@@ -128,7 +132,8 @@ try {
                     $tplId = $mpdf2->ImportPage($i);
                     $mpdf2->UseTemplate($tplId);
                 }
-                $mpdf2->SetWatermarkText('VIEW ONLY / COPY');
+                $mpdf2->SetWatermarkText('โรงพยาบาลปราสาท');
+                $mpdf2->watermark_font = 'Garuda';
                 $mpdf2->showWatermarkText = true;
                 $mpdf2->SetProtection(['print']);
                 $watermarkedData = $mpdf2->Output('', 'S');
