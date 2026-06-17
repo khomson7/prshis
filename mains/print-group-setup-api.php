@@ -40,6 +40,8 @@ try {
     } elseif ($action === 'save_group') {
         $group_print = isset($_POST['group_print']) ? (int) $_POST['group_print'] : 0;
         $group_name = trim($_POST['group_name'] ?? '');
+        $is_watermark = isset($_POST['is_watermark']) ? 1 : 0;
+        $watermark_text = trim($_POST['watermark_text'] ?? 'COPY');
 
         if (!$group_name) {
             echo json_encode(['success' => false, 'message' => 'กรุณาระบุชื่อกลุ่ม']);
@@ -48,15 +50,15 @@ try {
 
         if ($group_print > 0) {
             // Update
-            $stmt = $conn->prepare("UPDATE prs_group_print_index SET group_name = :group_name WHERE group_print = :group_print");
-            $stmt->execute(['group_name' => $group_name, 'group_print' => $group_print]);
+            $stmt = $conn->prepare("UPDATE prs_group_print_index SET group_name = :group_name, is_watermark = :is_watermark, watermark_text = :watermark_text WHERE group_print = :group_print");
+            $stmt->execute(['group_name' => $group_name, 'is_watermark' => $is_watermark, 'watermark_text' => $watermark_text, 'group_print' => $group_print]);
         } else {
             // Insert - Auto increment group_print manually since it might not be AUTO_INCREMENT in DB schema
             $maxStmt = $conn->query("SELECT MAX(group_print) FROM prs_group_print_index");
             $newId = (int) $maxStmt->fetchColumn() + 1;
 
-            $stmt = $conn->prepare("INSERT INTO prs_group_print_index (group_print, group_name) VALUES (:group_print, :group_name)");
-            $stmt->execute(['group_print' => $newId, 'group_name' => $group_name]);
+            $stmt = $conn->prepare("INSERT INTO prs_group_print_index (group_print, group_name, is_watermark, watermark_text) VALUES (:group_print, :group_name, :is_watermark, :watermark_text)");
+            $stmt->execute(['group_print' => $newId, 'group_name' => $group_name, 'is_watermark' => $is_watermark, 'watermark_text' => $watermark_text]);
         }
         echo json_encode(['success' => true]);
     } elseif ($action === 'delete_group') {

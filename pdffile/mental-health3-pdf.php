@@ -249,7 +249,7 @@ $html = '
 $dateChunks = array_chunk($allDates, 4);
 
 if (empty($dateChunks)) {
-    $html .= '<h2 style="text-align:center;">ไม่พบข้อมูล</h2>';
+    die('<div style="font-family:sans-serif;padding:20px;color:red;text-align:center;">ไม่พบข้อมูลการประเมิน (SAVE) สำหรับ AN นี้</div>');
 }
 
 // วนลูปสร้างตารางในแต่ละหน้า

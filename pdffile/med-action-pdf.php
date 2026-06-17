@@ -101,6 +101,10 @@ $stmt->bindParam(':an', $an);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+if (empty($rows)) {
+    die('<div style="font-family:sans-serif;padding:20px;color:red;text-align:center;">ไม่พบข้อมูลการบริหารยาสำหรับ AN นี้</div>');
+}
+
 // =====================================================
 // 2. จัดกลุ่มข้อมูล: รวบรวมวันที่ทั้งหมด และจัดกลุ่มตาม order_item_detail
 // =====================================================

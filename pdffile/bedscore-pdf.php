@@ -142,6 +142,10 @@ $stmt->execute();
 // Fetch all rows for the current page
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+if (empty($rows)) {
+    die('<div style="font-family:sans-serif;padding:20px;color:red;text-align:center;">ไม่พบข้อมูลการประเมินความเสี่ยงต่อการเกิดแผลกดทับ (Bedscore) สำหรับ AN นี้</div>');
+}
+
 
 foreach ($rows as $row) {
 

@@ -170,7 +170,7 @@ function printGroup(groupId) {
 
     var scripts = selected.join(',');
     var an = encodeURIComponent("<?= htmlspecialchars($an) ?>");
-    var url = '../pdffile/print-group-merge-pdf.php?an=' + an + '&scripts=' + encodeURIComponent(scripts);
+    var url = '../pdffile/print-group-merge-pdf.php?an=' + an + '&group_id=' + groupId + '&scripts=' + encodeURIComponent(scripts);
     
     // เปิดหน้า PDF ที่ทำการ Merge แล้วใน Tab ใหม่
     window.open(url, '_blank');

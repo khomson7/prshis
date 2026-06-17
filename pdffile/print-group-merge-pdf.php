@@ -12,16 +12,30 @@ $group_id = isset($_REQUEST['group_id']) ? (int)$_REQUEST['group_id'] : 0;
 
 if (!$an || (!$scripts && !$group_id)) die('ไม่พบข้อมูล AN หรือ Scripts/Group');
 
-if (!$scripts && $group_id > 0) {
+$isWatermark = false;
+$watermarkText = 'COPY';
+
+if ($group_id > 0) {
     require_once '../include/DbUtils.php';
     $conn = DbUtils::get_hosxp_connection();
-    $stmt = $conn->prepare("SELECT pdf_script FROM prs_group_print_item WHERE group_print = :group_print ORDER BY sort_order");
-    $stmt->execute(['group_print' => $group_id]);
-    $arr = [];
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        if ($row['pdf_script']) $arr[] = $row['pdf_script'];
+    
+    // ดึงการตั้งค่ากลุ่ม (ลายน้ำ)
+    $grpStmt = $conn->prepare("SELECT is_watermark, watermark_text FROM prs_group_print_index WHERE group_print = :group_print");
+    $grpStmt->execute(['group_print' => $group_id]);
+    if ($grpInfo = $grpStmt->fetch(PDO::FETCH_ASSOC)) {
+        $isWatermark = ($grpInfo['is_watermark'] == 1 || $grpInfo['is_watermark'] === '1' || $grpInfo['is_watermark'] === true);
+        $watermarkText = !empty($grpInfo['watermark_text']) ? $grpInfo['watermark_text'] : 'COPY';
     }
-    $scripts = implode(',', $arr);
+
+    if (!$scripts) {
+        $stmt = $conn->prepare("SELECT pdf_script FROM prs_group_print_item WHERE group_print = :group_print ORDER BY sort_order");
+        $stmt->execute(['group_print' => $group_id]);
+        $arr = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if ($row['pdf_script']) $arr[] = $row['pdf_script'];
+        }
+        $scripts = implode(',', $arr);
+    }
 }
 
 $scriptList = explode(',', $scripts);
@@ -98,6 +112,16 @@ foreach ($pdfResults as $pdfData) {
                 $mpdf->AddPage();
                 $tplId = $mpdf->importPage($i);
                 $mpdf->useTemplate($tplId);
+                
+                // ฝังข้อความทับลงไปบนหน้า PDF โดยตรง (วิธีเดียวกับไฟล์ scratch_test4)
+                if ($isWatermark) {
+                    $mpdf->WriteHTML('
+                        <div style="position: absolute; top: 120mm; left: -45mm; width: 300mm; text-align: center; font-family: Garuda; font-size: 60pt; font-weight: bold; color: #888888; opacity: 0.25; transform: rotate(-45deg); transform-origin: center center; z-index: 9999;">
+                            ' . htmlspecialchars($watermarkText) . '
+                        </div>
+                    ');
+                }
+                
                 $hasPage = true;
             }
         } catch (Exception $e) {

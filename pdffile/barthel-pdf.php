@@ -79,6 +79,10 @@ $stmt = $conn->prepare($sql);
 $stmt->execute($query_parameters);
 $row  = $stmt->fetch();
 
+if (!$row) {
+    die('<div style="font-family:sans-serif;padding:20px;color:red;text-align:center;">ไม่พบข้อมูลการประเมิน Barthel Index สำหรับ AN นี้</div>');
+}
+
 $sql_item = "SELECT dr_adm_item.id,
                     dr_adm_item.doctor,
                     doctor.`name` AS admission_note_doctorname

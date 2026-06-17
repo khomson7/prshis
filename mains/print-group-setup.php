@@ -97,6 +97,13 @@ $canRemove = Session::checkPermission('SETUP_PRINT_GROUP', 'REMOVE') ? 'true' : 
                     <label>ชื่อกลุ่ม <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="modal_group_name" name="group_name" required>
                 </div>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox mb-2">
+                        <input type="checkbox" class="custom-control-input" id="modal_is_watermark" name="is_watermark" value="1" onchange="toggleWatermarkInput()">
+                        <label class="custom-control-label" for="modal_is_watermark">แสดงลายน้ำ (Watermark) ในเอกสารกลุ่มนี้</label>
+                    </div>
+                    <input type="text" class="form-control" id="modal_watermark_text" name="watermark_text" placeholder="ข้อความลายน้ำ เช่น COPY หรือ สำเนา" style="display:none;" value="COPY">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
@@ -195,8 +202,10 @@ function loadGroups() {
             res.data.forEach(g => {
                 let activeClass = (g.group_print == currentSelectedGroup) ? 'tr-active' : '';
                 let safeName = $('<div>').text(g.group_name).html().replace(/'/g, "\\'");
+                let isWatermark = g.is_watermark == 1 ? 1 : 0;
+                let wmText = g.watermark_text ? $('<div>').text(g.watermark_text).html().replace(/'/g, "\\'") : 'COPY';
                 
-                let btnEditHtml = CAN_EDIT ? `<button class="btn btn-sm btn-warning" onclick="editGroup(${g.group_print}, '${safeName}')"><i class="fas fa-edit"></i></button>` : '';
+                let btnEditHtml = CAN_EDIT ? `<button class="btn btn-sm btn-warning" onclick="editGroup(${g.group_print}, '${safeName}', ${isWatermark}, '${wmText}')"><i class="fas fa-edit"></i></button>` : '';
                 let btnDelHtml = CAN_REMOVE ? `<button class="btn btn-sm btn-danger" onclick="deleteGroup(${g.group_print})"><i class="fas fa-trash"></i></button>` : '';
                 
                 html += `<tr class="cursor-pointer ${activeClass}" data-id="${g.group_print}" onclick="selectGroup(${g.group_print}, '${safeName}')">
@@ -261,15 +270,28 @@ function loadItems(groupId) {
 function openGroupModal() {
     $('#groupForm')[0].reset();
     $('#modal_group_print').val('');
+    $('#modal_is_watermark').prop('checked', false);
+    $('#modal_watermark_text').val('COPY');
+    toggleWatermarkInput();
     $('#groupModalTitle').text('เพิ่มกลุ่มใหม่');
     $('#groupModal').modal('show');
 }
-function editGroup(id, name) {
+function editGroup(id, name, isWatermark, wmText) {
     $('#groupForm')[0].reset();
     $('#modal_group_print').val(id);
     $('#modal_group_name').val(name);
+    $('#modal_is_watermark').prop('checked', isWatermark == 1);
+    $('#modal_watermark_text').val(wmText || 'COPY');
+    toggleWatermarkInput();
     $('#groupModalTitle').text('แก้ไขชื่อกลุ่ม');
     $('#groupModal').modal('show');
+}
+function toggleWatermarkInput() {
+    if($('#modal_is_watermark').is(':checked')) {
+        $('#modal_watermark_text').slideDown('fast');
+    } else {
+        $('#modal_watermark_text').slideUp('fast');
+    }
 }
 function deleteGroup(id) {
     Swal.fire({
