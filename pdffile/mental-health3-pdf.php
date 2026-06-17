@@ -62,14 +62,8 @@ $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class=
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
 //-------------------------Doctor admission note
 
-// Pagination variables
-$limit = 4;  // Show 7 days per page
-
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
-
-//echo $page ;
-
+// ไม่ต้องใช้ Limit/Offset เพื่อให้ดึงข้อมูลทั้งหมดมารวมในไฟล์เดียว
+// แล้วใช้ array_chunk จัดกลุ่มแบ่งหน้าเอาเอง
 $sql = "select t.*,t2.level_of_consciousness as shift from
 (SELECT an,date(create_datetime) as date,'' as head_
 ,if(question1_1 = 1 ,'ล','-') as question1_1,if(question1_2 = 1 ,'ล','-') as question1_2,if(question1_3 > 0 ,'ด','-') as question1_3
@@ -88,16 +82,13 @@ $sql = "select t.*,t2.level_of_consciousness as shift from
 FROM " . DbConstant::KPHIS_DBNAME . ".prs_mental_health3
 WHERE an = :an
 GROUP BY date(create_datetime)
-ORDER BY date ASC
-LIMIT :limit OFFSET :offset)t
+ORDER BY date ASC)t
 LEFT JOIN " . DbConstant::KPHIS_DBNAME . ".prs_mental_health3 t2 on date(t2.create_datetime) = t.date and t2.an = t.an
 ";
 $stmt = $conn->prepare($sql);
 
 // Bind parameters
-$stmt->bindParam(':an', $an); // Assuming $an is defined and contains the Admission Number
-$stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // Bind limit
-$stmt->bindParam(':offset', $offset, PDO::PARAM_INT); // Bind offset
+$stmt->bindParam(':an', $an);
 
 // Execute the statement
 $stmt->execute();
@@ -115,26 +106,17 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 */
 
-// Get total number of days for this AN
-$countQuery = "SELECT COUNT(DISTINCT date(create_datetime)) as total_days FROM " . DbConstant::KPHIS_DBNAME . ".prs_mental_health3 WHERE an = :an";
-$countStmt = $conn->prepare($countQuery);
-$countStmt->execute($query_parameters);
-$totalDays = $countStmt->fetchColumn();
-$totalPages = ceil($totalDays / $limit);
-
-
-//echo $totalDays;
 // Group data by date and shift
 $groupedData = [];
-$dates = [];
+$allDates = [];
 
 foreach ($rows as $row) {
     $date = $row['date'];
     $shift = $row['shift'];
     
     // Store date for headers
-    if (!in_array($date, $dates)) {
-        $dates[] = $date;
+    if (!in_array($date, $allDates)) {
+        $allDates[] = $date;
     }
    // echo $date;
     // Group data by date and store shift values
@@ -261,21 +243,36 @@ $html = '
             white-space: nowrap; /* Prevent unwanted line wrapping */
           }
     
-    </style>
+    </style>';
+
+// แบ่งวันที่ทั้งหมดเป็นกลุ่ม กลุ่มละ 4 วัน (เพื่อให้พอดีกับ 1 หน้า A4)
+$dateChunks = array_chunk($allDates, 4);
+
+if (empty($dateChunks)) {
+    $html .= '<h2 style="text-align:center;">ไม่พบข้อมูล</h2>';
+}
+
+// วนลูปสร้างตารางในแต่ละหน้า
+foreach ($dateChunks as $pageIndex => $dates) {
+    if ($pageIndex > 0) {
+        $html .= '<pagebreak />'; // ขึ้นหน้าใหม่เมื่อไม่ใช่กลุ่มแรก
+    }
+
+    $html .= '
     <h2 style="text-align:right;font-size:8pt;">FM-PSY-002-00 ประกาศใช้ 8 พฤษภาคม 2567</h2>
     <h2 style="text-align:center;font-size:15pt;">แบบประเมินภาวะเสี่ยง (SAVE) &nbsp;'.htmlspecialchars(DbConstant::HOSPITAL_NAME).$check_report.'</h2>';
 
-// Table header
-$html .= '<table border="1" cellpadding="10" cellspacing="0">';
-$html .= '<thead><tr><th rowspan="2">ภาวะเสี่ยง</th>';
-foreach ($dates as $date) {
-    $html .= '<th colspan="3">' . date('d/m/Y', strtotime($date)) . '</th>';
-}
-$html .= '</tr><tr>';
-foreach ($dates as $date) {
-    $html .= '<th>ด</th><th>ช</th><th>บ</th>';
-}
-$html .= '</tr></thead><tbody>';
+    // Table header
+    $html .= '<table border="1" cellpadding="10" cellspacing="0" width="100%">';
+    $html .= '<thead><tr><th rowspan="2">ภาวะเสี่ยง</th>';
+    foreach ($dates as $date) {
+        $html .= '<th colspan="3">' . date('d/m/Y', strtotime($date)) . '</th>';
+    }
+    $html .= '</tr><tr>';
+    foreach ($dates as $date) {
+        $html .= '<th>ด</th><th>ช</th><th>บ</th>';
+    }
+    $html .= '</tr></thead><tbody>';
 
 
 
@@ -420,31 +417,17 @@ foreach (['create_'] as $questionIndex  => $questionName) {
 
 $html .= '</tbody></table>';
 
-
-
-$html .= '<h2 style="text-align:left;font-size:10pt;"><u>หมายเหตุ</u> กรณีไม่พบตามเกณฑ์ตามประเมินให้ระดับเขียว <br> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ข(สีเขียว)&nbsp;&nbsp; ล(สีเหลือง) &nbsp;&nbsp;ด(สีแดง)</h2>'; // Adjust level as needed
-
-
-
-// Pagination links in the PDF (optional)
-$html .= '<div style="text-align: center; margin-top: 20px;">';
-if ($page > 1) {
-    $html .= '<a href="mental-health3-pdf.php?an=' . $an . '&page=' . ($page - 1) . '">Previous Page</a> | ';
+    $html .= '<h2 style="text-align:left;font-size:10pt;"><u>หมายเหตุ</u> กรณีไม่พบตามเกณฑ์ตามประเมินให้ระดับเขียว <br> 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ข(สีเขียว)&nbsp;&nbsp; ล(สีเหลือง) &nbsp;&nbsp;ด(สีแดง)</h2>'; // Adjust level as needed
 }
-$html .= 'Page ' . $page . ' of ' . $totalPages;
-if ($page < $totalPages) {
-    $html .= ' | <a href="mental-health3-pdf.php?an=' . $an . '&page=' . ($page + 1) . '">Next Page</a>';
-    
-}
-$html .= '</div>';
+
 //แสดงข้อมุลอยู่ในช่วง ก่อน footer
 $mpdf->setAutoTopMargin = 'stretch';
 $mpdf->setAutoBottomMargin = 'stretch';
 
-$mpdf->setFooter('HN: '.htmlspecialchars($hn).' AN: '.htmlspecialchars($an).' Page '.$page);
+$mpdf->setFooter('HN: '.htmlspecialchars($hn).' AN: '.htmlspecialchars($an).' หน้า {PAGENO}/{nbpg}');
 // Write the HTML content to the PDF
 $mpdf->WriteHTML($html);
 
 // Output the PDF to the browser
-$mpdf->Output('Shift_Report_AN_' . $an . '_Page_' . $page . '.pdf', 'I'); // Inline display in browser
+$mpdf->Output('Mental_Health3_' . $an . '.pdf', 'I'); // Inline display in browser
