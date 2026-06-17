@@ -534,9 +534,9 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
         </div>
 
         <div class="row mb-5">
-            <div class="col text-center">
-                <!-- DEBUG BLOCK FOR USER TO SEE WHAT FAILS -->
-                <div class="alert alert-warning text-left d-inline-block" style="font-size: 12px;">
+            <div class="col text-center"> 
+                <!--DEBUG BLOCK FOR USER TO SEE WHAT FAILS --> 
+                <!--<div class="alert alert-warning text-left d-inline-block" style="font-size: 12px;">
                     <b>สถานะการตรวจสอบปุ่มลบ (Debug):</b><br>
                     1. เป็นเอกสารเก่าใช่หรือไม่ (มี ID): <b><?= !empty($rec['id']) ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO)' ?></b><br>
                     2. คนล็อกอินคือคนสร้าง หรือเป็น admin: <b><?= (!empty($rec) && ($rec['created_by'] === $loginname || strtolower($loginname) === 'admin')) ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO)' ?></b> (ผู้สร้าง: <?= htmlspecialchars($rec['created_by'] ?? 'ไม่มี') ?>, ล็อกอิน: <?= htmlspecialchars($loginname) ?>)<br>
@@ -544,7 +544,7 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
                     4. คนไข้ยังไม่ถูกล็อก (Read-Only): <b><?= ReportQueryUtils::checkReadOnly($an) ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO - ล็อกแล้ว)' ?></b><br>
                     <i>* ปุ่มลบจะแสดงก็ต่อเมื่อทั้ง 4 ข้อขึ้นว่า "ผ่าน" ทั้งหมดครับ</i>
                 </div>
-                <br>
+                <br> -->
                 
                 <?php if ($canEdit && Session::checkPermission('OPNOTE', 'EDIT') && ReportQueryUtils::checkReadOnly($an)): ?>
                 <button type="submit" class="btn btn-primary btn-lg px-5 shadow" id="btn-save">
@@ -558,7 +558,7 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
                 </button>
                 <?php endif; ?>
             </div>
-        </div>
+        </div> 
 
     </div>
 </form>
@@ -1244,7 +1244,7 @@ function openTemplateModal() {
     $('#tpl_finding').val($('[name="finding"]').val());
     $('#tpl_procedure_detail').val($('[name="procedure_detail"]').val());
     
-    loadTemplateList();
+    refreshTemplateTable();
     $('#templateModal').modal('show');
 }
 
