@@ -36,21 +36,7 @@ $menuname = ReportQueryUtils::getLinkMenu(26);
 
 
 <div id="formContainer">        
-<div class="row">
-    <div class="col-sm-12">
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="pills-document-tab" data-toggle="tab" href="#pills-document" role="tab" aria-controls="pills-document" aria-selected="true"><?= htmlspecialchars($menuname) ?></a>
-        
-            </div> <!-- style="display: none" -->
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-
-            <div class="tab-pane fade show active" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab"><?php require_once 'form-felldown-document.php';?></div>
-           
-        </div>
-    </div>
-</div><br>
+    <?php require_once 'form-felldown-document.php';?>
 </div>
 
 <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>

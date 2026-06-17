@@ -187,14 +187,33 @@ $check_    = ReportQueryUtils::getProduction($_id)
                 padding-top: 102px;
         }
 
-        table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
+.felldown-table td {
+  vertical-align: middle;
 }
-
-table.center {
-   margin-right: 150px;
-  margin-left: 80px;
+/* Header & Score rows */
+.felldown-table tr:nth-child(1) td,
+.felldown-table tr:nth-child(29) td {
+  background-color: #007bff !important;
+  color: white !important;
+  font-size: 1.1rem;
+}
+.felldown-table tr:nth-child(30) td {
+  background-color: #f8f9fa !important;
+}
+/* Odd Questions (1, 3, 5, 7, 9) */
+.felldown-table tr:nth-child(2), .felldown-table tr:nth-child(3), .felldown-table tr:nth-child(4),
+.felldown-table tr:nth-child(8), .felldown-table tr:nth-child(9), .felldown-table tr:nth-child(10),
+.felldown-table tr:nth-child(14), .felldown-table tr:nth-child(15), .felldown-table tr:nth-child(16),
+.felldown-table tr:nth-child(20), .felldown-table tr:nth-child(21), .felldown-table tr:nth-child(22),
+.felldown-table tr:nth-child(26), .felldown-table tr:nth-child(27), .felldown-table tr:nth-child(28) {
+  background-color: #ffffff !important;
+}
+/* Even Questions (2, 4, 6, 8) */
+.felldown-table tr:nth-child(5), .felldown-table tr:nth-child(6), .felldown-table tr:nth-child(7),
+.felldown-table tr:nth-child(11), .felldown-table tr:nth-child(12), .felldown-table tr:nth-child(13),
+.felldown-table tr:nth-child(17), .felldown-table tr:nth-child(18), .felldown-table tr:nth-child(19),
+.felldown-table tr:nth-child(23), .felldown-table tr:nth-child(24), .felldown-table tr:nth-child(25) {
+  background-color: #eaf3fc !important;
 }
 </style>
 
@@ -222,23 +241,19 @@ table.center {
 
         </div> -->
 
-                        <div class="row">
-                                <div class="col-auto">
-                                        <button type="button" class="btn btn-sm btn-primary btn-block" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
-                                </div>
-                                <div class="col-auto p-1 font-weight-bold">
-                                        <h5><B><?= htmlspecialchars($menu_name) ?> <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
-                                                        <?php if ($check_ == "1") { ?>
-
-                                                                <font color="red">ช่วงทดลอง</font>
-                                                        <?php } else { ?>
-
-                                                        <? } ?>
-                                                </B></h5>
-                                </div>
-
-
-                        </div>
+<div class="d-flex justify-content-between align-items-center mb-3 pb-2" style="border-bottom: 2px solid #007bff;">
+    <div>
+        <h5 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-file-medical-alt mr-2"></i><?= htmlspecialchars($menu_name) ?> <?= htmlspecialchars(DbConstant::HOSPITAL_NAME) ?>
+            <?php if ($check_ == "1") { ?>
+                <span class="badge badge-danger ml-2">ช่วงทดลอง</span>
+            <?php } ?>
+        </h5>
+    </div>
+    <div>
+        <button type="button" class="btn btn-sm btn-outline-secondary shadow-sm" onclick="window.close()"><i class="fas fa-arrow-left"></i> กลับ</button>
+    </div>
+</div>
 
                             
 
@@ -382,39 +397,42 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 </div>-->
 
 
-                        <div class="row">
-
-
-                            &nbsp;&nbsp;&nbsp;&nbsp;<label>เวร: </label>
-                                <div class="custom-control custom-radio col-sm-1">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" <?php if ($row['work_shift'] == '1') {
-                                                                                                echo 'checked="checked"';
-                                                                                        } else if($id == null) {
-                                                                                                echo $work_shift1_checked;
-                                                                                        }?> class="custom-control-input" id="work_shift1" name="work_shift" value="1">
-                                        <label class="custom-control-label" for="work_shift1" style="font-size:100%; background-color:yellow;"><strong>&nbsp;ดึก&nbsp;</strong></label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?php if ($row['work_shift'] == '2') {
-                                                                                                echo 'checked="checked"';
-                                                                                        } else if($id == null) {
-                                                                                                echo $work_shift2_checked;
-                                                                                        }?>  class="custom-control-input" id="work_shift2" name="work_shift" value="2">
-                                        <label class="custom-control-label" for="work_shift2" style="font-size:100%; background-color:orange;"><strong>&nbsp;เช้า&nbsp;</strong></label>
-                                </div>
-                                <div class="custom-control custom-radio col-sm-1">
-                                        <input type="radio" <?php if ($row['work_shift'] == '3') {
-                                                                                                echo 'checked="checked"';
-                                                                                        } else if($id == null) {
-                                                                                                echo $work_shift3_checked;
-                                                                                        }?>  class="custom-control-input" id="work_shift3" name="work_shift" value="3">
-                                        <label class="custom-control-label" for="work_shift3" style="font-size:100%; background-color:gray;"><strong>&nbsp;บ่าย&nbsp;</strong></label>
-                                </div>
-
-                                                        
-
-
-                        </div>
+<div class="d-flex align-items-center mb-3 bg-light p-2 rounded border">
+    <strong class="mr-3 ml-2"><i class="fas fa-clock text-secondary mr-1"></i> เวร:</strong>
+    
+    <div class="custom-control custom-radio custom-control-inline mr-4">
+        <input type="radio" <?php if ($row['work_shift'] == '1') {
+                                echo 'checked="checked"';
+                            } else if($id == null) {
+                                echo $work_shift1_checked;
+                            }?> class="custom-control-input" id="work_shift1" name="work_shift" value="1">
+        <label class="custom-control-label" for="work_shift1">
+            <span class="badge badge-pill text-dark" style="background-color: #ffeb3b; font-size: 0.9rem; padding: 5px 12px;"><i class="fas fa-moon mr-1"></i> ดึก</span>
+        </label>
+    </div>
+    
+    <div class="custom-control custom-radio custom-control-inline mr-4">
+        <input type="radio" <?php if ($row['work_shift'] == '2') {
+                                echo 'checked="checked"';
+                            } else if($id == null) {
+                                echo $work_shift2_checked;
+                            }?>  class="custom-control-input" id="work_shift2" name="work_shift" value="2">
+        <label class="custom-control-label" for="work_shift2">
+            <span class="badge badge-pill text-dark" style="background-color: #ff9800; font-size: 0.9rem; padding: 5px 12px;"><i class="fas fa-sun mr-1"></i> เช้า</span>
+        </label>
+    </div>
+    
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" <?php if ($row['work_shift'] == '3') {
+                                echo 'checked="checked"';
+                            } else if($id == null) {
+                                echo $work_shift3_checked;
+                            }?>  class="custom-control-input" id="work_shift3" name="work_shift" value="3">
+        <label class="custom-control-label" for="work_shift3">
+            <span class="badge badge-pill text-white" style="background-color: #6c757d; font-size: 0.9rem; padding: 5px 12px;"><i class="fas fa-cloud-sun mr-1"></i> บ่าย</span>
+        </label>
+    </div>
+</div>
 
 
 
@@ -424,21 +442,21 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                         <div class="col-12 col-md-12">
                                
 
-                                        <table lass="center" id="bg-table" width="100%" style="border-collapse: collapse;font-size:10pt;margin-top:8px;">
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                        <table class="table table-bordered table-sm felldown-table" id="bg-table" width="100%" style="font-size:11pt;margin-top:8px; border: 1px solid #dee2e6;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;"  colspan="2" >&nbsp;<b>ปัจจัยเสี่ยง</b></td>
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >&nbsp;<b>คะแนน</b></td>
+                                                        <td class="text-center align-middle"  colspan="2" >&nbsp;<b>ปัจจัยเสี่ยง</b></td>
+                                                        <td class="text-center align-middle" >&nbsp;<b>คะแนน</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"  rowspan="3">&nbsp;<b>1. ผู้ป่วยมีระดับความรู้สึกตัว</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left"  rowspan="3">&nbsp;<b>1. ผู้ป่วยมีระดับความรู้สึกตัว</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;ผู้ป่วยรับรู้ลดลง</td>
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-left" >&nbsp;ผู้ป่วยรับรู้ลดลง</td>
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['consciousness'] == '5') {
                                                                                                         echo 'checked="checked"';
@@ -448,13 +466,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                         </td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;ผู้ป่วยรู้สึกตัวดี</td>
+                                                        <td class="text-left" >&nbsp;ผู้ป่วยรู้สึกตัวดี</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                       <input type="radio" <?php if ($row['consciousness'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -467,17 +485,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"  rowspan="3">&nbsp;<b>2. ประวัติชัก/ลื่นล้ม/ตกเตียง</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left"  rowspan="3">&nbsp;<b>2. ประวัติชัก/ลื่นล้ม/ตกเตียง</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;มีประวัติชัก/ลื่นล้ม/ตกเตียงภายใน 1 ปี</td>
+                                                        <td class="text-left" >&nbsp;มีประวัติชัก/ลื่นล้ม/ตกเตียงภายใน 1 ปี</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['slip_and_fall'] == '2') {
                                                                                                         echo 'checked="checked"';
@@ -494,13 +512,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;ไม่มีประวัติชัก/ลื่นล้ม/ตกเตียงภายใน 1 ปี</td>
+                                                        <td class="text-left" >&nbsp;ไม่มีประวัติชัก/ลื่นล้ม/ตกเตียงภายใน 1 ปี</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['slip_and_fall'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -515,17 +533,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 
 
                                                
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" rowspan="3">&nbsp;<b>3. อายุ</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left" rowspan="3">&nbsp;<b>3. อายุ</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;อายุ 65 ปี หรือมากกว่า/ผู้ป่วยเด็กและทารก</td>
+                                                        <td class="text-left" >&nbsp;อายุ 65 ปี หรือมากกว่า/ผู้ป่วยเด็กและทารก</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['age_check'] == '2') {
                                                                                                         echo 'checked="checked"';
@@ -542,13 +560,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;อายุ 15 - 65 ปี</td>
+                                                        <td class="text-left" >&nbsp;อายุ 15 - 65 ปี</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['age_check'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -561,17 +579,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
                                    
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" rowspan="3">&nbsp;<b>4. การได้รับยา</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left" rowspan="3">&nbsp;<b>4. การได้รับยา</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;ได้รับยาที่มีผลต่อความดันโลหิต ระดับความรู้สึกตัวมีผลทำให้ง่วง ซึม</td>
+                                                        <td class="text-left" >&nbsp;ได้รับยาที่มีผลต่อความดันโลหิต ระดับความรู้สึกตัวมีผลทำให้ง่วง ซึม</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['get_medicine'] == '3') {
                                                                                                         echo 'checked="checked"';
@@ -584,13 +602,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" >&nbsp;ไม่ได้รับยาที่มีผลต่อความดันโลหิต ระดับความรู้สึกตัวมีผลทำให้ง่วง ซึม</td>
+                                                        <td class="text-left" >&nbsp;ไม่ได้รับยาที่มีผลต่อความดันโลหิต ระดับความรู้สึกตัวมีผลทำให้ง่วง ซึม</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['get_medicine'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -602,14 +620,14 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"  rowspan="3">&nbsp;<b>5. มีสภาพการทำงานของร่างกาย</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left"  rowspan="3">&nbsp;<b>5. มีสภาพการทำงานของร่างกาย</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;กล้ามเนื้ออ่อนแรง การทรงตัวไม่ดี ซีดจาก (Hct Hb) ต่ำ อ่อนเพลีย อีเล็กโตรไลท์ผิดปกติ มีปัญหาด้านสายตา มีปัญหาการเคลื่อนไหวรวมถึง การใช้อุปกรณ์ช่วยเดิน</td>
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-left">&nbsp;กล้ามเนื้ออ่อนแรง การทรงตัวไม่ดี ซีดจาก (Hct Hb) ต่ำ อ่อนเพลีย อีเล็กโตรไลท์ผิดปกติ มีปัญหาด้านสายตา มีปัญหาการเคลื่อนไหวรวมถึง การใช้อุปกรณ์ช่วยเดิน</td>
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['body'] == '3') {
                                                                                                         echo 'checked="checked"';
@@ -619,10 +637,10 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                         </td>
                                                 </tr>
                                              
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;ผู้ป่วยมีการเคลื่อนไหวปกติ สติสัมปชัญญะปกติ</td>
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;">
+                                                        <td class="text-left">&nbsp;ผู้ป่วยมีการเคลื่อนไหวปกติ สติสัมปชัญญะปกติ</td>
+                                                        <td class="text-center align-middle">
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['body'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -632,17 +650,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                         </td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" rowspan="3">&nbsp;<b>6. การประเมินตนเอง</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left" rowspan="3">&nbsp;<b>6. การประเมินตนเอง</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;ประเมินตนเองไม่เหมาะสม/ไม่อยู่บนเตียง ตามคำแนะนำ</td>
+                                                        <td class="text-left">&nbsp;ประเมินตนเองไม่เหมาะสม/ไม่อยู่บนเตียง ตามคำแนะนำ</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;">
+                                                        <td class="text-center align-middle">
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['assessment'] == '2') {
                                                                                                         echo 'checked="checked"';
@@ -653,13 +671,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;ประเมินตนเองเหมาะสม/อยู่บนเตียง ตามคำแนะนำ</td>
+                                                        <td class="text-left">&nbsp;ประเมินตนเองเหมาะสม/อยู่บนเตียง ตามคำแนะนำ</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['assessment'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -669,17 +687,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                         </td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"  rowspan="3">&nbsp;<b>7. การขับถ่าย</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left"  rowspan="3">&nbsp;<b>7. การขับถ่าย</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;มีความต้องการการช่วยเหลือในการขับถ่าย</td>
+                                                        <td class="text-left">&nbsp;มีความต้องการการช่วยเหลือในการขับถ่าย</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['excretion'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -692,13 +710,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;ช่วยเหลือตนเองเกี่ยวกับการขับถ่ายได้ดี</td>
+                                                        <td class="text-left">&nbsp;ช่วยเหลือตนเองเกี่ยวกับการขับถ่ายได้ดี</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                                        <td class="text-center align-middle" width="1%">
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['excretion'] == '9') {
                                                                                                         echo 'checked="checked"';
@@ -708,17 +726,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                         </td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="3">&nbsp;<b>8. หลังคลอด</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left" width="5%" rowspan="3">&nbsp;<b>8. หลังคลอด</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;อยู่ในภาวะหลังคลอดภายใน 4 - 6 ชั่วโมง</td>
+                                                        <td class="text-left">&nbsp;อยู่ในภาวะหลังคลอดภายใน 4 - 6 ชั่วโมง</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;">
+                                                        <td class="text-center align-middle">
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['after_birth'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -729,13 +747,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 
                                                 </tr>
              
-                                                <tr style="border:1px solid #000;margin: 45px; background-color:var(--bright-blue-light)">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;หลังคลอดมากกว่า 6 ชั่วโมง</td>
+                                                        <td class="text-left">&nbsp;หลังคลอดมากกว่า 6 ชั่วโมง</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['after_birth'] == '9') {
                                                                                                         echo 'checked="checked"';
@@ -747,17 +765,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
 
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;"  rowspan="3">&nbsp;<b>9. หลังผ่าตัด</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-left"  rowspan="3">&nbsp;<b>9. หลังผ่าตัด</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;อยู่ในภาวะหลังผ่าตัดภายใน 24 ชั่วโมง</td>
+                                                        <td class="text-left">&nbsp;อยู่ในภาวะหลังผ่าตัดภายใน 24 ชั่วโมง</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" >
+                                                        <td class="text-center align-middle" >
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['surgery'] == '1') {
                                                                                                         echo 'checked="checked"';
@@ -768,13 +786,13 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
                                                 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:left; border-right:0.5px solid #000;padding:4px;">&nbsp;หลังผ่าตัดมากกว่า 24 ชั่วโมง</td>
+                                                        <td class="text-left">&nbsp;หลังผ่าตัดมากกว่า 24 ชั่วโมง</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="1%">
+                                                        <td class="text-center align-middle" width="1%">
                                                         <div class="custom-control custom-radio col-sm-1">
                                                                         <input type="radio" <?php if ($row['surgery'] == '9') {
                                                                                                         echo 'checked="checked"';
@@ -785,17 +803,17 @@ if ($current_hour >= '00:00' && $current_hour <= '07:59') {
                                                 </tr>
 
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="5%" rowspan="2">&nbsp;<b>คะแนน</b></td>
+                                                <tr class="bg-alt">
+                                                        <td class="text-center align-middle" width="5%" rowspan="2">&nbsp;<b>คะแนน</b></td>
                                                 </tr>
 
-                                                <tr style="border:1px solid #000;margin: 45px;">
+                                                <tr class="bg-alt">
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px;" width="10%">&nbsp;</td>
+                                                        <td class="text-center align-middle" width="10%">&nbsp;</td>
 
 
 
-                                                        <td style="text-align:center; border-right:0.5px solid #000;padding:4px; font-size: 20px;" width="1%">
+                                                        <td style="text-align:center;  font-size: 20px;" width="1%">
                                                                 <div>
                                                                 <b><?= htmlspecialchars($row['score']) ?></b> 
                                                                 </div>
