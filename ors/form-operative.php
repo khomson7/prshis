@@ -215,8 +215,25 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Surgeon</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" name="surgeon" id="inp_surgeon"
-                                   value="<?= htmlspecialchars($rec['surgeon'] ?? '') ?>" <?= !$canEdit ? 'readonly' : '' ?>>
+                            <select class="form-control" name="surgeon[]" id="inp_surgeon" multiple="multiple" <?= !$canEdit ? 'disabled' : '' ?> style="width:100%">
+                                <?php 
+                                $surgeons = [];
+                                if (!empty($rec['surgeon'])) {
+                                    $surgeons = json_decode($rec['surgeon'], true);
+                                    if (!is_array($surgeons)) {
+                                        $surgeons = [$rec['surgeon']];
+                                    }
+                                }
+                                foreach ($surgeons as $s) {
+                                    echo '<option value="'.htmlspecialchars($s).'" selected>'.htmlspecialchars($s).'</option>';
+                                }
+                                ?>
+                            </select>
+                            <?php if (!$canEdit): ?>
+                                <?php foreach ($surgeons as $s): ?>
+                                    <input type="hidden" name="surgeon[]" value="<?= htmlspecialchars($s) ?>">
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                             <?php if ($canEdit): ?>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-success" type="button" onclick="signField('inp_surgeon')" title="ลงชื่ออัตโนมัติ">
@@ -328,8 +345,20 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Anesthesiologist</label>
-                        <input type="text" class="form-control" name="anesthesiologist" 
-                               value="<?= htmlspecialchars($rec['anesthesiologist'] ?? '') ?>" <?= !$canEdit ? 'readonly' : '' ?>>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="anesthesiologist" id="inp_anesthesiologist"
+                                   value="<?= htmlspecialchars($rec['anesthesiologist'] ?? '') ?>" <?= !$canEdit ? 'readonly' : '' ?>>
+                            <?php if ($canEdit): ?>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-success" type="button" onclick="signField('inp_anesthesiologist')" title="ลงชื่ออัตโนมัติ">
+                                    <i class="fas fa-signature"></i> SIGN
+                                </button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="clearField('inp_anesthesiologist')" title="ล้าง">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -506,9 +535,26 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
 
         <div class="row mb-5">
             <div class="col text-center">
+                <!-- DEBUG BLOCK FOR USER TO SEE WHAT FAILS -->
+                <div class="alert alert-warning text-left d-inline-block" style="font-size: 12px;">
+                    <b>สถานะการตรวจสอบปุ่มลบ (Debug):</b><br>
+                    1. เป็นเอกสารเก่าใช่หรือไม่ (มี ID): <b><?= !empty($rec['id']) ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO)' ?></b><br>
+                    2. คนล็อกอินคือคนสร้าง หรือเป็น admin: <b><?= (!empty($rec) && ($rec['created_by'] === $loginname || strtolower($loginname) === 'admin')) ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO)' ?></b> (ผู้สร้าง: <?= htmlspecialchars($rec['created_by'] ?? 'ไม่มี') ?>, ล็อกอิน: <?= htmlspecialchars($loginname) ?>)<br>
+                    3. มีสิทธิ์ OPNOTE -> REMOVE: <b><?= Session::checkPermission('OPNOTE', 'REMOVE') ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO)' ?></b><br>
+                    4. คนไข้ยังไม่ถูกล็อก (Read-Only): <b><?= ReportQueryUtils::checkReadOnly($an) ? 'ผ่าน (YES)' : 'ไม่ผ่าน (NO - ล็อกแล้ว)' ?></b><br>
+                    <i>* ปุ่มลบจะแสดงก็ต่อเมื่อทั้ง 4 ข้อขึ้นว่า "ผ่าน" ทั้งหมดครับ</i>
+                </div>
+                <br>
+                
                 <?php if ($canEdit && Session::checkPermission('OPNOTE', 'EDIT') && ReportQueryUtils::checkReadOnly($an)): ?>
                 <button type="submit" class="btn btn-primary btn-lg px-5 shadow" id="btn-save">
                     <i class="fas fa-save"></i> บันทึกข้อมูล
+                </button>
+                <?php endif; ?>
+                
+                <?php if (!empty($rec['id']) && ($rec['created_by'] === $loginname || strtolower($loginname) === 'admin') && Session::checkPermission('OPNOTE', 'REMOVE') && ReportQueryUtils::checkReadOnly($an)): ?>
+                <button type="button" class="btn btn-danger btn-lg px-4 shadow ml-3" onclick="deleteOpNote(<?= $rec['id'] ?>)">
+                    <i class="fas fa-trash"></i> ลบเอกสาร
                 </button>
                 <?php endif; ?>
             </div>
@@ -530,22 +576,69 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
             </div>
             <div class="modal-body">
                 <form id="templateForm">
-                    <div class="form-group">
-                        <label>ชื่อรายการผ่าตัด</label>
-                        <input type="text" class="form-control" id="tpl_operation_name" required placeholder="ระบุชื่อการผ่าตัดเพื่อใช้คู่กับ Template นี้">
+                    <input type="hidden" id="tpl_id" value="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ชื่อรายการผ่าตัด</label>
+                                <input type="text" class="form-control" id="tpl_operation_name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>เลือกไฟล์รูปภาพ (Template)</label>
+                                <input type="file" class="form-control-file" id="tpl_image" accept="image/*">
+                                <small class="text-muted">เว้นว่างไว้หากไม่ต้องการเปลี่ยนรูป</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12"><hr class="my-2"><h6><b>ข้อมูลเริ่มต้นของ Template</b></h6></div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group mb-2">
+                                <label class="mb-0 text-muted"><small>Clinical diagnosis</small></label>
+                                <textarea class="form-control form-control-sm" id="tpl_clinical_diagnosis" rows="2"></textarea>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="mb-0 text-muted"><small>Post operation diagnosis</small></label>
+                                <textarea class="form-control form-control-sm" id="tpl_post_op_diagnosis" rows="2"></textarea>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="mb-0 text-muted"><small>Anesthetic techniques</small></label>
+                                <input type="text" class="form-control form-control-sm" id="tpl_anesthetic_technique">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group mb-2">
+                                <label class="mb-0 text-muted"><small>Position</small></label>
+                                <input type="text" class="form-control form-control-sm" id="tpl_op_position">
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="mb-0 text-muted"><small>Incision</small></label>
+                                <input type="text" class="form-control form-control-sm" id="tpl_incision">
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="mb-0 text-muted"><small>Finding</small></label>
+                                <textarea class="form-control form-control-sm" id="tpl_finding" rows="2"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="mb-0 text-muted"><small>Procedure detail</small></label>
+                                <textarea class="form-control form-control-sm" id="tpl_procedure_detail" rows="3"></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>เลือกไฟล์รูปภาพ (Template)</label>
-                        <input type="file" class="form-control-file" id="tpl_image" accept="image/*" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> บันทึก Template</button>
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-save"></i> บันทึก Template</button>
                 </form>
                 <hr>
                 <h6>รายการ Template ของคุณ</h6>
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                         <thead class="bg-light">
-                            <tr><th>ชื่อการผ่าตัด</th><th>วันที่สร้าง</th><th width="100">จัดการ</th></tr>
+                            <tr><th>ชื่อการผ่าตัด</th><th>วันที่สร้าง</th><th width="220">จัดการ</th></tr>
                         </thead>
                         <tbody id="templateListTbody">
                             <!-- Data -->
@@ -560,12 +653,26 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
 <script>
 var _sessionName = <?= json_encode($session_name) ?>;
 function signField(fieldId) {
-    var el = document.getElementById(fieldId);
-    if (el && !el.value.trim()) { el.value = _sessionName; }
+    var el = $('#' + fieldId);
+    if (el.is('select') && el.prop('multiple')) {
+        var current = el.val() || [];
+        if (!current.includes(_sessionName)) {
+            var newOption = new Option(_sessionName, _sessionName, true, true);
+            el.append(newOption).trigger('change');
+        }
+    } else {
+        var domEl = document.getElementById(fieldId);
+        if (domEl && !domEl.value.trim()) { domEl.value = _sessionName; }
+    }
 }
 function clearField(fieldId) {
-    var el = document.getElementById(fieldId);
-    if (el) el.value = '';
+    var el = $('#' + fieldId);
+    if (el.is('select') && el.prop('multiple')) {
+        el.val(null).trigger('change');
+    } else {
+        var domEl = document.getElementById(fieldId);
+        if (domEl) domEl.value = '';
+    }
 }
 
 var imageList = [];
@@ -967,6 +1074,45 @@ $('#operative_form').on('submit', function(e) {
     });
 });
 
+function deleteOpNote(id) {
+    Swal.fire({
+        title: 'ยืนยันการลบ',
+        text: 'คุณต้องการลบ Operative Note ฉบับนี้ใช่หรือไม่?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ลบข้อมูล',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'form-operative-delete.php',
+                type: 'POST',
+                data: { id: id, an: '<?= htmlspecialchars($an) ?>' },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        Swal.fire({
+                            title: 'ลบสำเร็จ',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = 'form-operative-main.php?an=<?= urlencode($an) ?>&loginname=<?= urlencode($loginname) ?>';
+                        });
+                    } else {
+                        Swal.fire('ข้อผิดพลาด', res.message || 'ไม่สามารถลบข้อมูลได้', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', 'error');
+                }
+            });
+        }
+    });
+}
+
 window._templatesData = [];
 function loadTemplateList(cb) {
     $.get('form-operative-template-api.php?action=list', function(res) {
@@ -1008,6 +1154,13 @@ function initSelect2Templates() {
 }
 
 $(function() {
+    $('#inp_surgeon').select2({
+        tags: true,
+        theme: 'bootstrap4',
+        width: '100%',
+        placeholder: ''
+    });
+
     initSelect2Templates();
 
     // Handle change event to load template
@@ -1027,11 +1180,11 @@ $(function() {
             var exists = imageList.find(img => img.name === 'Template: ' + opName);
             if(!exists) {
                 Swal.fire({
-                    title: 'ดึง Template ภาพไหม?',
-                    text: 'ต้องการเพิ่มภาพ Template ของรายการผ่าตัดนี้เข้าไปหรือไม่?',
+                    title: 'ดึงข้อมูลจาก Template ไหม?',
+                    text: 'ต้องการโหลดภาพและข้อมูลเริ่มต้น (เช่น Diagnosis, Procedure) ของรายการผ่าตัดนี้หรือไม่?',
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonText: 'ตกลง',
+                    confirmButtonText: 'โหลดข้อมูล',
                     cancelButtonText: 'ไม่เป็นไร'
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -1045,18 +1198,79 @@ $(function() {
 
 function fetchTemplateImage(id, opName) {
     $.get('form-operative-template-api.php?action=get&id=' + id, function(res) {
-        if(res.success && res.b64) {
-            imageList.push({ b64: res.b64, svgData: '', name: 'Template: ' + opName, itemId: null });
-            renderThumbs();
-            selectImage(imageList.length - 1);
+        if(res.success) {
+            if (res.b64) {
+                imageList.push({ b64: res.b64, svgData: '', name: 'Template: ' + opName, itemId: null });
+                renderThumbs();
+                selectImage(imageList.length - 1);
+            }
+            
+            // Auto-fill text fields if they are currently empty
+            var fields = ['clinical_diagnosis', 'post_op_diagnosis', 'anesthetic_technique', 'op_position', 'incision', 'finding', 'procedure_detail'];
+            var filled = 0;
+            fields.forEach(function(f) {
+                var el = $('[name="'+f+'"]');
+                if(res[f] && el.length > 0) {
+                    if(el.val().trim() === '') {
+                        el.val(res[f]);
+                        filled++;
+                    }
+                }
+            });
+            
+            if (filled > 0) {
+                Swal.fire({
+                    title: 'โหลดข้อมูลสำเร็จ',
+                    text: 'ดึงข้อมูลเริ่มต้นจาก Template ลงในฟอร์มเรียบร้อยแล้ว',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
         }
     }, 'json');
 }
 
 function openTemplateModal() {
-    refreshTemplateTable();
+    $('#templateForm')[0].reset();
+    $('#tpl_id').val('');
+    
+    // Auto-fill from main form to help them start creating a new template
+    $('#tpl_clinical_diagnosis').val($('[name="clinical_diagnosis"]').val());
+    $('#tpl_post_op_diagnosis').val($('[name="post_op_diagnosis"]').val());
+    $('#tpl_anesthetic_technique').val($('[name="anesthetic_technique"]').val());
+    $('#tpl_op_position').val($('[name="op_position"]').val());
+    $('#tpl_incision').val($('[name="incision"]').val());
+    $('#tpl_finding').val($('[name="finding"]').val());
+    $('#tpl_procedure_detail').val($('[name="procedure_detail"]').val());
+    
+    loadTemplateList();
     $('#templateModal').modal('show');
 }
+
+function editTemplateInModal(id) {
+    Swal.fire({ title: 'กำลังโหลด...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    $.get('form-operative-template-api.php?action=get&id=' + id, function(res) {
+        Swal.close();
+        if(res.success) {
+            $('#tpl_id').val(id);
+            $('#tpl_operation_name').val(res.operation_name);
+            $('#tpl_clinical_diagnosis').val(res.clinical_diagnosis || '');
+            $('#tpl_post_op_diagnosis').val(res.post_op_diagnosis || '');
+            $('#tpl_anesthetic_technique').val(res.anesthetic_technique || '');
+            $('#tpl_op_position').val(res.op_position || '');
+            $('#tpl_incision').val(res.incision || '');
+            $('#tpl_finding').val(res.finding || '');
+            $('#tpl_procedure_detail').val(res.procedure_detail || '');
+            
+            // Scroll to top of modal
+            $('#templateModal .modal-body').animate({ scrollTop: 0 }, 'fast');
+            $('#tpl_operation_name').focus();
+        }
+    }, 'json');
+}
+
+
 
 function refreshTemplateTable() {
     loadTemplateList(function(data) {
@@ -1071,10 +1285,104 @@ function refreshTemplateTable() {
                 <tr>
                     <td>${item.operation_name}</td>
                     <td>${item.create_datetime}</td>
-                    <td><button type="button" class="btn btn-sm btn-danger py-0 px-2" onclick="deleteTemplate(${item.id})"><i class="fas fa-trash"></i> ลบ</button></td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-info py-0 px-2 mb-1" onclick="loadTemplateToEdit(${item.id}, '${item.operation_name}')" title="ดึงข้อมูลลงฟอร์มเพื่อใช้งาน"><i class="fas fa-download"></i> ใช้</button>
+                        <button type="button" class="btn btn-sm btn-warning py-0 px-2 mb-1" onclick="editTemplateInModal(${item.id})" title="แก้ไขข้อมูล Template นี้"><i class="fas fa-pencil-alt"></i> แก้ไข</button>
+                        <button type="button" class="btn btn-sm btn-success py-0 px-2 mb-1" onclick="copyTemplate(${item.id}, '${item.operation_name}')" title="คัดลอกให้ผู้อื่น"><i class="fas fa-share"></i> โอน</button>
+                        <button type="button" class="btn btn-sm btn-danger py-0 px-2 mb-1" onclick="deleteTemplate(${item.id})" title="ลบ"><i class="fas fa-trash"></i> ลบ</button>
+                    </td>
                 </tr>
             `);
         });
+    });
+}
+
+function loadTemplateToEdit(id, opName) {
+    $('#templateModal').modal('hide');
+    fetchTemplateImage(id, opName);
+    
+    // Set the dropdown value to match the template name
+    var opSelect = $('#inp_operation_name');
+    if(opSelect.find("option[value='" + opName + "']").length) {
+        opSelect.val(opName).trigger('change.select2');
+    } else {
+        var newOption = new Option(opName, opName, true, true);
+        opSelect.append(newOption).trigger('change');
+    }
+}
+
+function copyTemplate(id, opName) {
+    Swal.fire({
+        title: 'กำลังโหลดข้อมูล...',
+        text: 'โปรดรอสักครู่',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+    });
+
+    $.ajax({
+        url: 'form-operative-template-api.php?action=users',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            Swal.close();
+            if(res.success) {
+                var optionsHtml = '<option value="">-- ค้นหาและเลือกผู้รับ --</option>';
+                res.data.forEach(function(u) {
+                    optionsHtml += `<option value="${u.loginname}">${u.name} (${u.loginname})</option>`;
+                });
+                
+                Swal.fire({
+                    title: 'โอน Template',
+                    html: `
+                        <div class="text-left mb-2 text-muted">ส่งสำเนา "<b>${opName}</b>" ให้แพทย์/ผู้ใช้งานท่านอื่น</div>
+                        <select id="swal-target-user" class="form-control" style="width: 100%;">
+                            ${optionsHtml}
+                        </select>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'โอน Template',
+                    cancelButtonText: 'ยกเลิก',
+                    didOpen: () => {
+                        $('#swal-target-user').select2({
+                            dropdownParent: $('.swal2-container')
+                        });
+                    },
+                    preConfirm: () => {
+                        var val = $('#swal-target-user').val();
+                        if (!val) {
+                            Swal.showValidationMessage('กรุณาเลือกผู้รับ');
+                            return false;
+                        }
+                        return val;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'form-operative-template-api.php?action=copy',
+                            type: 'POST',
+                            data: { id: id, target_user: result.value },
+                            dataType: 'json',
+                            success: function(cRes) {
+                                if (cRes.success) {
+                                    Swal.fire('สำเร็จ', 'ส่งสำเนา Template ให้ผู้ใช้อื่นเรียบร้อยแล้ว', 'success');
+                                } else {
+                                    Swal.fire('ข้อผิดพลาด', cRes.message, 'error');
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire('ข้อผิดพลาด', 'เซิร์ฟเวอร์ไม่ตอบสนอง (Copy Error: ' + xhr.status + ')', 'error');
+                            }
+                        });
+                    }
+                });
+            } else {
+                Swal.fire('ข้อผิดพลาด', res.message || 'ไม่สามารถโหลดรายชื่อผู้ใช้ได้', 'error');
+            }
+        },
+        error: function(xhr) {
+            Swal.close();
+            Swal.fire('ข้อผิดพลาด', 'เซิร์ฟเวอร์ไม่ตอบสนอง (Users Error: ' + xhr.status + ')', 'error');
+        }
     });
 }
 
@@ -1082,7 +1390,19 @@ $('#templateForm').on('submit', function(e) {
     e.preventDefault();
     var fd = new FormData();
     fd.append('operation_name', $('#tpl_operation_name').val());
-    fd.append('template_image', $('#tpl_image')[0].files[0]);
+    
+    if ($('#tpl_image')[0].files.length > 0) {
+        fd.append('template_image', $('#tpl_image')[0].files[0]);
+    }
+    
+    // Save text fields from Modal into the template
+    fd.append('clinical_diagnosis', $('#tpl_clinical_diagnosis').val());
+    fd.append('post_op_diagnosis', $('#tpl_post_op_diagnosis').val());
+    fd.append('anesthetic_technique', $('#tpl_anesthetic_technique').val());
+    fd.append('op_position', $('#tpl_op_position').val());
+    fd.append('incision', $('#tpl_incision').val());
+    fd.append('finding', $('#tpl_finding').val());
+    fd.append('procedure_detail', $('#tpl_procedure_detail').val());
     
     var btn = $(this).find('button[type="submit"]');
     var orgHtml = btn.html();

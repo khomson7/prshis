@@ -42,6 +42,15 @@ try {
 
     $combinedB64 = $_POST['combinedB64'] ?? '';
     $images      = json_decode($_POST['images'] ?? '[]', true);
+    
+    $surgeon_val = null;
+    if (isset($_POST['surgeon'])) {
+        if (is_array($_POST['surgeon'])) {
+            $surgeon_val = json_encode($_POST['surgeon'], JSON_UNESCAPED_UNICODE);
+        } else {
+            $surgeon_val = $_POST['surgeon'];
+        }
+    }
 
     $combined_bin = decodeB64($combinedB64);
 
@@ -68,7 +77,7 @@ try {
     $stmt->bindParam(':operation_date', $operation_date);
     $stmt->bindParam(':time_started', $time_started);
     $stmt->bindParam(':time_ended', $time_ended);
-    $stmt->bindValue(':surgeon', $_POST['surgeon'] ?? null);
+    $stmt->bindValue(':surgeon', $surgeon_val);
     $stmt->bindValue(':first_assistant', $_POST['first_assistant'] ?? null);
     $stmt->bindValue(':second_assistant', $_POST['second_assistant'] ?? null);
     $stmt->bindValue(':surgical_nurse', $_POST['surgical_nurse'] ?? null);

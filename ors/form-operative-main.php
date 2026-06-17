@@ -24,6 +24,15 @@ Session::insertSystemAccessLog(json_encode([
 $stmt = $conn->prepare("SELECT * FROM prs_operative_note WHERE an = :an AND is_deleted = 0 ORDER BY create_datetime DESC");
 $stmt->execute(['an' => $an]);
 $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+function formatSurgeon($jsonStr) {
+    if (empty($jsonStr)) return '';
+    $arr = json_decode($jsonStr, true);
+    if (is_array($arr)) {
+        return implode(', ', $arr);
+    }
+    return $jsonStr;
+}
 ?>
 <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 <link  rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">
@@ -70,7 +79,7 @@ $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?= htmlspecialchars(substr($row['time_started'] ?? '', 0, 5)) ?> - 
                                     <?= htmlspecialchars(substr($row['time_ended'] ?? '', 0, 5)) ?>
                                 </td>
-                                <td class="align-middle"><?= htmlspecialchars($row['surgeon']) ?></td>
+                                <td class="align-middle"><?= htmlspecialchars(formatSurgeon($row['surgeon'])) ?></td>
                                 <td class="align-middle"><?= htmlspecialchars($row['operation_name']) ?></td>
                                 <td class="align-middle">
                                     <small><?= htmlspecialchars($row['created_by']) ?><br>
@@ -85,7 +94,7 @@ $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                        target="_blank" class="btn btn-sm btn-secondary" title="พิมพ์ PDF">
                                         <i class="fas fa-file-pdf"></i>
                                     </a>
-                                    <?php if ($row['created_by'] === $loginname && Session::checkPermission('OPNOTE', 'DELETE') && ReportQueryUtils::checkReadOnly($an)): ?>
+                                    <?php if (($row['created_by'] === $loginname || strtolower($loginname) === 'admin') && Session::checkPermission('OPNOTE', 'REMOVE') && ReportQueryUtils::checkReadOnly($an)): ?>
                                     <button type="button" class="btn btn-sm btn-danger" title="ลบ" onclick="deleteRecord(<?= $row['id'] ?>)">
                                         <i class="fas fa-trash"></i>
                                     </button>

@@ -8,7 +8,7 @@ require_once '../include/DbUtils.php';
 header('Content-Type: application/json; charset=utf-8');
 
 try {
-    if (!Session::checkPermission('OPNOTE', 'DELETE')) {
+    if (!Session::checkPermission('OPNOTE', 'REMOVE')) {
         throw new Exception('ไม่มีสิทธิ์ในการลบข้อมูล');
     }
 
@@ -23,7 +23,7 @@ try {
     $stmt_c->execute(['id' => $id, 'an' => $an]);
     $row = $stmt_c->fetch(PDO::FETCH_ASSOC);
     if (!$row) throw new Exception('ไม่พบข้อมูลที่ต้องการลบ');
-    if ($row['created_by'] !== $loginname) throw new Exception('ลบได้เฉพาะผู้บันทึกเท่านั้น');
+    if ($row['created_by'] !== $loginname && strtolower($loginname) !== 'admin') throw new Exception('ลบได้เฉพาะผู้บันทึก หรือ Admin เท่านั้น');
 
     $stmt = $conn->prepare("UPDATE prs_operative_note SET 
         is_deleted = 1,

@@ -44,12 +44,22 @@ function thaiDate($d) {
     return (count($p)===3) ? ((int)$p[2].' '.$m[(int)$p[1]].' '.((int)$p[0]+543)) : $d;
 }
 
+function formatSurgeon($jsonStr) {
+    if (empty($jsonStr)) return '';
+    $arr = json_decode($jsonStr, true);
+    if (is_array($arr)) {
+        return implode(', ', $arr);
+    }
+    return $jsonStr;
+}
+
 $pt_name   = ($pt['pname']??'').($pt['fname']??'').' '.($pt['lname']??'');
 $hn        = $pt['hn'] ?? '';
 $ward_name = $pt['ward_name'] ?? '';
 $age_y     = $pt['birthday'] ? date_diff(date_create($pt['birthday']), date_create('today'))->y : '-';
 $reg_date  = thaiDate($pt['regdate'] ?? '');
 $print_dt  = thaiDate(date('Y-m-d')).' '.date('H:i');
+$surgeon_display = formatSurgeon($rec['surgeon'] ?? '');
 
 // Image generation block first
 $combined_b64 = '';
@@ -188,7 +198,7 @@ $html = '
   </table>
   <table class="row-tb">
     <tr>
-      <td class="lbl" style="width:60px">Surgeon</td><td class="val" style="width:40%">' . htmlspecialchars($rec['surgeon']??'') . '</td>
+      <td class="lbl" style="width:60px">Surgeon</td><td class="val" style="width:40%">' . htmlspecialchars($surgeon_display) . '</td>
       <td class="lbl" style="width:90px">First assistant</td><td class="val">' . htmlspecialchars($rec['first_assistant']??'') . '</td>
     </tr>
     <tr>
@@ -259,7 +269,7 @@ $html = '
     <tr>
       <td>Department <br><br><b>ศัลยกรรม</b></td>
       <td>Ward <br><br><b>' . htmlspecialchars($ward_name) . '</b></td>
-      <td>Signature <br><br><b>' . htmlspecialchars($rec['surgeon']??'') . '</b></td>
+      <td>Signature <br><br><b>' . htmlspecialchars($surgeon_display) . '</b></td>
     </tr>
   </table>
 

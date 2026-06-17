@@ -46,6 +46,15 @@ try {
 
     $combinedB64 = $_POST['combinedB64'] ?? '';
     $images      = json_decode($_POST['images'] ?? '[]', true);
+    
+    $surgeon_val = null;
+    if (isset($_POST['surgeon'])) {
+        if (is_array($_POST['surgeon'])) {
+            $surgeon_val = json_encode($_POST['surgeon'], JSON_UNESCAPED_UNICODE);
+        } else {
+            $surgeon_val = $_POST['surgeon'];
+        }
+    }
     $combined_bin = decodeB64($combinedB64);
 
     $stmt = $conn->prepare("UPDATE prs_operative_note SET 
@@ -78,7 +87,7 @@ try {
         'operation_date' => !empty($_POST['operation_date']) ? $_POST['operation_date'] : null,
         'time_started' => !empty($_POST['time_started']) ? $_POST['time_started'] : null,
         'time_ended' => !empty($_POST['time_ended']) ? $_POST['time_ended'] : null,
-        'surgeon' => $_POST['surgeon'] ?? null,
+        'surgeon' => $surgeon_val,
         'first_assistant' => $_POST['first_assistant'] ?? null,
         'second_assistant' => $_POST['second_assistant'] ?? null,
         'surgical_nurse' => $_POST['surgical_nurse'] ?? null,
