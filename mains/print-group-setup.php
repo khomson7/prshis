@@ -3,6 +3,18 @@ require_once '../include/Session.php';
 Session::checkLoginSessionAndShowMessage();
 require_once '../mains/main-report.php'; // Top nav
 
+// เช็คสิทธิ์การเข้าใช้งานหน้านี้
+$permissionCheck     = Session::checkPermissionAndShowMessage('SETUP_PRINT_GROUP', 'VIEW');
+$permissionCheckJson = json_encode($permissionCheck);
+
+if (!$permissionCheck['hasPermission']) {
+    echo '<div class="container mt-5"><div class="alert alert-danger text-center shadow-sm"><i class="fas fa-lock fa-2x mb-3"></i><br><h5>' . htmlspecialchars($permissionCheck['message']) . '</h5></div></div>';
+    exit;
+}
+
+$canAdd = Session::checkPermission('SETUP_PRINT_GROUP', 'ADD') ? 'true' : 'false';
+$canEdit = Session::checkPermission('SETUP_PRINT_GROUP', 'EDIT') ? 'true' : 'false';
+$canRemove = Session::checkPermission('SETUP_PRINT_GROUP', 'REMOVE') ? 'true' : 'false';
 ?>
 <div class="container-fluid mt-4 mb-5">
     <div class="row mb-3">
@@ -17,9 +29,11 @@ require_once '../mains/main-report.php'; // Top nav
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">1. รายการกลุ่ม (Groups)</h6>
+                    <?php if (Session::checkPermission('SETUP_PRINT_GROUP', 'ADD')): ?>
                     <button class="btn btn-sm btn-light" onclick="openGroupModal()">
                         <i class="fas fa-plus"></i> เพิ่มกลุ่ม
                     </button>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-hover table-striped mb-0">
@@ -43,9 +57,11 @@ require_once '../mains/main-report.php'; // Top nav
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">2. เอกสารในกลุ่ม: <span id="currentGroupName" class="text-warning">กรุณาเลือกกลุ่มจากด้านซ้าย</span></h6>
+                    <?php if (Session::checkPermission('SETUP_PRINT_GROUP', 'ADD')): ?>
                     <button class="btn btn-sm btn-light" id="btnAddItem" onclick="openItemModal()">
                         <i class="fas fa-plus"></i> เพิ่มเอกสาร
                     </button>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-hover table-bordered mb-0">
@@ -134,6 +150,10 @@ require_once '../mains/main-report.php'; // Top nav
 </style>
 
 <script>
+const CAN_ADD = <?= $canAdd ?>;
+const CAN_EDIT = <?= $canEdit ?>;
+const CAN_REMOVE = <?= $canRemove ?>;
+
 let currentSelectedGroup = 0;
 
 $(document).ready(function() {
@@ -175,12 +195,16 @@ function loadGroups() {
             res.data.forEach(g => {
                 let activeClass = (g.group_print == currentSelectedGroup) ? 'tr-active' : '';
                 let safeName = $('<div>').text(g.group_name).html().replace(/'/g, "\\'");
+                
+                let btnEditHtml = CAN_EDIT ? `<button class="btn btn-sm btn-warning" onclick="editGroup(${g.group_print}, '${safeName}')"><i class="fas fa-edit"></i></button>` : '';
+                let btnDelHtml = CAN_REMOVE ? `<button class="btn btn-sm btn-danger" onclick="deleteGroup(${g.group_print})"><i class="fas fa-trash"></i></button>` : '';
+                
                 html += `<tr class="cursor-pointer ${activeClass}" data-id="${g.group_print}" onclick="selectGroup(${g.group_print}, '${safeName}')">
                     <td class="align-middle">${g.group_print}</td>
                     <td class="align-middle">${g.group_name}</td>
                     <td class="text-center align-middle" onclick="event.stopPropagation();">
-                        <button class="btn btn-sm btn-warning" onclick="editGroup(${g.group_print}, '${safeName}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteGroup(${g.group_print})"><i class="fas fa-trash"></i></button>
+                        ${btnEditHtml}
+                        ${btnDelHtml}
                     </td>
                 </tr>`;
             });
@@ -210,15 +234,19 @@ function loadItems(groupId) {
         let html = '';
         if(res.success && res.data.length > 0) {
             res.data.forEach(item => {
-                let encodedDoc = $('<div>').text(item.document_name).html();
-                let encodedPdf = $('<div>').text(item.pdf_script).html();
+                let encodedDoc = $('<div>').text(item.document_name).html().replace(/'/g, "\\'");
+                let encodedPdf = $('<div>').text(item.pdf_script).html().replace(/'/g, "\\'");
+                
+                let btnEditHtml = CAN_EDIT ? `<button class="btn btn-sm btn-warning" onclick="editItem(${item.id}, '${encodedDoc}', '${encodedPdf}', ${item.sort_order})"><i class="fas fa-edit"></i></button>` : '';
+                let btnDelHtml = CAN_REMOVE ? `<button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})"><i class="fas fa-trash"></i></button>` : '';
+                
                 html += `<tr>
                     <td class="text-center align-middle">${item.sort_order}</td>
                     <td class="align-middle">${encodedDoc}</td>
                     <td class="align-middle text-primary">${encodedPdf}</td>
                     <td class="text-center align-middle">
-                        <button class="btn btn-sm btn-warning" onclick="editItem(${item.id}, '${encodedDoc}', '${encodedPdf}', ${item.sort_order})"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})"><i class="fas fa-trash"></i></button>
+                        ${btnEditHtml}
+                        ${btnDelHtml}
                     </td>
                 </tr>`;
             });

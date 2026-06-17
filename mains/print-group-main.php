@@ -1,6 +1,15 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+Session::checkLoginSessionAndShowMessage();
+
+// สิทธิ์สำหรับการพิมพ์เอกสาร แนะนำให้ตั้งแยกจากสิทธิ์การตั้งค่า (SETUP_PRINT_GROUP)
+$permissionCheck = Session::checkPermissionAndShowMessage('PRINT_GROUP', 'VIEW');
+if (!$permissionCheck['hasPermission']) {
+    require_once '../mains/main-report.php'; // โหลด Navbar ก่อนแสดง Error
+    echo '<div class="container mt-5"><div class="alert alert-danger text-center shadow-sm"><i class="fas fa-lock fa-2x mb-3"></i><br><h5>' . htmlspecialchars($permissionCheck['message']) . '</h5></div></div>';
+    exit;
+}
+
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
 
 require_once '../mains/main-report.php'; // For top nav/layout if needed
@@ -126,7 +135,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     <small class="text-muted"><?= htmlspecialchars($item['pdf_script']) ?></small>
                                 </td>
                                 <td class="text-center align-middle">
-                                    <a href="../pdffile/<?= htmlspecialchars($item['pdf_script']) ?>?an=<?= urlencode($an) ?>&loginname=<?= urlencode($loginname) ?>" target="_blank" class="btn btn-sm btn-outline-secondary" title="พิมพ์เดี่ยว">
+                                    <a href="../<?= htmlspecialchars($item['pdf_script']) ?>?an=<?= urlencode($an) ?>&loginname=<?= urlencode($loginname) ?>" target="_blank" class="btn btn-sm btn-outline-secondary" title="พิมพ์เดี่ยว">
                                         <i class="fas fa-external-link-alt"></i>
                                     </a>
                                 </td>

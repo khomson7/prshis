@@ -1,6 +1,7 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
 require_once '../include/DbUtils.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -12,6 +13,23 @@ if (!$loginname) {
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+
+// ตรวจสอบสิทธิ์แยกตามประเภทการกระทำ (ADD, EDIT, REMOVE, VIEW)
+$reqOp = 'VIEW';
+if ($action === 'delete_group' || $action === 'delete_item') {
+    $reqOp = 'REMOVE';
+} elseif ($action === 'save_group') {
+    $reqOp = (!empty($_POST['group_print']) && $_POST['group_print'] > 0) ? 'EDIT' : 'ADD';
+} elseif ($action === 'save_item') {
+    $reqOp = (!empty($_POST['id']) && $_POST['id'] > 0) ? 'EDIT' : 'ADD';
+}
+
+$permissionCheck = Session::checkPermissionAndShowMessage('SETUP_PRINT_GROUP', $reqOp);
+if (!$permissionCheck['hasPermission']) {
+    echo json_encode(['success' => false, 'message' => $permissionCheck['message']]);
+    exit;
+}
+
 $conn = DbUtils::get_hosxp_connection();
 
 try {
@@ -19,11 +37,10 @@ try {
         $stmt = $conn->query("SELECT * FROM prs_group_print_index ORDER BY group_print");
         $groups = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(['success' => true, 'data' => $groups]);
-    } 
-    elseif ($action === 'save_group') {
-        $group_print = isset($_POST['group_print']) ? (int)$_POST['group_print'] : 0;
+    } elseif ($action === 'save_group') {
+        $group_print = isset($_POST['group_print']) ? (int) $_POST['group_print'] : 0;
         $group_name = trim($_POST['group_name'] ?? '');
-        
+
         if (!$group_name) {
             echo json_encode(['success' => false, 'message' => 'กรุณาระบุชื่อกลุ่ม']);
             exit;
@@ -36,15 +53,14 @@ try {
         } else {
             // Insert - Auto increment group_print manually since it might not be AUTO_INCREMENT in DB schema
             $maxStmt = $conn->query("SELECT MAX(group_print) FROM prs_group_print_index");
-            $newId = (int)$maxStmt->fetchColumn() + 1;
-            
+            $newId = (int) $maxStmt->fetchColumn() + 1;
+
             $stmt = $conn->prepare("INSERT INTO prs_group_print_index (group_print, group_name) VALUES (:group_print, :group_name)");
             $stmt->execute(['group_print' => $newId, 'group_name' => $group_name]);
         }
         echo json_encode(['success' => true]);
-    }
-    elseif ($action === 'delete_group') {
-        $group_print = isset($_POST['group_print']) ? (int)$_POST['group_print'] : 0;
+    } elseif ($action === 'delete_group') {
+        $group_print = isset($_POST['group_print']) ? (int) $_POST['group_print'] : 0;
         if ($group_print > 0) {
             $conn->prepare("DELETE FROM prs_group_print_item WHERE group_print = :group_print")->execute(['group_print' => $group_print]);
             $conn->prepare("DELETE FROM prs_group_print_index WHERE group_print = :group_print")->execute(['group_print' => $group_print]);
@@ -52,20 +68,18 @@ try {
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid ID']);
         }
-    }
-    elseif ($action === 'get_items') {
-        $group_print = isset($_REQUEST['group_print']) ? (int)$_REQUEST['group_print'] : 0;
+    } elseif ($action === 'get_items') {
+        $group_print = isset($_REQUEST['group_print']) ? (int) $_REQUEST['group_print'] : 0;
         $stmt = $conn->prepare("SELECT * FROM prs_group_print_item WHERE group_print = :group_print ORDER BY sort_order, id");
         $stmt->execute(['group_print' => $group_print]);
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(['success' => true, 'data' => $items]);
-    }
-    elseif ($action === 'save_item') {
-        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-        $group_print = isset($_POST['group_print']) ? (int)$_POST['group_print'] : 0;
+    } elseif ($action === 'save_item') {
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $group_print = isset($_POST['group_print']) ? (int) $_POST['group_print'] : 0;
         $document_name = trim($_POST['document_name'] ?? '');
         $pdf_script = trim($_POST['pdf_script'] ?? '');
-        $sort_order = isset($_POST['sort_order']) ? (int)$_POST['sort_order'] : 0;
+        $sort_order = isset($_POST['sort_order']) ? (int) $_POST['sort_order'] : 0;
 
         if (!$group_print || !$document_name || !$pdf_script) {
             echo json_encode(['success' => false, 'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน']);
@@ -90,9 +104,8 @@ try {
             ]);
         }
         echo json_encode(['success' => true]);
-    }
-    elseif ($action === 'delete_item') {
-        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+    } elseif ($action === 'delete_item') {
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         if ($id > 0) {
             $conn->prepare("DELETE FROM prs_group_print_item WHERE id = :id")->execute(['id' => $id]);
             echo json_encode(['success' => true]);
