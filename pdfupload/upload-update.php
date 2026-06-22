@@ -48,14 +48,42 @@ try {
     // ---- ถ้ามีการ upload ไฟล์ใหม่ ----
     if (!empty($_FILES['pdf_file']['name'])) {
         $file      = $_FILES['pdf_file'];
-        $file_ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $mime_type = mime_content_type($file['tmp_name']);
 
-        if ($file_ext !== 'pdf' || !in_array($mime_type, ['application/pdf', 'application/x-pdf', 'application/acrobat', 'applications/vnd.pdf', 'text/pdf', 'text/x-pdf'])) {
-            if ($file_ext !== 'pdf' || (strpos($mime_type, 'pdf') === false && $mime_type !== 'application/octet-stream')) {
-                echo json_encode(['status' => 'error', 'message' => 'ผิดพลาด รองรับเฉพาะไฟล์ PDF เท่านั้น']);
-                exit;
+        if (isset($file['error']) && $file['error'] !== UPLOAD_ERR_OK) {
+            echo json_encode(['status' => 'error', 'message' => 'อัปโหลดล้มเหลว รหัสข้อผิดพลาด: ' . $file['error']]);
+            exit;
+        }
+
+        $file_ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $mime_type = @mime_content_type($file['tmp_name']);
+        if (empty($mime_type)) {
+            $mime_type = $file['type'] ?? '';
+        }
+
+        $is_pdf = false;
+        $magic = '';
+        if ($file_ext === 'pdf') {
+            if (in_array($mime_type, ['application/pdf', 'application/x-pdf', 'application/acrobat', 'applications/vnd.pdf', 'text/pdf', 'text/x-pdf', 'application/octet-stream'])) {
+                $is_pdf = true;
+            } elseif (strpos((string)$mime_type, 'pdf') !== false) {
+                $is_pdf = true;
+            } else {
+                // Fallback check magic bytes
+                $handle = @fopen($file['tmp_name'], 'r');
+                if ($handle) {
+                    $magic = fread($handle, 10);
+                    fclose($handle);
+                    if (strpos($magic, '%PDF') !== false) {
+                        $is_pdf = true;
+                    }
+                }
             }
+        }
+
+        if (!$is_pdf) {
+            $debug = "ext=$file_ext, mime=$mime_type, magic=" . bin2hex($magic) . ", err=" . ($file['error'] ?? 'none');
+            echo json_encode(['status' => 'error', 'message' => 'ผิดพลาด รองรับเฉพาะไฟล์ PDF เท่านั้น (' . $debug . ')']);
+            exit;
         }
 
         if ($file['size'] > 20 * 1024 * 1024) {
