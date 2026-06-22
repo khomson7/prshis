@@ -66,7 +66,8 @@ $doc_groups = [
 ];
 
 // ---- ดึงรายการ PDF ของ AN นี้ ----
-$stmt = $conn->prepare("SELECT * FROM prs_pdf_upload
+$stmt = $conn->prepare("SELECT id, an, doc_name, doc_group, original_name, file_size, upload_at, upload_by 
+                         FROM prs_pdf_upload
                          WHERE an = :an AND is_deleted = 0
                          ORDER BY upload_at DESC");
 $stmt->execute(['an' => $an]);

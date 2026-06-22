@@ -5,6 +5,10 @@ header("Pragma: no-cache");
 require_once '../include/Session.php';
 require_once '../include/DbUtils.php';
 
+// เพิ่ม memory_limit และเวลาทำงานสูงสุด เนื่องจาก mPDF ใช้ทรัพยากรสูงมากกับไฟล์ขนาดใหญ่
+ini_set('memory_limit', '1024M');
+ini_set('max_execution_time', '300');
+
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : '';
 if (!$loginname) { http_response_code(403); exit('Unauthorized'); }
 
@@ -160,7 +164,8 @@ try {
             }
         } else {
             error_log("PRS-HIS-DEBUG QPDF FAILED: return_var=$return_var, tmp_out_exists=" . (file_exists($tmp_out)?'1':'0'));
-            exit("ERROR: qpdf is missing or failed to run. Return code: $return_var");
+            // Fallback: Serve the original un-watermarked PDF if we can't process it at all
+            $watermarkedData = $file_data;
         }
         
         if (file_exists($tmp_in)) @unlink($tmp_in);
