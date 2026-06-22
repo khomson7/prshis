@@ -1,6 +1,7 @@
 <?php
         require_once '../include/Session.php';
-        Session::checkLoginSessionAndShowMessage(); //เช็ค session
+        require_once '../include/session-sso.php';
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
         require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
         $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
@@ -403,3 +404,4 @@ else if(!(expression == "ประเมินไม่ได้" || expression 
         
 
 </script>
+

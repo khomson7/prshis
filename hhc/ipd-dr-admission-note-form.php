@@ -7,10 +7,10 @@ $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 //ส่วนหัวหน้า
 require_once '../mains/main-report.php';
 //check session and permission  

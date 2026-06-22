@@ -1,5 +1,6 @@
 <?php 
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../mains/main-report.php';
 if(Session::checkLoginSession()){
   

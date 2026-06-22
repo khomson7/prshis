@@ -14,6 +14,7 @@ require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/Session.php';
 
+require_once '../include/session-sso.php';
 date_default_timezone_set("Asia/Bangkok");
 set_time_limit(60); // ลดจาก 120 → 60 เพราะ query เบาลง
 

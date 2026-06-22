@@ -3,6 +3,7 @@ ob_start();
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 date_default_timezone_set("Asia/Bangkok");
 
 $conn = DbUtils::get_hosxp_connection();
@@ -96,3 +97,4 @@ try {
     echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
 ?>
+

@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

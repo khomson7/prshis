@@ -3,6 +3,7 @@
 
 
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -13,10 +14,10 @@ require_once '../include/DbUtils.php';
 $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-/*if ($login != $loginname) {
+/*/* if ($login != $loginname) {
     session_start();
     session_destroy();
-} */
+} */ */
 //require_once '../mains/main-report.php';
 
 //Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -90,5 +91,7 @@ $writer->save('php://output');
 exit;
 
 ?>
+
+
 
 

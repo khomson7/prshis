@@ -4,6 +4,7 @@ require_once '../include/KphisConstant.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
 
+require_once '../include/session-sso.php';
 if(Session::checkLoginSession()){
 	$hn = $_REQUEST['hn'];
 	if($hn != null || $hn != ''){

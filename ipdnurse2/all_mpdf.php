@@ -3,16 +3,17 @@
 require_once '../include/Session.php';
  
                  
-   $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+   require_once '../include/session-sso.php';
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
    $loginname = $_SESSION['loginname'];
    $values =['loginname'=>$loginname];
    
    //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-   if($login != $loginname){
+   /* if($login != $loginname){
        session_start();
        session_destroy();              
            
-     } 
+     } */ 
 
  Session::checkLoginSessionAndShowMessage(); //เช็ค session
 Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
@@ -20,6 +21,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 //require_once __DIR__ . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/KphisQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');
@@ -50,10 +52,10 @@ Session::insertSystemAccessLog(json_encode(array(
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 */
 $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
@@ -433,7 +435,8 @@ require_once '../mains/datethai.php';
 require_once '../include/Session.php';
  
                  
-   $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+   require_once '../include/session-sso.php';
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
    $loginname = $_SESSION['loginname'];
    $values =['loginname'=>$loginname];
    
@@ -459,6 +462,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 //require_once __DIR__ . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
 
@@ -490,10 +494,10 @@ Session::insertSystemAccessLog(json_encode(array(
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 */
 $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
@@ -1398,4 +1402,6 @@ $level_of_consciousness_1.'&nbsp;Alert&nbsp;'
 $mpdf->setFooter('HN: '.htmlspecialchars($hn).' AN: '.htmlspecialchars($an).' Page '.'{PAGENO}');
 $mpdf->WriteHTML($head);
 $mpdf->Output();
+
+
 

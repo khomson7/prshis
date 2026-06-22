@@ -3,6 +3,7 @@ include('../mains/datethai.php');
 //require_once __DIR__ . '/vendor/autoload.php';
 //$_SERVER['DOCUMENT_ROOT'] .
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage();
 //Session::checkLoginSessionAndShowMessage();
 require_once '../include/DbUtils.php';
@@ -140,3 +141,4 @@ require_once '../include/KphisQueryUtils.php';
             });
         </script>
     <?php } ?>
+

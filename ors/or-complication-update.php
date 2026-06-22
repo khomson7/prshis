@@ -3,7 +3,8 @@
         //เวลาตาม timezone
         date_default_timezone_set("Asia/Bangkok");
         require_once '../include/Session.php';
-        Session::checkLoginSessionAndShowMessage(); //เช็ค session
+        require_once '../include/session-sso.php';
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
         // SessionManager::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_NURSE_ADMISSION_NOTE');
         //ตรวจสอบสิทธ update
         /*

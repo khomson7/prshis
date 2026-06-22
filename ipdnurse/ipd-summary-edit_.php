@@ -3,7 +3,8 @@
     require_once '../include/KphisQueryUtils.php';
     require_once '../include/Session.php';
 
-     $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
+     require_once '../include/session-sso.php';
+$conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
     // SessionManager::checkLoginSessionAndShowMessage(); //เช็ค session
     /*if(!(
         // && SessionManager::checkPermission('IPD_NURSE_MAIN_PROGRAM','ACCESS')

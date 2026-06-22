@@ -1,7 +1,6 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE)
-    session_start();
+require_once '../include/session-sso.php';
 require_once '../include/DbUtils.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -120,3 +119,4 @@ try {
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 }
+

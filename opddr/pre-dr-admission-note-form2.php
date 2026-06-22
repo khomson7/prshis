@@ -5,6 +5,7 @@
 
 
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
+require_once '../include/session-sso.php';
 require_once '../mains/main-report.php';
 require_once '../mains/pre-opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/pre-opd-show-patient-main-sticky.php';
@@ -35,10 +36,10 @@ $vn = ReportQueryUtils::getpreOrderVn($hn,$order_for_date);
 //echo $order_for_date ;
 //  echo  $loginname;
 
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 
 Session::insertSystemAccessLog(json_encode(array(
     'form'=>'PRE-DR-ADMISSION-NOTE-FORM2',
@@ -2015,3 +2016,4 @@ function Draw5() {
         $('#' + id).val(value);
     }
 </script>
+

@@ -4,6 +4,7 @@ require_once '../include/DbConstant.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
 
+require_once '../include/session-sso.php';
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
 $an  = $_REQUEST['an'];
@@ -20,3 +21,4 @@ echo "<script>window.history.back();</script>";
 echo "<script>window.history.back();</script>";
 //exit();
 }
+

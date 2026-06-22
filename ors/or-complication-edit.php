@@ -1,6 +1,7 @@
 <?php
         require_once '../include/Session.php';
-        Session::checkLoginSessionAndShowMessage(); //เช็ค session
+        require_once '../include/session-sso.php';
+Session::checkLoginSessionAndShowMessage(); //เช็ค session
         // SessionManager::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_NURSE_ADMISSION_NOTE');
         //ตรวจสอบ sessions
       /*  if(!(Session::checkPermission('IPD_NURSE_ADDMISSION_NOTE','EDIT'))){

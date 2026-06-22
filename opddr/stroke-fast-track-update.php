@@ -1,4 +1,5 @@
 <?php require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
 if (!(Session::checkPermission('ADMISSION_NOTE', 'ADD'))) {
     return;
@@ -175,3 +176,4 @@ try {
 }
 
 echo $output_error;
+

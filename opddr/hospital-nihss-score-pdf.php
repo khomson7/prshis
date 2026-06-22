@@ -3,7 +3,8 @@
        // if(!(Session::checkPermission('IPD_NURSE_ADDMISSION_NOTE','VIEW'))){
          //   return;
        // }
-       $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+       require_once '../include/session-sso.php';
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
        $loginname = $_SESSION['loginname'];
        $values =['loginname'=>$loginname];
        $an = $_REQUEST['an'];

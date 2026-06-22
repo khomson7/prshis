@@ -1,6 +1,7 @@
 <?php
 require_once '../include/Session.php';
 // Simplified session check - ensure session is active via Session.php
+require_once '../include/session-sso.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

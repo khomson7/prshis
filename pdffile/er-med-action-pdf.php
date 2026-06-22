@@ -9,25 +9,29 @@ require_once '../include/Session.php';
 // =====================================================
 // ป้องกันการเรียกผ่าน GET (บังคับใช้ POST เท่านั้น)
 // =====================================================
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+/*if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo "<script>window.close();</script>";
     exit;
 }
-
+*/
 // =====================================================
 // ระบบ Single Sign-On (SSO) ข้าม Port/Server (แบบ POST)
 // =====================================================
 if (isset($_POST['hash']) && isset($_POST['loginuser']) && isset($_POST['t']) && isset($_POST['an'])) {
     $secret_key = "PRSHIS_SECRET_2026"; // ต้องตั้งให้ตรงกับฝั่งที่สร้างปุ่มลิงก์
-    
+
     // ขยายเวลาเป็น 1 ชั่วโมง (3600 วิ) และใช้ abs() เพื่อแก้ปัญหาเวลา 2 เซิร์ฟเวอร์เดินไม่เท่ากัน
     if (abs(time() - $_POST['t']) <= 3600) {
         $expected_hash = md5($_POST['loginuser'] . $_POST['t'] . $_POST['an'] . $secret_key);
-        
+
         // ถ้ารหัสตรงกัน ให้สร้าง Session ใช้งานได้เลย
         if ($_POST['hash'] === $expected_hash) {
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
+            }
+            // หาก session เก่าเป็นของคนละยูสเซอร์ ให้ล้างข้อมูล session เดิมออกให้หมด
+            if (isset($_SESSION['loginname']) && $_SESSION['loginname'] !== $_POST['loginuser']) {
+                session_unset();
             }
             $_SESSION['loginname'] = $_POST['loginuser'];
         }
@@ -240,7 +244,7 @@ $html = '
 for ($page = 1; $page <= $totalPages; $page++) {
     $offset = ($page - 1) * $daysPerPage;
     $pageDates = array_slice($allDates, $offset, $daysPerPage);
-    
+
     if ($page > 1) {
         $html .= '<pagebreak />';
     }
@@ -333,9 +337,9 @@ for ($page = 1; $page <= $totalPages; $page++) {
                         $html .= '<td rowspan="' . $maxRowsForDrug . '"></td>';
                     }
                 } elseif ($dateCount === $maxRowsForDrug) {
-                    $entry       = $entries[$rowIdx];
+                    $entry = $entries[$rowIdx];
                     $displayText = $entry['time'];
-                    $names       = [];
+                    $names = [];
                     if (!empty($entry['dname1']))
                         $names[] = $entry['dname1'];
                     if (!empty($entry['dname2']))
@@ -346,9 +350,9 @@ for ($page = 1; $page <= $totalPages; $page++) {
                     $html .= '<td style="font-size:15px; text-align:left;">' . htmlspecialchars($displayText) . '</td>';
                 } else {
                     if ($rowIdx < $dateCount) {
-                        $entry       = $entries[$rowIdx];
+                        $entry = $entries[$rowIdx];
                         $displayText = $entry['time'];
-                        $names       = [];
+                        $names = [];
                         if (!empty($entry['dname1']))
                             $names[] = $entry['dname1'];
                         if (!empty($entry['dname2']))

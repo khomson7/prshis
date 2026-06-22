@@ -1,6 +1,7 @@
 <?php   require_once '../include/Session.php';
        // Session::checkLoginSessionAndShowMessage(); //เช็ค session
-        require_once '../include/DbUtils.php';
+        require_once '../include/session-sso.php';
+require_once '../include/DbUtils.php';
         require_once '../include/KphisQueryUtils.php';
         require_once '../include/ReportQueryUtils.php';
         //require_once '../include/FormQueryUtils.php';

@@ -1,6 +1,9 @@
 <?php  // require_once './project/function/Session.php';
 // Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
+$loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
+
 // Session::checkLoginSessionAndShowMessage(); //เช็ค session
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
 require_once '../mains/main-report.php';

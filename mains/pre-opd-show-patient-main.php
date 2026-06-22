@@ -1,7 +1,8 @@
 <?php
 
     require_once '../include/Session.php';
-    Session::checkLoginSessionAndShowMessage();
+    require_once '../include/session-sso.php';
+Session::checkLoginSessionAndShowMessage();
     require_once '../include/DbUtils.php';
     require_once '../include/KphisQueryUtils.php';
     // require_once './vendor/autoload.php';
@@ -76,3 +77,4 @@
             </div>
         </div>
     <?php } ?>
+

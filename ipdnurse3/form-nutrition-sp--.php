@@ -7,6 +7,7 @@
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
 
+require_once '../include/session-sso.php';
 header('Content-Type: application/json; charset=utf-8');
 date_default_timezone_set("Asia/Bangkok");
 set_time_limit(120);
@@ -158,3 +159,4 @@ try {
     ]);
 }
 ?>
+

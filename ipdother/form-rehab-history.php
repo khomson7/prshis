@@ -4,6 +4,7 @@ require_once '../include/Session.php';
 // =====================================================
 // ป้องกันการเรียกผ่าน GET (บังคับใช้ POST เท่านั้น)
 // =====================================================
+require_once '../include/session-sso.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo "<script>window.close();</script>";
     exit;

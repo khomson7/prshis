@@ -1,5 +1,6 @@
 <?php 
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 $conn = DbUtils::get_hosxp_connection();
@@ -63,3 +64,4 @@ function check_Table_AuditEdit(){
 
 check_Table_AuditEdit();
 </script>
+

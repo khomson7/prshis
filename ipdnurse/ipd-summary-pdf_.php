@@ -3,6 +3,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/KphisQueryUtils.php';
 
 date_default_timezone_set('asia/bangkok');

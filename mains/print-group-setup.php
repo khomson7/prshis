@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage();
 require_once '../mains/main-report.php'; // Top nav
 
@@ -371,3 +372,4 @@ function deleteItem(id) {
     });
 }
 </script>
+

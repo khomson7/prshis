@@ -2,6 +2,7 @@
 ob_start();
 date_default_timezone_set("Asia/Bangkok");
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage();
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
@@ -93,3 +94,4 @@ try {
     echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
 ?>
+

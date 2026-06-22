@@ -5,6 +5,7 @@
 
 
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
+require_once '../include/session-sso.php';
 require_once '../mains/main-report.php';
 require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/opd-show-patient-main-sticky.php';
@@ -34,10 +35,10 @@ $values = ['loginname' => $loginname];
 
 
 
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 
 /*
 Session::insertSystemAccessLog(json_encode(array(
@@ -2206,3 +2207,4 @@ $row_period  = $stmt_period->fetch();
 
 <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">
+

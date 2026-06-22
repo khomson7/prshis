@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/DbUtils.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -85,3 +86,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+

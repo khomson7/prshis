@@ -1,7 +1,6 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE)
-    session_start();
+require_once '../include/session-sso.php';
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
 
 require_once '../mains/main-report.php';

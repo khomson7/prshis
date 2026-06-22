@@ -4,7 +4,8 @@ session_start();
    require_once '../include/Session.php';
    
 
-   $mylink = DbConstant::MAIN_LINK;
+   require_once '../include/session-sso.php';
+$mylink = DbConstant::MAIN_LINK;
    $root = $_SERVER['DOCUMENT_ROOT'];
 ?>
 
@@ -203,3 +204,4 @@ session_start();
     </body>
 
 </html>
+

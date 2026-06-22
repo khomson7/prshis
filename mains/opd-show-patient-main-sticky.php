@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage();
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
@@ -98,3 +99,4 @@ while ($row_opd = $stmt_opd->fetch()){
             });
         </script>
     <?php } ?>
+

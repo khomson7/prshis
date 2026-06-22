@@ -3,7 +3,8 @@ require_once '../mains/datethai.php';
 require_once '../include/Session.php';
  
                  
-   $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+   require_once '../include/session-sso.php';
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
    $loginname = $_SESSION['loginname'];
    $values =['loginname'=>$loginname];
    
@@ -29,6 +30,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 //require_once __DIR__ . '/vendor/autoload.php';
 require_once '../include/DbUtils.php';
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/KphisQueryUtils.php';
 require_once '../include/ReportQueryUtils.php';
 

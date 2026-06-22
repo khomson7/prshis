@@ -63,10 +63,10 @@ Session::insertSystemAccessLog(json_encode(array(
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 */
 $image_uncheck = "<img src='../include/images/check-adm.jpg' width='1.6%' class='check_img'>";
 $image_check = "<img src='../include/images/check-1.jpg' width='1.6%' class='check_img'>";
@@ -1309,3 +1309,4 @@ $mpdf->setAutoBottomMargin = 'stretch';
 $mpdf->setFooter('HN: '.htmlspecialchars($hn).' AN: '.htmlspecialchars($an).' Page '.'{PAGENO}');
 $mpdf->WriteHTML($head);
 $mpdf->Output();
+

@@ -1,14 +1,15 @@
 <?php  // require_once './project/function/Session.php';
 require_once '../include/Session.php';
 //ตรวจสอบว่า session login ตรงกันหรือไม่
+require_once '../include/session-sso.php';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 
 //ส่วนหัวหน้า
 require_once '../mains/main-report.php';
@@ -62,3 +63,4 @@ function saveSignature() {
   document.getElementById('signature-form').submit();
 }
 </script>
+

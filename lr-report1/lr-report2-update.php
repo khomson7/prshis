@@ -2,6 +2,7 @@
 //เวลาตาม timezone
 date_default_timezone_set("Asia/Bangkok");
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
 
 require_once '../include/DbUtils.php';
@@ -204,3 +205,4 @@ try {
 }
 
 echo $output_error;
+

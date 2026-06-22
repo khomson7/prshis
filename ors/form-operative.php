@@ -1,6 +1,7 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+require_once '../include/session-sso.php';
+
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
 
 require_once '../mains/main-report.php';
@@ -31,6 +32,33 @@ $items = [];
 $canEdit = true;
 $created_by = '';
 
+$session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
+
+// ดึง doctorcode, ชื่อ และ groupname จาก opduser เป็นหลักเพื่อลดปัญหา Session หาย
+$current_doctorcode = '';
+$current_fullname   = $session_name;
+$groupname          = isset($_SESSION['groupname']) ? $_SESSION['groupname'] : '';
+
+try {
+    $stmt_usr = $conn->prepare(
+        "SELECT u.name, u.doctorcode, d.name AS doctor_name, u.groupname
+           FROM " . DbConstant::HOSXP_DBNAME . ".opduser u
+           LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = u.doctorcode
+          WHERE u.loginname = :loginname LIMIT 1"
+    );
+    $stmt_usr->execute(['loginname' => $loginname]);
+    $usr_row = $stmt_usr->fetch(PDO::FETCH_ASSOC);
+    if ($usr_row) {
+        $current_doctorcode = trim($usr_row['doctorcode'] ?? '');
+        $doctor_fn = trim($usr_row['doctor_name'] ?? '');
+        $current_fullname = ($doctor_fn) ? $doctor_fn : ($usr_row['name'] ?? $session_name);
+        if (!empty($usr_row['groupname'])) {
+            $groupname = $usr_row['groupname'];
+        }
+    }
+} catch (Exception $e) { }
+$is_doctor = (mb_strpos($groupname, 'แพทย์') !== false);
+
 if ($ids) {
     $stmt_m = $conn->prepare("SELECT * FROM prs_operative_note WHERE id = :id AND an = :an AND is_deleted = 0");
     $stmt_m->execute(['id' => $ids, 'an' => $an]);
@@ -39,7 +67,28 @@ if ($ids) {
         $ids = null;
     } else {
         $created_by  = $rec['created_by'] ?? '';
-        $canEdit = ($loginname === $created_by);
+        $update_user = $rec['update_user'] ?? $created_by;
+
+        // เช็คว่า update_user เป็นแพทย์หรือไม่
+        $stmt_upd = $conn->prepare("SELECT groupname, doctorcode FROM " . DbConstant::HOSXP_DBNAME . ".opduser WHERE loginname = :loginname");
+        $stmt_upd->execute(['loginname' => $update_user]);
+        $upd_row = $stmt_upd->fetch(PDO::FETCH_ASSOC);
+        $update_user_is_doctor = false;
+        if ($upd_row) {
+            $upd_groupname = $upd_row['groupname'] ?? '';
+            $update_user_is_doctor = (mb_strpos($upd_groupname, 'แพทย์') !== false);
+        }
+
+        $canEdit = false;
+        if ($loginname === $created_by) {
+            $canEdit = true;
+        } else if ($is_doctor) { // อาศัยตัวแปร $is_doctor ที่ประกาศไว้ด้านบน
+            if ($loginname === $update_user) {
+                $canEdit = true;
+            } else if (!$update_user_is_doctor) {
+                $canEdit = true;
+            }
+        }
         
         $stmt_i = $conn->prepare("SELECT id, sort_order, image_type, original_name,
                                           canvas_w, canvas_h, svg_data, image_data
@@ -58,7 +107,7 @@ if ($ids) {
     }
 }
 
-$session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
+// ลบโค้ดส่วนที่ถูกย้ายไปแล้ว
 ?>
 <script src="../include/fabric.js"></script>
 <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
@@ -180,8 +229,8 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
         <div class="alert alert-warning d-flex align-items-center mb-3" style="font-size:14px">
             <i class="fas fa-lock mr-2 fa-lg"></i>
             <div>
-                <b>ไม่สามารถแก้ไขได้</b> — บันทึกโดย <b><?= htmlspecialchars($created_by) ?></b>
-                &nbsp;เฉพาะผู้บันทึกเท่านั้นที่สามารถแก้ไขรายการนี้ได้
+                <b>ไม่สามารถแก้ไขได้</b> — บันทึกล่าสุดโดย <b><?= htmlspecialchars($rec['update_user'] ?? $created_by) ?></b>
+                &nbsp;ผู้บันทึกเดิมหรือแพทย์ท่านแรกที่แก้ไขแล้วเท่านั้นที่สามารถแก้ไขรายการนี้ได้
             </div>
         </div>
         <?php endif; ?>
@@ -236,9 +285,11 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
                             <?php endif; ?>
                             <?php if ($canEdit): ?>
                             <div class="input-group-append">
+                                <?php if ($is_doctor): ?>
                                 <button class="btn btn-outline-success" type="button" onclick="signField('inp_surgeon')" title="ลงชื่ออัตโนมัติ">
                                     <i class="fas fa-signature"></i> SIGN
                                 </button>
+                                <?php endif; ?>
                                 <button class="btn btn-outline-secondary" type="button" onclick="clearField('inp_surgeon')" title="ล้าง">
                                     <i class="fas fa-times"></i>
                                 </button>
@@ -650,9 +701,52 @@ $session_name = isset($_SESSION['name']) ? $_SESSION['name'] : $loginname;
     </div>
 </div>
 
+<!-- Transfer Template Modal -->
+<div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="transferModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="transferModalLabel"><i class="fas fa-share"></i> โอน Template</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-1">ส่งสำเนา "<b id="transfer-op-name"></b>" ให้แพทย์/ผู้ใช้งานท่านอื่น</p>
+                <div class="form-group mt-2">
+                    <label for="transfer-search"><b>ค้นหาผู้รับ</b></label>
+                    <input type="text" id="transfer-search" class="form-control" placeholder="พิมพ์ชื่อหรือ username เพื่อค้นหา..." autocomplete="off">
+                </div>
+                <div id="transfer-user-list" style="max-height:260px; overflow-y:auto; border:1px solid #dee2e6; border-radius:4px;">
+                    <!-- user rows injected here -->
+                </div>
+                <input type="hidden" id="transfer-selected-user">
+                <div id="transfer-selected-display" class="mt-2" style="display:none;">
+                    <span class="badge badge-success p-2" style="font-size:13px;"><i class="fas fa-user-check"></i> เลือกแล้ว: <span id="transfer-selected-label"></span></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-success" id="btn-confirm-transfer"><i class="fas fa-share"></i> โอน Template</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-var _sessionName = <?= json_encode($session_name) ?>;
+var _sessionName = <?= json_encode($current_fullname) ?>;
+var _isDoctor    = <?= $is_doctor ? 'true' : 'false' ?>;
+var _doctorOnlyFields = ['inp_surgeon'];
+
 function signField(fieldId) {
+    // ตรวจสอบสิทธิ์แพทย์สำหรับ surgeon / anesthesiologist
+    if (_doctorOnlyFields.indexOf(fieldId) !== -1 && !_isDoctor) {
+        Swal.fire({
+            title: 'ไม่สามารถ SIGN ได้',
+            text: 'เฉพาะแพทย์เท่านั้นที่สามารถลงชื่อในช่องนี้ได้',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง'
+        });
+        return;
+    }
     var el = $('#' + fieldId);
     if (el.is('select') && el.prop('multiple')) {
         var current = el.val() || [];
@@ -1311,12 +1405,23 @@ function loadTemplateToEdit(id, opName) {
     }
 }
 
+var _transferTemplateId   = null;
+var _transferAllUsers     = [];
+
 function copyTemplate(id, opName) {
-    Swal.fire({
-        title: 'กำลังโหลดข้อมูล...',
-        text: 'โปรดรอสักครู่',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
+    _transferTemplateId = id;
+    _transferAllUsers   = [];
+
+    $('#transfer-op-name').text(opName);
+    $('#transfer-search').val('');
+    $('#transfer-user-list').html('<div class="p-3 text-center text-muted"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</div>');
+    $('#transfer-selected-user').val('');
+    $('#transfer-selected-display').hide();
+
+    // ปิด templateModal ก่อน แล้วค่อยเปิด transferModal เพื่อหลีกเลี่ยง nested modal focus conflict
+    $('#templateModal').modal('hide');
+    $('#templateModal').one('hidden.bs.modal', function() {
+        $('#transferModal').modal('show');
     });
 
     $.ajax({
@@ -1324,67 +1429,81 @@ function copyTemplate(id, opName) {
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            Swal.close();
-            if(res.success) {
-                var optionsHtml = '<option value="">-- ค้นหาและเลือกผู้รับ --</option>';
-                res.data.forEach(function(u) {
-                    optionsHtml += `<option value="${u.loginname}">${u.name} (${u.loginname})</option>`;
-                });
-                
-                Swal.fire({
-                    title: 'โอน Template',
-                    html: `
-                        <div class="text-left mb-2 text-muted">ส่งสำเนา "<b>${opName}</b>" ให้แพทย์/ผู้ใช้งานท่านอื่น</div>
-                        <select id="swal-target-user" class="form-control" style="width: 100%;">
-                            ${optionsHtml}
-                        </select>
-                    `,
-                    showCancelButton: true,
-                    confirmButtonText: 'โอน Template',
-                    cancelButtonText: 'ยกเลิก',
-                    didOpen: () => {
-                        $('#swal-target-user').select2({
-                            dropdownParent: $('.swal2-container')
-                        });
-                    },
-                    preConfirm: () => {
-                        var val = $('#swal-target-user').val();
-                        if (!val) {
-                            Swal.showValidationMessage('กรุณาเลือกผู้รับ');
-                            return false;
-                        }
-                        return val;
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'form-operative-template-api.php?action=copy',
-                            type: 'POST',
-                            data: { id: id, target_user: result.value },
-                            dataType: 'json',
-                            success: function(cRes) {
-                                if (cRes.success) {
-                                    Swal.fire('สำเร็จ', 'ส่งสำเนา Template ให้ผู้ใช้อื่นเรียบร้อยแล้ว', 'success');
-                                } else {
-                                    Swal.fire('ข้อผิดพลาด', cRes.message, 'error');
-                                }
-                            },
-                            error: function(xhr) {
-                                Swal.fire('ข้อผิดพลาด', 'เซิร์ฟเวอร์ไม่ตอบสนอง (Copy Error: ' + xhr.status + ')', 'error');
-                            }
-                        });
-                    }
-                });
+            if (res.success) {
+                _transferAllUsers = res.data;
+                renderTransferUserList(_transferAllUsers);
             } else {
-                Swal.fire('ข้อผิดพลาด', res.message || 'ไม่สามารถโหลดรายชื่อผู้ใช้ได้', 'error');
+                $('#transfer-user-list').html('<div class="p-3 text-center text-danger">ไม่สามารถโหลดรายชื่อผู้ใช้ได้</div>');
             }
         },
-        error: function(xhr) {
-            Swal.close();
-            Swal.fire('ข้อผิดพลาด', 'เซิร์ฟเวอร์ไม่ตอบสนอง (Users Error: ' + xhr.status + ')', 'error');
+        error: function() {
+            $('#transfer-user-list').html('<div class="p-3 text-center text-danger">เกิดข้อผิดพลาดในการเชื่อมต่อ</div>');
         }
     });
 }
+
+function renderTransferUserList(users) {
+    var q = $('#transfer-search').val().toLowerCase();
+    var filtered = users.filter(function(u) {
+        return u.name.toLowerCase().indexOf(q) >= 0 || u.loginname.toLowerCase().indexOf(q) >= 0;
+    });
+    if (filtered.length === 0) {
+        $('#transfer-user-list').html('<div class="p-3 text-center text-muted">ไม่พบผู้ใช้ที่ค้นหา</div>');
+        return;
+    }
+    var html = '';
+    filtered.forEach(function(u) {
+        var selected = ($('#transfer-selected-user').val() === u.loginname) ? 'background:#d4edda;font-weight:bold;' : '';
+        html += '<div class="transfer-user-row p-2" style="cursor:pointer;border-bottom:1px solid #f0f0f0;' + selected + '" data-loginname="' + u.loginname + '" data-name="' + u.name + '">' +
+                '<i class="fas fa-user mr-2 text-muted"></i>' + u.name + ' <span class="text-muted small">('+u.loginname+')</span></div>';
+    });
+    $('#transfer-user-list').html(html);
+}
+
+// เมื่อพิมพ์ค้นหาใน transferModal
+$('#transfer-search').on('input', function() {
+    renderTransferUserList(_transferAllUsers);
+});
+
+// เมื่อคลิกเลือกผู้รับ
+$(document).on('click', '.transfer-user-row', function() {
+    var loginname = $(this).data('loginname');
+    var name      = $(this).data('name');
+    $('#transfer-selected-user').val(loginname);
+    $('#transfer-selected-label').text(name + ' (' + loginname + ')');
+    $('#transfer-selected-display').show();
+    renderTransferUserList(_transferAllUsers);
+});
+
+// เมื่อกดปุ่มโอนใน transferModal
+$('#btn-confirm-transfer').on('click', function() {
+    var targetUser = $('#transfer-selected-user').val();
+    if (!targetUser) {
+        Swal.fire('แจ้งเตือน', 'กรุณาเลือกผู้รับก่อน', 'warning');
+        return;
+    }
+    var btn = $(this);
+    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> กำลังโอน...');
+    $.ajax({
+        url: 'form-operative-template-api.php?action=copy',
+        type: 'POST',
+        data: { id: _transferTemplateId, target_user: targetUser },
+        dataType: 'json',
+        success: function(cRes) {
+            btn.prop('disabled', false).html('<i class="fas fa-share"></i> โอน Template');
+            $('#transferModal').modal('hide');
+            if (cRes.success) {
+                Swal.fire('สำเร็จ', 'ส่งสำเนา Template ให้ผู้ใช้อื่นเรียบร้อยแล้ว', 'success');
+            } else {
+                Swal.fire('ข้อผิดพลาด', cRes.message, 'error');
+            }
+        },
+        error: function(xhr) {
+            btn.prop('disabled', false).html('<i class="fas fa-share"></i> โอน Template');
+            Swal.fire('ข้อผิดพลาด', 'เซิร์ฟเวอร์ไม่ตอบสนอง (' + xhr.status + ')', 'error');
+        }
+    });
+});
 
 $('#templateForm').on('submit', function(e) {
     e.preventDefault();

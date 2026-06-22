@@ -1,15 +1,16 @@
 <?php  // require_once './project/function/Session.php';
 require_once '../include/Session.php';
 //ตรวจสอบว่า session login ตรงกันหรือไม่
+require_once '../include/session-sso.php';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
 
 //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 require_once '../mains/main-report.php';
 
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -2132,3 +2133,4 @@ $check_    = ReportQueryUtils::getProduction($id)
 
                     <script src="../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
                     <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.min.css">
+

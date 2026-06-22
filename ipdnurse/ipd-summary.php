@@ -2,17 +2,18 @@
   // Session::checkPermissionAndShowMessage('IPD_DISCHARGE_SUMMARY','VIEW');
   require_once '../include/Session.php';
   //ตรวจสอบว่า session login ตรงกันหรือไม่
-         $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
+         require_once '../include/session-sso.php';
+$login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
           $loginname = $_SESSION['loginname'];
           $values =['loginname'=>$loginname];
   
           //หากพบว่าไม่ตรงกันให้ ทำลาย session เดิมทิ้งไป
-          if($login != $loginname){
+          /* if($login != $loginname){
               session_start();
               session_destroy();
               
                   
-            }
+            } */
             
   
        
@@ -444,3 +445,4 @@
         });
     }
 </script>
+

@@ -3,6 +3,7 @@
        require_once '../include/Session.php';
        
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
+require_once '../include/session-sso.php';
 require_once '../mains/main-report.php';
 require_once '../mains/opd-show-patient-main.php'; //เป็นส่วนที่แสดง ข้อมูลผู้ป่วย เช่น รูป,hn,an,ชื่อ-สกุล,แพ้ยา ฯลฯ
 require_once '../mains/opd-show-patient-main-sticky.php';
@@ -31,10 +32,10 @@ $values = ['loginname' => $loginname];
 
 
 
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 
 Session::insertSystemAccessLog(json_encode(array(
     'form'=>'NIHSS-SCORE-FORM',
@@ -541,3 +542,5 @@ function PersonAsCurrentUser_1(){
 
 
 </script>
+
+

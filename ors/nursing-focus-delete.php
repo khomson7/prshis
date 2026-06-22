@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/DbUtils.php';
 
 date_default_timezone_set('Asia/Bangkok');
@@ -54,3 +55,4 @@ try {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
+

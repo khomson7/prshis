@@ -3,6 +3,7 @@ require_once '../include/Session.php';
 //SessionManager::checkLoginSessionAndShowMessage(); //เช็ค session
 // SessionManager::checkPermissionAndShowMessage('KPHIS_ACCESS_IPD_NURSE_PROGRAM');
 
+require_once '../include/session-sso.php';
 require_once './project/function/DbUtils.php';
 require_once './project/function/KphisQueryUtils.php';
 

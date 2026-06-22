@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/DbUtils.php';
 $conn = DbUtils::get_hosxp_connection();
 $an = $_POST['an'];
@@ -31,3 +32,4 @@ if ($i == 1):
 ?>
 <tr><td colspan="6" class="text-center text-muted">ไม่พบข้อมูลการตรวจประเมิน</td></tr>
 <?php endif; ?>
+

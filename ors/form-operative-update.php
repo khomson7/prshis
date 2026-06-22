@@ -1,6 +1,6 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+require_once '../include/session-sso.php';
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
 
 require_once '../include/DbUtils.php';
@@ -32,14 +32,44 @@ try {
     if (empty($id) || empty($an)) throw new Exception('ข้อมูลไม่ครบถ้วน');
 
     // ตรวจสิทธิ์ผู้เขียน
-    $stmt_owner = $conn->prepare("SELECT created_by FROM prs_operative_note WHERE id = :id AND an = :an AND is_deleted = 0");
-    $stmt_owner->execute(['id' => $id, 'an' => $an]);
-    $owner = $stmt_owner->fetchColumn();
-    if ($owner === false) {
+    $stmt_rec = $conn->prepare("SELECT created_by, update_user FROM prs_operative_note WHERE id = :id AND an = :an AND is_deleted = 0");
+    $stmt_rec->execute(['id' => $id, 'an' => $an]);
+    $rec = $stmt_rec->fetch(PDO::FETCH_ASSOC);
+    if (!$rec) {
         throw new Exception('ไม่พบรายการข้อมูล');
     }
-    if ($owner !== $loginname) {
-        throw new Exception('ไม่มีสิทธิ์แก้ไข — เฉพาะผู้บันทึก (' . $owner . ') เท่านั้น');
+
+    $owner = $rec['created_by'] ?? '';
+    $update_user = $rec['update_user'] ?? $owner;
+
+    $groupname = isset($_SESSION['groupname']) ? $_SESSION['groupname'] : '';
+    $stmt_doc = $conn->prepare("SELECT doctorcode FROM " . DbConstant::HOSXP_DBNAME . ".opduser WHERE loginname = :loginname");
+    $stmt_doc->execute(['loginname' => $loginname]);
+    $doctorcode = $stmt_doc->fetchColumn();
+    $is_doctor = (mb_strpos($groupname, 'แพทย์') !== false);
+
+    $stmt_upd = $conn->prepare("SELECT groupname, doctorcode FROM " . DbConstant::HOSXP_DBNAME . ".opduser WHERE loginname = :loginname");
+    $stmt_upd->execute(['loginname' => $update_user]);
+    $upd_row = $stmt_upd->fetch(PDO::FETCH_ASSOC);
+    $update_user_is_doctor = false;
+    if ($upd_row) {
+        $upd_groupname = $upd_row['groupname'] ?? '';
+        $update_user_is_doctor = (mb_strpos($upd_groupname, 'แพทย์') !== false);
+    }
+
+    $canEdit = false;
+    if ($loginname === $owner) {
+        $canEdit = true;
+    } else if ($is_doctor) {
+        if ($loginname === $update_user) {
+            $canEdit = true;
+        } else if (!$update_user_is_doctor) {
+            $canEdit = true;
+        }
+    }
+
+    if (!$canEdit) {
+        throw new Exception('ไม่มีสิทธิ์แก้ไข — บันทึกล่าสุดโดย (' . $update_user . ') อนุญาตให้ผู้บันทึกเดิมหรือแพทย์เข้าแก้ไขได้เท่านั้น');
     }
 
     $conn->beginTransaction();
@@ -105,7 +135,7 @@ try {
         'patho_status' => $_POST['patho_status'] ?? null,
         'wound_type' => $_POST['wound_type'] ?? null,
         'combined_data' => $combined_bin,
-        'update_user' => $loginname,
+        'update_user' => $is_doctor ? $loginname : null,
         'id' => $id,
         'an' => $an
     ]);
@@ -195,3 +225,4 @@ try {
     }
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
+

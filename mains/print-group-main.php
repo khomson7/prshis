@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage();
 
 // สิทธิ์สำหรับการพิมพ์เอกสาร แนะนำให้ตั้งแยกจากสิทธิ์การตั้งค่า (SETUP_PRINT_GROUP)
@@ -176,3 +177,4 @@ function printGroup(groupId) {
     window.open(url, '_blank');
 }
 </script>
+

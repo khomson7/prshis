@@ -1,5 +1,6 @@
 <?php
 require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 require_once '../include/DbUtils.php';
 require_once '../include/KphisQueryUtils.php';
 
@@ -28,3 +29,4 @@ if (isset($_POST['specimen']) && trim($_POST['specimen']) != "") {
     }
 }
 ?>
+

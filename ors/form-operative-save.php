@@ -1,6 +1,6 @@
 <?php
 require_once '../include/Session.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
+require_once '../include/session-sso.php';
 $loginname = isset($_SESSION['loginname']) ? $_SESSION['loginname'] : null;
 
 require_once '../include/DbUtils.php';
@@ -27,6 +27,10 @@ try {
     if (!Session::checkPermission('OPNOTE', 'ADD')) {
         throw new Exception('ไม่มีสิทธิ์ในการเพิ่มข้อมูล');
     }
+
+    $groupname = isset($_SESSION['groupname']) ? $_SESSION['groupname'] : '';
+    $is_doctor = (mb_strpos($groupname, 'แพทย์') !== false);
+    $update_user_val = $is_doctor ? $loginname : null;
 
     $conn = DbUtils::get_hosxp_connection();
     $conn->beginTransaction();
@@ -96,7 +100,7 @@ try {
     $stmt->bindValue(':wound_type', $_POST['wound_type'] ?? null);
     $stmt->bindParam(':combined_data', $combined_bin, PDO::PARAM_LOB);
     $stmt->bindParam(':created_by', $loginname);
-    $stmt->bindParam(':update_user', $loginname);
+    $stmt->bindValue(':update_user', $update_user_val);
 
     $stmt->execute();
     $insert_id = $conn->lastInsertId();
@@ -153,3 +157,4 @@ try {
     }
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
+

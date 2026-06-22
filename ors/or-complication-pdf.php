@@ -5,6 +5,7 @@
 // }
 
 
+require_once '../include/session-sso.php';
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
 Session::checkPermissionAndShowMessage('DOCUMENT', 'PRINT');
 

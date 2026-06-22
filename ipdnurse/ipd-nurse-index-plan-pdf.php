@@ -1,6 +1,7 @@
 <?php
 require_once '../include/Session.php';
 
+require_once '../include/session-sso.php';
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values =['loginname'=>$loginname];

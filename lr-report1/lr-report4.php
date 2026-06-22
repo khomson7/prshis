@@ -3,6 +3,7 @@
 require_once '../include/Session.php';
 // Session::checkLoginSessionAndShowMessage(); //เช็ค session
 // Session::checkPermissionAndShowMessage('IPD_NURSE_ADDMISSION_NOTE','VIEW');
+require_once '../include/session-sso.php';
 require_once '../mains/main-report.php';
 
 Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -25,10 +26,10 @@ Session::insertSystemAccessLog(json_encode(array(
 $login = empty($_REQUEST['loginname']) ? null : $_REQUEST['loginname'];
 $loginname = $_SESSION['loginname'];
 $values = ['loginname' => $loginname];
-if ($login != $loginname) {
+/* if ($login != $loginname) {
     session_start();
     session_destroy();
-}
+} */
 
 // echo $an;
 
@@ -1113,3 +1114,4 @@ date_default_timezone_set('asia/bangkok');
                         }
                         */
                     </script>
+

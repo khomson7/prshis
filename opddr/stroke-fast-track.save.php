@@ -3,7 +3,8 @@ require_once '../include/DbUtils.php';
     require_once '../include/KphisQueryUtils.php';
     require_once '../include/Session.php';
     //เวลาตาม timezone
-    date_default_timezone_set("Asia/Bangkok");
+    require_once '../include/session-sso.php';
+date_default_timezone_set("Asia/Bangkok");
 
     $conn = DbUtils::get_hosxp_connection(); //เชื่อมต่อฐานข้อมูล
 
@@ -137,3 +138,4 @@ require_once '../include/DbUtils.php';
             }
         echo $output_error;
 ?>
+

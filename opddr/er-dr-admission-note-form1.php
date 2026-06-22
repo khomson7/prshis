@@ -1,4 +1,5 @@
 <?php require_once '../include/Session.php';
+require_once '../include/session-sso.php';
 // Session::::checkPermissionAndShowMessage('ADMISSION_NOTE','VIEW');
 // require_once '../include/Session.php';
 // Session::checkLoginSessionAndShowMessage(); //เช็ค session
@@ -34,10 +35,10 @@ $values = ['loginname' => $loginname];
 
 
 
-if ($login != $loginname) {
-    session_start();
-    session_destroy();
-}
+// if ($login != $loginname) {
+//     session_start();
+//     session_destroy();
+// }
 
 Session::insertSystemAccessLog(json_encode(array(
     'form'=>'ER-DR-ADMISSION-NOTE-FORM',
