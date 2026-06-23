@@ -32,10 +32,11 @@ $stmt_i->execute(['annot_id' => $id]);
 $items = $stmt_i->fetchAll(PDO::FETCH_ASSOC);
 
 $stmt_pt = $conn->prepare("SELECT p.hn, p.pname, p.fname, p.lname, p.sex, p.birthday,
-                                   i.regdate, i.dchdate, w.name AS ward_name
+                                   i.regdate, i.dchdate, w.name AS ward_name,s.name as spcltyname
                               FROM " . DbConstant::HOSXP_DBNAME . ".ipt i
                               LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".patient p ON p.hn = i.hn
                               LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".ward   w ON w.ward = i.ward
+                              LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".spclty   s ON s.spclty = i.spclty
                              WHERE i.an = :an");
 $stmt_pt->execute(['an' => $an]);
 $pt = $stmt_pt->fetch();
@@ -63,6 +64,7 @@ function formatSurgeon($jsonStr)
 $pt_name = ($pt['pname'] ?? '') . ($pt['fname'] ?? '') . ' ' . ($pt['lname'] ?? '');
 $hn = $pt['hn'] ?? '';
 $ward_name = $pt['ward_name'] ?? '';
+$spcltyname = $pt['spcltyname'] ?? '';
 $age_y = $pt['birthday'] ? date_diff(date_create($pt['birthday']), date_create('today'))->y : '-';
 $reg_date = thaiDate($pt['regdate'] ?? '');
 $print_dt = thaiDate(date('Y-m-d')) . ' ' . date('H:i');
@@ -329,7 +331,7 @@ $html = '
       <td width="40%">Hospital number <br><br><b>' . htmlspecialchars($hn) . '</b></td>
     </tr>
     <tr>
-      <td>Department <br><br><b>' . htmlspecialchars($ward_name) . '</b></td>
+      <td>Department <br><br><b>' . htmlspecialchars($spcltyname) . '</b></td>
       <td>Ward <br><br><b>' . htmlspecialchars($ward_name) . '</b></td>
       <td>Signature <br><b>' . htmlspecialchars($signature_name) . '</b><br>
           ' . ($signature_licenno ? '<small>เลขใบอนุญาต: ' . htmlspecialchars($signature_licenno) . '</small><br>' : '') . '
