@@ -99,7 +99,7 @@ if (!empty($surgeons_arr)) {
     }
   } catch (Exception $e) { /* fallback */
   }
-  
+
   // ใช้ update_datetime จากเอกสาร prs_operative_note
   $raw_dt = $rec['update_datetime'] ?? ($rec['create_datetime'] ?? '');
   if ($raw_dt && $raw_dt !== '0000-00-00 00:00:00') {
@@ -204,7 +204,7 @@ if ($combined_bin && strlen($combined_bin) > 0) {
 $img_html = '';
 if ($combined_b64) {
   // Explicit width inside fixed table layout helps mPDF scaling
-  $img_html = '<div style="width: 100%; overflow: hidden;"><img src="' . $combined_b64 . '" style="width:100%; max-height:280px;" /></div>';
+  $img_html = '<div style="width: 100%; overflow: hidden;"><img src="' . $combined_b64 . '" style="width:100%; max-height:200px;" /></div>';
 }
 
 $chk_patho_y = (strpos(strtolower($rec['patho_status'] ?? ''), 'ส่ง') !== false && strpos(strtolower($rec['patho_status'] ?? ''), 'ไม่') === false) ? '☑' : '☐';
@@ -217,21 +217,21 @@ $chk_w_dirty = ($rec['wound_type'] == 'Dirty wound') ? '☑' : '☐';
 
 $html = '
 <style>
-  body { font-family: garuda, sans-serif; font-size: 13px; }
+  body { font-family: garuda, sans-serif; font-size: 10px; }
   .doc-header { width: 100%; margin-bottom: 2px; border-collapse: collapse; }
-  .doc-title { text-align: center; font-size: 16px; font-weight: bold; }
-  .doc-form-no { text-align: right; font-size: 13px; font-weight: bold; }
+  .doc-title { text-align: center; font-size: 14px; font-weight: bold; }
+  .doc-form-no { text-align: right; font-size: 10px; font-weight: bold; }
   .main-box { border: 1.5px solid #000; padding: 6px; width: 100%; box-sizing: border-box; }
   .row-tb { width: 100%; border-collapse: collapse; margin-bottom: 3px; }
   .row-tb td { padding: 1px 2px; vertical-align: top; }
-  .lbl { font-size: 13px; white-space: nowrap; }
+  .lbl { font-size: 12px; white-space: nowrap; }
   .val { border-bottom: 1px dotted #000; font-weight: bold; font-size: 13px; }
   
   .desc-title { text-align: center; font-size: 13px; font-weight: bold; text-decoration: underline; margin: 8px 0 5px 0; }
   
   .desc-layout { width: 100%; border-collapse: collapse; margin-bottom: 5px; table-layout: fixed; }
-  .desc-left { width: 65%; vertical-align: top; padding-right: 5px; font-size: 13px; overflow-wrap: break-word; }
-  .desc-right { width: 35%; vertical-align: top; text-align: center; overflow: hidden; }
+  .desc-left { width: 75%; vertical-align: top; padding-right: 5px; font-size: 13px; overflow-wrap: break-word; }
+  .desc-right { width: 25%; vertical-align: top; text-align: center; overflow: hidden; }
   
   .desc-lbl { margin-top: 4px; }
   
@@ -290,7 +290,7 @@ $html = '
         <div><span class="desc-lbl">Position:</span> <b>' . htmlspecialchars($rec['op_position'] ?? '') . '</b></div>
         <div style="margin-top:10px"><span class="desc-lbl">Incision:</span> <b>' . htmlspecialchars($rec['incision'] ?? '') . '</b></div>
         <div style="margin-top:10px"><span class="desc-lbl">Finding:</span> <b>' . nl2br(htmlspecialchars($rec['finding'] ?? '')) . '</b></div>
-        <div style="margin-top:10px"><span class="desc-lbl">Procedure:</span><br><br><b>' . nl2br(htmlspecialchars($rec['procedure_detail'] ?? '')) . '</b></div>
+        <div style="margin-top:10px"><span class="desc-lbl">Procedure:</span><br><br><b style="font-size: 14px;">' . nl2br(htmlspecialchars($rec['procedure_detail'] ?? '')) . '</b></div>
       </td>
       <td class="desc-right">
         ' . $img_html . '
