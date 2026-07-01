@@ -73,6 +73,11 @@ $stmt = $conn->prepare("SELECT id, an, doc_name, doc_group, original_name, file_
 $stmt->execute(['an' => $an]);
 $pdf_list = $stmt->fetchAll();
 
+// ---- ตรวจสอบข้อมูล Clinical Summary ของ AN นี้ ----
+$stmt_summary = $conn->prepare("SELECT COUNT(*) FROM prs_clinical_summary WHERE an = :an");
+$stmt_summary->execute(['an' => $an]);
+$has_clinical_summary = $stmt_summary->fetchColumn() > 0;
+
 Session::insertSystemAccessLog(json_encode([
     'form' => 'PDF-UPLOAD-LIST',
     'an' => $an,
@@ -145,18 +150,27 @@ Session::insertSystemAccessLog(json_encode([
     <?php else: ?>
 
         <!-- Filter by group -->
-        <div class="mb-2">
-            <span class="text-muted small">กรองตามกลุ่ม:</span>
-            <button class="btn btn-sm btn-outline-secondary ml-1 filter-btn active" data-group="all">ทั้งหมด</button>
+        <div class="mb-2 d-flex align-items-center flex-wrap">
+            <span class="text-muted small mr-1">กรองตามกลุ่ม:</span>
+            <button class="btn btn-sm btn-outline-secondary ml-1 mb-1 filter-btn active" data-group="all">ทั้งหมด</button>
             <?php
             $used_groups = array_unique(array_column($pdf_list, 'doc_group'));
             foreach ($used_groups as $g):
                 if (!$g)
                     continue; ?>
-                <button class="btn btn-sm btn-outline-info ml-1 filter-btn" data-group="<?= htmlspecialchars($g) ?>">
+                <button class="btn btn-sm btn-outline-info ml-1 mb-1 filter-btn" data-group="<?= htmlspecialchars($g) ?>">
                     <?= htmlspecialchars($g) ?>
                 </button>
             <?php endforeach; ?>
+
+            <?php if ($has_clinical_summary): ?>
+            <form action="../pdffile/clinical-summary-pdf.php" method="POST" target="_blank" class="d-inline ml-1 mb-1">
+                <input type="hidden" name="an" value="<?= htmlspecialchars($an) ?>">
+                <button type="submit" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-file-medical"></i> Clinical Summary
+                </button>
+            </form>
+            <?php endif; ?>
         </div>
 
         <div id="pdfListContainer">
