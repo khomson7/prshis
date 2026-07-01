@@ -129,6 +129,9 @@ Session::insertSystemAccessLog(json_encode([
         <button class="btn btn-primary btn-sm shadow-sm mr-2" onclick="fetchClinicalSummary()">
             <i class="fas fa-cloud-download-alt"></i> ดึงข้อมูล Clinical Summary
         </button>
+        <button class="btn btn-secondary btn-sm shadow-sm mr-2" onclick="openTokenModal()" id="btnTokenConfig" title="ตั้งค่า / อัพเดท Token">
+            <i class="fas fa-key"></i> <span id="tokenStatusLabel">ตั้งค่า Token</span>
+        </button>
         <button class="btn btn-success btn-sm shadow-sm" onclick="openUploadModal(0)">
             <i class="fas fa-upload"></i> Upload PDF ใหม่
         </button>
@@ -266,8 +269,62 @@ Session::insertSystemAccessLog(json_encode([
     </div>
 </div>
 
+<!-- ===== Token Config Modal ===== -->
+<div class="modal fade" id="tokenModal" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#343a40;color:#fff;">
+                <h6 class="modal-title mb-0">
+                    <i class="fas fa-key"></i> ตั้งค่า SATI API Token
+                </h6>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="tokenStatusInfo" class="alert alert-secondary small mb-3" style="display:none;"></div>
+                <div class="form-group">
+                    <label><b>Tenant ID</b> <span class="text-danger">*</span></label>
+                    <input type="text" id="input_tenant_id" class="form-control form-control-sm font-monospace"
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                </div>
+                <div class="form-group mb-1">
+                    <label><b>Bearer Token (JWT)</b> <span class="text-danger">*</span></label>
+                    <textarea id="input_bearer_token" class="form-control form-control-sm font-monospace" rows="5"
+                        placeholder="eyJhbGci..."></textarea>
+                    <small class="text-muted">Token มีอายุ 24 ชั่วโมง ต้องอัพเดทก่อนหมดอายุ</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-dark btn-sm" id="btnSaveToken" onclick="saveToken()">
+                    <i class="fas fa-save"></i> บันทึก Token
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var currentAn = '<?= htmlspecialchars($an) ?>';
+
+    // ---- Load Token Status on page load ----
+    (function loadTokenStatus() {
+        $.post('fetch-clinical-summary.php', { action: 'get_token_status' }, function(resp) {
+            try {
+                var d = (typeof resp === 'string') ? JSON.parse(resp) : resp;
+                var btn = document.getElementById('tokenStatusLabel');
+                var btnEl = document.getElementById('btnTokenConfig');
+                if (d.is_expired || !d.token_length) {
+                    btn.textContent = 'Token หมดอายุ!';
+                    btnEl.classList.remove('btn-secondary');
+                    btnEl.classList.add('btn-danger');
+                } else {
+                    btn.textContent = 'Token OK (หมด ' + d.expire_time + ')';
+                    btnEl.classList.remove('btn-danger');
+                    btnEl.classList.add('btn-secondary');
+                }
+            } catch(e) {}
+        });
+    })();
 
     // ---- Filter by group ----
     document.querySelectorAll('.filter-btn').forEach(function (btn) {
@@ -378,9 +435,7 @@ Session::insertSystemAccessLog(json_encode([
             title: 'ดึงข้อมูล Clinical Summary',
             text: 'ระบบกำลังดึงข้อมูลจาก API ภายนอก กรุณารอสักครู่...',
             allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+            didOpen: () => { Swal.showLoading(); }
         });
 
         $.post('fetch-clinical-summary.php', { an: currentAn }, function(resp) {
@@ -388,23 +443,110 @@ Session::insertSystemAccessLog(json_encode([
                 var data = (typeof resp === 'string') ? JSON.parse(resp) : resp;
                 if (data.status === 'success') {
                     Swal.fire('สำเร็จ', data.message, 'success');
+                } else if (data.status === 'not_found') {
+                    Swal.fire({
+                        title: 'ไม่พบข้อมูล',
+                        text: data.message,
+                        icon: 'info'
+                    });
+                } else if (data.need_token) {
+                    // Token หมดอายุหรือไม่มี — เปิด modal ให้อัพเดทเลย
+                    Swal.fire({
+                        title: 'Token หมดอายุ / ไม่มี Token',
+                        html: data.message + '<br><br>กรุณาอัพเดท Token ใหม่',
+                        icon: 'warning',
+                        confirmButtonText: 'ไปตั้งค่า Token',
+                        showCancelButton: true,
+                        cancelButtonText: 'ปิด'
+                    }).then(function(r) {
+                        if (r.isConfirmed) openTokenModal();
+                    });
                 } else {
-                    let errorText = data.message;
+                    var errorText = data.message;
                     if (data.raw_response) {
                         errorText += '<br><br><b>HTTP Code:</b> ' + data.httpcode;
-                        errorText += '<br><b>Raw Response:</b> <pre style="text-align:left; font-size:12px;">' + data.raw_response + '</pre>';
+                        errorText += '<br><b>Raw Response:</b> <pre style="text-align:left;font-size:12px;">' + data.raw_response + '</pre>';
                     }
-                    Swal.fire({
-                        title: 'ผิดพลาด',
-                        html: errorText,
-                        icon: 'error'
-                    });
+                    Swal.fire({ title: 'ผิดพลาด', html: errorText, icon: 'error' });
                 }
             } catch (ex) {
                 Swal.fire('ผิดพลาด', 'ไม่สามารถอ่านผลลัพธ์จากเซิร์ฟเวอร์ได้', 'error');
             }
         }).fail(function() {
             Swal.fire('ผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error');
+        });
+    }
+
+    // ---- Token Modal ----
+    function openTokenModal() {
+        // โหลดสถานะปัจจุบัน
+        $.post('fetch-clinical-summary.php', { action: 'get_token_status' }, function(resp) {
+            try {
+                var d = (typeof resp === 'string') ? JSON.parse(resp) : resp;
+                var info = document.getElementById('tokenStatusInfo');
+                info.style.display = '';
+                if (d.is_expired || !d.token_length) {
+                    info.className = 'alert alert-danger small mb-3';
+                    info.innerHTML = '<i class="fas fa-exclamation-triangle"></i> <b>Token หมดอายุแล้ว</b> กรุณาวาง Token ใหม่จาก SATI';
+                } else {
+                    info.className = 'alert alert-success small mb-3';
+                    info.innerHTML = '<i class="fas fa-check-circle"></i> Token ยังใช้งานได้ จะหมดอายุ: <b>' + d.expire_time + '</b>'
+                        + ' | อัพเดทโดย: ' + d.updated_by;
+                }
+                document.getElementById('input_tenant_id').value = d.tenant_id || '';
+                document.getElementById('input_bearer_token').value = '';
+            } catch(e) {}
+        });
+        $('#tokenModal').modal('show');
+    }
+
+    function saveToken() {
+        var tenant = document.getElementById('input_tenant_id').value.trim();
+        var token  = document.getElementById('input_bearer_token').value.trim();
+        if (!tenant || !token) {
+            Swal.fire('แจ้งเตือน', 'กรุณากรอก Tenant ID และ Bearer Token ให้ครบ', 'warning');
+            return;
+        }
+        var btn = document.getElementById('btnSaveToken');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+        $.post('fetch-clinical-summary.php', {
+            action: 'update_token',
+            tenant_id: tenant,
+            bearer_token: token
+        }, function(resp) {
+            try {
+                var d = (typeof resp === 'string') ? JSON.parse(resp) : resp;
+                if (d.status === 'success') {
+                    $('#tokenModal').modal('hide');
+                    Swal.fire('สำเร็จ', d.message, 'success');
+                    // อัพเดทปุ่มสถานะ
+                    var btnLabel = document.getElementById('tokenStatusLabel');
+                    var btnEl = document.getElementById('btnTokenConfig');
+                    btnEl.classList.remove('btn-danger');
+                    btnEl.classList.add('btn-secondary');
+                    // คำนวณเวลาหมดอายุ
+                    var now = new Date();
+                    now.setHours(now.getHours() + 24);
+                    var dd = String(now.getDate()).padStart(2,'0');
+                    var mm = String(now.getMonth()+1).padStart(2,'0');
+                    var yy = now.getFullYear() + 543;
+                    var hh = String(now.getHours()).padStart(2,'0');
+                    var min = String(now.getMinutes()).padStart(2,'0');
+                    btnLabel.textContent = 'Token OK (หมด ' + dd + '/' + mm + '/' + yy + ' ' + hh + ':' + min + ')';
+                } else {
+                    Swal.fire('ผิดพลาด', d.message, 'error');
+                }
+            } catch(e) {
+                Swal.fire('ผิดพลาด', 'ไม่สามารถอ่านผลลัพธ์ได้', 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> บันทึก Token';
+        }).fail(function() {
+            Swal.fire('ผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> บันทึก Token';
         });
     }
 </script>
