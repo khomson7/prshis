@@ -172,6 +172,7 @@ Session::insertSystemAccessLog(json_encode([
             <?php if ($has_clinical_summary): ?>
             <form action="../pdffile/clinical-summary-pdf.php" method="POST" target="_blank" class="d-inline ml-1 mb-1">
                 <input type="hidden" name="an" value="<?= htmlspecialchars($an) ?>">
+                <input type="hidden" name="loginname" value="<?= htmlspecialchars($loginname) ?>">
                 <button type="submit" class="btn btn-sm btn-outline-primary">
                     <i class="fas fa-file-medical"></i> Clinical Summary
                 </button>
