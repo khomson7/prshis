@@ -328,14 +328,14 @@ if ($httpcode >= 200 && $httpcode < 300) {
         $follow_up       = $record['followUp']       ?? '';
 
         $stmt_check = $conn->prepare(
-            "SELECT COUNT(*) FROM prs_clinical_summay WHERE an = :an"
+            "SELECT COUNT(*) FROM prs_clinical_summary WHERE an = :an"
         );
         $stmt_check->execute(['an' => $an]);
         $count = $stmt_check->fetchColumn();
 
         if ($count > 0) {
             $stmt = $conn->prepare(
-                "UPDATE prs_clinical_summay
+                "UPDATE prs_clinical_summary
                  SET final_diagnosis = :final_diagnosis,
                      progression     = :progression,
                      follow_up       = :follow_up
@@ -343,7 +343,7 @@ if ($httpcode >= 200 && $httpcode < 300) {
             );
         } else {
             $stmt = $conn->prepare(
-                "INSERT INTO prs_clinical_summay
+                "INSERT INTO prs_clinical_summary
                     (an, final_diagnosis, progression, follow_up)
                  VALUES (:an, :final_diagnosis, :progression, :follow_up)"
             );
