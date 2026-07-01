@@ -343,22 +343,27 @@ if ($httpcode >= 200 && $httpcode < 300) {
                      update_datetime = :update_datetime
                  WHERE an = :an"
             );
+            $stmt->execute([
+                'an'              => $an,
+                'final_diagnosis' => $final_diagnosis,
+                'progression'     => $progression,
+                'follow_up'       => $follow_up,
+                'update_datetime' => $now,
+            ]);
         } else {
             $stmt = $conn->prepare(
                 "INSERT INTO prs_clinical_summary
-                    (an, final_diagnosis, progression, follow_up,create_datetime)
+                    (an, final_diagnosis, progression, follow_up, create_datetime)
                  VALUES (:an, :final_diagnosis, :progression, :follow_up, :create_datetime)"
             );
+            $stmt->execute([
+                'an'              => $an,
+                'final_diagnosis' => $final_diagnosis,
+                'progression'     => $progression,
+                'follow_up'       => $follow_up,
+                'create_datetime' => $now,
+            ]);
         }
-
-        $stmt->execute([
-            'an'              => $an,
-            'final_diagnosis' => $final_diagnosis,
-            'progression'     => $progression,
-            'follow_up'       => $follow_up,
-            'create_datetime'       => $now,
-            'update_datetime'       => $now,
-        ]);
 
         echo json_encode(['status' => 'success', 'message' => 'ดึงข้อมูลและบันทึกสำเร็จ']);
 
