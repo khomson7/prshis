@@ -126,6 +126,9 @@ Session::insertSystemAccessLog(json_encode([
             <i class="fas fa-file-pdf text-danger"></i>
             เอกสาร PDF แนบประวัติผู้ป่วย
         </h5>
+        <button class="btn btn-primary btn-sm shadow-sm mr-2" onclick="fetchClinicalSummary()">
+            <i class="fas fa-cloud-download-alt"></i> ดึงข้อมูล Clinical Summary
+        </button>
         <button class="btn btn-success btn-sm shadow-sm" onclick="openUploadModal(0)">
             <i class="fas fa-upload"></i> Upload PDF ใหม่
         </button>
@@ -366,6 +369,42 @@ Session::insertSystemAccessLog(json_encode([
                     Swal.fire('ผิดพลาด', 'ไม่สามารถอ่านผลลัพธ์ได้', 'error');
                 }
             });
+        });
+    }
+
+    // ---- Fetch Clinical Summary ----
+    function fetchClinicalSummary() {
+        Swal.fire({
+            title: 'ดึงข้อมูล Clinical Summary',
+            text: 'ระบบกำลังดึงข้อมูลจาก API ภายนอก กรุณารอสักครู่...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.post('fetch-clinical-summary.php', { an: currentAn }, function(resp) {
+            try {
+                var data = (typeof resp === 'string') ? JSON.parse(resp) : resp;
+                if (data.status === 'success') {
+                    Swal.fire('สำเร็จ', data.message, 'success');
+                } else {
+                    let errorText = data.message;
+                    if (data.raw_response) {
+                        errorText += '<br><br><b>HTTP Code:</b> ' + data.httpcode;
+                        errorText += '<br><b>Raw Response:</b> <pre style="text-align:left; font-size:12px;">' + data.raw_response + '</pre>';
+                    }
+                    Swal.fire({
+                        title: 'ผิดพลาด',
+                        html: errorText,
+                        icon: 'error'
+                    });
+                }
+            } catch (ex) {
+                Swal.fire('ผิดพลาด', 'ไม่สามารถอ่านผลลัพธ์จากเซิร์ฟเวอร์ได้', 'error');
+            }
+        }).fail(function() {
+            Swal.fire('ผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error');
         });
     }
 </script>
