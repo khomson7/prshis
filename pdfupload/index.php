@@ -74,9 +74,15 @@ $stmt->execute(['an' => $an]);
 $pdf_list = $stmt->fetchAll();
 
 // ---- ตรวจสอบข้อมูล Clinical Summary ของ AN นี้ ----
-$stmt_summary = $conn->prepare("SELECT COUNT(*) FROM prs_clinical_summary WHERE an = :an");
-$stmt_summary->execute(['an' => $an]);
-$has_clinical_summary = $stmt_summary->fetchColumn() > 0;
+$has_clinical_summary = false;
+try {
+    $conn_kphis = DbUtils::get_hosxp_connection();
+    $stmt_summary = $conn_kphis->prepare("SELECT COUNT(*) FROM prs_clinical_summary WHERE an = :an");
+    $stmt_summary->execute(['an' => $an]);
+    $has_clinical_summary = $stmt_summary->fetchColumn() > 0;
+} catch (Exception $e) {
+    // ป้องกันกรณีที่ตารางยังไม่ถูกสร้าง หรือ DB error ทำให้หน้าเว็บพัง
+}
 
 Session::insertSystemAccessLog(json_encode([
     'form' => 'PDF-UPLOAD-LIST',
