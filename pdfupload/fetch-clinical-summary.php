@@ -328,23 +328,23 @@ if ($httpcode >= 200 && $httpcode < 300) {
         $follow_up       = $record['followUp']       ?? '';
 
         $stmt_check = $conn->prepare(
-            "SELECT COUNT(*) FROM prs_clinical_summay_sati WHERE admission_number = :an"
+            "SELECT COUNT(*) FROM prs_clinical_summay WHERE an = :an"
         );
         $stmt_check->execute(['an' => $an]);
         $count = $stmt_check->fetchColumn();
 
         if ($count > 0) {
             $stmt = $conn->prepare(
-                "UPDATE prs_clinical_summay_sati
+                "UPDATE prs_clinical_summay
                  SET final_diagnosis = :final_diagnosis,
                      progression     = :progression,
                      follow_up       = :follow_up
-                 WHERE admission_number = :an"
+                 WHERE an = :an"
             );
         } else {
             $stmt = $conn->prepare(
-                "INSERT INTO prs_clinical_summay_sati
-                    (admission_number, final_diagnosis, progression, follow_up)
+                "INSERT INTO prs_clinical_summay
+                    (an, final_diagnosis, progression, follow_up)
                  VALUES (:an, :final_diagnosis, :progression, :follow_up)"
             );
         }
