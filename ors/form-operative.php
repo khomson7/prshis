@@ -438,6 +438,11 @@ if ($ids) {
                             คลิกหรือลากไฟล์ภาพมาวางที่นี่ (เพิ่มได้ครั้งละหลายภาพ)<br>
                             <small class="text-muted">PNG, JPG, WEBP | แต่ละภาพไม่เกิน 10 MB</small>
                         </div>
+                        <div class="text-center mt-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary shadow-sm" onclick="addBlankCanvas()">
+                                <i class="far fa-file"></i> เพิ่มพื้นสีขาวเปล่าเพื่อวาดรูป
+                            </button>
+                        </div>
                         <input type="file" id="file-input" accept="image/*" multiple style="display:none">
                         <?php else: ?>
                         <div class="text-muted small mt-1">
@@ -841,6 +846,21 @@ function handleFiles(files) {
         };
         r.readAsDataURL(file);
     });
+}
+
+function addBlankCanvas() {
+    if (!_canEdit) return;
+    var tempC = document.createElement('canvas');
+    tempC.width = 800;
+    tempC.height = 600;
+    var ctx = tempC.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, tempC.width, tempC.height);
+    var b64 = tempC.toDataURL('image/png');
+    
+    imageList.push({ b64: b64, svgData: '', name: 'Blank Canvas', itemId: null });
+    renderThumbs();
+    selectImage(imageList.length - 1);
 }
 
 function renderThumbs() {
