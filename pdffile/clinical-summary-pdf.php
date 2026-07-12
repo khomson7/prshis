@@ -52,6 +52,7 @@ $patientSql = "SELECT p.pname, p.fname, p.lname, p.sex, p.birthday,
        null AS admit_diag,
        w.name AS ward_name,
        d.name AS doctor_name,
+       d.licenseno,
        TIMESTAMPDIFF(YEAR, p.birthday, i.regdate) AS age_year,
        TIMESTAMPDIFF(MONTH, p.birthday, i.regdate) % 12 AS age_month,
        TIMESTAMPDIFF(DAY, DATE_ADD(p.birthday, INTERVAL (TIMESTAMPDIFF(MONTH, p.birthday, i.regdate)) MONTH), i.regdate) AS age_day,
@@ -85,7 +86,7 @@ if ($patient) {
     $regTimeText = !empty($patient['regtime']) ? substr($patient['regtime'], 0, 5) . ' น.' : '';
     $dchTimeText = !empty($patient['dchtime']) ? substr($patient['dchtime'], 0, 5) . ' น.' : '';
     if (!empty($patient['doctor_name'])) {
-        $doctorName = htmlspecialchars($patient['doctor_name']);
+        $doctorName = htmlspecialchars($patient['doctor_name']) . ' ' . htmlspecialchars($patient['licenseno']);
     }
 }
 
