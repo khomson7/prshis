@@ -51,6 +51,7 @@ $patientSql = "SELECT p.pname, p.fname, p.lname, p.sex, p.birthday,
        i.an, i.hn, i.regdate, i.regtime, i.dchdate, i.dchtime,
        null AS admit_diag,
        w.name AS ward_name,
+       d.name AS doctor_name,
        TIMESTAMPDIFF(YEAR, p.birthday, i.regdate) AS age_year,
        TIMESTAMPDIFF(MONTH, p.birthday, i.regdate) % 12 AS age_month,
        TIMESTAMPDIFF(DAY, DATE_ADD(p.birthday, INTERVAL (TIMESTAMPDIFF(MONTH, p.birthday, i.regdate)) MONTH), i.regdate) AS age_day,
@@ -58,6 +59,7 @@ $patientSql = "SELECT p.pname, p.fname, p.lname, p.sex, p.birthday,
 FROM " . DbConstant::HOSXP_DBNAME . ".ipt i
 LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".patient p ON p.hn = i.hn
 LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".ward w ON w.ward = i.ward
+LEFT JOIN " . DbConstant::HOSXP_DBNAME . ".doctor d ON d.code = i.dch_doctor
 WHERE i.an = :an LIMIT 1";
 
 $patientStmt = $conn->prepare($patientSql);
@@ -71,6 +73,7 @@ $ageText = '';
 $regDateText = '';
 $dchDateText = '';
 $admitDays = '';
+$doctorName = '........................................................................';
 
 if ($patient) {
     $patientName = ($patient['pname'] ?? '') . ($patient['fname'] ?? '') . ' ' . ($patient['lname'] ?? '');
@@ -81,6 +84,9 @@ if ($patient) {
     $admitDays = $patient['admit_days'] ?? '0';
     $regTimeText = !empty($patient['regtime']) ? substr($patient['regtime'], 0, 5) . ' น.' : '';
     $dchTimeText = !empty($patient['dchtime']) ? substr($patient['dchtime'], 0, 5) . ' น.' : '';
+    if (!empty($patient['doctor_name'])) {
+        $doctorName = htmlspecialchars($patient['doctor_name']);
+    }
 }
 
 // =====================================================
@@ -432,10 +438,11 @@ if (!empty($icdRows)) {
 // --- ลายเซ็น ---
 $html .= '<div class="sign-section">';
 $html .= '<br><br>';
-$html .= 'ลงชื่อแพทย์ผู้รักษา........................................................................<br>';
-$html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(........................................................................)<br>';
+$html .= 'ลงชื่อแพทย์ผู้รักษา ' . $doctorName . '<br>';
 $html .= '<br>';
-$html .= 'วันที่ ......./......./.........&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; เวลา .............';
+$signDate = (!empty($dchDateText) && $dchDateText !== '-') ? $dchDateText : '......./......./.........';
+$signTime = (!empty($dchTimeText)) ? $dchTimeText : '.............';
+$html .= 'วันที่ ' . $signDate . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; เวลา ' . $signTime;
 $html .= '</div>';
 
 // --- Footer ---
