@@ -85,6 +85,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         --bright-blue: #007bff;
         --bright-blue-light: #e6f2ff;
     }
+
     .nutrition-input {
         border: 1px solid #aaa;
         border-radius: 4px;
@@ -470,7 +471,39 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                                 <i class="fas fa-exclamation-triangle"></i> ชุดข้อความสรุปการประเมิน: -
                             </div>
                             <input type="hidden" id="evaluation_message" name="evaluation_message" value="">
-                            <input type="hidden" id="level_of_check" name="level_of_check" value="<?= htmlspecialchars($row ? ($row['level_of_check'] ?? '') : '') ?>">
+                            <input type="hidden" id="level_of_check" name="level_of_check"
+                                value="<?= htmlspecialchars($row ? ($row['level_of_check'] ?? '') : '') ?>">
+                        </div>
+                    </div>
+
+                    <!-- Accordion สำหรับ Remark -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="accordion" id="accordionRemark">
+                                <div class="card">
+                                    <div class="card-header bg-info" id="headingRemark" style="padding: 0;">
+                                        <h2 class="mb-0">
+                                            <button
+                                                class="btn btn-link btn-block text-left text-dark font-weight-bold text-decoration-none"
+                                                type="button" data-toggle="collapse" data-target="#collapseRemark"
+                                                aria-expanded="false" aria-controls="collapseRemark">
+                                                <i class="fas fa-pen-alt"></i> บันทึกเพิ่มเติม โดยโภชนากร
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseRemark" class="collapse" aria-labelledby="headingRemark"
+                                        data-parent="#accordionRemark">
+                                        <div class="card-body">
+                                            <textarea id="remark" name="remark" class="form-control mb-2" rows="3"
+                                                placeholder="ระบุข้อความ..."></textarea>
+                                            <button type="button" class="btn btn-success btn-sm px-4"
+                                                onclick="saveRemark()">
+                                                <i class="fas fa-save"></i> บันทึก ข้อมูล ลง Progress Note
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -481,23 +514,24 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                             Session::checkPermission('PRS_FORM_NUTRITION', 'ADD')
                             && ReportQueryUtils::checkReadOnly($an)
                         ): ?>
-                        <div class="col-md-12 text-right">
-                            <?php if (!$hasVitalsignRecord): ?>
-                                <div class="alert alert-warning d-inline-flex align-items-center py-2 px-3 mb-2" style="font-size:0.88rem;">
-                                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                                    กรุณากด <b class="mx-1">ประมวลผล sp_update_bw_all</b> ก่อนบันทึก
-                                </div>
-                                <br>
-                                <button type="button" class="btn btn-primary px-5" disabled
+                            <div class="col-md-12 text-right">
+                                <?php if (!$hasVitalsignRecord): ?>
+                                    <div class="alert alert-warning d-inline-flex align-items-center py-2 px-3 mb-2"
+                                        style="font-size:0.88rem;">
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                                        กรุณากด <b class="mx-1">ประมวลผล sp_update_bw_all</b> ก่อนบันทึก
+                                    </div>
+                                    <br>
+                                    <button type="button" id="btn_main_save" class="btn btn-primary px-5" disabled
                                         title="กรุณากด ประมวลผล sp_update_bw_all ก่อน">
-                                    <i class="fas fa-save"></i> บันทึก
-                                </button>
-                            <?php else: ?>
-                                <button type="button" class="btn btn-primary px-5" onclick="form_save()">
-                                    <i class="fas fa-save"></i> บันทึก
-                                </button>
-                            <?php endif; ?>
-                        </div>
+                                        <i class="fas fa-save"></i> บันทึก
+                                    </button>
+                                <?php else: ?>
+                                    <button type="button" id="btn_main_save" class="btn btn-primary px-5" onclick="form_save()">
+                                        <i class="fas fa-save"></i> บันทึก
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
                     </div>
 
@@ -658,9 +692,9 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
             var sev_label = wl_severity == 2 ? "Severe" : "Moderate";
             // แสดง: น้ำหนักลดลงจาก X kg เป็น Y kg คิดเป็น Z%
             wl_text = "ประเมินภาวะ Malnutrition น้ำหนักลดลงจาก " + max_prev_bw.toFixed(2) +
-                      " kg เป็น " + bw_now.toFixed(2) +
-                      " kg คิดเป็น " + max_pct.toFixed(2) + "% ในเวลา " + max_label +
-                      " วินิจฉัย " + sev_label + " Malnutrition";
+                " kg เป็น " + bw_now.toFixed(2) +
+                " kg คิดเป็น " + max_pct.toFixed(2) + "% ในเวลา " + max_label +
+                " วินิจฉัย " + sev_label + " Malnutrition";
         }
 
         // --- คำนวณ overall severity สูงสุด (BMI vs Weight Loss) ---
@@ -682,13 +716,13 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
             if (bmi > 17 && bmi < 18.5) isMild = true;
             if (!isMild && bw_now > 0) {
                 var mildThresholds = [
-                    { id: 'bw_1week',   mild: 1   },
-                    { id: 'bw_2_3week', mild: 2   },
-                    { id: 'bw_1month',  mild: 4   },
-                    { id: 'bw_3month',  mild: 7   },
-                    { id: 'bw_5month',  mild: 8   }
+                    { id: 'bw_1week', mild: 1 },
+                    { id: 'bw_2_3week', mild: 2 },
+                    { id: 'bw_1month', mild: 4 },
+                    { id: 'bw_3month', mild: 7 },
+                    { id: 'bw_5month', mild: 8 }
                 ];
-                mildThresholds.forEach(function(m) {
+                mildThresholds.forEach(function (m) {
                     var prev = parseFloat($('#' + m.id).val());
                     if (prev > 0) {
                         var pct = ((prev - bw_now) / prev) * 100;
@@ -786,7 +820,7 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                                     'bw_3month': d.bw_3month,
                                     'bw_5month': d.bw_5month
                                 };
-                                $.each(bwFields, function(fid, val) {
+                                $.each(bwFields, function (fid, val) {
                                     if (val !== null && val !== '') {
                                         $('#' + fid).val(parseFloat(val).toFixed(2));
                                     } else {
@@ -802,12 +836,12 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
                                     ['bw_3month', 'percen_3month'],
                                     ['bw_5month', 'percen_5month']
                                 ];
-                                periodMap.forEach(function(p) {
+                                periodMap.forEach(function (p) {
                                     calcPercent(p[0], p[1]);
                                 });
 
                                 // Enable save button
-                                $('.btn-primary[disabled]').prop('disabled', false)
+                                $('#btn_main_save').prop('disabled', false)
                                     .attr('onclick', 'form_save()')
                                     .removeAttr('title');
                                 $('.alert-warning').fadeOut(300);
@@ -882,6 +916,47 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         }
     }
 
+    // ---- Save Remark ----
+    function saveRemark() {
+        var an = $('#an').val();
+        var id = $('#id').val();
+        var remark = $('#remark').val().trim();
+
+        if (remark === '') {
+            Swal.fire('แจ้งเตือน', 'กรุณาระบุข้อความ Remark', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: 'ยืนยัน',
+            text: 'ต้องการบันทึก Remark นี้ลงใน Progress Note หรือไม่?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'บันทึก',
+            cancelButtonText: 'ยกเลิก',
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'form-nutrition-remark-save.php',
+                    type: 'POST',
+                    data: { an: an, id: id, remark: remark },
+                    dataType: 'json',
+                    success: function (resp) {
+                        if (resp.status === 'success') {
+                            Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ', showConfirmButton: false, timer: 1200 })
+                                .then(function () { window.close(); });
+                        } else {
+                            Swal.fire('ผิดพลาด', resp.message || 'บันทึกไม่สำเร็จ', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('ผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error');
+                    }
+                });
+            }
+        });
+    }
+
     // ---- INIT: คำนวณ % ทุก period ตอน page load ----
     $(function () {
         // อัปเดต CURRENT_BW จาก input ถ้า PHP ไม่ได้ส่งมา
@@ -916,6 +991,18 @@ $f_percen_5month = $row && isset($row['percen_5month']) ? $row['percen_5month'] 
         });
 
         updateMaxPercent();
+
+        // จัดการสถานะปุ่มบันทึกหลักเมื่อเปิด/ปิด Accordion
+        $('#collapseRemark').on('show.bs.collapse', function () {
+            $('#btn_main_save').prop('disabled', true);
+        });
+
+        $('#collapseRemark').on('hide.bs.collapse', function () {
+            // คืนค่าเฉพาะถ้าปุ่มเคยถูกเปิดใช้งานมาแล้ว (มี onclick attribute)
+            if ($('#btn_main_save').attr('onclick')) {
+                $('#btn_main_save').prop('disabled', false);
+            }
+        });
     });
 
 </script>
