@@ -1010,26 +1010,18 @@ $head =
                 พยาบาลผู้บันทึก '.htmlspecialchars($row['nurse_name']).'  '.htmlspecialchars($row['nurse_pos']).'
             </td>
         </tr>
+        <tr style="border:1px solid #000;margin: 35px;"> /* ชื่อ-สกุล */
+            <td  colspan="3" width="100%" style="border-right:0.5px solid #000;margin: 35px;padding:4px;vertical-align:text-top;">
+            <label>HN : '.htmlspecialchars($row_ipt['hn']).' | AN : '.htmlspecialchars($an).'</label>
+            <label>ชื่อ - สกุล : '.htmlspecialchars($row_ipt['pname'].$row_ipt['fname']." ".$row_ipt['lname']).' | </label>
+            <label>อายุ : '.htmlspecialchars($row_ipt['age_y']." ปี ".$row_ipt['age_m']." เดือน ".$row_ipt['age_d']." วัน ").' | </label>
+            <label>ตึก : '.htmlspecialchars($row_ipt['name']).' | </label>
+            <label>เตียง : '.htmlspecialchars($row_ipt['bedno']).' | </label>
+            <label>สิทธิ : ('.htmlspecialchars($row_ipt['pttype']).') '.htmlspecialchars($row_ipt['pttype_name']).'</label>
+            </td>
+        </tr>
     </table>
 ';
-
-$footer = '
-<table width="100%" style="border-collapse: collapse;font-size:8pt;">
-    <tr style="border:1px solid #000;">
-        <td  colspan="3" width="100%" style="border-right:0.5px solid #000;padding:4px;vertical-align:text-top;">
-        <label>HN : '.htmlspecialchars($row_ipt['hn']).' | AN : '.htmlspecialchars($an).'</label>
-        <label>ชื่อ - สกุล : '.htmlspecialchars($row_ipt['pname'].$row_ipt['fname']." ".$row_ipt['lname']).' | </label>
-        <label>อายุ : '.htmlspecialchars($row_ipt['age_y']." ปี ".$row_ipt['age_m']." เดือน ".$row_ipt['age_d']." วัน ").' | </label>
-        <label>ตึก : '.htmlspecialchars($row_ipt['name']).' | </label>
-        <label>เตียง : '.htmlspecialchars($row_ipt['bedno']).' | </label>
-        <label>สิทธิ : ('.htmlspecialchars($row_ipt['pttype']).') '.htmlspecialchars($row_ipt['pttype_name']).'</label>
-        </td>
-    </tr>
-</table>
-';
-
-$mpdf->SetHTMLFooter($footer);
-
 $mpdf->WriteHTML($head);
 $mpdf->Output();
 ?>
