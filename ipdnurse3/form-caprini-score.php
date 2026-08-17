@@ -1,6 +1,7 @@
 <?php
 require_once '../include/Session.php';
 require_once '../include/session-sso.php';
+date_default_timezone_set('Asia/Bangkok');
 
 // =====================================================
 // ระบบ Single Sign-On (SSO) ข้าม Port/Server จัดการโดย session-sso.php
@@ -33,16 +34,10 @@ try {
     $hn = KphisQueryUtils::getHnByAn($an);
     $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 
-    // If no ID provided, try to find existing record for this AN
-    if (!$ids) {
-        $sql_check = "SELECT id FROM prs_caprini_score WHERE an = :an ORDER BY id DESC LIMIT 1";
-        $stmt_check = $conn->prepare($sql_check);
-        $stmt_check->execute(['an' => $an]);
-        $res_check = $stmt_check->fetch();
-        if ($res_check) {
-            $ids = $res_check['id'];
-        }
-    }
+    // Removed logic that automatically selects the latest ID if not provided,
+    // to allow creating new records.
+    
+
 
     Session::insertSystemAccessLog(json_encode([
         'form' => 'CAPRINI-FORM',
@@ -55,6 +50,23 @@ try {
         $stmt->execute(['an' => $an, 'id' => $ids]);
         $caprini_row = $stmt->fetch();
     }
+    $default_age_range = '<41';
+    $stmt_age = $conn->prepare("SELECT age_y FROM " . DbConstant::HOSXP_DBNAME . ".an_stat WHERE an = :an");
+    $stmt_age->execute(['an' => $an]);
+    $res_age = $stmt_age->fetch();
+    if ($res_age) {
+        $age = (int)$res_age['age_y'];
+        if ($age < 41) {
+            $default_age_range = '<41';
+        } elseif ($age <= 60) {
+            $default_age_range = '41-60';
+        } elseif ($age <= 74) {
+            $default_age_range = '61-74';
+        } else {
+            $default_age_range = '>=75';
+        }
+    }
+
 } catch (Exception $e) {
     echo '<div class="alert alert-danger" style="margin:20px;">Database Error: ' . htmlspecialchars($e->getMessage()) . '</div>';
 }
@@ -63,9 +75,9 @@ function isChecked($field, $row)
 {
     return (isset($row[$field]) && $row[$field] == 1) ? 'checked' : '';
 }
-function isRadioSelected($field, $value, $row)
+function isRadioSelected($field, $value, $row, $default_val = '<41')
 {
-    if (!$row && $value === '<41')
+    if (!$row && $value === $default_val)
         return 'checked';
     return (isset($row[$field]) && $row[$field] === $value) ? 'checked' : '';
 }
@@ -285,6 +297,13 @@ function isRadioSelected($field, $value, $row)
                                     ? date('Y-m-d', strtotime($caprini_row['assessment_date']))
                                     : date('Y-m-d') ?>">
                         </div>
+                        <div class="col-md-3">
+                            <label><b>เวลาที่ประเมิน</b></label>
+                            <input type="time" name="assessment_time"
+                                class="form-control form-control-sm d-inline-block w-auto" value="<?= isset($caprini_row['assessment_time'])
+                                    ? date('H:i', strtotime($caprini_row['assessment_time']))
+                                    : date('H:i') ?>">
+                        </div>
                     </div>
                     <hr>
                     <!-- Age Range -->
@@ -293,22 +312,22 @@ function isRadioSelected($field, $value, $row)
                         <div class="age-radio-group mt-2">
                             <label>
                                 <input type="radio" name="age_range" value="<41" data-score="0"
-                                    <?= isRadioSelected('age_range', '<41', $caprini_row) ?>>
+                                    <?= isRadioSelected('age_range', '<41', $caprini_row, $default_age_range) ?>>
                                 อายุน้อยกว่า 41 ปี <small class="text-muted">(0 คะแนน)</small>
                             </label>
                             <label>
                                 <input type="radio" name="age_range" value="41-60" data-score="1"
-                                    <?= isRadioSelected('age_range', '41-60', $caprini_row) ?>>
+                                    <?= isRadioSelected('age_range', '41-60', $caprini_row, $default_age_range) ?>>
                                 อายุ 41–60 ปี <small class="text-muted">(1 คะแนน)</small>
                             </label>
                             <label>
                                 <input type="radio" name="age_range" value="61-74" data-score="2"
-                                    <?= isRadioSelected('age_range', '61-74', $caprini_row) ?>>
+                                    <?= isRadioSelected('age_range', '61-74', $caprini_row, $default_age_range) ?>>
                                 อายุ 61–74 ปี <small class="text-muted">(2 คะแนน)</small>
                             </label>
                             <label>
                                 <input type="radio" name="age_range" value=">=75" data-score="3"
-                                    <?= isRadioSelected('age_range', '>=75', $caprini_row) ?>>
+                                    <?= isRadioSelected('age_range', '>=75', $caprini_row, $default_age_range) ?>>
                                 อายุ &ge; 75 ปี <small class="text-muted">(3 คะแนน)</small>
                             </label>
                         </div>
@@ -651,7 +670,10 @@ function isRadioSelected($field, $value, $row)
                         $("input[name='id']").val(data.id);
                     }
                     Swal.fire("สำเร็จ", "บันทึกข้อมูลเรียบร้อยแล้ว", "success").then(function () {
-                        window.location.reload(true);
+                        if (window.opener && !window.opener.closed) {
+                            window.opener.location.reload(true);
+                        }
+                        window.close();
                     });
                 } else {
                     Swal.fire("ข้อผิดพลาด", data.message, "error");

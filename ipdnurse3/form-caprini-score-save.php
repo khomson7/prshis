@@ -36,6 +36,7 @@ try {
     $an = trim($_POST['an'] ?? '');
     $hn = trim($_POST['hn'] ?? '');
     $assessment_date = $_POST['assessment_date'] ?? date('Y-m-d');
+    $assessment_time = $_POST['assessment_time'] ?? date('H:i');
     $total_score = isset($_POST['total_score']) ? (int) $_POST['total_score'] : 0;
     $risk_level = $_POST['risk_level'] ?? '';
     $age_range = $_POST['age_range'] ?? '<41';
@@ -85,6 +86,7 @@ try {
         'hn' => $hn,
         'an' => $an,
         'assessment_date' => $assessment_date,
+        'assessment_time' => $assessment_time,
         'total_score' => $total_score,
         'risk_level' => $risk_level,
         'age_range' => $age_range,
