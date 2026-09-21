@@ -21,7 +21,7 @@ $mylink = DbConstant::MAIN_LINK;
     <!-- <link href="picture/favicon/icon12.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" /> -->
     <!-- <link href="picture/favicon/icon6.png" rel="shortcut icon" type="image/png" /> -->
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="..\vendor\twbs\bootstrap\dist\css\bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../include/css/theme_new.css">
 
 

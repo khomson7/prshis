@@ -213,6 +213,24 @@ $check_ = ReportQueryUtils::getProduction(26);
 ?>
 
 <style>
+    :root {
+        --bright-blue: #007bff;
+        --bright-blue-light: #e6f2ff;
+    }
+
+    .bg-theme-blue {
+        background-color: var(--bright-blue);
+        color: #fff;
+    }
+
+    .border-theme-blue {
+        border-color: var(--bright-blue) !important;
+    }
+
+    .text-orange {
+        color: #fd7e14 !important;
+    }
+
     .audit-table th,
     .audit-table td {
         border: 1px solid #aaa;
