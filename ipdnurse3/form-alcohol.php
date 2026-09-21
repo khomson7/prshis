@@ -623,7 +623,7 @@ $check_ = ReportQueryUtils::getProduction(26);
         var msg = '', cls = '', cardIdx = -1;
         if (score <= 7)         { msg = '0-7 คะแนน — ผู้ดื่มแบบเสี่ยงต่ำ (Low risk drinker)';   cls = 'text-success'; cardIdx = 0; }
         else if (score <= 15)   { msg = '8-15 คะแนน — ผู้ดื่มแบบเสี่ยง (Hazardous drinker)';     cls = 'text-warning'; cardIdx = 1; }
-        else if (score <= 20)   { msg = '16-19 คะแนน — ผู้ดื่มแบบอันตราย (Harmful use)';         cls = 'text-orange';  cardIdx = 2; }
+        else if (score <= 19)   { msg = '16-19 คะแนน — ผู้ดื่มแบบอันตราย (Harmful use)';         cls = 'text-orange';  cardIdx = 2; }
         else                    { msg = '>20 คะแนน — ผู้ดื่มแบบติด (Alcohol dependence)';         cls = 'text-danger';  cardIdx = 3; }
 
         box.innerHTML = '<span class="' + cls + '">' + msg + '</span>';
