@@ -96,14 +96,23 @@ try {
                     bottom: 0;
                 }
 
-                iframe {
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                }
+                    iframe {
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        pointer-events: all;
+                    }
+
+                    /* ป้องกัน user-select */
+                    body {
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                    }
 
                 /* Anti-snapshot overlay trick (optional, minimal effect but requested) */
-                .overlay {
+                /*.overlay {
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -111,33 +120,81 @@ try {
                     bottom: 0;
                     pointer-events: none;
                     z-index: 999;
+                } */
+
+                    /* เป็นแบบนี้ */
+               /* .overlay {
+                    position: absolute;
+                    top: 50px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    pointer-events: all;   
+                    z-index: 999;
+                    background: transparent;
+                    cursor: default;  
+                }*/
+
+                    .overlay {
+                    display: none;  /* ปิด overlay */
                 }
             </style>
             <script>
-                // Prevent right-click
-                document.addEventListener('contextmenu', event => event.preventDefault());
-                // Prevent common shortcuts for saving/printing natively
-                document.addEventListener('keydown', function (e) {
-                    if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'p' || e.key === 'P' || e.key === 'c' || e.key === 'C')) {
-                        e.preventDefault();
-                    }
-                    if (e.key === 'PrintScreen') {
-                        navigator.clipboard.writeText(''); // Attempt to clear clipboard
-                    }
-                });
-                function printPdf() {
-                    var iframe = document.getElementById('pdfFrame');
-                    iframe.contentWindow.focus();
-                    iframe.contentWindow.print();
-                }
-            </script>
+    // Block right-click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Block overlay right-click
+    window.addEventListener('load', function() {
+    var overlay = document.querySelector('.overlay');
+    if (overlay) {
+        // Block right-click
+        overlay.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // ส่ง scroll event ไปให้ iframe
+        overlay.addEventListener('wheel', function(e) {
+            var iframe = document.getElementById('pdfFrame');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.scrollBy(0, e.deltaY);
+            }
+        });
+
+        // Block Ctrl+P
+        overlay.setAttribute('tabindex', '0');
+        overlay.focus();
+        overlay.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+});
+    // Block keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && (e.key === 's' || e.key === 'S' ||
+                      e.key === 'p' || e.key === 'P' ||
+                      e.key === 'c' || e.key === 'C')) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+window.print = function() { return false; };
+</script>
         </head>
 
         <body>
-            <div class="toolbar">
+            <!--<div class="toolbar">
                 <span style="color: white; margin-right: auto; font-family: sans-serif;"><?= $safe_name ?></span>
                 <button class="btn-print" onclick="printPdf()">พิมพ์เอกสาร (Print)</button>
-            </div>
+            </div> -->
             <div class="pdf-container">
                 <iframe id="pdfFrame" src="<?= $raw_url ?>"></iframe>
                 <div class="overlay"></div>
@@ -164,20 +221,19 @@ try {
             $mpdf->UseTemplate($tplId);
 
             // --- Overlay Watermark (On top of scanned images) ---
-            $mpdf->SetFont('Garuda');
-            $mpdf->SetAlpha(0.02); // ความโปร่งใสลดลงเหลือ 5% (จางมากๆ)
-            $mpdf->StartTransform();
-            $mpdf->TransformRotate(-45, 105, 148); // หมุน -45 องศา ตรงกลางหน้า A4
-            // ส่วนบน
-            $mpdf->WriteFixedPosHTML('<div style="font-family: Garuda, sans-serif; text-align:center; width:250mm; font-size:30pt; font-weight:normal; color:#e0e0e0;">' . base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX') . '</div>', -20, 70, 250, 50);
-            // ส่วนล่าง
-            $mpdf->WriteFixedPosHTML('<div style="font-family: Garuda, sans-serif; text-align:center; width:250mm; font-size:30pt; font-weight:normal; color:#e0e0e0;">' . base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX') . '</div>', -20, 200, 250, 50);
-            $mpdf->StopTransform();
-            $mpdf->SetAlpha(1);
+          // แทนด้วย
+                //$mpdf->SetFont('Garuda');
+                $mpdf->SetWatermarkText(base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX'));
+                $mpdf->watermark_font = 'Garuda';
+                $mpdf->watermarkTextAlpha = 0.10;  // ปรับความจางได้ 0.01-0.1
+                $mpdf->showWatermarkText = true;
         }
 
         // Protect PDF: only print allowed
-        $mpdf->SetProtection(['print']);
+       // $mpdf->SetProtection(['print']);
+
+       // แก้เป็น — ไม่อนุญาตอะไรเลย
+         $mpdf->SetProtection([]);
 
         error_log("PRS-HIS-DEBUG: MPDF 1 SUCCESS");
         $watermarkedData = $mpdf->Output('', 'S');
@@ -204,16 +260,11 @@ try {
                     $mpdf2->UseTemplate($tplId);
 
                     // --- Overlay Watermark (On top of scanned images) ---
-                    $mpdf2->SetFont('Garuda');
-                    $mpdf2->SetAlpha(0.05); // ความโปร่งใสลดลงเหลือ 5% (จางมากๆ)
-                    $mpdf2->StartTransform();
-                    $mpdf2->TransformRotate(-45, 105, 148);
-                    // ส่วนบน
-                    $mpdf2->WriteFixedPosHTML('<div style="font-family: Garuda, sans-serif; text-align:center; width:250mm; font-size:30pt; font-weight:normal; color:#e0e0e0;">' . base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX') . '</div>', -20, 70, 250, 50);
-                    // ส่วนล่าง
-                    $mpdf2->WriteFixedPosHTML('<div style="font-family: Garuda, sans-serif; text-align:center; width:250mm; font-size:30pt; font-weight:normal; color:#e0e0e0;">' . base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX') . '</div>', -20, 200, 250, 50);
-                    $mpdf2->StopTransform();
-                    $mpdf2->SetAlpha(1);
+                    //$mpdf2->SetFont('Garuda');
+                    $mpdf2->SetWatermarkText(base64_decode('4LmC4Lij4LiH4Lie4Lii4Liy4Lia4Liy4Lil4Lib4Lij4Liy4Liq4Liy4LiX'));
+                    $mpdf2->watermark_font = 'Garuda';
+                    $mpdf2->watermarkTextAlpha = 0.10;  // ปรับความจางได้ 0.01-0.1
+                    $mpdf2->showWatermarkText = true;
                 }
                 $mpdf2->SetProtection(['print']);
                 error_log("PRS-HIS-DEBUG: MPDF 2 SUCCESS");
