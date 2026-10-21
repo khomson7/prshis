@@ -45,7 +45,7 @@ try {
     if (empty($an))
         throw new Exception("ไม่พบข้อมูล AN");
 
-    $fields = [
+    /*$fields = [
         'minor_surgery',
         'bmi_over_25',
         'swollen_legs',
@@ -80,6 +80,51 @@ try {
         'elective_major_lower_extremity_arthroplasty',
         'hip_pelvis_leg_fracture',
         'acute_spinal_cord_injury_1_month'
+    ]; */
+
+    $fields = [
+        'minor_surgery',
+        'after_major_surgery',
+        'bmi_over_25',
+        'swollen_legs',
+        'varicose_veins',
+        'pregnancy_postpartum',
+        'history_unexplained_miscarriage',
+        'oral_contraceptives_hrt',
+        'sepsis_1_month',
+        'severe_lung_disease',
+        'copd',
+       /* 'abnormal_pulmonary_function',*/
+        'ischemic_heart_disease',
+        'chf_1_month',
+        'inflammatory_bowel_disease',
+        'bed_rest',
+
+        'arthroscopic_surgery',
+        'major_surgery_over_45m',
+        'laparoscopic_surgery_over_45m',
+        'cancer_patient',
+        'bedridden_over_72h',
+        'patient_in_cast',
+        'central_venous_access',
+
+        'history_vte',
+        'family_history_vte',
+        'factor_v_leiden',
+        'prothrombin_20210a',
+        'lupus_anticoagulant',
+        'anticardiolipin_antibodies',
+        'increased_homocysteine',
+        'heparin_induced_thrombocytopenia',
+        'thrombophilia',
+        'spinal_fraction',
+        'gcs',
+
+        'stroke_1_month',
+        'elective_major_lower_extremity_arthroplasty',
+        'hip_pelvis_leg_fracture',
+        'acute_spinal_cord_injury_1_month',
+        'multiple_trauma'
     ];
 
     $params = [
