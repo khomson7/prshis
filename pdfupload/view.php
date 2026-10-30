@@ -15,6 +15,8 @@ if (!$loginname) {
     exit('Unauthorized');
 }
 
+$canPrint = (bool) Session::checkPermission('IPD_DOCUMENT', 'PRINT');
+
 $id = (int) ($_GET['id'] ?? 0);
 $an = trim($_GET['an'] ?? '');
 
@@ -39,7 +41,7 @@ try {
     if (empty($_GET['raw'])) {
         // Output HTML viewer wrapper
         $safe_name = htmlspecialchars($row['original_name'] ?? 'document.pdf');
-        $raw_url = 'view.php?id=' . $id . '&an=' . urlencode($an) . '&raw=1#toolbar=0';
+        $raw_url = 'view.php?id=' . $id . '&an=' . urlencode($an) . '&raw=1' . ($canPrint ? '' : '#toolbar=0');
         ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -139,6 +141,7 @@ try {
                     display: none;  /* ปิด overlay */
                 }
             </style>
+            <?php if (!$canPrint) { ?>
             <script>
     // Block right-click
     document.addEventListener('contextmenu', e => e.preventDefault());
@@ -188,6 +191,7 @@ try {
 
 window.print = function() { return false; };
 </script>
+            <?php } ?>
         </head>
 
         <body>
@@ -233,7 +237,7 @@ window.print = function() { return false; };
        // $mpdf->SetProtection(['print']);
 
        // แก้เป็น — ไม่อนุญาตอะไรเลย
-         $mpdf->SetProtection([]);
+         $mpdf->SetProtection($canPrint ? ['print'] : []);
 
         error_log("PRS-HIS-DEBUG: MPDF 1 SUCCESS");
         $watermarkedData = $mpdf->Output('', 'S');
@@ -266,7 +270,7 @@ window.print = function() { return false; };
                     $mpdf2->watermarkTextAlpha = 0.10;  // ปรับความจางได้ 0.01-0.1
                     $mpdf2->showWatermarkText = true;
                 }
-                $mpdf2->SetProtection(['print']);
+                $mpdf2->SetProtection($canPrint ? ['print'] : []);
                 error_log("PRS-HIS-DEBUG: MPDF 2 SUCCESS");
                 $watermarkedData = $mpdf2->Output('', 'S');
             } catch (\Exception $e2) {
